@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiangshangban.organization.dao.UserDao">
+	<resultMap type="com.xiangshangban.organization.bean.User" id="User">
+		<result property="userId" column="user_id" />
+   		<result property="userName" column="user_name" />
+        <!-- <result property="userPassword" column="user_password"/>
+        <result property="userRealName" column="user_realname"/>   -->
+   </resultMap>
+   
+	<select id="findbyUserName" parameterType="String" resultMap="User">
+		select 
+		u.user_realname
+		from 
+		user_ u
+		where 
+		user_name= #{userName,jdbcType=VARCHAR} 			
+	</select>
+	
+	<insert id="saveUser" parameterType="User">
+		insert 
+		into
+		user_ (user_id,user_name)
+		values
+		(
+		#{userId,jdbcType=VARCHAR},
+		#{userName,jdbcType=VARCHAR}
+		)
+	</insert>
+	
+	<select id="getOneUser" parameterType="User" resultMap="User">
+		select 
+		* 
+		from 
+		user_  
+		where 
+		user_name= #{userName,jdbcType=VARCHAR} 
+	</select>
+	
+</mapper>	

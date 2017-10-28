@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiangshangban.organization.dao.CompanyDao">
+
+  <resultMap id="Company" type="com.xiangshangban.organization.bean.Company"> 
+  
+    <id column="company_id" jdbcType="VARCHAR" property="companyId" />
+    <result column="company_name" jdbcType="VARCHAR" property="companyName" />
+    <result column="company_english_name" jdbcType="VARCHAR" property="companyEnglishName" />
+    <result column="company_abbreviation_name" jdbcType="VARCHAR" property="companyAbbreviationName" />
+    <result column="company_address_detail" jdbcType="VARCHAR" property="companyAddressDetail" />
+    <result column="company_phone" jdbcType="VARCHAR" property="companyPhone" />
+    <result column="company_email" jdbcType="VARCHAR" property="companyEmail" />
+    <result column="company_postalcode" jdbcType="VARCHAR" property="companyPostalcode" />
+    <result column="company_logo" jdbcType="VARCHAR" property="companyLogo" />
+    <result column="company_business_license" jdbcType="VARCHAR" property="companyBusinessLicense" />
+    <result column="juridical_person" jdbcType="VARCHAR" property="juridicalPerson" />
+    <result column="brought_accoun" jdbcType="VARCHAR" property="broughtAccoun" />
+    <result column="registered_capital" jdbcType="VARCHAR" property="registeredCapital" />
+    <result column="join_date" jdbcType="VARCHAR" property="joinDate" />
+    <result column="company_state" jdbcType="VARCHAR" property="companyState" />
+    <result column="registration_number" jdbcType="VARCHAR" property="registrationNumber" />
+    <result column="business_registration_number" jdbcType="VARCHAR" property="businessRegistrationNumber" />
+    <result column="uniform_credit_code" jdbcType="VARCHAR" property="uniformCreditCode" />
+    <result column="type_enterprise" jdbcType="VARCHAR" property="typeEnterprise" />
+    <result column="taxpayer_registration_number" jdbcType="VARCHAR" property="taxpayerRegistrationNumber" />
+    <result column="industry_type" jdbcType="VARCHAR" property="industryType" />
+    <result column="begin_business_time" jdbcType="VARCHAR" property="beginBusinessTime" />
+    <result column="end_business_time" jdbcType="VARCHAR" property="endBusinessTime" />
+    <result column="dateof_approval" jdbcType="VARCHAR" property="dateofApproval" />
+    <result column="registration_authority" jdbcType="VARCHAR" property="registrationAuthority" />
+    <result column="registered_address" jdbcType="VARCHAR" property="registeredAddress" />
+    <result column="company_creat_time" jdbcType="VARCHAR" property="companyCreatTime" />
+    <result column="company_area" jdbcType="VARCHAR" property="companyArea" />
+    <result column="company_code" jdbcType="VARCHAR" property="companyCode" />
+    <result column="company_approve" jdbcType="VARCHAR" property="companyApprove" />
+    <result column="company_personal_name" jdbcType="VARCHAR" property="companyPersonalName" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="company_no" jdbcType="VARCHAR" property="companyNo" />
+    
+  </resultMap>
+  
+  <sql id="Base_Column_List">    
+    company_id, company_name, company_english_name, company_abbreviation_name, company_address_detail, 
+    company_phone, company_email, company_postalcode, company_logo, company_business_license, 
+    juridical_person, brought_accoun, registered_capital, join_date, company_state, registration_number, 
+    business_registration_number, uniform_credit_code, type_enterprise, taxpayer_registration_number, 
+    industry_type, begin_business_time, end_business_time, dateof_approval, registration_authority, 
+    registered_address,company_creat_time,company_personal_name,company_no
+  </sql>
+  
+  <select id="selectByCompany" parameterType="java.lang.String" resultMap="Company">  
+    select 
+    <include refid="Base_Column_List" />
+    from company_
+    where company_id = #{companyId,jdbcType=VARCHAR}
+  </select>
+  
+  
+  <select id="findBycompanyNo" parameterType="java.lang.String" resultMap="Company">
+    select 
+    c.company_no
+    from company_ c
+    where c.company_no = #{companyNo,jdbcType=VARCHAR}
+  </select>
+  
+  
+  <select id="fingdByAllCompany"  resultMap="Company">  
+    select 
+    <include refid="Base_Column_List" />
+    from company_   
+  </select>
+  
+  <delete id="deleteByCompany" parameterType="java.lang.String"> 
+    delete from company_
+    where company_id = #{companyId,jdbcType=VARCHAR}
+  </delete>
+  
+  <insert id="insertCompany" parameterType="com.xiangshangban.organization.bean.Company">   
+    insert into company_ (company_id, company_name,company_logo,company_code,
+    company_abbreviation_name,industry_type, company_area,company_personal_name,company_phone,company_approve,user_name,company_no
+      )
+    values (
+      #{companyId,jdbcType=VARCHAR}, 
+      #{companyName,jdbcType=VARCHAR},       
+      #{companyLogo,jdbcType=VARCHAR},
+      #{companyCode,jdbcType=VARCHAR}, 
+      #{companyAbbreviationName,jdbcType=VARCHAR},
+      #{industryType,jdbcType=VARCHAR},
+      #{companyArea,jdbcType=VARCHAR},
+      #{companyPersonalName,jdbcType=VARCHAR},
+      #{companyPhone,jdbcType=VARCHAR},      
+      #{companyApprove,jdbcType=VARCHAR},
+      #{userName,jdbcType=VARCHAR},
+      #{companyNo,jdbcType=VARCHAR}
+      
+      )
+  </insert>
+  
+  <update id="updateByCompany" parameterType="com.xiangshangban.organization.bean.Company">    
+    update company_
+    set 
+      company_name=#{companyName,jdbcType=VARCHAR},       
+      company_logo=#{companyLogo,jdbcType=VARCHAR},
+      company_code=#{companyCode,jdbcType=VARCHAR}, 
+      company_abbreviation_name=#{companyAbbreviationName,jdbcType=VARCHAR},
+      company_phone=#{companyPhone,jdbcType=VARCHAR},
+      industry_type=#{industryType,jdbcType=VARCHAR},
+      company_area=#{companyArea,jdbcType=VARCHAR},
+      company_approve=#{companyApprove,jdbcType=VARCHAR},
+      company_personal_name=#{companyPersonalName,jdbcType=VARCHAR}    
+    where 
+    company_id = #{companyId,jdbcType=VARCHAR}
+  </update>
+</mapper>

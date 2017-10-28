@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration>
+    <classPathEntry
+        location="C:/Users/Administrator/.m2/repository/postgresql-9.1-901.jdbc4.jar" />
+    <context id="context1">
+        <jdbcConnection driverClass="org.postgresql.Driver"
+            connectionURL="jdbc:postgresql://192.168.0.242:5432/organization" userId="postgres"
+            password="jinnian-123abc" />            
+            <!--去除注释 -->
+        <commentGenerator>
+            <property name="suppressAllComments" value="true" />
+        </commentGenerator>            
+        <!-- 生成模型的包名和位置--> 
+        <javaModelGenerator targetPackage="com.xiangshangban.organization.bean"
+            targetProject="Organization" />
+        <!-- 生成映射文件的包名和位置--> 
+        <sqlMapGenerator targetPackage="com.xiangshangban.organization.mapper"
+            targetProject="Organization" />
+        <!-- 生成DAO的包名和位置-->
+        <javaClientGenerator
+            targetPackage="com.xiangshangban.organization.dao"
+            targetProject="Organization"
+            type="XMLMAPPER" />
+        <!-- 要生成哪些表-->  
+        <table tableName="dsd" domainObjectName="Dsd" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table>
+       
+        <!-- <table schema="zpeng" tableName="stu" domainObjectName="Student"
+            enableSelectByPrimaryKey="true" enableUpdateByPrimaryKey="true"
+            enableDeleteByPrimaryKey="true" enableSelectByExample="false"
+            enableDeleteByExample="false" enableCountByExample="false"
+            enableUpdateByExample="false">
+            <columnOverride column="" property="" />
+        </table> -->
+    </context>
+</generatorConfiguration>

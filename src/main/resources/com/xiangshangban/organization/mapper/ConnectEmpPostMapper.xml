@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiangshangban.organization.dao.ConnectEmpPostDao">
+	<resultMap type="com.xiangshangban.organization.bean.ConnectEmpPost" id="ConnectEmpPost">			
+   		<result property="employeeId" column="employee_id" />
+        <result property="postId" column="post_id" />       
+        <result property="departmentId" column="department_id" /> 
+        <result property="postStaus" column="post_staus" />
+        <result property="isDelete" column="is_delete" /> 
+        <result property="postGrades" column="post_grades" />        
+   </resultMap>
+
+
+   <select id="findByConnect" parameterType="java.util.Map" resultMap="ConnectEmpPost">
+     select c.employee_id,e.employee_name,c.department_id,d.department_name,c.post_id,p.post_name
+    from connect_emp_post_ c 
+    LEFT JOIN  post_ p on  c.post_id=p.post_id
+    LEFT JOIN  employee_ e on e.employee_id=c.employee_id
+    LEFT JOIN  department_ d on d.department_id=c.department_id
+    where 
+    c.employee_id=#{employeeId,jdbcType=VARCHAR}
+    and
+    c.department_id=#{departmentId}
+    AND
+    c.post_id=#{}
+   </select>
+     
+    <select id="findByConnectpostemp" parameterType="java.lang.String" resultMap="ConnectEmpPost">
+   select  
+    c.employee_id   
+    from connect_emp_post_ c     
+    LEFT JOIN  post_ p  on c.post_id = p.post_id   
+   where 
+     p.post_id=#{postId}
+   </select>
+
+
+	<insert id="saveConnect" parameterType="com.xiangshangban.organization.bean.ConnectEmpPost">
+		insert into 
+		connect_emp_post_ 
+		(employee_id,post_id,department_id,post_grades)
+		values
+		(				 
+		#{employeeId,jdbcType=VARCHAR}, 
+        #{postId,jdbcType=VARCHAR},
+        #{departmentId,jdbcType=VARCHAR},
+        #{postGrades,jdbcType=VARCHAR}  
+            
+        )
+	</insert>
+	
+	<delete id="deleteConnect" parameterType="java.lang.String">
+		delete 
+		from 
+		connect_emp_post_
+		where 
+		employee_id=#{employeeId,jdbcType=VARCHAR}
+		and 
+		post_id=#{postId,jdbcType=VARCHAR}
+		and
+		
+	</delete>
+	
+	<delete id="deleteTransferjobConnect" parameterType="java.lang.String">
+		delete 
+		from 
+		connect_emp_post_
+		where 
+		employee_id=#{employeeId,jdbcType=VARCHAR}
+		and 
+		post_id=#{postId,jdbcType=VARCHAR}		
+	</delete>
+	
+	<update id="updateConnect" parameterType="com.xiangshangban.organization.bean.ConnectEmpPost">
+		update 
+		connect_emp_post_
+		set 
+		post_id=#{postId,jdbcType=VARCHAR}
+		where 
+		c.employee_id=#{employeeId,jdbcType=VARCHAR}
+		and
+		c.department_id=#{departmentId} 
+	</update>
+	
+	
+	<update id="updateConnectpostStaus" parameterType="com.xiangshangban.organization.bean.ConnectEmpPost">
+		update 
+		connect_emp_post_
+		set 
+		post_staus='1' 
+		where 
+		employee_id=#{employeeId,jdbcType=VARCHAR}
+		and 
+		department_id=#{departmentId,jdbcType=VARCHAR}
+	</update>
+	
+	<update id="updateConnectLizhipostStaus" parameterType="com.xiangshangban.organization.bean.ConnectEmpPost">
+		update 
+		connect_emp_post_
+		set 
+		is_delete='2' 
+		where 
+		employee_id=#{employeeId,jdbcType=VARCHAR}		
+	</update>
+	
+	<update id="updateConnectDelehipostStaus" parameterType="com.xiangshangban.organization.bean.ConnectEmpPost">
+		update 
+		connect_emp_post_
+		set 
+		is_delete='1' 
+		where 
+		employee_id=#{employeeId,jdbcType=VARCHAR}		
+	</update>
+	
+	<update id="updateConnectDelehipostStaus" parameterType="com.xiangshangban.organization.bean.ConnectEmpPost">
+		update 
+		connect_emp_post_
+		set 
+		post_grades=#{postGrades} 
+		where 
+		employee_id=#{employeeId,jdbcType=VARCHAR}
+		and
+		post_id=#{postId,jdbcType=VARCHAR}		
+	</update>
+	
+	
+</mapper>	
