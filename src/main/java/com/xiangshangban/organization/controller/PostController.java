@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.xiangshangban.organization.bean.ConnectEmpPost;
 import com.xiangshangban.organization.bean.Post;
 import com.xiangshangban.organization.service.ConnectEmpPostService;
 import com.xiangshangban.organization.service.PostService;
@@ -79,20 +78,7 @@ public class PostController {
 				map.put("message", "删除成功");		
 			}	
 			return map;
-		}
-		/**
-		 * 查询一个部门下的所有岗位分类以及分类下的岗位
-		 * @param departmentId
-		 * @param request
-		 * @param response
-		 * @return
-		 */
-		@RequestMapping(value="/findBydepartmentPost", produces = "application/json;charset=UTF-8", method=RequestMethod.POST)
-		public String findBydepartmentPost(@RequestBody String departmentId,HttpServletRequest request,HttpServletResponse response){
-			String companyId="977ACD3022C24B99AC9586CC50A8F786";
-			List<Post> list=postService.findBydepartmentPost(departmentId,companyId);				
-			return JSON.toJSONString(list);
-		}
+		}		
 		/**
 		 * 查询所有岗位信息
 		 * @param request
@@ -101,22 +87,17 @@ public class PostController {
 		 */
 		@RequestMapping(value="/selectByAllPostInfo", produces = "application/json;charset=UTF-8", method=RequestMethod.GET)
 		public Map<String, Object> selectByAllPostInfo(HttpServletRequest request,HttpServletResponse response){	
-			Map<String, Object> postlisttemp=new HashMap<String, Object>();
+			Map<String, Object> map=new HashMap<String, Object>();
 			String companyId="977ACD3022C24B99AC9586CC50A8F786";
-			List<Post> list=postService.selectByAllPostInfo(companyId);			
-			 int s=0;
-			for (int i = 0; i < list.size(); i++) {
-				 s=s+1;
-	                String temps =String.valueOf(s);
-				Post post = list.get(i);			
-				String postId = post.getPostId();												
-				/*List<ConnectEmpPost> Postempnumber = connectEmpPostService.findByConnectpostemp(postId);
-				int countNumber = Postempnumber.size();	
-				post.setCountNumber(countNumber);		*/		
-				postlisttemp.put("post"+temps, post);				 											
+			List<Post> list=postService.selectByAllPostInfo(companyId);
+			if(list.size()!=0){
+				map.put("list", list);
+				return map;
+			}else{
+				map.put("message", "没有查到信息");
+				return map;
 			}
 			
-			return postlisttemp;
 		}
 		
 		/** 

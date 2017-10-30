@@ -158,7 +158,16 @@ PostDao postDao;
 					departmentTree = new DepartmentTree();
 					departmentTree.setLabel(department.getDepartmentName());					
 					departmentTree.setValue(department.getDepartmentId());
-					departmentTree.setKey(department.getDepartmentId()); 					
+					departmentTree.setKey(department.getDepartmentId()); 
+					List<Post> postlist = postDao.findBydepartmentPost(department.getDepartmentId(), companyId);
+					for (int i = 0; i < postlist.size(); i++) {
+						String postId = postlist.get(i).getPostId();
+						List<Employee> employeelist = employeeDao.findByposcounttemp(postId, companyId);
+						postlist.get(i).setEmployeelist(employeelist);
+					}
+					List<Employee> employeeemp = employeeDao.findBydeptemployee(department.getDepartmentId(), companyId);
+					departmentTree.setCountNumber(employeeemp.size());	
+					departmentTree.setPostlist(postlist);
 					departmentTree.setChildren(getDepartmentTree(department.getDepartmentId(),companyId, departmentTree));;										
 			        list.add(departmentTree);
 				}
@@ -171,11 +180,20 @@ PostDao postDao;
 	public List<DepartmentTree> getDepartmentempTreeAll(String companyId) {
 		List<Department> DepartmentList=departmentDao.findDepartmentTree("0",companyId);		
 		List<DepartmentTree> list = new ArrayList<DepartmentTree>();
-		for(Department department: DepartmentList){
+		for(Department department: DepartmentList){			
 			DepartmentTree departmentTree = new DepartmentTree();			
 			departmentTree.setLabel(department.getDepartmentName());						
 			departmentTree.setValue(department.getDepartmentId());
-			departmentTree.setKey(department.getDepartmentId());			
+			departmentTree.setKey(department.getDepartmentId());	
+			List<Post> postlist = postDao.findBydepartmentPost(department.getDepartmentId(), companyId);
+			for (int i = 0; i < postlist.size(); i++) {
+				String postId = postlist.get(i).getPostId();
+				List<Employee> employeelist = employeeDao.findByposcounttemp(postId, companyId);
+				postlist.get(i).setEmployeelist(employeelist);
+			}
+			List<Employee> employeeemp = employeeDao.findBydeptemployee(department.getDepartmentId(), companyId);
+			departmentTree.setCountNumber(employeeemp.size());	
+			departmentTree.setPostlist(postlist);					
 			departmentTree.setChildren(getDepartmentTree(department.getDepartmentId(), companyId, departmentTree));
 			list.add(departmentTree);
 		}

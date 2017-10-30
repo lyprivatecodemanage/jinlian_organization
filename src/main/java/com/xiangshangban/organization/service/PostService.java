@@ -14,13 +14,11 @@ public interface PostService {
 
     String updateByPost(Post post);
     
-    List<Post> selectByPostName(String employeeId);  
+    List<Post> selectByPostName(String employeeId,String departmentId);  
     
     List<Post> selectByAllPostInfo(String companyId);
     
     List<Post>findByMorePostIfon(Map<String,String> map);
-    
-    List<Post> findBydepartmentPost (String departmentId,String companyId);
    
     
 }

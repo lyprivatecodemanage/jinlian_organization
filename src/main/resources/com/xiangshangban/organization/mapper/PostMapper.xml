@@ -15,18 +15,23 @@
     <result column="company_name" jdbcType="VARCHAR" property="companyName" />
     <result column="employee_name" jdbcType="VARCHAR" property="employeeName" />
     <result column="count_number" jdbcType="VARCHAR" property="countNumber" />
-    <result column="company_id" jdbcType="VARCHAR" property="companyId" />  
-    
+    <result column="company_id" jdbcType="VARCHAR" property="companyId" />      
   </resultMap>
   
  <select id="selectByPostName" parameterType="java.lang.String" resultMap="Post">  
-    SELECT DISTINCT p.company_id,y.company_name, p.department_id ,d.department_name,p.post_id,p.post_name,p.post_proficiencies,p.post_work_type,p.educational_requirements,p.post_principal_id,e.employee_name
-  FROM  post_ p       
-	LEFT JOIN employee_ e on e.employee_id=p.post_principal_id	
-	LEFT JOIN company_ y on p.company_id=y.company_id
-    LEFT JOIN department_ d  on d.department_id=p.department_id 
-    where     
-    c.employee_id = #{employeeId,jdbcType=VARCHAR}    
+    select 
+p.company_id,y.company_name, c.department_id ,d.department_name,p.post_id,p.post_name,p.post_proficiencies,p.post_work_type,p.educational_requirements,p.post_principal_id,e.employee_name  
+    from  post_ p    
+    LEFT JOIN connect_emp_post_ c  on  c.post_id=p.post_id
+    LEFT JOIN  department_ d on d.department_id=c.department_id
+    LEFT JOIN employee_ e on e.employee_id=p.post_principal_id 
+    LEFT JOIN company_ y on y.company_id=p.company_id
+  where     
+    c.employee_id =#{employeeId}
+    and
+    c.department_id=#{departmentId}
+    and c.post_staus='0'
+	and c.is_delete='0'   
   </select>
  
   <select id="selectByPost" parameterType="java.lang.String" resultMap="Post">  

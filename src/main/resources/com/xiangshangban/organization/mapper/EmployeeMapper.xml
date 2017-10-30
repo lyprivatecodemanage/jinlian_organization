@@ -41,12 +41,11 @@
   <sql id="Base_Column_List"> 
     employee_id, employee_name, employee_sex,employee_no, direct_report_person, 
     employee_phone,employee_twophone,entry_time,
-    employee_status,probationary_expired
-    
+    employee_status,probationary_expired  
   </sql>
+   
   
-  
-  
+  <!-- 查询一个岗位下所有员工 -->
   <select id="findByposcounttemp" parameterType="java.lang.String" resultMap="Employee">
    SELECT  
     e.employee_id,e.employee_name
@@ -60,18 +59,18 @@
   </select>
   
   
-  <select id="findBydeptemployeeName" parameterType="java.lang.String" resultMap="Employee">
-   select DISTINCT e.employee_id, e.employee_name,e.login_name, e.employee_sex,e.employee_no, 
-       e.employee_phone,(select d.department_name from department_ d where d.department_id=e.department_id),
-       e.employee_twophone,e.entry_time,e.department_id,e.company_id,c.company_name,
-       e.employee_status,e.probationary_expired,e.direct_person_id,y.employee_name AS direct_person_name
-	from employee_ e 
- 
-	lEFT JOIN  employee_ y  on y.employee_id=e.direct_person_id
-	lEFT JOIN  department_ d  on d.department_id=e.department_id
-	lEFT JOIN  company_ c on c.company_id=e.company_id 
-	where 
-	d.department_id=#{departmentId} 
+  <select id="findBydeptemployee" parameterType="java.lang.String" resultMap="Employee">
+   SELECT 
+     e.employee_id, e.employee_name 
+  FROM  employee_ e     	
+  LEFT JOIN department_ d  on d.department_id=e.department_id 
+	where  	
+	d.department_id=#{departmentId}
+	and
+	e.company_id=#{companyId}
+    and 
+    e.employee_status='0'	
+	 
 	  
   </select>
   
@@ -152,7 +151,7 @@
 	lEFT JOIN  department_ d  on d.department_id=e.department_id
 	lEFT JOIN  company_ c on c.company_id=e.company_id
     where 
-    e.employee_status='0'
+    e.employee_status in ('0','1')
     AND	
 	e.company_id=#{companyId} 
     ORDER BY e.entry_time DESC

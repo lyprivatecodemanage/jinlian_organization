@@ -24,7 +24,7 @@ public interface PostDao {
     
     List<Post> selectByAllPostInfo(String companyId);
     
-    List<Post> selectByPostName(String employeeId);
+    List<Post> selectByPostName(@Param("employeeId")String employeeId,@Param("departmentId") String departmentId);
     
     
     List<Post>findByMorePostIfon(Map<String,String> map);

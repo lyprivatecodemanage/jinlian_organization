@@ -3,7 +3,6 @@ package com.xiangshangban.organization.bean;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 
 
@@ -13,12 +12,18 @@ public class DepartmentTree implements Serializable {
 	private String label;//部门名称
 	private String value;//部门ID
 	private String key;	//部门ID	
-	private Map<String, Object> postemplist;
+	private List<Post> postlist;
 	private int CountNumber;
 	private List<DepartmentTree> children = new ArrayList<DepartmentTree>();	
 	
 	
 		
+	public List<Post> getPostlist() {
+		return postlist;
+	}
+	public void setPostlist(List<Post> postlist) {
+		this.postlist = postlist;
+	}
 	public String getLabel() {
 		return label;
 	}
@@ -37,12 +42,7 @@ public class DepartmentTree implements Serializable {
 	public void setKey(String key) {
 		this.key = key;
 	}
-	public Map<String, Object> getPostemplist() {
-		return postemplist;
-	}
-	public void setPostemplist(Map<String, Object> postemplist) {
-		this.postemplist = postemplist;
-	}
+	
 	public int getCountNumber() {
 		return CountNumber;
 	}

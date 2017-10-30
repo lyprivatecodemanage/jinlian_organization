@@ -141,11 +141,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 		return employeeDao.findByemploginName(loginName);
 	}
 
-	@Override
-	public List<Employee> findBydeptemployeeName(String departmentId) {
-		// TODO Auto-generated method stub
-		return employeeDao.findBydeptemployeeName(departmentId);
-	}
 
 	@Override
 	public List<Employee> findByposcounttemp(String postId,String companyId) {

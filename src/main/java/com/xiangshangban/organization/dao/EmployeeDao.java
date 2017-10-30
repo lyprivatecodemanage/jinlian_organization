@@ -23,7 +23,7 @@ public interface EmployeeDao {
     
     List<Employee> findByLiZhiemployee(String companyId);
     
-    List<Employee> findBydeptemployeeName(String departmentId);
+    List<Employee> findBydeptemployee(@Param("departmentId") String departmentId,@Param("companyId") String companyId);
     
     List<Employee> findByMoreEmployee(Map<String,String> map);
     

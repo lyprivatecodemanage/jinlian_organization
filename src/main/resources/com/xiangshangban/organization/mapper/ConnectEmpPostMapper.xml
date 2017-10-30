@@ -12,17 +12,19 @@
 
 
    <select id="findByConnect" parameterType="java.util.Map" resultMap="ConnectEmpPost">
-     select c.employee_id,e.employee_name,c.department_id,d.department_name,c.post_id,p.post_name
+    select c.employee_id,e.employee_name,c.department_id,d.department_name,c.post_id,p.post_name,c.post_grades,c.post_staus
     from connect_emp_post_ c 
     LEFT JOIN  post_ p on  c.post_id=p.post_id
     LEFT JOIN  employee_ e on e.employee_id=c.employee_id
-    LEFT JOIN  department_ d on d.department_id=c.department_id
+    LEFT JOIN  department_ d on d.department_id=c.department_id   
     where 
     c.employee_id=#{employeeId,jdbcType=VARCHAR}
     and
     c.department_id=#{departmentId}
-    AND
-    c.post_id=#{}
+    and
+    c.post_grades=#{postGrades}
+   and
+   c.post_staus='0'
    </select>
      
     <select id="findByConnectpostemp" parameterType="java.lang.String" resultMap="ConnectEmpPost">
@@ -33,7 +35,7 @@
    where 
      p.post_id=#{postId}
    </select>
-
+   
 
 	<insert id="saveConnect" parameterType="com.xiangshangban.organization.bean.ConnectEmpPost">
 		insert into 
@@ -93,16 +95,7 @@
 		and 
 		department_id=#{departmentId,jdbcType=VARCHAR}
 	</update>
-	
-	<update id="updateConnectLizhipostStaus" parameterType="com.xiangshangban.organization.bean.ConnectEmpPost">
-		update 
-		connect_emp_post_
-		set 
-		is_delete='2' 
-		where 
-		employee_id=#{employeeId,jdbcType=VARCHAR}		
-	</update>
-	
+		
 	<update id="updateConnectDelehipostStaus" parameterType="com.xiangshangban.organization.bean.ConnectEmpPost">
 		update 
 		connect_emp_post_
@@ -112,15 +105,17 @@
 		employee_id=#{employeeId,jdbcType=VARCHAR}		
 	</update>
 	
-	<update id="updateConnectDelehipostStaus" parameterType="com.xiangshangban.organization.bean.ConnectEmpPost">
+	<update id="updatetpostGradespostStaus" parameterType="com.xiangshangban.organization.bean.ConnectEmpPost">
 		update 
 		connect_emp_post_
 		set 
-		post_grades=#{postGrades} 
+		post_staus='1' 
 		where 
 		employee_id=#{employeeId,jdbcType=VARCHAR}
 		and
-		post_id=#{postId,jdbcType=VARCHAR}		
+		post_id=#{postId,jdbcType=VARCHAR}
+		and
+		department_id=#{departmentId,jdbcType=VARCHAR}				
 	</update>
 	
 	

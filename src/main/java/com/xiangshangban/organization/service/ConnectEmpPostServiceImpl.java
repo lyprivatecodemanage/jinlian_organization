@@ -49,13 +49,6 @@ public class ConnectEmpPostServiceImpl implements ConnectEmpPostService {
 		}
 		return i;
 	}
-
-	@Override
-	public List<ConnectEmpPost> findByConnect(Map<String,String> map) {
-		// TODO Auto-generated method stub
-		return connectEmpPostDao.findByConnect(map);
-	}
-
 	@Override
 	public String updateConnectpostStaus(ConnectEmpPost connect) {
 		String i="0";
@@ -69,22 +62,11 @@ public class ConnectEmpPostServiceImpl implements ConnectEmpPostService {
 	}
 
 	@Override
-	public List<ConnectEmpPost> findByConnectpostemp(String postId) {
+	public ConnectEmpPost findByConnectpostemp(String employeeId,String postId) {
 		// TODO Auto-generated method stub
-		return connectEmpPostDao.findByConnectpostemp(postId);
+		return connectEmpPostDao.findByConnectpostemp(postId, postId);
 	}
 
-	@Override
-	public String updateConnectLizhipostStaus(String employeeId) {
-		String i="0";
-		try {			
-			connectEmpPostDao.updateConnectLizhipostStaus(employeeId);
-			i="1";
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return i;
-	}
 
 	@Override
 	public String updateConnectDelehipostStaus(String employeeId) {
@@ -97,6 +79,26 @@ public class ConnectEmpPostServiceImpl implements ConnectEmpPostService {
 		}
 		return i;
 	}
+
+	@Override
+	public String updatetpostGradespostStaus(ConnectEmpPost connect) {
+		String i="0";
+		try {			
+			connectEmpPostDao.updatetpostGradespostStaus(connect);
+			i="1";
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return i;		
+	}
+
+	@Override
+	public ConnectEmpPost findByConnect(String employeeId, String departmentId,String postGrades) {
+		// TODO Auto-generated method stub
+		return connectEmpPostDao.findByConnect(employeeId, departmentId, postGrades);
+	}
+
+
 
 
 }

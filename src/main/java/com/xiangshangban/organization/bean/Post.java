@@ -1,5 +1,7 @@
 package com.xiangshangban.organization.bean;
 
+import java.util.List;
+
 public class Post {    
     private String postId;//岗位ID
     private String postName;//岗位名称   
@@ -12,9 +14,16 @@ public class Post {
     private String companyId;//公司ID   
     private String employeeName;//直属上司名称
     private String companyName;//公司名称    
-    
+    private List<Employee> employeelist;
     
 	
+    
+	public List<Employee> getEmployeelist() {
+		return employeelist;
+	}
+	public void setEmployeelist(List<Employee> employeelist) {
+		this.employeelist = employeelist;
+	}
 	public String getPostId() {
 		return postId;
 	}

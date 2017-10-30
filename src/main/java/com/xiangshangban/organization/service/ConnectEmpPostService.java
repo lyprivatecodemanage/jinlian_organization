@@ -10,9 +10,9 @@ public interface ConnectEmpPostService {
 	String saveConnect(ConnectEmpPost connect);	
 	String deleteConnect(String employeeId,String postId);	
 	String updateConnect(ConnectEmpPost connect);
-	List<ConnectEmpPost> findByConnect(Map<String,String> map);
 	String updateConnectpostStaus(ConnectEmpPost connect);
-	List<ConnectEmpPost> findByConnectpostemp(String postId);
-	String updateConnectLizhipostStaus(String employeeId);
+	ConnectEmpPost findByConnectpostemp(String employeeId,String postId);
 	String updateConnectDelehipostStaus(String employeeId);
+	String updatetpostGradespostStaus(ConnectEmpPost connect);
+	ConnectEmpPost findByConnect(String employeeId,String departmentId,String postGrades);
 }

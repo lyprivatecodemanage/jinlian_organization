@@ -2,8 +2,6 @@ package com.xiangshangban.organization.bean;
 
 import java.util.List;
 
-import com.xiangshangban.organization.util.ExcelResources;
-
 
 public class Employee {
     
@@ -48,56 +46,48 @@ public class Employee {
 		this.employeeId = employeeId;
 	}
 	
-	@ExcelResources(title="员工姓名",order=1)
 	public String getEmployeeName() {
 		return employeeName;
 	}
 	public void setEmployeeName(String employeeName) {
 		this.employeeName = employeeName;
 	}
-	@ExcelResources(title="性别",order=2)
 	public String getEmployeeSex() {
 		return employeeSex;
 	}
 	public void setEmployeeSex(String employeeSex) {
 		this.employeeSex = employeeSex;
 	}
-	@ExcelResources(title="登录名",order=3)
 	public String getLoginName() {
 		return loginName;
 	}
 	public void setLoginName(String loginName) {
 		this.loginName = loginName;
 	}
-	@ExcelResources(title="联系方式",order=4)
 	public String getEmployeePhone() {
 		return employeePhone;
 	}
 	public void setEmployeePhone(String employeePhone) {
 		this.employeePhone = employeePhone;
 	}
-	@ExcelResources(title="岗位",order=5)
 	public List<Post> getPostList() {
 		return postList;
 	}	
 	public void setPostList(List<Post> postList) {
 		this.postList = postList;
 	}
-	@ExcelResources(title="部门",order=6)
 	public String getDepartmentName() {
 		return departmentName;
 	}
 	public void setDepartmentName(String departmentName) {
 		this.departmentName = departmentName;
 	}
-	@ExcelResources(title="入职时间",order=7)
 	public String getEntryTime() {
 		return entryTime;
 	}
 	public void setEntryTime(String entryTime) {
 		this.entryTime = entryTime;
 	}
-	@ExcelResources(title="在职状态",order=8)
 	public String getEmployeeStatus() {
 		return employeeStatus;
 	}
@@ -155,6 +145,8 @@ public class Employee {
 	public void setCompanyName(String companyName) {
 		this.companyName = companyName;
 	}
+	
+	
 	
     
     

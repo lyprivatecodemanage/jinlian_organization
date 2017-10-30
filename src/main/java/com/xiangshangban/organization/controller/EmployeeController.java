@@ -71,89 +71,51 @@ public class EmployeeController {
 		}	
 		return map;	
 	}
+	
 	/**
-	 * 用户已注册，加入组织（公司），该公司管理员同意,跳到员工添加页面，把用户的登录名添加到员工信息表，
-	 * @param userName
+	 * 用户申请加入公司(如果用户已经注册，调该方法)
+	 * @param employee
 	 * @param request
 	 * @param response
 	 * @return
+	 * @throws JsonProcessingException
 	 */
-	@RequestMapping(value="/saveUser", produces = "application/json;charset=UTF-8", method=RequestMethod.POST)
-	public Map<String, Object> saveUser(@RequestBody String employee,HttpServletRequest request,HttpServletResponse response){		
+	@RequestMapping(value="/insertEmployeeuser", produces = "application/json;charset=UTF-8", method=RequestMethod.POST)
+	public Map<String, Object> insertEmployeeuser(@RequestBody String employee,HttpServletRequest request,HttpServletResponse response) throws JsonProcessingException{								
 		Map<String, Object> result = new HashMap<String, Object>();
 		Employee employeenew = new Employee();
 		JSONObject jsonObject = JSONObject.parseObject(employee);
-		String employeeNo = jsonObject.getString("employeeNo");		
-		Employee employeeNotemp =employeeService.findByemployeeNo(employeeNo);	
-		if(employeeNotemp != null ){			
-			result.put("message", "员工编号已存在");
-			return result;			
-		}
-		 String loginName = jsonObject.getString("loginName");		 
-		 Employee loginname=employeeService.findByemploginName(loginName);		 
-		if(loginname != null ){			
+		String employeeName = jsonObject.getString("employeeName");
+		String employeeSex = jsonObject.getString("employeeSex");
+		String employeePhone = jsonObject.getString("employeePhone");
+		//String userName ="13022167724";
+		String userName = jsonObject.getString("userName");
+		String companyId = jsonObject.getString("companyId");				
+		User useremp = userService.getOneUser(userName);
+		String UserId = useremp.getUserId();
+		 Employee loginname=employeeService.findByemploginName(userName);		 
+		if(loginname != null){			
 			result.put("message", "登录名已存在");  
 			return result;			
-		}else{
-			String employeeName = jsonObject.getString("employeeName");			
-			String employeeSex = jsonObject.getString("employeeSex");			
-			String employeePhone = jsonObject.getString("employeePhone");
-			boolean employeephone = Pattern.matches("^[1][3,4,5,7,8][0-9]{9}$", employeePhone);
-			String employeeTwophone = jsonObject.getString("employeeTwophone");
-			boolean employeetwophone = Pattern.matches("^[1][3,4,5,7,8][0-9]{9}$", employeeTwophone);
-			String directPersonId = jsonObject.getString("directPersonId");
-			String entryTime = jsonObject.getString("entryTime");
-			boolean entrytime = Pattern.matches("[0-9]{4}-[0-9]{2}-[0-9]{2}", entryTime);
-			String probationaryExpired = jsonObject.getString("probationaryExpired");
-			boolean probationaryexpired = Pattern.matches("[0-9]{4}-[0-9]{2}-[0-9]{2}", probationaryExpired);
-			String departmentId = jsonObject.getString("departmentId");
-			String companyId ="977ACD3022C24B99AC9586CC50A8F786";			
-			employeenew.setCompanyId(companyId);
+		}else{			
+			//String companyId ="977ACD3022C24B99AC9586CC50A8F786";
 			employeenew.setEmployeeName(employeeName);
 			employeenew.setEmployeeSex(employeeSex);
-			employeenew.setLoginName(loginName);
 			employeenew.setEmployeePhone(employeePhone);
-			employeenew.setEmployeeTwophone(employeeTwophone);
-			employeenew.setDirectPersonId(directPersonId);			
-			employeenew.setEntryTime(entryTime);
-			employeenew.setEmployeeNo(employeeNo);
-			employeenew.setProbationaryExpired(probationaryExpired);
-			employeenew.setDepartmentId(departmentId);
-			employeenew.setEmployeeStatus("0");
-			if (!employeephone || !employeetwophone || !entrytime || !probationaryexpired) {				
-				result.put("message", "参数格式不正确");
-				return result;
+			employeenew.setEmployeeId(UserId);
+			employeenew.setLoginName(userName);
+			employeenew.setCompanyId(companyId);			
+			employeenew.setEmployeeStatus("3");	
+			String i=employeeService.insertEmployeeuser(employeenew);
+			if(i.equals("1")){
+				result.put("message", "申请成功");
 			}else{
-				employeeService.updateByEmployeeapprove(employeenew);				
-				//添加员工信息的同时把员工信息添加到调动表里
-				Employee employeeNotemps =employeeService.findByemployeeNo(employeeNo);
-				String EmployeeId = employeeNotemps.getEmployeeId();
-			    Transferjob transferjob = new Transferjob();		    
-			    transferjob.setEmployeeId(EmployeeId);
-			    transferjob.setDepartmentId(departmentId);
-			    transferjob.setTransferBeginTime(entryTime);
-			    transferjob.setTransferJobCause("新员工入职该岗位");			   
-			    transferjob.setUserId("6B566C197A7D4337A5DA0B4D6F9FC1A3");//操作人ID	
-			    transferjob.setCompanyId("977ACD3022C24B99AC9586CC50A8F786");
-			    transferjobService.insertTransferjob(transferjob);
-			    //把员工关联的岗位添加到connect_emp_post_中间表里面
-			    String empId=employeenew.getEmployeeId();						
-				String postIdList = jsonObject.getString("postList");
-				JSONArray postIdList1 = JSON.parseArray(postIdList);
-				for(int i =0;i<postIdList1.size();i++){
-					JSONObject jobj = jsonObject.parseObject(postIdList1.getString(i)) ;
-							String postId = jobj.getString("postId");
-							ConnectEmpPost empPost = new ConnectEmpPost();
-							empPost.setEmployeeId(empId);
-							empPost.setDepartmentId(departmentId);
-							empPost.setPostId(postId);				          
-					 connectEmpPostService.saveConnect(empPost);				 				
-				}									
-				result.put("message", "添加成功");
+				result.put("message", "申请失败");
+			}				
 				return result;
-			}								    			
+										    			
 		}					
-	} 
+	}		
 	
 	/**
 	 * 根据姓名、登录名、联系方式、性别、所属部门、岗位、入职时间、在职状态查询员工信息
@@ -185,7 +147,8 @@ public class EmployeeController {
                 String temps =String.valueOf(s);
 				Employee employeelist = employeelistemp.get(i);
 				String Employeeid = employeelist.getEmployeeId();
-	            List<Post> PostNamelist = postService.selectByPostName(Employeeid);	            
+				String departmentId = employeelist.getDepartmentId();
+	            List<Post> PostNamelist = postService.selectByPostName(Employeeid,departmentId);	            
 	            employeelist.setPostList(PostNamelist);	                 
 	            postnamelist.put("employeelist"+temps, employeelist);
 				
@@ -230,7 +193,8 @@ public class EmployeeController {
            String temps =String.valueOf(s);
 		   Employee employeelist = employeelistemp.get(i);
 		   String Employeeid = employeelist.getEmployeeId();
-           List<Post> PostNamelist = postService.selectByPostName(Employeeid);	            
+		   String departmentId = employeelist.getDepartmentId();
+           List<Post> PostNamelist = postService.selectByPostName(Employeeid,departmentId);	            
            employeelist.setPostList(PostNamelist);	                 
            postnamelist.put("employeelist"+temps, employeelist);			
 		}	
@@ -262,7 +226,8 @@ public class EmployeeController {
           String temps =String.valueOf(s);
 		   Employee employeelist = LiZhiemployeelist.get(i);
 		   String Employeeid = employeelist.getEmployeeId();
-          List<Post> PostNamelist = postService.selectByPostName(Employeeid);	            
+		   String departmentId = employeelist.getDepartmentId();
+           List<Post> PostNamelist = postService.selectByPostName(Employeeid,departmentId);	            
           employeelist.setPostList(PostNamelist);	                 
           postnamelist.put("employeelist"+temps, employeelist);
 		}
@@ -363,50 +328,7 @@ public class EmployeeController {
 			}								    			
 		}					
 	}
-	/**
-	 * 用户申请加入公司(如果用户已经注册，调该方法)
-	 * @param employee
-	 * @param request
-	 * @param response
-	 * @return
-	 * @throws JsonProcessingException
-	 */
-	@RequestMapping(value="/insertEmployeeuser", produces = "application/json;charset=UTF-8", method=RequestMethod.POST)
-	public Map<String, Object> insertEmployeeuser(@RequestBody String employee,HttpServletRequest request,HttpServletResponse response) throws JsonProcessingException{								
-		Map<String, Object> result = new HashMap<String, Object>();
-		Employee employeenew = new Employee();
-		JSONObject jsonObject = JSONObject.parseObject(employee);
-		String employeeName = jsonObject.getString("employeeName");
-		String employeeSex = jsonObject.getString("employeeSex");
-		String employeePhone = jsonObject.getString("employeePhone");
-		//String userName ="13022167724";
-		String userName = jsonObject.getString("userName");
-		String companyId = jsonObject.getString("companyId");				
-		User useremp = userService.getOneUser(userName);
-		String UserId = useremp.getUserId();
-		 Employee loginname=employeeService.findByemploginName(userName);		 
-		if(loginname != null){			
-			result.put("message", "登录名已存在");  
-			return result;			
-		}else{			
-			//String companyId ="977ACD3022C24B99AC9586CC50A8F786";
-			employeenew.setEmployeeName(employeeName);
-			employeenew.setEmployeeSex(employeeSex);
-			employeenew.setEmployeePhone(employeePhone);
-			employeenew.setEmployeeId(UserId);
-			employeenew.setLoginName(userName);
-			employeenew.setCompanyId(companyId);			
-			employeenew.setEmployeeStatus("3");	
-			String i=employeeService.insertEmployeeuser(employeenew);
-			if(i.equals("1")){
-				result.put("message", "申请成功");
-			}else{
-				result.put("message", "申请失败");
-			}				
-				return result;
-										    			
-		}					
-	}		
+	
 	
 	/**
 	 * 编辑员工信息
@@ -418,6 +340,7 @@ public class EmployeeController {
 	@RequestMapping(value="/updateByEmployee", produces = "application/json;charset=UTF-8", method=RequestMethod.POST)
 	public Map<String, Object> updateByEmployee(@RequestBody String employee,HttpServletRequest request,HttpServletResponse response){		 		
 		Map<String, Object> result = new HashMap<String, Object>();
+		Map<String, Object> preams= new HashMap<String, Object>();
 		Employee employeenew = new Employee();
 		JSONObject jsonObject = JSONObject.parseObject(employee);		
 			String employeeId = jsonObject.getString("employeeId");			
@@ -459,17 +382,27 @@ public class EmployeeController {
 		    //把员工关联的岗位添加到connect_emp_post_中间表里面					    
 			String postIdList = jsonObject.getString("postList");
 			JSONArray postIdList1 = JSON.parseArray(postIdList);			
-			for(int j =0;j<postIdList1.size();j++){
-				JSONObject jobj = jsonObject.parseObject(postIdList1.getString(j));
-				ConnectEmpPost empPost = new ConnectEmpPost();
-						String postId = jobj.getString("postId");						
-						String postGrades = jobj.getString("postGrades");												
-						empPost.setEmployeeId(employeeId);
-						empPost.setDepartmentId(departmentId);
-						empPost.setPostGrades(postGrades);
-						empPost.setPostId(postId);				          	
-				  connectEmpPostService.saveConnect(empPost);				
-			}	
+			for(int i =0;i<postIdList1.size();i++){
+				JSONObject jobj = jsonObject.parseObject(postIdList1.getString(i)) ;
+						String postId = jobj.getString("postId");
+						String postGrades = jobj.getString("postGrades");
+						ConnectEmpPost empPost = new ConnectEmpPost();
+						ConnectEmpPost connect = new ConnectEmpPost();
+						ConnectEmpPost connectemppos = connectEmpPostService.findByConnect(employeeId,departmentId, postGrades);
+						String postid = connectemppos.getPostId();
+						if(!postId.equals("postid")){
+							connect.setDepartmentId(departmentId);
+							connect.setEmployeeId(employeeId);
+							connect.setPostId(postid);
+							connectEmpPostService.updatetpostGradespostStaus(connect);
+							empPost.setEmployeeId(employeeId);
+							empPost.setDepartmentId(departmentId);
+							empPost.setPostGrades(postGrades);
+							empPost.setPostId(postId);				          
+					        connectEmpPostService.saveConnect(empPost);
+						}continue;
+										 				
+			}				
 			if(employeeId.equals("")){
 				result.put("message","编辑失败");			
 			}else{
@@ -494,8 +427,9 @@ public class EmployeeController {
 		Map<String, Object> map=new HashMap<String, Object>();
 		String companyId = "977ACD3022C24B99AC9586CC50A8F786";			
          if(!employeeId.equals("")){ 
-        	 Employee emp =employeeService.selectByEmployee(employeeId,companyId);		    		
-             List<Post> PostNamelist = postService.selectByPostName(employeeId);	            
+        	 Employee emp =employeeService.selectByEmployee(employeeId,companyId);	
+        	 String departmentId = emp.getDepartmentId();
+             List<Post> PostNamelist = postService.selectByPostName(employeeId,departmentId);	            
              emp.setPostList(PostNamelist);
         	 map.put("emp",emp);
         	 return map;
@@ -525,7 +459,8 @@ public class EmployeeController {
 		if(employeeId.equals("")){
 			map.put("message","删除失败");
 		}else{
-			employeeService.deleteByEmployee(employeeId);
+			employeeService.batchUpdateTest(employeeId);
+			connectEmpPostService.updateConnectDelehipostStaus(employeeId);
 			map.put("message", "删除成功");
 						
 		}	
@@ -618,9 +553,7 @@ public class EmployeeController {
 			if(employeeId.equals("")){				
 				map.put("message","离职失败");			
 			}else{
-				employeeService.batchUpdateStatus(employeeId);
-				//离职后，把connect_emp_post_表对应的岗位ID状态改为2
-				connectEmpPostService.updateConnectLizhipostStaus(employeeId);
+				employeeService.batchUpdateStatus(employeeId);			
 				map.put("message", "离职成功");
 						
 			}	

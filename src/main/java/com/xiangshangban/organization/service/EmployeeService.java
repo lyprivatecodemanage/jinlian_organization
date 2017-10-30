@@ -30,8 +30,6 @@ public interface EmployeeService {
     Employee findByemployeeNo(String employeeNo);
     Employee findByemploginName(String loginName);
     
-    List<Employee> findBydeptemployeeName(String departmentId);
-    
     List<Employee> findByposcounttemp(String postId,String companyId);
 	String updateByEmployeeapprove(Employee employee);
     

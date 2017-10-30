@@ -19,7 +19,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.xiangshangban.organization.bean.Department;
 import com.xiangshangban.organization.bean.DepartmentTree;
 import com.xiangshangban.organization.service.DepartmentService;
-import com.xiangshangban.organization.util.ExcelUtil;
 
 @RestController
 @RequestMapping("/DepartmentController")
@@ -64,7 +63,7 @@ public class DepartmentController {
 		return JSON.toJSONString(treeNode);
 	}
 	/**
-	 * 查询所有部门下的所有岗位分类以及分类下的岗位
+	 * 查询所有部门下的岗位关人员系树
 	 * @param request
 	 * @param response
 	 * @return
@@ -101,7 +100,6 @@ public class DepartmentController {
 	 */
 	@RequestMapping(value="/insertDepartment", produces = "application/json;charset=UTF-8", method=RequestMethod.POST)
 	public Map<String, Object> insertDepartment(@RequestBody String department,HttpServletRequest request,HttpServletResponse response){		
-		Map<String,String> param = new HashMap<String, String>();
 		Map<String, Object> map=new HashMap<String, Object>();
 		String companyId="977ACD3022C24B99AC9586CC50A8F786";
 		Department departmenttemp=JSON.parseObject(department,Department.class);
