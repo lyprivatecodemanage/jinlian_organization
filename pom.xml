@@ -42,11 +42,17 @@
         </dependency>
 		<!-- 导出报表 -->
 		    
-       <dependency>  
+        <dependency>  
             <groupId>org.apache.poi</groupId>  
             <artifactId>poi</artifactId>  
             <version>3.14</version>  
         </dependency> 
+		<dependency>  
+	        <groupId>com.microsoft.azure</groupId>  
+		    <artifactId>azure-storage</artifactId>  
+		    <version>4.0.0</version>  
+	    </dependency>
+	
 	
 	<!-- json依赖 -->
  		<dependency>

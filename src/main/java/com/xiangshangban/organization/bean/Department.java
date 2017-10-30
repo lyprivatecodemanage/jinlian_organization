@@ -1,8 +1,7 @@
 package com.xiangshangban.organization.bean;
 
 
-public class Department {
-   
+public class Department {   
 	private String departmentId;//部门ID
     private String departmentNumbe;//部门编号
     private String departmentName;//部门名称
