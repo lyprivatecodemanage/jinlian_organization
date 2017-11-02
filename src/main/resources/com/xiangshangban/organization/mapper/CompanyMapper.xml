@@ -52,7 +52,7 @@
   <select id="selectByCompany" parameterType="java.lang.String" resultMap="Company">  
     select 
     <include refid="Base_Column_List" />
-    from company_
+    from organization.company_
     where company_id = #{companyId,jdbcType=VARCHAR}
   </select>
   
@@ -60,7 +60,7 @@
   <select id="findBycompanyNo" parameterType="java.lang.String" resultMap="Company">
     select 
     c.company_no
-    from company_ c
+    from organization.company_ c
     where c.company_no = #{companyNo,jdbcType=VARCHAR}
   </select>
   
@@ -68,7 +68,7 @@
   <select id="fingdByAllCompany"  resultMap="Company">  
     select 
     <include refid="Base_Column_List" />
-    from company_   
+    from organization.company_   
   </select>
   
   <delete id="deleteByCompany" parameterType="java.lang.String"> 
@@ -77,7 +77,7 @@
   </delete>
   
   <insert id="insertCompany" parameterType="com.xiangshangban.organization.bean.Company">   
-    insert into company_ (company_id, company_name,company_logo,company_code,
+    insert into organization.company_ (company_id, company_name,company_logo,company_code,
     company_abbreviation_name,industry_type, company_area,company_personal_name,company_phone,company_approve,user_name,company_no
       )
     values (
@@ -98,7 +98,7 @@
   </insert>
   
   <update id="updateByCompany" parameterType="com.xiangshangban.organization.bean.Company">    
-    update company_
+    update organization.company_
     set 
       company_name=#{companyName,jdbcType=VARCHAR},       
       company_logo=#{companyLogo,jdbcType=VARCHAR},

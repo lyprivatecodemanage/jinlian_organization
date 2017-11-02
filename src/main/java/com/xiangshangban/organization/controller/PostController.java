@@ -36,11 +36,22 @@ public class PostController {
 		 * @return
 		 */
 		@RequestMapping(value="/insertPost", produces = "application/json;charset=UTF-8", method=RequestMethod.POST)
-		public String insertPost(@RequestBody String post,HttpServletRequest request,HttpServletResponse response){
+		public Map<String, Object> insertPost(@RequestBody String post,HttpServletRequest request,HttpServletResponse response){
 			System.out.println(post);
-			Post posttemp=JSON.parseObject(post,Post.class);			
-			String i=postService.insertPost(posttemp);		
-			return "{\"message\":\""+i+"\"}";
+			String companyId="977ACD3022C24B99AC9586CC50A8F786";
+			Post posttemp=JSON.parseObject(post,Post.class);
+			posttemp.setCompanyId(companyId);
+			String departmentId = posttemp.getDepartmentId();
+			String postName = posttemp.getPostName();
+			
+			Map<String, Object> map=new HashMap<String, Object>();
+			if(!departmentId.equals("") || !postName.equals("") || !companyId.equals("")){
+				map.put("message", "添加成功");
+				postService.insertPost(posttemp);
+			}else{
+				map.put("message", "添加失败");
+			}
+			return map;
 		}
 		
 		/**

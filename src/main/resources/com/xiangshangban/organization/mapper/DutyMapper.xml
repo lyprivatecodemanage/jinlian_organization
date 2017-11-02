@@ -16,24 +16,24 @@
   <select id="selectByDuty" parameterType="java.lang.String" resultMap="Duty">
     select 
     <include refid="Base_Column_List" />
-    from duty_
+    from organization.duty_
     where duty_id = #{dutyId,jdbcType=VARCHAR}
   </select>
   
   <select id="findByAllDuty" parameterType="java.lang.String" resultMap="Duty">
     select 
     <include refid="Base_Column_List" />
-    from duty_   
+    from organization.duty_   
     where post_id = #{postId,jdbcType=VARCHAR}
   </select>
   
   <delete id="deleteByDuty" parameterType="java.lang.String">   
-    delete from duty_
+    delete from organization.duty_
     where duty_id = #{dutyId,jdbcType=VARCHAR}
   </delete>
   
   <insert id="insertDuty" parameterType="com.xiangshangban.organization.bean.Duty"> 
-    insert into duty_ (duty_id, duty_name, duty_matter, 
+    insert into organization.duty_ (duty_id, duty_name, duty_matter, 
       post_id)
     values (#{dutyId,jdbcType=VARCHAR}, #{dutyName,jdbcType=VARCHAR}, #{dutyMatter,jdbcType=VARCHAR}, 
       #{postId,jdbcType=VARCHAR})
@@ -42,7 +42,7 @@
   
   
   <update id="updateByDuty" parameterType="com.xiangshangban.organization.bean.Duty">   
-    update duty_
+    update organization.duty_
     set duty_name = #{dutyName,jdbcType=VARCHAR},
       duty_matter = #{dutyMatter,jdbcType=VARCHAR},
       post_id = #{postId,jdbcType=VARCHAR}

@@ -19,6 +19,6 @@ public interface PostService {
     List<Post> selectByAllPostInfo(String companyId);
     
     List<Post>findByMorePostIfon(Map<String,String> map);
-   
+    List<Post> selectByPostemp(String employeeId,String departmentId);
     
 }

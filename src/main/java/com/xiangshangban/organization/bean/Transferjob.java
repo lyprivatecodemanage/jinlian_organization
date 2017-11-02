@@ -15,8 +15,17 @@ public class Transferjob {
     private String operatingTime;//操作时间
     private String departmentName;//部门名称  
     private String companyId;//公司ID
+    private String directPersonId;//调动直接汇报人id
     
   
+
+	public String getDirectPersonId() {
+		return directPersonId;
+	}
+
+	public void setDirectPersonId(String directPersonId) {
+		this.directPersonId = directPersonId;
+	}
 
 	public String getCompanyId() {
 		return companyId;

@@ -1,5 +1,6 @@
 package com.xiangshangban.organization.bean;
 
+import com.xiangshangban.organization.util.ExcelResources;
 
 public class Department {   
 	private String departmentId;//部门ID
@@ -16,32 +17,35 @@ public class Department {
     private String CountNumber;//部门总人数
     
     
-    
+	@ExcelResources(title="部门编号",order=1)
 	public String getDepartmentNumbe() {
 		return departmentNumbe;
 	}
 	public void setDepartmentNumbe(String departmentNumbe) {
 		this.departmentNumbe = departmentNumbe;
 	}
+	@ExcelResources(title="部门名称",order=2)
 	public String getDepartmentName() {
 		return departmentName;
 	}
 	public void setDepartmentName(String departmentName) {
 		this.departmentName = departmentName;
 	}
+	@ExcelResources(title="部门描述",order=3)	
 	public String getDepartmentDescribe() {
 		return departmentDescribe;
 	}
 	public void setDepartmentDescribe(String departmentDescribe) {
 		this.departmentDescribe = departmentDescribe;
 	}
-	
+	@ExcelResources(title="上级组织机构",order=4)	
 	public String getCompanyName() {
 		return companyName;
 	}
 	public void setCompanyName(String companyName) {
 		this.companyName = companyName;
 	}	
+	@ExcelResources(title="部门负责人",order=5)	
 	public String getEmployeeName() {
 		return employeeName;
 	}

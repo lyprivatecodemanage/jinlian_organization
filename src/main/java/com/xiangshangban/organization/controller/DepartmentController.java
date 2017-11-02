@@ -106,13 +106,16 @@ public class DepartmentController {
 		departmenttemp.setCompanyId(companyId);
 		String DepartmentNumbe = departmenttemp.getDepartmentNumbe();
 		String DepartmentName = departmenttemp.getDepartmentName();
-		String EmployeeId = departmenttemp.getEmployeeId();
+		//String EmployeeId = departmenttemp.getEmployeeId();
 		String DepartmentParentId = departmenttemp.getDepartmentParentId();
-		departmentService.insertDepartment(departmenttemp);
-		if(companyId.equals("") || DepartmentNumbe.equals("") || DepartmentName.equals("") || EmployeeId.equals("") || DepartmentParentId.equals("")){
+		if(DepartmentParentId.equals("")){
+			departmenttemp.setDepartmentParentId("0");
+		}		
+		if(companyId.equals("") || DepartmentNumbe.equals("") || DepartmentName.equals("")){
 			map.put("message","添加失败");
 			return map;			
 		}else{			
+			departmentService.insertDepartment(departmenttemp);
 			map.put("message", "添加成功");			
 			return map;
 		}		

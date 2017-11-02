@@ -77,6 +77,12 @@ public class PostServiceImpl implements PostService {
 		return postDao.findByMorePostIfon(map);
 	}
 
+	@Override
+	public List<Post> selectByPostemp(String employeeId, String departmentId) {
+		// TODO Auto-generated method stub
+		return postDao.selectByPostemp(employeeId, departmentId);
+	}
+
 	
 
 	

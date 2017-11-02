@@ -1,42 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xiangshangban.organization.dao.EmployeeDao">
-
   <resultMap id="Employee" type="com.xiangshangban.organization.bean.Employee">     
     <result column="employee_id" jdbcType="VARCHAR" property="employeeId" />
     <result column="employee_name" jdbcType="VARCHAR" property="employeeName" />
     <result column="login_name" jdbcType="VARCHAR" property="loginName" />    
     <result column="employee_sex" jdbcType="VARCHAR" property="employeeSex" />
-    <!-- <result column="employee_birthday" jdbcType="VARCHAR" property="employeeBirthday" /> -->
     <result column="employee_no" jdbcType="VARCHAR" property="employeeNo" />
     <result column="direct_person_id" jdbcType="VARCHAR" property="directPersonId" />
-    <result column="direct_person_name" jdbcType="VARCHAR" property="directPersonName" />   
-    <!-- <result column="employee_tell" jdbcType="VARCHAR" property="employeeTell" /> -->
+    <result column="direct_person_name" jdbcType="VARCHAR" property="directPersonName" /> 
     <result column="employee_phone" jdbcType="VARCHAR" property="employeePhone" />
     <result column="employee_twophone" jdbcType="VARCHAR" property="employeeTwophone" />
-    <!-- <result column="employee_email" jdbcType="VARCHAR" property="employeeEmail" />
-    <result column="employee_dept" jdbcType="VARCHAR" property="employeeDept" />
-    <result column="employee_position" jdbcType="VARCHAR" property="employeePosition" />
-    <result column="employee_work_place" jdbcType="VARCHAR" property="employeeWorkPlace" />
-    <result column="employee_img_url" jdbcType="VARCHAR" property="employeeImgUrl" />   -->
     <result column="entry_time" jdbcType="VARCHAR" property="entryTime" />
-    <!-- <result column="contract_period" jdbcType="VARCHAR" property="contractPeriod" /> -->
     <result column="employee_status" jdbcType="VARCHAR" property="employeeStatus" />
-    <!-- <result column="is_manager" jdbcType="VARCHAR" property="isManager" />
-    <result column="contract_expired" jdbcType="VARCHAR" property="contractExpired" /> -->
     <result column="probationary_expired" jdbcType="VARCHAR" property="probationaryExpired" />
-    <!-- <result column="probationary_period" jdbcType="VARCHAR" property="probationaryPeriod" /> -->
-    <!-- <result column="emergency_contact_phone" jdbcType="VARCHAR" property="emergencyContactPhone" />
-    <result column="emergency_contact" jdbcType="VARCHAR" property="emergencyContact" />
-    <result column="phone_public" jdbcType="VARCHAR" property="phonePublic" />-->
-    <!-- <result column="shift_time" jdbcType="VARCHAR" property="shiftTime" /> -->
-    <!-- <result column="employee_card_number" jdbcType="VARCHAR" property="employeeCardNumber" />  -->
-    <result column="department_name" jdbcType="VARCHAR" property="departmentName" />
-    <!-- <result column="post_name" jdbcType="VARCHAR" property="postName" /> -->    
     <result column="department_id" jdbcType="VARCHAR" property="departmentId" /> 
-    <!-- <result column="post_class_name" jdbcType="VARCHAR" property="postClassName" /> --> 
+    <result column="department_name" jdbcType="VARCHAR" property="departmentName" />
     <result column="company_name" jdbcType="VARCHAR" property="companyName" />
     <result column="company_id" jdbcType="VARCHAR" property="companyId" />
+    <result column="post_name" jdbcType="VARCHAR" property="postName" />       
+   
+    <!-- <result column="employee_birthday" jdbcType="VARCHAR" property="employeeBirthday" />   
+    <result column="employee_tell" jdbcType="VARCHAR" property="employeeTell" />     
+    <result column="employee_email" jdbcType="VARCHAR" property="employeeEmail" />
+    <result column="employee_position" jdbcType="VARCHAR" property="employeePosition" />
+    <result column="employee_work_place" jdbcType="VARCHAR" property="employeeWorkPlace" />
+    <result column="employee_img_url" jdbcType="VARCHAR" property="employeeImgUrl" />    
+    <result column="contract_period" jdbcType="VARCHAR" property="contractPeriod" />   
+    <result column="is_manager" jdbcType="VARCHAR" property="isManager" />
+    <result column="contract_expired" jdbcType="VARCHAR" property="contractExpired" />  
+    <result column="probationary_period" jdbcType="VARCHAR" property="probationaryPeriod" />
+    <result column="emergency_contact_phone" jdbcType="VARCHAR" property="emergencyContactPhone" />
+    <result column="emergency_contact" jdbcType="VARCHAR" property="emergencyContact" />
+    <result column="phone_public" jdbcType="VARCHAR" property="phonePublic" />
+    <result column="shift_time" jdbcType="VARCHAR" property="shiftTime" /> 
+    <result column="employee_card_number" jdbcType="VARCHAR" property="employeeCardNumber" />  -->    
+    
   </resultMap>
   <sql id="Base_Column_List"> 
     employee_id, employee_name, employee_sex,employee_no, direct_report_person, 
@@ -49,9 +48,9 @@
   <select id="findByposcounttemp" parameterType="java.lang.String" resultMap="Employee">
    SELECT  
     e.employee_id,e.employee_name
-   FROM  employee_ e 
-	LEFT JOIN connect_emp_post_ c on c.employee_id=e.employee_id  and c.is_delete='0'
-	LEFT JOIN post_ p  on  c.post_id = p.post_id  
+   FROM  organization.employee_ e 
+	LEFT JOIN organization.connect_emp_post_ c on c.employee_id=e.employee_id  and c.is_delete='0'
+	LEFT JOIN organization.post_ p  on  c.post_id = p.post_id  
 	where 
 	p.post_id=#{postId}
 	and
@@ -62,8 +61,8 @@
   <select id="findBydeptemployee" parameterType="java.lang.String" resultMap="Employee">
    SELECT 
      e.employee_id, e.employee_name 
-  FROM  employee_ e     	
-  LEFT JOIN department_ d  on d.department_id=e.department_id 
+  FROM  organization.employee_ e     	
+  LEFT JOIN organization.department_ d  on d.department_id=e.department_id 
 	where  	
 	d.department_id=#{departmentId}
 	and
@@ -76,7 +75,7 @@
   
   <!--员工批量删除,逻辑删除-->
   <update id="batchUpdateTest" parameterType="java.lang.String">	
-	update employee_ 
+	update organization.employee_ 
 	set 
 	employee_status='2'
 	where 
@@ -85,7 +84,7 @@
   
   <!--员工离职-->
   <update id="batchUpdateStatus" parameterType="java.lang.String">	
-	update employee_ 
+	update organization.employee_ 
 	set 
 	employee_status='1'
 	where 
@@ -94,14 +93,14 @@
 
   <select id="findByLiZhiemployee" parameterType="java.lang.String" resultMap="Employee">
    select DISTINCT e.employee_id, e.employee_name,e.login_name, e.employee_sex,e.employee_no, 
-       e.employee_phone,(select d.department_name from department_ d where d.department_id=e.department_id),
+       e.employee_phone,(select d.department_name from organization.department_ d where d.department_id=e.department_id),
        e.employee_twophone,e.entry_time,e.department_id,e.company_id,c.company_name,
        e.employee_status,e.probationary_expired,e.direct_person_id,y.employee_name AS direct_person_name
-	from employee_ e 
+	from organization.employee_ e 
  
-	lEFT JOIN  employee_ y  on y.employee_id=e.direct_person_id
-	lEFT JOIN  department_ d  on d.department_id=e.department_id
-	lEFT JOIN  company_ c on c.company_id=e.company_id
+	lEFT JOIN  organization.employee_ y  on y.employee_id=e.direct_person_id
+	lEFT JOIN  organization.department_ d  on d.department_id=e.department_id
+	lEFT JOIN  organization.company_ c on c.company_id=e.company_id
 	where 
 	e.employee_status='1'
 	AND	
@@ -112,46 +111,48 @@
  <select id="findByemployeeNo" parameterType="java.lang.String" resultMap="Employee">
     select 
     e.employee_no,employee_id
-    from employee_ e
-    where employee_no = #{employeeNo,jdbcType=VARCHAR}
+    from organization.employee_ e
+    where 
+    e.employee_no = #{employeeNo,jdbcType=VARCHAR}
   </select>
 
 <select id="findByemploginName" parameterType="java.lang.String" resultMap="Employee">
     select 
     e.login_name
-    from employee_ e
-    where login_name = #{loginName,jdbcType=VARCHAR}
+    from organization.employee_ e
+    where 
+    e.login_name = #{loginName,jdbcType=VARCHAR}
   </select>
 
   <select id="selectByEmployee" parameterType="java.lang.String" resultMap="Employee">  
     select DISTINCT e.employee_id, e.employee_name,e.login_name, e.employee_sex,e.employee_no, 
-       e.employee_phone,(select d.department_name from department_ d where d.department_id=e.department_id),
+       e.employee_phone,(select d.department_name from organization.department_ d where d.department_id=e.department_id),
        e.employee_twophone,e.entry_time,e.department_id,e.company_id,c.company_name,
        e.employee_status,e.probationary_expired,e.direct_person_id,y.employee_name AS direct_person_name
-	from employee_ e 
+	from organization.employee_ e 
  
-	lEFT JOIN  employee_ y  on y.employee_id=e.direct_person_id
-	lEFT JOIN  department_ d  on d.department_id=e.department_id
-	lEFT JOIN  company_ c on c.company_id=e.company_id
+	lEFT JOIN  organization.employee_ y  on y.employee_id=e.direct_person_id
+	lEFT JOIN  organization.department_ d  on d.department_id=e.department_id
+	lEFT JOIN  organization.company_ c on c.company_id=e.company_id
     where  
      e.employee_id = #{employeeId,jdbcType=VARCHAR}
    and 
     e.company_id=#{companyId}        
   </select>
   
-  <!-- 所有员工的信息 -->
+  <!-- 所有在职员工的信息 -->
   <select id="findByAllEmployee" parameterType="java.lang.String" resultMap="Employee">  
     select DISTINCT e.employee_id, e.employee_name,e.login_name, e.employee_sex,e.employee_no, 
-       e.employee_phone,(select d.department_name from department_ d where d.department_id=e.department_id),
+       e.employee_phone,(select d.department_name from organization.department_ d where d.department_id=e.department_id),
        e.employee_twophone,e.entry_time,e.department_id,e.company_id,c.company_name,
        e.employee_status,e.probationary_expired,e.direct_person_id,y.employee_name AS direct_person_name
-	from employee_ e 
+	from organization.employee_ e 
  
-	lEFT JOIN  employee_ y  on y.employee_id=e.direct_person_id
-	lEFT JOIN  department_ d  on d.department_id=e.department_id
-	lEFT JOIN  company_ c on c.company_id=e.company_id
+	lEFT JOIN  organization.employee_ y  on y.employee_id=e.direct_person_id
+	lEFT JOIN  organization.department_ d  on d.department_id=e.department_id
+	lEFT JOIN  organization.company_ c on c.company_id=e.company_id
     where 
-    e.employee_status in ('0','1')
+    e.employee_status='0'
     AND	
 	e.company_id=#{companyId} 
     ORDER BY e.entry_time DESC
@@ -160,41 +161,41 @@
   <!-- 根据姓名、联系方式、性别、所属部门、岗位、入职时间、在职状态查询员工信息 -->
   <select id="findByMoreEmployee"   parameterType="java.util.Map" resultMap="Employee">  
     select DISTINCT e.employee_id, e.employee_name,e.login_name, e.employee_sex,e.employee_no, 
-       e.employee_phone,(select d.department_name from department_ d where d.department_id=e.department_id),
+       e.employee_phone,(select d.department_name from organization.department_ d where d.department_id=e.department_id),
        e.employee_twophone,e.entry_time,e.department_id,e.company_id,c.company_name,
        e.employee_status,e.probationary_expired,e.direct_person_id,y.employee_name AS direct_person_name
-	from employee_ e 
+	from organization.employee_ e 
  
-	lEFT JOIN  employee_ y  on y.employee_id=e.direct_person_id
-	lEFT JOIN  department_ d  on d.department_id=e.department_id
-	lEFT JOIN  company_ c on c.company_id=e.company_id
+	lEFT JOIN  organization.employee_ y  on y.employee_id=e.direct_person_id
+	lEFT JOIN  organization.department_ d  on d.department_id=e.department_id
+	lEFT JOIN  organization.company_ c on c.company_id=e.company_id
     <where> 
      <if test="employeeName!=null and employeeName != ''">
-      and e.employee_id in (select employee_id from  employee_  where  employee_name like '%${employeeName}%')
+      and e.employee_id in (select employee_id from  organization.employee_  where  employee_name like '%${employeeName}%')
      </if>
      <if test="loginName!=null and loginName != ''">
-      and e.employee_id in (select employee_id from  employee_  where  login_name like '%${loginName}%')
+      and e.employee_id in (select employee_id from  organization.employee_  where  login_name like '%${loginName}%')
      </if>     
      <if test="employeePhone!=null and employeePhone != ''">
-     and e.employee_id  in (select employee_id from  employee_  where  employee_phone like '%${employeePhone}%')
+     and e.employee_id  in (select employee_id from  organization.employee_  where  employee_phone like '%${employeePhone}%')
      </if>
      <if test="employeeTwophone!=null and employeeTwophone != ''">
-     and e.employee_id in (select employee_id from  employee_  where  employee_twophone like '%${employeeTwophone}%') 
+     and e.employee_id in (select employee_id from  organization.employee_  where  employee_twophone like '%${employeeTwophone}%') 
      </if>     
      <if test="employeeSex!=null and employeeSex != ''">
-     and e.employee_id in (select employee_id from  employee_  where  employee_sex like '%${employeeSex}%')
+     and e.employee_id in (select employee_id from  organization.employee_  where  employee_sex like '%${employeeSex}%')
      </if>         
      <if test="departmentName!=null and departmentName != ''">
-     and e.employee_id in (select employee_id from  employee_  where  department_id in (select DISTINCT d.department_id from department_ d where d.department_name like '%${departmentName}%'))
+     and e.employee_id in (select employee_id from  organization.employee_  where  department_id in (select DISTINCT d.department_id from organization.department_ d where d.department_name like '%${departmentName}%'))
      </if> 
      <if test="postName!=null and postName != ''">
-     and e.employee_id in (select DISTINCT c.employee_id from connect_emp_post_ c LEFT JOIN post_ p on c.post_id=p.post_id   where c.post_id in (select p.post_id from post_ p where p.post_name like '%${postName}%'))  
+     and e.employee_id in (select DISTINCT c.employee_id from organization.connect_emp_post_ c LEFT JOIN organization.post_ p on c.post_id=p.post_id   where c.post_id in (select p.post_id from organization.post_ p where p.post_name like '%${postName}%'))  
      </if>     
      <if test="entryTime!=null and entryTime != ''">
-     and e.employee_id in (select employee_id from  employee_  where  entry_time like '%${entryTime}%')
+     and e.employee_id in (select employee_id from  organization.employee_  where  entry_time like '%${entryTime}%')
      </if>        
      <if test="employeeStatus!=null and employeeStatus != ''">
-     and e.employee_id in (select employee_id from  employee_  where  employee_status like '%${employeeStatus}%')
+     and e.employee_id in (select employee_id from  organization.employee_  where  employee_status like '%${employeeStatus}%')
      </if> 
 	 <if test="companyId != null and companyId != ''">
 	 and e.company_id=#{companyId}   
@@ -204,12 +205,13 @@
   </select>     
   
   <delete id="deleteByEmployee" parameterType="java.lang.String"> 
-    delete from employee_
-    where employee_id = #{employeeId,jdbcType=VARCHAR}
+    delete from organization.employee_
+    where 
+    employee_id = #{employeeId,jdbcType=VARCHAR}
   </delete>
   
   <insert id="insertEmployee" parameterType="com.xiangshangban.organization.bean.Employee">    
-    insert into employee_ (
+    insert into organization.employee_ (
       employee_id, 
       employee_name, 
       employee_sex,
@@ -241,7 +243,7 @@
       )
   </insert>
   <insert id="insertEmployeeuser" parameterType="com.xiangshangban.organization.bean.Employee">    
-    insert into employee_ (
+    insert into organization.employee_ (
       employee_id, 
       employee_name, 
       employee_sex,
@@ -262,7 +264,7 @@
   </insert>
   
   <update id="updateByEmployee" parameterType="com.xiangshangban.organization.bean.Employee"> 
-    update employee_
+    update organization.employee_
     set 
       employee_name = #{employeeName,jdbcType=VARCHAR},
       employee_sex = #{employeeSex,jdbcType=VARCHAR},
@@ -278,7 +280,7 @@
   </update>
   
   <update id="updateByEmployeeapprove" parameterType="com.xiangshangban.organization.bean.Employee"> 
-    update employee_
+    update organization.employee_
     set 
       employee_name = #{employeeName,jdbcType=VARCHAR},
       employee_sex = #{employeeSex,jdbcType=VARCHAR},
@@ -296,11 +298,11 @@
   
   
   <update id="updateByEmployeedept" parameterType="com.xiangshangban.organization.bean.Employee"> 
-    update employee_
+    update organization.employee_
     set                  
       department_id=#{departmentId,jdbcType=VARCHAR}                  
     where 
-       employee_id = #{employeeId,jdbcType=VARCHAR}
+      employee_id = #{employeeId,jdbcType=VARCHAR}
   </update>
   
 </mapper>

@@ -1,5 +1,6 @@
 package com.xiangshangban.organization.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,6 +27,7 @@ import com.xiangshangban.organization.service.EmployeeService;
 import com.xiangshangban.organization.service.PostService;
 import com.xiangshangban.organization.service.TransferjobService;
 import com.xiangshangban.organization.service.UserService;
+import com.xiangshangban.organization.util.HttpRequestFactory;
 
 @RestController
 @RequestMapping("/EmployeeController")
@@ -181,7 +183,7 @@ public class EmployeeController {
 	 * @param response
 	 * @return
 	 */
-	@RequestMapping(value = "/findByAllEmployee",produces = "application/json;charset=UTF-8", method=RequestMethod.POST)	
+	@RequestMapping(value = "/findByAllEmployee",produces = "application/json;charset=UTF-8", method=RequestMethod.GET)	
 	public Map<String, Object> findByAllEmployee(HttpServletRequest request,HttpServletResponse response){
 		int s=0;	
 		Map<String, Object> postnamelist=new HashMap<String, Object>();
@@ -214,7 +216,7 @@ public class EmployeeController {
 	 * @return
 	 */
 	
-	@RequestMapping(value = "/findByLiZhiemployee",produces = "application/json;charset=UTF-8", method=RequestMethod.POST)	
+	@RequestMapping(value = "/findByLiZhiemployee",produces = "application/json;charset=UTF-8", method=RequestMethod.GET)	
 	public Map<String, Object> findByLiZhiemployee(HttpServletRequest request,HttpServletResponse response){		
 		int s=0;		    		   
 		Map<String, Object> postnamelist=new HashMap<String, Object>();
@@ -389,19 +391,27 @@ public class EmployeeController {
 						ConnectEmpPost empPost = new ConnectEmpPost();
 						ConnectEmpPost connect = new ConnectEmpPost();
 						ConnectEmpPost connectemppos = connectEmpPostService.findByConnect(employeeId,departmentId, postGrades);
-						String postid = connectemppos.getPostId();
-						if(!postId.equals("postid")){
-							connect.setDepartmentId(departmentId);
-							connect.setEmployeeId(employeeId);
-							connect.setPostId(postid);
-							connectEmpPostService.updatetpostGradespostStaus(connect);
+						if(connectemppos==null){
 							empPost.setEmployeeId(employeeId);
 							empPost.setDepartmentId(departmentId);
 							empPost.setPostGrades(postGrades);
 							empPost.setPostId(postId);				          
-					        connectEmpPostService.saveConnect(empPost);
-						}continue;
-										 				
+						    connectEmpPostService.saveConnect(empPost);
+						}
+						if(connectemppos!=null){
+							String postid = connectemppos.getPostId();
+							if(!postId.equals("postid")){
+								connect.setDepartmentId(departmentId);
+								connect.setEmployeeId(employeeId);
+								connect.setPostId(postid);
+								connectEmpPostService.updatetpostGradespostStaus(connect);
+								empPost.setEmployeeId(employeeId);
+								empPost.setDepartmentId(departmentId);
+								empPost.setPostGrades(postGrades);
+								empPost.setPostId(postId);				          
+							    connectEmpPostService.saveConnect(empPost);
+							}continue;	
+						}												 				
 			}				
 			if(employeeId.equals("")){
 				result.put("message","编辑失败");			
@@ -420,8 +430,7 @@ public class EmployeeController {
 	 * @return
 	 */
 	@RequestMapping(value = "/selectByEmployee",produces = "application/json;charset=UTF-8", method=RequestMethod.POST)	
-	public Map<String, Object> selectByEmployee(@RequestBody String employeeId,HttpServletRequest request,HttpServletResponse response){							
-		System.err.println(employeeId);
+	public Map<String, Object> selectByEmployee(@RequestBody String employeeId,HttpServletRequest request,HttpServletResponse response){									
 		JSONObject obj = JSON.parseObject(employeeId);
 		employeeId=obj.getString("employeeId");			
 		Map<String, Object> map=new HashMap<String, Object>();
@@ -450,12 +459,12 @@ public class EmployeeController {
 	@RequestMapping(value="/deleteByEmployee", produces = "application/json;charset=UTF-8", method=RequestMethod.POST)
 	public Map<String, Object> deleteByEmployee(@RequestBody String employeeId,HttpServletRequest request,HttpServletResponse response){		
 		Map<String, Object> map=new HashMap<String, Object>();
-		//Map<String, Object> cmdmap=new HashMap<String, Object>();		
-//		List<String> cmdlist=new ArrayList<String>();
-//		cmdmap.put("action", "UPDATE_USER_INFO");
-//		cmdlist.add(employeeId);
-//		cmdmap.put("employeeIdCollection", cmdlist);
-//		HttpRequestFactory.sendRequet("http://192.168.0.119:8080/employee/commandGenerate", cmdmap);
+		Map<String, Object> cmdmap=new HashMap<String, Object>();		
+		List<String> cmdlist=new ArrayList<String>();
+		cmdmap.put("action", "UPDATE_USER_INFO");
+		cmdlist.add(employeeId);
+		cmdmap.put("employeeIdCollection", cmdlist);
+		HttpRequestFactory.sendRequet("http://192.168.0.119:8080/employee/commandGenerate", cmdmap);
 		if(employeeId.equals("")){
 			map.put("message","删除失败");
 		}else{
@@ -481,12 +490,12 @@ public class EmployeeController {
 		Map<String, Object> map=new HashMap<String, Object>();
 		String employeeId = obj.getString("employeeId");		
 		String postId = obj.getString("postId");				
-		//Map<String, Object> cmdmap=new HashMap<String, Object>();		
-		//List<String> cmdlist=new ArrayList<String>();
-//		cmdmap.put("action", "UPDATE_USER_INFO");
-//		cmdlist.add(employeeId);
-//		cmdmap.put("employeeIdCollection", cmdlist);
-//		HttpRequestFactory.sendRequet("http://192.168.0.119:8080/employee/commandGenerate", cmdmap);
+		Map<String, Object> cmdmap=new HashMap<String, Object>();		
+		List<String> cmdlist=new ArrayList<String>();
+		cmdmap.put("action", "UPDATE_USER_INFO");
+		cmdlist.add(employeeId);
+		cmdmap.put("employeeIdCollection", cmdlist);
+		HttpRequestFactory.sendRequet("http://192.168.0.119:8080/employee/commandGenerate", cmdmap);
 		if(employeeId.equals("")){
 			map.put("message","删除失败");
 		}else{
@@ -520,12 +529,12 @@ public class EmployeeController {
 			}else{
 				map.put("message","删除失败");			
 			}	
-			//Map<String, Object> cmdmap=new HashMap<String, Object>();
-//			List<String> cmdlist=new ArrayList<String>();
-//			cmdmap.put("action", "UPDATE_USER_INFO");
-//			cmdlist.add(empId);
-//			cmdmap.put("employeeIdCollection", cmdlist);
-//			HttpRequestFactory.sendRequet("http://192.168.0.119:8080/employee/commandGenerate", cmdmap);					
+			Map<String, Object> cmdmap=new HashMap<String, Object>();
+			List<String> cmdlist=new ArrayList<String>();
+			cmdmap.put("action", "UPDATE_USER_INFO");
+			cmdlist.add(empId);
+			cmdmap.put("employeeIdCollection", cmdlist);
+			HttpRequestFactory.sendRequet("http://192.168.0.119:8080/employee/commandGenerate", cmdmap);					
 		}
 		if(array.size() == 0){
 			map.put("message", "请选择要删除的选项");			
@@ -542,14 +551,19 @@ public class EmployeeController {
 	@RequestMapping(value="/batchUpdateStatus", produces = "application/json;charset=UTF-8", method=RequestMethod.POST)
 	public Map<String, Object> batchUpdateStatus(@RequestBody String employeeId,HttpServletRequest request,HttpServletResponse response){															
 			Map<String, Object> map=new HashMap<String, Object>();
-			//Map<String, Object> cmdmap=new HashMap<String, Object>();
-			//List<String> cmdlist=new ArrayList<String>();
-//			cmdmap.put("action", "UPDATE_USER_INFO");
-//			cmdlist.add(employeeId);
-//			cmdmap.put("employeeIdCollection", cmdlist);
-//			HttpRequestFactory.sendRequet("http://192.168.0.119:8080/employee/commandGenerate", cmdmap);
 			JSONObject obj = JSON.parseObject(employeeId);
-			employeeId=obj.getString("employeeId");	
+			Map<String, Object> cmdmap=new HashMap<String, Object>();			
+			try {
+				List<String> cmdlist=new ArrayList<String>();
+				cmdmap.put("action", "UPDATE_USER_INFO");
+				employeeId=obj.getString("employeeId");
+				System.err.println(employeeId);
+				cmdlist.add(employeeId);
+				cmdmap.put("employeeIdCollection", cmdlist);
+				HttpRequestFactory.sendRequet("http://192.168.0.119:8080/employee/commandGenerate", cmdmap);
+			} catch (Exception e) {
+				System.err.println("设备模块不在线");
+			}
 			if(employeeId.equals("")){				
 				map.put("message","离职失败");			
 			}else{

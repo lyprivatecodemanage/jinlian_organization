@@ -22,10 +22,11 @@ public interface PostDao {
 
     int updateByPost(Post post);
     
-    List<Post> selectByAllPostInfo(String companyId);
+    List<Post> selectByAllPostInfo(String companyId);   
     
     List<Post> selectByPostName(@Param("employeeId")String employeeId,@Param("departmentId") String departmentId);
-    
+    //查询所有员工的岗位信息
+    List<Post> selectByPostemp(@Param("employeeId")String employeeId,@Param("departmentId") String departmentId);  
     
     List<Post>findByMorePostIfon(Map<String,String> map);
     

@@ -13,10 +13,10 @@
 
    <select id="findByConnect" parameterType="java.util.Map" resultMap="ConnectEmpPost">
     select c.employee_id,e.employee_name,c.department_id,d.department_name,c.post_id,p.post_name,c.post_grades,c.post_staus
-    from connect_emp_post_ c 
-    LEFT JOIN  post_ p on  c.post_id=p.post_id
-    LEFT JOIN  employee_ e on e.employee_id=c.employee_id
-    LEFT JOIN  department_ d on d.department_id=c.department_id   
+    from organization.connect_emp_post_ c 
+    LEFT JOIN  organization.post_ p on  c.post_id=p.post_id
+    LEFT JOIN  organization.employee_ e on e.employee_id=c.employee_id
+    LEFT JOIN  organization.department_ d on d.department_id=c.department_id   
     where 
     c.employee_id=#{employeeId,jdbcType=VARCHAR}
     and
@@ -30,8 +30,8 @@
     <select id="findByConnectpostemp" parameterType="java.lang.String" resultMap="ConnectEmpPost">
    select  
     c.employee_id   
-    from connect_emp_post_ c     
-    LEFT JOIN  post_ p  on c.post_id = p.post_id   
+    from organization.connect_emp_post_ c     
+    LEFT JOIN  organization.post_ p  on c.post_id = p.post_id   
    where 
      p.post_id=#{postId}
    </select>
@@ -39,7 +39,7 @@
 
 	<insert id="saveConnect" parameterType="com.xiangshangban.organization.bean.ConnectEmpPost">
 		insert into 
-		connect_emp_post_ 
+		organization.connect_emp_post_ 
 		(employee_id,post_id,department_id,post_grades)
 		values
 		(				 
@@ -54,7 +54,7 @@
 	<delete id="deleteConnect" parameterType="java.lang.String">
 		delete 
 		from 
-		connect_emp_post_
+		organization.connect_emp_post_
 		where 
 		employee_id=#{employeeId,jdbcType=VARCHAR}
 		and 
@@ -66,7 +66,7 @@
 	<delete id="deleteTransferjobConnect" parameterType="java.lang.String">
 		delete 
 		from 
-		connect_emp_post_
+		organization.connect_emp_post_
 		where 
 		employee_id=#{employeeId,jdbcType=VARCHAR}
 		and 
@@ -75,7 +75,7 @@
 	
 	<update id="updateConnect" parameterType="com.xiangshangban.organization.bean.ConnectEmpPost">
 		update 
-		connect_emp_post_
+		organization.connect_emp_post_
 		set 
 		post_id=#{postId,jdbcType=VARCHAR}
 		where 
@@ -87,7 +87,7 @@
 	
 	<update id="updateConnectpostStaus" parameterType="com.xiangshangban.organization.bean.ConnectEmpPost">
 		update 
-		connect_emp_post_
+		organization.connect_emp_post_
 		set 
 		post_staus='1' 
 		where 
@@ -98,7 +98,7 @@
 		
 	<update id="updateConnectDelehipostStaus" parameterType="com.xiangshangban.organization.bean.ConnectEmpPost">
 		update 
-		connect_emp_post_
+		organization.connect_emp_post_
 		set 
 		is_delete='1' 
 		where 
@@ -107,7 +107,7 @@
 	
 	<update id="updatetpostGradespostStaus" parameterType="com.xiangshangban.organization.bean.ConnectEmpPost">
 		update 
-		connect_emp_post_
+		organization.connect_emp_post_
 		set 
 		post_staus='1' 
 		where 
