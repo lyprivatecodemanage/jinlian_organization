@@ -83,41 +83,135 @@ public class EmployeeController {
 	 * @throws JsonProcessingException
 	 */
 	@RequestMapping(value="/insertEmployeeuser", produces = "application/json;charset=UTF-8", method=RequestMethod.POST)
-	public Map<String, Object> insertEmployeeuser(@RequestBody String employee,HttpServletRequest request,HttpServletResponse response) throws JsonProcessingException{								
+	public Map<String, Object> insertEmployeeuser(@RequestBody String jsonString,HttpServletRequest request,HttpServletResponse response) throws JsonProcessingException{								
 		Map<String, Object> result = new HashMap<String, Object>();
 		Employee employeenew = new Employee();
-		JSONObject jsonObject = JSONObject.parseObject(employee);
-		String employeeName = jsonObject.getString("employeeName");
-		String employeeSex = jsonObject.getString("employeeSex");
-		String employeePhone = jsonObject.getString("employeePhone");
-		//String userName ="13022167724";
-		String userName = jsonObject.getString("userName");
-		String companyId = jsonObject.getString("companyId");				
-		User useremp = userService.getOneUser(userName);
-		String UserId = useremp.getUserId();
-		 Employee loginname=employeeService.findByemploginName(userName);		 
+		JSONObject obj = JSON.parseObject(jsonString);
+		String userName = obj.getString("userName");		
+		String Phone = obj.getString("Phone");
+		String Account = obj.getString("Account");
+		String companyId = obj.getString("companyId");						
+		String userId = obj.getString("userId");
+		 Employee loginname=employeeService.findByemploginName(Account);		 
 		if(loginname != null){			
 			result.put("message", "登录名已存在");  
 			return result;			
-		}else{			
-			//String companyId ="977ACD3022C24B99AC9586CC50A8F786";
-			employeenew.setEmployeeName(employeeName);
-			employeenew.setEmployeeSex(employeeSex);
-			employeenew.setEmployeePhone(employeePhone);
-			employeenew.setEmployeeId(UserId);
-			employeenew.setLoginName(userName);
-			employeenew.setCompanyId(companyId);			
-			employeenew.setEmployeeStatus("3");	
-			String i=employeeService.insertEmployeeuser(employeenew);
-			if(i.equals("1")){
-				result.put("message", "申请成功");
+		}else{						
+			employeenew.setEmployeeName(userName);
+			employeenew.setEmployeePhone(Phone);
+			employeenew.setEmployeeId(userId);
+			employeenew.setLoginName(Account);
+			employeenew.setCompanyId(companyId);						
+			if(!userName.equals("") || !Phone.equals("") || !userId.equals("") || !Account.equals("") || !companyId.equals("")){
+				employeeService.insertEmployeeuser(employeenew);
+				result.put("message", "申请成功");				
 			}else{
 				result.put("message", "申请失败");
 			}				
-				return result;
-										    			
+				return result;										    			
 		}					
 	}		
+	/**
+	 * 完善申请入职员工的入职信息
+	 * @param jsonString
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping(value="/ImproveEmployeeOrientation", produces = "application/json;charset=UTF-8", method=RequestMethod.POST)
+	public Map<String, Object> ImproveEmployeeOrientation(@RequestBody String jsonString,HttpServletRequest request,HttpServletResponse response){		 		
+		Map<String, Object> result = new HashMap<String, Object>();
+		Employee employeenew = new Employee();
+		JSONObject obj = JSON.parseObject(jsonString);	
+		String employeeNo = obj.getString("employeeNo");		
+		Employee employeeNotemp =employeeService.findByemployeeNo(employeeNo);	
+		if(employeeNotemp != null ){			
+			result.put("message", "员工编号已存在");
+			return result;			
+		}
+		String employeeId = obj.getString("employeeId");
+		String employeeName = obj.getString("employeeName");			
+		String employeeSex = obj.getString("employeeSex");
+		String loginName = obj.getString("loginName");
+		String employeePhone = obj.getString("employeePhone");
+		boolean employeephone = Pattern.matches("^[1][3,4,5,7,8][0-9]{9}$", employeePhone);
+		String employeeTwophone = obj.getString("employeeTwophone");
+		boolean employeetwophone = Pattern.matches("^[1][3,4,5,7,8][0-9]{9}$", employeeTwophone);
+		String directPersonId = obj.getString("directPersonId");
+		String entryTime = obj.getString("entryTime");
+		boolean entrytime = Pattern.matches("[0-9]{4}-[0-9]{2}-[0-9]{2}", entryTime);
+		String probationaryExpired = obj.getString("probationaryExpired");
+		boolean probationaryexpired = Pattern.matches("[0-9]{4}-[0-9]{2}-[0-9]{2}", probationaryExpired);
+		String departmentId = obj.getString("departmentId");
+		employeenew.setEmployeeId(employeeId);
+		employeenew.setEmployeeName(employeeName);
+		employeenew.setEmployeeSex(employeeSex);		
+		employeenew.setLoginName(loginName);//登录名
+		employeenew.setEmployeePhone(employeePhone);
+		employeenew.setEmployeeTwophone(employeeTwophone);
+		employeenew.setDirectPersonId(directPersonId);			
+		employeenew.setEntryTime(entryTime);
+		employeenew.setEmployeeNo(employeeNo);
+		employeenew.setProbationaryExpired(probationaryExpired);
+		employeenew.setDepartmentId(departmentId);
+		employeenew.setEmployeeStatus("0");
+		if (!employeephone || !employeetwophone || !entrytime || !probationaryexpired) {				
+			result.put("message", "参数格式不正确");
+			return result;
+		}
+			employeeService.updateByEmployee(employeenew);   
+			//添加员工信息的同时把员工信息添加到调动表里
+		    Transferjob transferjob = new Transferjob();		    
+		    transferjob.setEmployeeId(employeeId);
+		    transferjob.setDepartmentId(departmentId);
+		    transferjob.setTransferBeginTime(entryTime);
+		    transferjob.setTransferJobCause("新员工入职该岗位");			   
+		    transferjob.setUserId("6B566C197A7D4337A5DA0B4D6F9FC1A3");//操作人ID	
+		    transferjob.setCompanyId("977ACD3022C24B99AC9586CC50A8F786");
+		    transferjobService.insertTransferjob(transferjob);
+		    //把员工关联的岗位添加到connect_emp_post_中间表里面					    
+			String postIdList = obj.getString("postList");
+			JSONArray postIdList1 = JSON.parseArray(postIdList);			
+			for(int i =0;i<postIdList1.size();i++){
+				JSONObject jobj = obj.parseObject(postIdList1.getString(i)) ;
+						String postId = jobj.getString("postId");
+						String postGrades = jobj.getString("postGrades");
+						ConnectEmpPost empPost = new ConnectEmpPost();
+						ConnectEmpPost connect = new ConnectEmpPost();
+						ConnectEmpPost connectemppos = connectEmpPostService.findByConnect(employeeId,departmentId, postGrades);
+						if(connectemppos==null){
+							empPost.setEmployeeId(employeeId);
+							empPost.setDepartmentId(departmentId);
+							empPost.setPostGrades(postGrades);
+							empPost.setPostId(postId);				          
+						    connectEmpPostService.saveConnect(empPost);
+						}
+						if(connectemppos!=null){
+							String postid = connectemppos.getPostId();
+							if(!postId.equals("postid")){
+								connect.setDepartmentId(departmentId);
+								connect.setEmployeeId(employeeId);
+								connect.setPostId(postid);
+								connectEmpPostService.updatetpostGradespostStaus(connect);
+								empPost.setEmployeeId(employeeId);
+								empPost.setDepartmentId(departmentId);
+								empPost.setPostGrades(postGrades);
+								empPost.setPostId(postId);				          
+							    connectEmpPostService.saveConnect(empPost);
+							}continue;	
+						}												 				
+			}				
+			if(employeeId.equals("")){
+				result.put("message","编辑失败");			
+			}else{
+				result.put("message","编辑成功");	
+						
+			}						
+			return result;
+	}
+	
+	
+	
 	
 	/**
 	 * 根据姓名、登录名、联系方式、性别、所属部门、岗位、入职时间、在职状态查询员工信息
@@ -152,8 +246,7 @@ public class EmployeeController {
 				String departmentId = employeelist.getDepartmentId();
 	            List<Post> PostNamelist = postService.selectByPostName(Employeeid,departmentId);	            
 	            employeelist.setPostList(PostNamelist);	                 
-	            postnamelist.put("employeelist"+temps, employeelist);
-				
+	            postnamelist.put("employeelist"+temps, employeelist);				
 			}						 
 			return postnamelist;
 	}
@@ -225,7 +318,7 @@ public class EmployeeController {
 		List<Employee> LiZhiemployeelist =employeeService.findByLiZhiemployee(companyId);		
 		for (int i = 0; i < LiZhiemployeelist.size(); i++) {
 			 s=s+1;
-          String temps =String.valueOf(s);
+           String temps =String.valueOf(s);
 		   Employee employeelist = LiZhiemployeelist.get(i);
 		   String Employeeid = employeelist.getEmployeeId();
 		   String departmentId = employeelist.getDepartmentId();
@@ -330,7 +423,23 @@ public class EmployeeController {
 			}								    			
 		}					
 	}
-	
+	/**
+	 * 查询申请入职的人员信息 
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping(value = "/findByruzhiempinfo",produces = "application/json;charset=UTF-8", method=RequestMethod.GET)	
+	public Map<String, Object> findByruzhiempinfo(HttpServletRequest request,HttpServletResponse response){		
+		Map<String, Object> map = new HashMap<String, Object>();
+		List<Employee> employeelist = employeeService.findByruzhiempinfo();
+		if(employeelist !=null){
+			 map.put("employeelist",employeelist);			 
+		}else{       	 
+        	 map.put("message","没有查询到信息");
+         }
+		return map;		  
+		}
 	
 	/**
 	 * 编辑员工信息
@@ -342,7 +451,6 @@ public class EmployeeController {
 	@RequestMapping(value="/updateByEmployee", produces = "application/json;charset=UTF-8", method=RequestMethod.POST)
 	public Map<String, Object> updateByEmployee(@RequestBody String employee,HttpServletRequest request,HttpServletResponse response){		 		
 		Map<String, Object> result = new HashMap<String, Object>();
-		Map<String, Object> preams= new HashMap<String, Object>();
 		Employee employeenew = new Employee();
 		JSONObject jsonObject = JSONObject.parseObject(employee);		
 			String employeeId = jsonObject.getString("employeeId");			

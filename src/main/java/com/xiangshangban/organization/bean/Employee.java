@@ -25,7 +25,7 @@ public class Employee {
     private String companyName;//
     private String departmentName;//部门名称
     private String postName;//岗位名称
-    private String directPersonName;//直接汇报人名称
+    private String directPersonName;//直接汇报人名称    
     //----现在没用到的----
 //    private String employeeBirthday;// 出生年月日    
 //    private String employeeTell;//电话号码  

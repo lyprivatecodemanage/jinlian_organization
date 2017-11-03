@@ -34,17 +34,11 @@
     <result column="emergency_contact" jdbcType="VARCHAR" property="emergencyContact" />
     <result column="phone_public" jdbcType="VARCHAR" property="phonePublic" />
     <result column="shift_time" jdbcType="VARCHAR" property="shiftTime" /> 
-    <result column="employee_card_number" jdbcType="VARCHAR" property="employeeCardNumber" />  -->    
-    
+    <result column="employee_card_number" jdbcType="VARCHAR" property="employeeCardNumber" />  -->          
   </resultMap>
-  <sql id="Base_Column_List"> 
-    employee_id, employee_name, employee_sex,employee_no, direct_report_person, 
-    employee_phone,employee_twophone,entry_time,
-    employee_status,probationary_expired  
-  </sql>
    
-  
-  <!-- 查询一个岗位下所有员工 -->
+    
+  <!-- 查询一个岗位下所有在职员工 -->
   <select id="findByposcounttemp" parameterType="java.lang.String" resultMap="Employee">
    SELECT  
     e.employee_id,e.employee_name
@@ -52,11 +46,22 @@
 	LEFT JOIN organization.connect_emp_post_ c on c.employee_id=e.employee_id  and c.is_delete='0'
 	LEFT JOIN organization.post_ p  on  c.post_id = p.post_id  
 	where 
+	e.employee_status='0'	
+	and
 	p.post_id=#{postId}
 	and
 	e.company_id=#{companyId}		
   </select>
+  <!-- 查询申请入职的人员信息 -->
+  <select id="findByruzhiempinfo" parameterType="java.lang.String" resultMap="Employee">
+  select 
+    e.employee_id,e.employee_name,e.employee_phone,e.login_name
+    from employee_ e
+    where 
+    e.employee_no IS null
+    
   
+  </select>
   
   <select id="findBydeptemployee" parameterType="java.lang.String" resultMap="Employee">
    SELECT 
@@ -68,9 +73,7 @@
 	and
 	e.company_id=#{companyId}
     and 
-    e.employee_status='0'	
-	 
-	  
+    e.employee_status='0'		 	  
   </select>
   
   <!--员工批量删除,逻辑删除-->
@@ -111,9 +114,11 @@
  <select id="findByemployeeNo" parameterType="java.lang.String" resultMap="Employee">
     select 
     e.employee_no,employee_id
-    from organization.employee_ e
+    from employee_ e
     where 
-    e.employee_no = #{employeeNo,jdbcType=VARCHAR}
+    e.employee_no IS NOT null
+    AND 
+    e.employee_no= #{employeeNo,jdbcType=VARCHAR}
   </select>
 
 <select id="findByemploginName" parameterType="java.lang.String" resultMap="Employee">
@@ -246,20 +251,16 @@
     insert into organization.employee_ (
       employee_id, 
       employee_name, 
-      employee_sex,
       login_name,       
       employee_phone,     
-      company_id,
-      employee_status
+      company_id    
       )
     values (
       #{employeeId,jdbcType=VARCHAR}, 
-      #{employeeName,jdbcType=VARCHAR}, 
-      #{employeeSex,jdbcType=VARCHAR}, 
+      #{employeeName,jdbcType=VARCHAR},       
       #{loginName,jdbcType=VARCHAR},                      
       #{employeePhone,jdbcType=VARCHAR},     
-      #{companyId,jdbcType=VARCHAR},
-      #{employeeStatus,jdbcType=VARCHAR}    
+      #{companyId,jdbcType=VARCHAR} 
       )
   </insert>
   

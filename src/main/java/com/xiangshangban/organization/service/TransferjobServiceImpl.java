@@ -2,6 +2,7 @@ package com.xiangshangban.organization.service;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -89,6 +90,18 @@ public class TransferjobServiceImpl implements TransferjobService {
 			e.printStackTrace();
 		}
 		return i;
+	}
+
+	@Override
+	public Transferjob findByempinfo(Map<String, String> map) {
+		// TODO Auto-generated method stub
+		return transferjobDao.findByempinfo(map);
+	}
+
+	@Override
+	public Transferjob findByempNullinfo(Map<String, String> map) {
+		// TODO Auto-generated method stub
+		return transferjobDao.findByempNullinfo(map);
 	}
 
 }

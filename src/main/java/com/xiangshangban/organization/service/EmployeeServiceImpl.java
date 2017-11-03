@@ -171,6 +171,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 		}
 		return i;
 	}
+	//查询申请入职的人员信息 
+	@Override
+	public List<Employee> findByruzhiempinfo() {
+		// TODO Auto-generated method stub
+		return employeeDao.findByruzhiempinfo();
+	}
 
 	
 }

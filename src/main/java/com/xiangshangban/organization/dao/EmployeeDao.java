@@ -36,4 +36,6 @@ public interface EmployeeDao {
     int batchUpdateTransferJobStaus(String employeeId);
     
     List<Employee> findByposcounttemp(@Param("postId") String postId,@Param("companyId") String companyId);
+    
+    List<Employee>findByruzhiempinfo();
 }

@@ -4,6 +4,7 @@ package com.xiangshangban.organization.controller;
 
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -21,6 +22,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.xiangshangban.organization.bean.ConnectEmpPost;
 import com.xiangshangban.organization.bean.Employee;
+import com.xiangshangban.organization.bean.Post;
 import com.xiangshangban.organization.bean.Transferjob;
 import com.xiangshangban.organization.service.ConnectEmpPostService;
 import com.xiangshangban.organization.service.EmployeeService;
@@ -36,6 +38,52 @@ public class TransferjobController {
 	EmployeeService employeeService;
 	@Autowired
 	ConnectEmpPostService connectEmpPostService;
+	
+	
+	/**
+	 * 根据员工ID，在职时间查询员工信息 
+	 * @param jsonString
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping(value="/findByempinfo", produces = "application/json;charset=UTF-8", method=RequestMethod.POST)
+	public Map<String, Object> findByempinfo(@RequestBody String jsonString,HttpServletRequest request,HttpServletResponse response){	
+		Map<String, Object> map=new HashMap<String, Object>();
+		JSONObject obj = JSON.parseObject(jsonString);
+		Map<String,String> params = new HashMap<String, String>();
+		Map<String,String> nullemp = new HashMap<String, String>();
+		String companyId="977ACD3022C24B99AC9586CC50A8F786";
+		params.put("companyId",companyId);
+		params.put("employeeId",obj.getString("employeeId"));
+		nullemp.put("companyId", companyId);
+		nullemp.put("employeeId", obj.getString("employeeId"));
+		String positionTime = obj.getString("positionTime");
+		params.put("positionTime",positionTime);
+		boolean positiontime = Pattern.matches("[0-9]{4}-[0-9]{2}-[0-9]{2}", positionTime);
+		if(obj.getString("employeeId").equals("")){
+			map.put("message", "0");
+			return map;
+		}
+		if (!positiontime) {				
+			map.put("message", "1");
+			return map;
+		}else{			
+			Transferjob transferjobemp=transferjobService.findByempinfo(params);
+			if(transferjobemp!=null){
+				map.put("transferjobemp", transferjobemp);
+				return map;
+			}else{
+				Transferjob transferjobnullemp=transferjobService.findByempNullinfo(nullemp);
+				map.put("transferjobnullemp", transferjobnullemp);
+				if(transferjobnullemp==null){
+					map.put("message", "2");
+					return map;
+				}
+				return map;				
+			}						
+		}				
+	}
 	
 	/**
 	 * 添加调动记录

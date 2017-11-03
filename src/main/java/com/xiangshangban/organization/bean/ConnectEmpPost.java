@@ -3,10 +3,10 @@ package com.xiangshangban.organization.bean;
 public class ConnectEmpPost {		
 	private String employeeId;//员工ID
 	private String postId;//岗位ID
-	private String postStaus;//修改部门之前的岗位
 	private String departmentId;//部门ID
-	private String isDelete;
-	private String postGrades;
+	private String postStaus;//岗位状态（0.现在所在岗位  1原先所在岗位）	
+	private String isDelete;//岗位是否删除
+	private String postGrades;//岗位等级（0.副岗位  1.主岗位）
 
 	
 	
