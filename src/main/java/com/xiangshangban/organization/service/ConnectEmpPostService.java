@@ -1,9 +1,5 @@
 package com.xiangshangban.organization.service;
 
-
-import java.util.List;
-import java.util.Map;
-
 import com.xiangshangban.organization.bean.ConnectEmpPost;
 
 public interface ConnectEmpPostService {

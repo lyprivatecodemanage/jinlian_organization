@@ -49,11 +49,14 @@
     registered_address,company_creat_time,company_personal_name,company_no
   </sql>
   
+  <!-- 查询一个公司详细信息 -->
   <select id="selectByCompany" parameterType="java.lang.String" resultMap="Company">  
     select 
-    <include refid="Base_Column_List" />
+     company_id, company_name,company_abbreviation_name,company_phone,company_personal_name,industry_type,
+     company_no,company_area,company_personal_name,dateof_approval,user_name
     from organization.company_
-    where company_id = #{companyId,jdbcType=VARCHAR}
+    where 
+    company_id = #{companyId,jdbcType=VARCHAR}
   </select>
   
   
@@ -61,7 +64,8 @@
     select 
     c.company_no
     from organization.company_ c
-    where c.company_no = #{companyNo,jdbcType=VARCHAR}
+    where 
+    c.company_no = #{companyNo,jdbcType=VARCHAR}
   </select>
   
   
@@ -72,8 +76,9 @@
   </select>
   
   <delete id="deleteByCompany" parameterType="java.lang.String"> 
-    delete from company_
-    where company_id = #{companyId,jdbcType=VARCHAR}
+    delete from organization.company_
+    where 
+    company_id = #{companyId,jdbcType=VARCHAR}
   </delete>
   
   <insert id="insertCompany" parameterType="com.xiangshangban.organization.bean.Company">   

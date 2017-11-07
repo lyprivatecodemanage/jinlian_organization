@@ -33,5 +33,5 @@ public interface EmployeeService {
     List<Employee> findByposcounttemp(String postId,String companyId);
 	String updateByEmployeeapprove(Employee employee);
 	List<Employee>findByruzhiempinfo();
-    
+	List<Employee> selectByAllEmployee(String companyId);
 }

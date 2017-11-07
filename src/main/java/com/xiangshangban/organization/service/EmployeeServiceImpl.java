@@ -178,5 +178,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 		return employeeDao.findByruzhiempinfo();
 	}
 
+	@Override
+	public List<Employee> selectByAllEmployee(String companyId) {
+		// TODO Auto-generated method stub
+		return employeeDao.selectByAllEmployee(companyId);
+	}
+
 	
 }

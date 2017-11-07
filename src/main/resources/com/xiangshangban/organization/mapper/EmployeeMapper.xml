@@ -63,6 +63,23 @@
   
   </select>
   
+  <!-- 查询所有员工信息 -->
+   <select id="selectByAllEmployee" parameterType="java.lang.String" resultMap="Employee">
+   select DISTINCT e.employee_id, e.employee_name,e.login_name, e.employee_sex,e.employee_no, 
+       e.employee_phone,(select d.department_name from organization.department_ d where d.department_id=e.department_id),
+       e.employee_twophone,e.entry_time,e.department_id,e.company_id,c.company_name,
+       e.employee_status,e.probationary_expired,e.direct_person_id,y.employee_name AS direct_person_name
+	from organization.employee_ e 
+ 
+	lEFT JOIN  organization.employee_ y  on y.employee_id=e.direct_person_id
+	lEFT JOIN  organization.department_ d  on d.department_id=e.department_id
+	lEFT JOIN  organization.company_ c on c.company_id=e.company_id
+	where  	
+	e.company_id=#{companyId}
+    and 
+    e.employee_status IN ('0','1')		 	  
+  </select>
+  
   <select id="findBydeptemployee" parameterType="java.lang.String" resultMap="Employee">
    SELECT 
      e.employee_id, e.employee_name 

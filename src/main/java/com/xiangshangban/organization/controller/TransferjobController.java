@@ -4,7 +4,6 @@ package com.xiangshangban.organization.controller;
 
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -22,7 +21,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.xiangshangban.organization.bean.ConnectEmpPost;
 import com.xiangshangban.organization.bean.Employee;
-import com.xiangshangban.organization.bean.Post;
+import com.xiangshangban.organization.bean.ReturnData;
 import com.xiangshangban.organization.bean.Transferjob;
 import com.xiangshangban.organization.service.ConnectEmpPostService;
 import com.xiangshangban.organization.service.EmployeeService;
@@ -48,12 +47,14 @@ public class TransferjobController {
 	 * @return
 	 */
 	@RequestMapping(value="/findByempinfo", produces = "application/json;charset=UTF-8", method=RequestMethod.POST)
-	public Map<String, Object> findByempinfo(@RequestBody String jsonString,HttpServletRequest request,HttpServletResponse response){	
-		Map<String, Object> map=new HashMap<String, Object>();
+	public ReturnData findByempinfo(@RequestBody String jsonString,HttpServletRequest request,HttpServletResponse response){	
+		ReturnData returnData = new ReturnData();
 		JSONObject obj = JSON.parseObject(jsonString);
 		Map<String,String> params = new HashMap<String, String>();
 		Map<String,String> nullemp = new HashMap<String, String>();
 		String companyId="977ACD3022C24B99AC9586CC50A8F786";
+		//获取请求头信息			
+		//String companyId = request.getHeader("companyId");
 		params.put("companyId",companyId);
 		params.put("employeeId",obj.getString("employeeId"));
 		nullemp.put("companyId", companyId);
@@ -62,27 +63,29 @@ public class TransferjobController {
 		params.put("positionTime",positionTime);
 		boolean positiontime = Pattern.matches("[0-9]{4}-[0-9]{2}-[0-9]{2}", positionTime);
 		if(obj.getString("employeeId").equals("")){
-			map.put("message", "0");
-			return map;
+			returnData.setMessage("数据请求失败");
+			returnData.setReturnCode("3001");
+			return returnData;
 		}
 		if (!positiontime) {				
-			map.put("message", "1");
-			return map;
-		}else{			
+			returnData.setMessage("数据请求失败");
+			returnData.setReturnCode("3001");
+			return returnData;
+		}			
 			Transferjob transferjobemp=transferjobService.findByempinfo(params);
 			if(transferjobemp!=null){
-				map.put("transferjobemp", transferjobemp);
-				return map;
+				returnData.setData(transferjobemp);
+				returnData.setMessage("数据请求成功");
+				returnData.setReturnCode("3000");			
 			}else{
 				Transferjob transferjobnullemp=transferjobService.findByempNullinfo(nullemp);
-				map.put("transferjobnullemp", transferjobnullemp);
-				if(transferjobnullemp==null){
-					map.put("message", "2");
-					return map;
-				}
-				return map;				
-			}						
-		}				
+				if(transferjobnullemp!=null){
+				returnData.setData(transferjobnullemp);
+				returnData.setMessage("数据请求成功");
+				returnData.setReturnCode("3000");
+				}					
+		}
+			return returnData;		
 	}
 	
 	/**
@@ -93,9 +96,9 @@ public class TransferjobController {
 	 * @return
 	 */
 	@RequestMapping(value="/insertTransferjob", produces = "application/json;charset=UTF-8", method=RequestMethod.POST)
-	public Map<String, Object> insertTransferjob(@RequestBody String transferjob,HttpServletRequest request,HttpServletResponse response){		
+	public ReturnData insertTransferjob(@RequestBody String transferjob,HttpServletRequest request,HttpServletResponse response){		
 		JSONObject jsonObject = JSONObject.parseObject(transferjob);
-		Map<String, Object> result = new HashMap<String, Object>();
+		ReturnData returnData = new ReturnData();
 		String employeeId = jsonObject.getString("employeeId");
 		String transferBeginTime = jsonObject.getString("transferBeginTime");
 		boolean transferBeginTime1 = Pattern.matches("[0-9]{4}-[0-9]{2}-[0-9]{2}", transferBeginTime);
@@ -103,20 +106,24 @@ public class TransferjobController {
 		String departmentId = jsonObject.getString("departmentId");
 		String transferJobCause = jsonObject.getString("transferJobCause");	
 		String directPersonId = jsonObject.getString("directPersonId");
-		String userId ="6B566C197A7D4337A5DA0B4D6F9FC1A3";				
+		String userId ="6B566C197A7D4337A5DA0B4D6F9FC1A3";
+		String companyId="977ACD3022C24B99AC9586CC50A8F786";
+		//获取请求头信息			
+		//String companyId = request.getHeader("companyId");
+		//String userId = request.getHeader("userId");
 		Transferjob transferjobs = new Transferjob();
-		transferjobs.setDepartmentId(departmentId);
+		transferjobs.setDepartmentId(departmentId); 
 		transferjobs.setEmployeeId(employeeId);	
 		transferjobs.setUserId(userId);
 		transferjobs.setDirectPersonId(directPersonId);
 		transferjobs.setTransferJobCause(transferJobCause);
-		transferjobs.setTransferBeginTime(transferBeginTime);				
-		String companyId="977ACD3022C24B99AC9586CC50A8F786";
+		transferjobs.setTransferBeginTime(transferBeginTime);						
 		transferjobs.setCompanyId(companyId);
 		String transferEndtime = TimeUtil.getLongAfterDate(transferBeginTime, -1, Calendar.DATE);
-		if (!transferBeginTime1) {			
-			result.put("message", "参数格式不正确");
-			return result;
+		if (!transferBeginTime1) {						
+			returnData.setMessage("数据请求失败");
+			returnData.setReturnCode("3001");
+			return returnData;
 		}
 		Transferjob transferjobemp = transferjobService.selectByTransferjobpost(employeeId, companyId);
 		//上一次所在部门ID
@@ -170,11 +177,13 @@ public class TransferjobController {
 						}						
 																					 				
 			}						
-			result.put("message", "调动成功");
-			return result;
+			returnData.setMessage("数据请求成功");
+			returnData.setReturnCode("3000");
+			return returnData;
 		}else{
-			result.put("message", "调动失败");
-			return result;
+			returnData.setMessage("数据请求失败");
+			returnData.setReturnCode("3001");
+			return returnData;
 		}
 						
 	}
@@ -187,9 +196,9 @@ public class TransferjobController {
 	 * @return
 	 */
 	@RequestMapping(value="/updateByTransferjob", produces = "application/json;charset=UTF-8", method=RequestMethod.POST)
-	public Map<String, Object> updateByTransferjob(@RequestBody String transferjob,HttpServletRequest request,HttpServletResponse response){								
+	public ReturnData updateByTransferjob(@RequestBody String transferjob,HttpServletRequest request,HttpServletResponse response){								
 		JSONObject jsonObject = JSONObject.parseObject(transferjob);
-		Map<String, Object> result = new HashMap<String, Object>();
+		ReturnData returnData = new ReturnData();
 		String employeeId = jsonObject.getString("employeeId");
 		String transferBeginTime = jsonObject.getString("transferBeginTime");
 		boolean transferBeginTime1 = Pattern.matches("[0-9]{4}-[0-9]{2}-[0-9]{2}", transferBeginTime);
@@ -198,7 +207,11 @@ public class TransferjobController {
 		String transferJobId = jsonObject.getString("transferJobId");
 		String transferJobCause = jsonObject.getString("transferJobCause");	
 		String directPersonId = jsonObject.getString("directPersonId");
-		String userId ="6B566C197A7D4337A5DA0B4D6F9FC1A3";				
+		String userId ="6B566C197A7D4337A5DA0B4D6F9FC1A3";
+		String companyId="977ACD3022C24B99AC9586CC50A8F786";
+		//获取请求头信息			
+		//String companyId = request.getHeader("companyId");
+		//String userId = request.getHeader("userId");
 		Transferjob transferjobs = new Transferjob();
 		transferjobs.setDepartmentId(departmentId);
 		transferjobs.setEmployeeId(employeeId);	
@@ -206,13 +219,13 @@ public class TransferjobController {
 		transferjobs.setDirectPersonId(directPersonId);
 		transferjobs.setTransferJobCause(transferJobCause);
 		transferjobs.setTransferBeginTime(transferBeginTime);
-		transferjobs.setTransferJobId(transferJobId);
-		String companyId="977ACD3022C24B99AC9586CC50A8F786";
+		transferjobs.setTransferJobId(transferJobId);		
 		transferjobs.setCompanyId(companyId);
 		String transferEndtime = TimeUtil.getLongAfterDate(transferBeginTime, -1, Calendar.DATE);
 		if (!transferBeginTime1) {			
-			result.put("message", "参数格式不正确");
-			return result;
+			returnData.setMessage("数据请求失败");
+			returnData.setReturnCode("3001");
+			return returnData;
 		}
 		Transferjob transferjobemp = transferjobService.selectByTransferjobpost(employeeId, companyId);
 		//上一次所在部门ID
@@ -266,11 +279,13 @@ public class TransferjobController {
 						}						
 																					 				
 			}						
-			result.put("message", "修改成功");
-			return result;
+			returnData.setMessage("数据请求成功");
+			returnData.setReturnCode("3000");
+			return returnData;
 		}else{
-			result.put("message", "修改失败");
-			return result;
+			returnData.setMessage("数据请求失败");
+			returnData.setReturnCode("3001");
+			return returnData;
 		}				
 	}
 	
@@ -282,15 +297,17 @@ public class TransferjobController {
 	 * @return
 	 */
 	@RequestMapping(value="/deleteByTransferjob", produces = "application/json;charset=UTF-8", method=RequestMethod.POST)
-	public Map<String, Object> deleteByDuty(@RequestBody String transferJobId,HttpServletRequest request,HttpServletResponse response){
-		Map<String, Object> map=new HashMap<String,Object>();		
-		transferjobService.deleteByTransferjob(transferJobId);	
+	public ReturnData deleteByDuty(@RequestBody String transferJobId,HttpServletRequest request,HttpServletResponse response){
+		ReturnData returnData = new ReturnData();		
 		if(transferJobId.equals("")){
-			map.put("message", "删除成功");
+			transferjobService.deleteByTransferjob(transferJobId);	
+			returnData.setMessage("数据请求成功");
+			returnData.setReturnCode("3000");			
 		}else{
-			map.put("message", "删除失败");
+			returnData.setMessage("数据请求失败");
+			returnData.setReturnCode("3001");			
 		}
-		return map;
+		return returnData;
 	}
 	
 	

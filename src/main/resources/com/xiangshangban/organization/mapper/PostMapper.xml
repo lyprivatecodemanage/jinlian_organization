@@ -68,10 +68,8 @@
   <!-- 查询一个部门的所有岗位 -->
   <select id="findBydepartmentPost" parameterType="java.lang.String" resultMap="Post">  
     SELECT DISTINCT 
-    p.company_id,y.company_name, p.department_id ,d.department_name,p.post_id,p.post_name,p.post_proficiencies,p.post_work_type,p.educational_requirements,p.post_principal_id,e.employee_name
-  FROM  organization.post_ p       
-	LEFT JOIN organization.employee_ e on e.employee_id=p.post_principal_id	
-	LEFT JOIN organization.company_ y on p.company_id=y.company_id
+    p.post_id,p.post_name
+    FROM  organization.post_ p       	
     LEFT JOIN organization.department_ d  on d.department_id=p.department_id 
 	where  	
 	p.department_id=#{departmentId} 

@@ -38,4 +38,6 @@ public interface EmployeeDao {
     List<Employee> findByposcounttemp(@Param("postId") String postId,@Param("companyId") String companyId);
     
     List<Employee>findByruzhiempinfo();
+    
+    List<Employee> selectByAllEmployee(String companyId);
 }

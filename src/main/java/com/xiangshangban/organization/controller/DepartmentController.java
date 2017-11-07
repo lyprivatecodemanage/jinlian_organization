@@ -18,6 +18,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.xiangshangban.organization.bean.Department;
 import com.xiangshangban.organization.bean.DepartmentTree;
+import com.xiangshangban.organization.bean.ReturnData;
 import com.xiangshangban.organization.service.DepartmentService;
 
 @RestController
@@ -38,14 +39,18 @@ public class DepartmentController {
 	 * @return
 	 */
 	@RequestMapping(value = "/findByMoreDepartment",produces = "application/json;charset=UTF-8", method=RequestMethod.POST)	
-	public String findByMoreDepartment(@RequestBody String jsonString,HttpServletRequest request,HttpServletResponse response){		
+	public ReturnData findByMoreDepartment(@RequestBody String jsonString,HttpServletRequest request,HttpServletResponse response){		
 			Map<String,String> params = new HashMap<String, String>();
+			ReturnData returnData = new ReturnData();
 			JSONObject obj = JSON.parseObject(jsonString);
 			params.put("companyName", obj.getString("companyName"));
 			params.put("departmentName", obj.getString("departmentName"));
 			params.put("employeeName", obj.getString("employeeName"));								
 			List<Department> employeelist =departmentService.findByMoreDepartment(params);
-		return JSON.toJSONString(employeelist);
+			returnData.setData(employeelist);
+			returnData.setMessage("数据请求成功");
+			returnData.setReturnCode("3000");		
+			return returnData;
 	}
 	
 	
@@ -56,11 +61,17 @@ public class DepartmentController {
 	 * @param response
 	 * @return
 	 */
-	@RequestMapping(value = "/findDepartmentTree",produces = "application/json;charset=UTF-8", method=RequestMethod.POST)	
-	public String findDepartmentTree(HttpServletRequest request,HttpServletResponse response){	
+	@RequestMapping(value = "/findDepartmentTree",produces = "application/json;charset=UTF-8", method=RequestMethod.GET)	
+	public ReturnData findDepartmentTree(HttpServletRequest request,HttpServletResponse response){	
 		String companyId="977ACD3022C24B99AC9586CC50A8F786";
-		List<DepartmentTree> treeNode =departmentService.getDepartmentTreeAll(companyId);	
-		return JSON.toJSONString(treeNode);
+		//获取请求头信息
+	    //String companyId = request.getHeader("companyId");
+		ReturnData returnData = new ReturnData();
+		List<DepartmentTree> treeNode =departmentService.getDepartmentTreeAll(companyId);
+		returnData.setData(treeNode);
+		returnData.setMessage("数据请求成功");
+		returnData.setReturnCode("3000");		
+		return returnData;
 	}
 	/**
 	 * 查询所有部门下的岗位关人员系树
@@ -68,11 +79,17 @@ public class DepartmentController {
 	 * @param response
 	 * @return
 	 */
-	@RequestMapping(value = "/getDepartmentempTree",produces = "application/json;charset=UTF-8", method=RequestMethod.POST)	
-	public String getDepartmentempTree(HttpServletRequest request,HttpServletResponse response){
+	@RequestMapping(value = "/getDepartmentempTree",produces = "application/json;charset=UTF-8", method=RequestMethod.GET)	
+	public ReturnData getDepartmentempTree(HttpServletRequest request,HttpServletResponse response){
+		ReturnData returnData = new ReturnData();
 		String companyId="977ACD3022C24B99AC9586CC50A8F786";
-		List<DepartmentTree> treeNode =departmentService.getDepartmentempTreeAll(companyId);	
-		return JSON.toJSONString(treeNode);
+		//获取请求头信息
+	    //String companyId = request.getHeader("companyId");
+		List<DepartmentTree> treeNode =departmentService.getDepartmentempTreeAll(companyId);
+		returnData.setData(treeNode);
+		returnData.setMessage("数据请求成功");
+		returnData.setReturnCode("3000");		
+		return returnData;
 	}
 	
 	
@@ -82,11 +99,16 @@ public class DepartmentController {
 		 * @param response
 		 * @return
 		 */
-	@RequestMapping(value = "/findByAllDepartment",produces = "application/json;charset=UTF-8", method=RequestMethod.POST)	
-	public String findByAllDepartment(HttpServletRequest request,HttpServletResponse response){
+	@RequestMapping(value = "/findByAllDepartment",produces = "application/json;charset=UTF-8", method=RequestMethod.GET)	
+	public ReturnData findByAllDepartment(HttpServletRequest request,HttpServletResponse response){
+		ReturnData returnData = new ReturnData();
 		String companyId="977ACD3022C24B99AC9586CC50A8F786";
-		List<Department> treeNode =departmentService.findByAllDepartment(companyId);	
-		return JSON.toJSONString(treeNode);
+		//String companyId = request.getHeader("companyId");
+		List<Department> treeNode =departmentService.findByAllDepartment(companyId);
+		returnData.setData(treeNode);
+		returnData.setMessage("数据请求成功");
+		returnData.setReturnCode("3000");		
+		return returnData;
 	}
 	
 	
@@ -99,11 +121,13 @@ public class DepartmentController {
 	 * @return
 	 */
 	@RequestMapping(value="/insertDepartment", produces = "application/json;charset=UTF-8", method=RequestMethod.POST)
-	public Map<String, Object> insertDepartment(@RequestBody String department,HttpServletRequest request,HttpServletResponse response){		
-		Map<String, Object> map=new HashMap<String, Object>();
-		String companyId="977ACD3022C24B99AC9586CC50A8F786";
+	public ReturnData insertDepartment(@RequestBody String department,HttpServletRequest request,HttpServletResponse response){		
+		ReturnData returnData = new ReturnData();
 		Department departmenttemp=JSON.parseObject(department,Department.class);
-		departmenttemp.setCompanyId(companyId);
+		String companyId="977ACD3022C24B99AC9586CC50A8F786";
+		//获取请求头信息
+		//String companyId = request.getHeader("companyId");
+		departmenttemp.setCompanyId(companyId);		
 		String DepartmentNumbe = departmenttemp.getDepartmentNumbe();
 		String DepartmentName = departmenttemp.getDepartmentName();
 		//String EmployeeId = departmenttemp.getEmployeeId();
@@ -111,13 +135,15 @@ public class DepartmentController {
 		if(DepartmentParentId.equals("")){
 			departmenttemp.setDepartmentParentId("0");
 		}		
-		if(companyId.equals("") || DepartmentNumbe.equals("") || DepartmentName.equals("")){
-			map.put("message","添加失败");
-			return map;			
-		}else{			
+		if(!companyId.equals("") || !DepartmentNumbe.equals("") || !DepartmentName.equals("")){			
 			departmentService.insertDepartment(departmenttemp);
-			map.put("message", "添加成功");			
-			return map;
+			returnData.setMessage("数据请求成功");
+			returnData.setReturnCode("3000");			
+			return returnData;						
+		}else{			
+			returnData.setMessage("数据请求失败");
+			returnData.setReturnCode("3001");
+			return returnData;
 		}		
 	}
 	
@@ -129,13 +155,19 @@ public class DepartmentController {
 	 * @return
 	 */
 	@RequestMapping(value="/updateByDepartment", produces = "application/json;charset=UTF-8", method=RequestMethod.POST)
-	public Map<String, String> updateByCompany(@RequestBody String department,HttpServletRequest request,HttpServletResponse response){
-		System.out.println(department);
-		Map<String,String> param = new HashMap<String, String>();
+	public ReturnData updateByCompany(@RequestBody String department,HttpServletRequest request,HttpServletResponse response){
+		ReturnData returnData = new ReturnData();
 		Department departmenttemp=JSON.parseObject(department,Department.class);
-		String i=departmentService.updateByDepartment(departmenttemp);
-		param.put("message", i);
-	    return	param;			
+		String departmentId = departmenttemp.getDepartmentId();
+		if(!departmentId.equals("")){
+			departmentService.updateByDepartment(departmenttemp);
+			returnData.setMessage("数据请求成功");
+			returnData.setReturnCode("3000");		
+		}else{
+			returnData.setMessage("数据请求失败");
+			returnData.setReturnCode("3001");
+		}
+		return returnData;	
 	}
 	
 	/**
@@ -146,17 +178,19 @@ public class DepartmentController {
 	 * @return
 	 */
 	@RequestMapping(value="/deleteByDepartment", produces = "application/json;charset=UTF-8", method=RequestMethod.POST)
-	public Map<String, Object> deleteByDepartment(@RequestBody String departmentId,HttpServletRequest request,HttpServletResponse response){				
-		Map<String, Object> map=new HashMap<String, Object>();
+	public ReturnData deleteByDepartment(@RequestBody String departmentId,HttpServletRequest request,HttpServletResponse response){				
+		ReturnData returnData = new ReturnData();
 		JSONObject obj = JSON.parseObject(departmentId);
 		departmentId=obj.getString("departmentId");
 		if(!departmentId.equals("")){
 			departmentService.deleteByDepartment(departmentId);
-			map.put("message", "删除成功");			
+			returnData.setMessage("数据请求成功");
+			returnData.setReturnCode("3000");			
 		}else{
-			map.put("message","删除失败");		
+			returnData.setMessage("数据请求失败");
+			returnData.setReturnCode("3001");	
 		}	
-		return map;
+		return returnData;
 	}
 	
 }

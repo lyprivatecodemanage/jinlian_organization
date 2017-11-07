@@ -1,8 +1,6 @@
 package com.xiangshangban.organization.controller;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.xiangshangban.organization.bean.Company;
+import com.xiangshangban.organization.bean.ReturnData;
 import com.xiangshangban.organization.service.CompanyService;
 
 @RestController
@@ -34,20 +33,23 @@ public class CompanyController {
 	 * @return
 	 */
 	@RequestMapping(value="/insertCompany", produces = "application/json;charset=UTF-8", method=RequestMethod.POST)
-	public Map<String, Object> insertCompany(@RequestBody String company,HttpServletRequest request,HttpServletResponse response){
-		Map<String, Object> result = new HashMap<String, Object>();
+	public ReturnData insertCompany(@RequestBody String company,HttpServletRequest request,HttpServletResponse response){
 		Company companytemp=JSON.parseObject(company,Company.class);
+		ReturnData returnData = new ReturnData();
+		//获取请求头信息操作的用户
+		String userName = request.getHeader("userName");
+		companytemp.setUserName(userName);
 		String CompanyPhone = companytemp.getCompanyPhone();
 		boolean Companyphone = Pattern.matches("^[1][3,4,5,7,8][0-9]{9}$", CompanyPhone);
 		if (!Companyphone) {
-			result.put("errorCode", "3007");
-			result.put("message", "参数格式不正确");
-			return result;
+			returnData.setMessage("数据请求失败");
+			returnData.setReturnCode("3001");	
+			return returnData;
 		}			
 			companyService.insertCompany(companytemp);					
-			result.put("errorCode", "1");
-			result.put("message", "成功");
-		return result;
+			returnData.setMessage("数据请求成功");
+			returnData.setReturnCode("3000");
+		return returnData;
 						
 	}
 	
@@ -59,11 +61,20 @@ public class CompanyController {
 	 * @return
 	 */
 	@RequestMapping(value="/updateByCompany", produces = "application/json;charset=UTF-8", method=RequestMethod.POST)
-	public String updateByCompany(@RequestBody String company,HttpServletRequest request,HttpServletResponse response){
-		System.out.println(company);
+	public ReturnData updateByCompany(@RequestBody String company,HttpServletRequest request,HttpServletResponse response){
 		Company companytemp=JSON.parseObject(company,Company.class);
-		String i=companyService.updateByCompany(companytemp);	
-		return "{\"message\":\""+i+"\"}";
+		ReturnData returnData = new ReturnData();
+		String companyId = companytemp.getCompanyId();
+		if(!companyId.equals("")){
+			companyService.updateByCompany(companytemp);	
+			returnData.setMessage("数据请求成功");
+			returnData.setReturnCode("3000");
+		}else{
+			returnData.setMessage("数据请求失败");
+			returnData.setReturnCode("3001");	
+		}
+		return returnData;
+		
 	}
 	
 	/**
@@ -74,19 +85,19 @@ public class CompanyController {
 	 * @return
 	 */
 	@RequestMapping(value="/deleteByCompany", produces = "application/json;charset=UTF-8", method=RequestMethod.POST)
-	public Map<String, Object> deleteByCompany(@RequestBody String companyId,HttpServletRequest request,HttpServletResponse response){
-		System.out.println(companyId);
-		
-		Map<String, Object> map=new HashMap<String, Object>();
-		JSONObject obj = JSON.parseObject(companyId);
-		companyId=obj.getString("employeeId");	
-		if(companyId.equals("")){
-			map.put("message","删除失败");	
+	public ReturnData deleteByCompany(@RequestBody String companyId,HttpServletRequest request,HttpServletResponse response){		
+		ReturnData returnData = new ReturnData();
+		JSONObject obj = JSON.parseObject(companyId);		
+		String companyid=obj.getString("companyId");			
+		if(companyId !=null){
+			companyService.deleteByCompany(companyid);	
+			returnData.setMessage("数据请求成功");
+			returnData.setReturnCode("3000");
 		}else{
-			companyService.deleteByCompany(companyId);	
-			map.put("message", "删除成功");					
-		}	
-		return map;
+			returnData.setMessage("数据请求失败");
+			returnData.setReturnCode("3001");	
+		}
+		return returnData;
 	}
 	/**
 	 * 查询所有公司信息
@@ -95,9 +106,15 @@ public class CompanyController {
 	 * @return
 	 */
 	@RequestMapping(value="/fingdByAllCompany", produces = "application/json;charset=UTF-8", method=RequestMethod.GET)
-	public String fingdByAllCompany(HttpServletRequest request,HttpServletResponse response){
-		List<Company> list =companyService.fingdByAllCompany();		
-		return JSON.toJSONString(list);
+	public ReturnData fingdByAllCompany(HttpServletRequest request,HttpServletResponse response){
+		ReturnData returnData = new ReturnData();		
+		List<Company> list =companyService.fingdByAllCompany();	
+		if(list.size() != 0){
+			returnData.setData(list);
+			returnData.setMessage("数据请求成功");
+			returnData.setReturnCode("3000");			
+		}
+		return returnData;
 	}
 	
 	/**
@@ -108,9 +125,17 @@ public class CompanyController {
 	 * @return
 	 */
 	@RequestMapping(value="/selectByCompany", produces = "application/json;charset=UTF-8", method=RequestMethod.POST)
-	public String selectByCompany(@RequestBody String companyId,HttpServletRequest request,HttpServletResponse response){
-		Company company =companyService.selectByCompany(companyId);		
-		return JSON.toJSONString(company);
+	public ReturnData selectByCompany(@RequestBody String companyId,HttpServletRequest request,HttpServletResponse response){
+		ReturnData returnData = new ReturnData();
+		JSONObject obj = JSON.parseObject(companyId);		
+		String companyid=obj.getString("companyId");
+		Company company =companyService.selectByCompany(companyid);	
+		if(company !=null){
+			returnData.setData(company);
+			returnData.setMessage("数据请求成功");
+			returnData.setReturnCode("3000");			
+		}
+		return returnData;
 	}
 	
 }

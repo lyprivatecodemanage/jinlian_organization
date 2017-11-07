@@ -1,6 +1,6 @@
 package com.xiangshangban.organization.bean;
 
-import com.xiangshangban.organization.util.ExcelResources;
+import com.xiangshangban.organization.exportexcel.ExcelResources;
 
 public class Department {   
 	private String departmentId;//部门ID

@@ -23,7 +23,7 @@
             targetProject="Organization"
             type="XMLMAPPER" />
         <!-- 要生成哪些表-->  
-        <table tableName="dsd" domainObjectName="Dsd" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table>
+        <table tableName="ossfile" domainObjectName="OssFile" enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table>
        
         <!-- <table schema="zpeng" tableName="stu" domainObjectName="Student"
             enableSelectByPrimaryKey="true" enableUpdateByPrimaryKey="true"

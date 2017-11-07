@@ -2,7 +2,8 @@ package com.xiangshangban.organization.bean;
 
 import java.util.List;
 
-import com.xiangshangban.organization.util.ExcelResources;
+import com.xiangshangban.organization.exportexcel.ExcelResources;
+
 
 
 public class Employee {
