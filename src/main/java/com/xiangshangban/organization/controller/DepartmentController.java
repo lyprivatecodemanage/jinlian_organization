@@ -63,9 +63,9 @@ public class DepartmentController {
 	 */
 	@RequestMapping(value = "/findDepartmentTree",produces = "application/json;charset=UTF-8", method=RequestMethod.GET)	
 	public ReturnData findDepartmentTree(HttpServletRequest request,HttpServletResponse response){	
-		String companyId="977ACD3022C24B99AC9586CC50A8F786";
+		//String companyId="977ACD3022C24B99AC9586CC50A8F786";
 		//获取请求头信息
-	    //String companyId = request.getHeader("companyId");
+	    String companyId = request.getHeader("companyId");
 		ReturnData returnData = new ReturnData();
 		List<DepartmentTree> treeNode =departmentService.getDepartmentTreeAll(companyId);
 		returnData.setData(treeNode);
@@ -82,9 +82,9 @@ public class DepartmentController {
 	@RequestMapping(value = "/getDepartmentempTree",produces = "application/json;charset=UTF-8", method=RequestMethod.GET)	
 	public ReturnData getDepartmentempTree(HttpServletRequest request,HttpServletResponse response){
 		ReturnData returnData = new ReturnData();
-		String companyId="977ACD3022C24B99AC9586CC50A8F786";
+		//String companyId="977ACD3022C24B99AC9586CC50A8F786";
 		//获取请求头信息
-	    //String companyId = request.getHeader("companyId");
+	    String companyId = request.getHeader("companyId");
 		List<DepartmentTree> treeNode =departmentService.getDepartmentempTreeAll(companyId);
 		returnData.setData(treeNode);
 		returnData.setMessage("数据请求成功");
@@ -102,8 +102,8 @@ public class DepartmentController {
 	@RequestMapping(value = "/findByAllDepartment",produces = "application/json;charset=UTF-8", method=RequestMethod.GET)	
 	public ReturnData findByAllDepartment(HttpServletRequest request,HttpServletResponse response){
 		ReturnData returnData = new ReturnData();
-		String companyId="977ACD3022C24B99AC9586CC50A8F786";
-		//String companyId = request.getHeader("companyId");
+		//String companyId="977ACD3022C24B99AC9586CC50A8F786";
+		String companyId = request.getHeader("companyId");
 		List<Department> treeNode =departmentService.findByAllDepartment(companyId);
 		returnData.setData(treeNode);
 		returnData.setMessage("数据请求成功");
@@ -124,9 +124,9 @@ public class DepartmentController {
 	public ReturnData insertDepartment(@RequestBody String department,HttpServletRequest request,HttpServletResponse response){		
 		ReturnData returnData = new ReturnData();
 		Department departmenttemp=JSON.parseObject(department,Department.class);
-		String companyId="977ACD3022C24B99AC9586CC50A8F786";
+		//String companyId="977ACD3022C24B99AC9586CC50A8F786";
 		//获取请求头信息
-		//String companyId = request.getHeader("companyId");
+		String companyId = request.getHeader("companyId");
 		departmenttemp.setCompanyId(companyId);		
 		String DepartmentNumbe = departmenttemp.getDepartmentNumbe();
 		String DepartmentName = departmenttemp.getDepartmentName();

@@ -31,7 +31,6 @@ public class DutyController {
 	 */
 	@RequestMapping(value="/insertDuty", produces = "application/json;charset=UTF-8", method=RequestMethod.POST)
 	public String insertDuty(@RequestBody String duty,HttpServletRequest request,HttpServletResponse response){
-		System.out.println(duty);
 		Duty dutytemp=JSON.parseObject(duty,Duty.class);
 		String i=dutyService.insertDuty(dutytemp);		
 		return "{\"message\":\""+i+"\"}";
@@ -46,7 +45,6 @@ public class DutyController {
 	 */
 	@RequestMapping(value="/updateByDuty", produces = "application/json;charset=UTF-8", method=RequestMethod.POST)
 	public String updateByDuty(@RequestBody String duty,HttpServletRequest request,HttpServletResponse response){
-		System.out.println(duty);
 		Duty dutytemp=JSON.parseObject(duty,Duty.class);
 		String i=dutyService.updateByDuty(dutytemp);	
 		return "{\"message\":\""+i+"\"}";
@@ -61,7 +59,6 @@ public class DutyController {
 	 */
 	@RequestMapping(value="/deleteByDuty", produces = "application/json;charset=UTF-8", method=RequestMethod.POST)
 	public String deleteByDuty(@RequestBody String dutyId,HttpServletRequest request,HttpServletResponse response){
-		System.out.println(dutyId);
 		String i=dutyService.deleteByDuty(dutyId);		
 		return "{\"message\":\""+i+"\"}";
 	}

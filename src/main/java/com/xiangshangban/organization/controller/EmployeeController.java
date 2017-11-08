@@ -59,9 +59,9 @@ public class EmployeeController {
 		JSONObject obj = JSON.parseObject(employeeId);
 		ReturnData returnData = new ReturnData();
 		employeeId=obj.getString("employeeId");			
-		String companyId="977ACD3022C24B99AC9586CC50A8F786";
+		//String companyId="977ACD3022C24B99AC9586CC50A8F786";
 		//获取请求头信息
-		//String companyId = request.getHeader("companyId");			
+		String companyId = request.getHeader("companyId");			
 		Employee employee = employeeService.selectByEmployee(employeeId, companyId);
 		String LoginName = employee.getLoginName();		
 		User useremp = userService.getOneUser(LoginName);		
@@ -240,9 +240,9 @@ public class EmployeeController {
 			Map<String, Object> postnamelist=new HashMap<String, Object>();						
 			Map<String,String> params = new HashMap<String, String>();
 			JSONObject obj = JSON.parseObject(jsonString);
-			String companyId="977ACD3022C24B99AC9586CC50A8F786";
+			//String companyId="977ACD3022C24B99AC9586CC50A8F786";
 			//获取请求头信息
-			//String companyId = request.getHeader("companyId");			
+			String companyId = request.getHeader("companyId");			
 			params.put("companyId",companyId);
 			params.put("employeeName", obj.getString("employeeName"));
 			params.put("loginName", obj.getString("loginName"));			
@@ -277,9 +277,9 @@ public class EmployeeController {
 	@RequestMapping(value = "/findByposcounttemp",produces = "application/json;charset=UTF-8", method=RequestMethod.POST)	
 	public ReturnData findByposcounttemp(@RequestBody String postId, HttpServletRequest request,HttpServletResponse response){				
 		 ReturnData returnData = new ReturnData();
-		String companyId="977ACD3022C24B99AC9586CC50A8F786";
+		//String companyId="977ACD3022C24B99AC9586CC50A8F786";
 		//获取请求头信息
-		//String companyId = request.getHeader("companyId");	
+		String companyId = request.getHeader("companyId");	
 		if(!postId.equals("")){
 		List<Employee> emplist = employeeService.findByposcounttemp(postId, companyId);
 		if(emplist.size()!=0){
@@ -306,9 +306,9 @@ public class EmployeeController {
 	public ReturnData findByAllEmployee(HttpServletRequest request,HttpServletResponse response){		
 		ReturnData returnData = new ReturnData();
 		Map<String, Object> postnamelist=new HashMap<String, Object>();
-		String companyId="977ACD3022C24B99AC9586CC50A8F786";	 
+		//String companyId="977ACD3022C24B99AC9586CC50A8F786";	 
 		//获取请求头信息
-		//String companyId = request.getHeader("companyId");
+		String companyId = request.getHeader("companyId");
 		List<Employee> employeelistemp =employeeService.findByAllEmployee(companyId);
 		int s=0;	
 		for (int i = 0; i < employeelistemp.size(); i++) {
@@ -342,9 +342,9 @@ public class EmployeeController {
 		int s=0;	
 		ReturnData returnData = new ReturnData();
 		Map<String, Object> postnamelist=new HashMap<String, Object>();
-		String companyId="977ACD3022C24B99AC9586CC50A8F786";
+		//String companyId="977ACD3022C24B99AC9586CC50A8F786";
 		//获取请求头信息
-		//String companyId = request.getHeader("companyId");
+		String companyId = request.getHeader("companyId");
 		List<Employee> LiZhiemployeelist =employeeService.findByLiZhiemployee(companyId);		
 		for (int i = 0; i < LiZhiemployeelist.size(); i++) {
 			 s=s+1;
@@ -406,9 +406,9 @@ public class EmployeeController {
 			String probationaryExpired = jsonObject.getString("probationaryExpired");
 			boolean probationaryexpired = Pattern.matches("[0-9]{4}-[0-9]{2}-[0-9]{2}", probationaryExpired);
 			String departmentId = jsonObject.getString("departmentId");
-			String companyId ="977ACD3022C24B99AC9586CC50A8F786";
+			//String companyId ="977ACD3022C24B99AC9586CC50A8F786";
 			//获取请求头信息
-			//String companyId = request.getHeader("companyId");
+			String companyId = request.getHeader("companyId");
 			employeenew.setCompanyId(companyId);
 			employeenew.setEmployeeName(employeeName);
 			employeenew.setEmployeeSex(employeeSex);
@@ -584,9 +584,9 @@ public class EmployeeController {
 		JSONObject obj = JSON.parseObject(employeeId);		
 		String employeeid = obj.getString("employeeId");	
 		ReturnData returnData = new ReturnData();
-		String companyId = "977ACD3022C24B99AC9586CC50A8F786";
+		//String companyId = "977ACD3022C24B99AC9586CC50A8F786";
 		//获取请求头信息			
-		//String companyId = request.getHeader("companyId");
+		String companyId = request.getHeader("companyId");
          if(!employeeId.equals("")){ 
         	 Employee emp =employeeService.selectByEmployee(employeeid,companyId);	
         	 String departmentId = emp.getDepartmentId();

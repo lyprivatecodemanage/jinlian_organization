@@ -23,13 +23,13 @@ public class ServletFilter implements Filter{
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
 		HttpServletRequest req=(HttpServletRequest) request;
-		HttpServletResponse res=(HttpServletResponse) response;
-		/*res.setHeader("Access-Control-Allow-Credentials","true");
-		res.setHeader("Access-Control-Allow-Origin","http://192.168.0.114:8000");*/
+		HttpServletResponse res=(HttpServletResponse) response;		
 		 //这里填写你允许进行跨域的主机ip
 		res.setHeader("Access-Control-Allow-Credentials","true");
-//		res.setHeader("Access-Control-Allow-Origin", "http://192.168.0.242");
-		res.setHeader("Access-Control-Allow-Origin", "http://localhost:8000");
+//		res.setHeader("Access-Control-Allow-Origin", "http://localhost:8000");
+//		res.setHeader("Access-Control-Allow-Origin", "http://192.168.0.110");
+		//res.setHeader("Access-Control-Allow-Origin","http://192.168.0.242:8000");
+		res.setHeader("Access-Control-Allow-Origin","*");
         //允许的访问方法
 		res.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, OPTIONS, DELETE, PATCH");
         //Access-Control-Max-Age 用于 CORS 相关配置的缓存

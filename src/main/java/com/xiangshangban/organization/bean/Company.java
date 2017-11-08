@@ -4,11 +4,18 @@ public class Company {
    
     private String companyId;//公司ID
     private String companyName;//公司名称
-    private String companyEnglishName;
-    private String companyAbbreviationName;//公司简称
-    private String companyAddressDetail;
     private String companyPhone;//联系方式
+    private String companyAbbreviationName;//公司简称
     private String companyPersonalName;//联系人名称
+    private String industryType;//行业类型
+    private String companyArea;//地区
+    private String companyApprove;//公司是否认证（0、未认证 1、已认证--默认0）
+    private String userName;//管理员用户名
+    private String companyNo;//公司编号
+    //暂时不用的字段
+    private String companyEnglishName;    
+    private String companyAddressDetail;
+    private String companyCode;//公司二维码    
     private String companyEmail;
     private String companyPostalcode;
     private String companyLogo;//公司LOGO
@@ -22,19 +29,14 @@ public class Company {
     private String businessRegistrationNumber;
     private String uniformCreditCode;
     private String typeEnterprise;
-    private String taxpayerRegistrationNumber;
-    private String industryType;//行业类型
+    private String taxpayerRegistrationNumber;  
     private String beginBusinessTime;
     private String endBusinessTime;
     private String dateofApproval;
     private String registrationAuthority;
     private String registeredAddress;
     private String companyCreatTime;
-    private String companyArea;//地区
-    private String companyCode;//公司二维码
-    private String companyApprove;//公司是否认证（0、未认证 1、已认证--默认0）
-    private String userName;//管理员用户名
-    private String companyNo;//公司编号
+  
     
     
 	public String getCompanyNo() {

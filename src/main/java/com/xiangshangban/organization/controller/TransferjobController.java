@@ -52,9 +52,9 @@ public class TransferjobController {
 		JSONObject obj = JSON.parseObject(jsonString);
 		Map<String,String> params = new HashMap<String, String>();
 		Map<String,String> nullemp = new HashMap<String, String>();
-		String companyId="977ACD3022C24B99AC9586CC50A8F786";
+		//String companyId="977ACD3022C24B99AC9586CC50A8F786";
 		//获取请求头信息			
-		//String companyId = request.getHeader("companyId");
+		String companyId = request.getHeader("companyId");
 		params.put("companyId",companyId);
 		params.put("employeeId",obj.getString("employeeId"));
 		nullemp.put("companyId", companyId);
@@ -106,11 +106,11 @@ public class TransferjobController {
 		String departmentId = jsonObject.getString("departmentId");
 		String transferJobCause = jsonObject.getString("transferJobCause");	
 		String directPersonId = jsonObject.getString("directPersonId");
-		String userId ="6B566C197A7D4337A5DA0B4D6F9FC1A3";
-		String companyId="977ACD3022C24B99AC9586CC50A8F786";
+		//String userId ="6B566C197A7D4337A5DA0B4D6F9FC1A3";
+		//String companyId="977ACD3022C24B99AC9586CC50A8F786";
 		//获取请求头信息			
-		//String companyId = request.getHeader("companyId");
-		//String userId = request.getHeader("userId");
+		String companyId = request.getHeader("companyId");
+		String userId = request.getHeader("userId");
 		Transferjob transferjobs = new Transferjob();
 		transferjobs.setDepartmentId(departmentId); 
 		transferjobs.setEmployeeId(employeeId);	
@@ -207,11 +207,11 @@ public class TransferjobController {
 		String transferJobId = jsonObject.getString("transferJobId");
 		String transferJobCause = jsonObject.getString("transferJobCause");	
 		String directPersonId = jsonObject.getString("directPersonId");
-		String userId ="6B566C197A7D4337A5DA0B4D6F9FC1A3";
-		String companyId="977ACD3022C24B99AC9586CC50A8F786";
+		//String userId ="6B566C197A7D4337A5DA0B4D6F9FC1A3";
+		//String companyId="977ACD3022C24B99AC9586CC50A8F786";
 		//获取请求头信息			
-		//String companyId = request.getHeader("companyId");
-		//String userId = request.getHeader("userId");
+		String companyId = request.getHeader("companyId");
+		String userId = request.getHeader("userId");
 		Transferjob transferjobs = new Transferjob();
 		transferjobs.setDepartmentId(departmentId);
 		transferjobs.setEmployeeId(employeeId);	

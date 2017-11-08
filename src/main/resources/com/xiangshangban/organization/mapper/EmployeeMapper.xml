@@ -42,7 +42,7 @@
   <select id="findByposcounttemp" parameterType="java.lang.String" resultMap="Employee">
    SELECT  
     e.employee_id,e.employee_name
-   FROM  organization.employee_ e 
+    FROM  organization.employee_ e 
 	LEFT JOIN organization.connect_emp_post_ c on c.employee_id=e.employee_id  and c.is_delete='0'
 	LEFT JOIN organization.post_ p  on  c.post_id = p.post_id  
 	where 

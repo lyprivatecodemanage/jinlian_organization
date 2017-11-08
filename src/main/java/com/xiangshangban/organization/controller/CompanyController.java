@@ -109,7 +109,7 @@ public class CompanyController {
 	public ReturnData fingdByAllCompany(HttpServletRequest request,HttpServletResponse response){
 		ReturnData returnData = new ReturnData();		
 		List<Company> list =companyService.fingdByAllCompany();	
-		if(list.size() != 0){
+		if(list.size() != 0){		
 			returnData.setData(list);
 			returnData.setMessage("数据请求成功");
 			returnData.setReturnCode("3000");			

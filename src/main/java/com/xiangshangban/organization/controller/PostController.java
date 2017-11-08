@@ -38,10 +38,10 @@ public class PostController {
 		 */
 		@RequestMapping(value="/insertPost", produces = "application/json;charset=UTF-8", method=RequestMethod.POST)
 		public ReturnData insertPost(@RequestBody String post,HttpServletRequest request,HttpServletResponse response){
-			String companyId="977ACD3022C24B99AC9586CC50A8F786";
+			//String companyId="977ACD3022C24B99AC9586CC50A8F786";
 			ReturnData returnData = new ReturnData();
 			//获取请求头信息			
-			//String companyId = request.getHeader("companyId");
+			String companyId = request.getHeader("companyId");
 			Post posttemp=JSON.parseObject(post,Post.class);
 			posttemp.setCompanyId(companyId);
 			String departmentId = posttemp.getDepartmentId();
@@ -117,9 +117,9 @@ public class PostController {
 		@RequestMapping(value="/selectByAllPostInfo", produces = "application/json;charset=UTF-8", method=RequestMethod.GET)
 		public ReturnData selectByAllPostInfo(HttpServletRequest request,HttpServletResponse response){	
 			ReturnData returnData = new ReturnData();
-			String companyId="977ACD3022C24B99AC9586CC50A8F786";
+			//String companyId="977ACD3022C24B99AC9586CC50A8F786";
 			//获取请求头信息			
-			//String companyId = request.getHeader("companyId");
+			String companyId = request.getHeader("companyId");
 			List<Post> list=postService.selectByAllPostInfo(companyId);
 			if(list.size()!=0){				
 				returnData.setData(list);
@@ -142,9 +142,9 @@ public class PostController {
 			Map<String,String> params = new HashMap<String, String>();
 			JSONObject obj = JSON.parseObject(jsonString);
 			ReturnData returnData = new ReturnData();
-			String companyId="977ACD3022C24B99AC9586CC50A8F786";
+			//String companyId="977ACD3022C24B99AC9586CC50A8F786";
 			//获取请求头信息			
-			//String companyId = request.getHeader("companyId");			
+			String companyId = request.getHeader("companyId");			
 			params.put("companyId", companyId);
 			params.put("postName", obj.getString("postName"));
 			params.put("departmentName", obj.getString("departmentName"));
