@@ -53,7 +53,7 @@
   <select id="selectByCompany" parameterType="java.lang.String" resultMap="Company">  
     select 
      company_id, company_name,company_abbreviation_name,company_phone,company_personal_name,industry_type,
-     company_no,company_area,company_personal_name,dateof_approval,user_name
+     company_no,company_area,company_personal_name,user_name
     from organization.company_
     where 
     company_id = #{companyId,jdbcType=VARCHAR}
@@ -71,7 +71,8 @@
   
   <select id="fingdByAllCompany"  resultMap="Company">  
     select 
-    <include refid="Base_Column_List" />
+     company_id, company_name,company_abbreviation_name,company_phone,company_personal_name,industry_type,
+     company_no,company_area,company_personal_name,user_name
     from organization.company_   
   </select>
   
@@ -82,8 +83,11 @@
   </delete>
   
   <insert id="insertCompany" parameterType="com.xiangshangban.organization.bean.Company">   
-    insert into organization.company_ (company_id, company_name,company_logo,company_code,
-    company_abbreviation_name,industry_type, company_area,company_personal_name,company_phone,company_approve,user_name,company_no
+    insert into organization.company_ (
+    company_id, company_name,company_logo,company_code,
+    company_abbreviation_name,industry_type, company_area,
+    company_personal_name,company_phone,
+    user_name,company_no
       )
     values (
       #{companyId,jdbcType=VARCHAR}, 
@@ -95,24 +99,20 @@
       #{companyArea,jdbcType=VARCHAR},
       #{companyPersonalName,jdbcType=VARCHAR},
       #{companyPhone,jdbcType=VARCHAR},      
-      #{companyApprove,jdbcType=VARCHAR},
       #{userName,jdbcType=VARCHAR},
-      #{companyNo,jdbcType=VARCHAR}
-      
+      #{companyNo,jdbcType=VARCHAR}     
       )
   </insert>
   
   <update id="updateByCompany" parameterType="com.xiangshangban.organization.bean.Company">    
     update organization.company_
-    set 
-      company_name=#{companyName,jdbcType=VARCHAR},       
+    set      
       company_logo=#{companyLogo,jdbcType=VARCHAR},
       company_code=#{companyCode,jdbcType=VARCHAR}, 
       company_abbreviation_name=#{companyAbbreviationName,jdbcType=VARCHAR},
       company_phone=#{companyPhone,jdbcType=VARCHAR},
       industry_type=#{industryType,jdbcType=VARCHAR},
-      company_area=#{companyArea,jdbcType=VARCHAR},
-      company_approve=#{companyApprove,jdbcType=VARCHAR},
+      company_area=#{companyArea,jdbcType=VARCHAR},      
       company_personal_name=#{companyPersonalName,jdbcType=VARCHAR}    
     where 
     company_id = #{companyId,jdbcType=VARCHAR}
