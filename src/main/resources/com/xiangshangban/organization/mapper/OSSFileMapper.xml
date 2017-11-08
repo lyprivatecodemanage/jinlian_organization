@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiangshangban.organization.dao.OSSFileDao">
+<resultMap id="OSSFile" type="com.xiangshangban.organization.bean.OSSFile"> 
+<result column="key" jdbcType="VARCHAR" property="key" />
+<result column="name" jdbcType="VARCHAR" property="name" />
+<result column="upload_time" jdbcType="VARCHAR" property="uploadTime" />
+<result column="status" jdbcType="VARCHAR" property="status" />
+<result column="upload_user" jdbcType="VARCHAR" property="uploadUser" />
+<result column="customer_id" jdbcType="VARCHAR" property="customerId" />
+<result column="path" jdbcType="VARCHAR" property="path" />
+</resultMap>
+
+<select id="selectByAllossfilet" parameterType="java.lang.String" resultMap="OSSFile">  
+    select  
+     key, customer_id, path, upload_time, upload_user, name, status
+     FROM  organization.ossfile       	
+    where
+    status='0' 
+    and 
+    customer_id=#{customerId}
+  </select>
+  
+  <select id="selectBysingleossfilet" parameterType="java.lang.String" resultMap="OSSFile">  
+    select  
+     key, customer_id, path, upload_time, upload_user, name, status
+     FROM  organization.ossfile       	
+    where
+    status='0' 
+    and 
+    key=#{key}
+    and
+    customer_id=#{customerId}
+  </select>
+  
+ <insert id="insertOssfile" parameterType="com.xiangshangban.organization.bean.OSSFile">    
+    insert into organization.ossfile (
+    key,name,upload_time,status,upload_user,customer_id,path
+    )values(
+    #{key},#{name},#{uploadTime},#{status},#{uploadUser},#{customerId},#{path}
+    )
+ </insert>
+ 
+ <update id="deleteByossfile" parameterType="com.xiangshangban.organization.bean.OSSFile">  
+    update organization.ossfile
+    set 
+       status='1'
+    where 
+    key = #{key}
+    and 
+    customer_id=#{customerId}
+  </update>
+</mapper>
