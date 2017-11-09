@@ -17,12 +17,12 @@ import com.xiangshangban.organization.util.FormatUtil;
 
 @Service
 public class DepartmentServiceImpl implements DepartmentService {
-@Autowired
-DepartmentDao departmentDao;
-@Autowired
-EmployeeDao employeeDao;
-@Autowired
-PostDao postDao;
+	@Autowired
+	DepartmentDao departmentDao;
+	@Autowired
+	EmployeeDao employeeDao;
+	@Autowired
+	PostDao postDao;
 
 
 	@Override
@@ -198,6 +198,12 @@ PostDao postDao;
 			list.add(departmentTree);
 		}
 		return list;
+	}
+
+	@Override
+	public List<Department> findByAllFenyeDepartment(Map<String, String> map) {
+		// TODO Auto-generated method stub
+		return departmentDao.findByAllFenyeDepartment(map);
 	}
 
 	

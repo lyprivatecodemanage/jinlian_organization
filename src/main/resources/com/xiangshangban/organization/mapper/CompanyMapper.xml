@@ -36,10 +36,11 @@
     <result column="company_approve" jdbcType="VARCHAR" property="companyApprove" />
     <result column="company_personal_name" jdbcType="VARCHAR" property="companyPersonalName" />
     <result column="user_name" jdbcType="VARCHAR" property="userName" />
-    <result column="company_no" jdbcType="VARCHAR" property="companyNo" />
-    
-  </resultMap>
-  
+    <result column="company_no" jdbcType="VARCHAR" property="companyNo" /> 
+    <result column="userid" jdbcType="VARCHAR" property="userId" /> 
+     <result column="account" jdbcType="VARCHAR" property="Account" />
+          
+  </resultMap> 
   <sql id="Base_Column_List">    
     company_id, company_name, company_english_name, company_abbreviation_name, company_address_detail, 
     company_phone, company_email, company_postalcode, company_logo, company_business_license, 
@@ -48,7 +49,18 @@
     industry_type, begin_business_time, end_business_time, dateof_approval, registration_authority, 
     registered_address,company_creat_time,company_personal_name,company_no
   </sql>
-  
+      
+  <!-- 查询一个人加入了哪些公司 -->
+  <select id="selectByUserCompany" parameterType="java.lang.String" resultMap="Company">  
+   select 
+s.userid,s.account,u.company_id,c.company_name
+from organization.company_ c 
+LEFT JOIN organization.user_company u on c.company_id=u.company_id 
+LEFT JOIN organization.u_users s on u.user_id=s.userid
+where 
+s.userid =(select s.userid from organization.u_users s where s.account=#{Account})
+  </select>
+   
   <!-- 查询一个公司详细信息 -->
   <select id="selectByCompany" parameterType="java.lang.String" resultMap="Company">  
     select 

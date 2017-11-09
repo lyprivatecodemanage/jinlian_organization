@@ -36,9 +36,22 @@ public class Company {
     private String registrationAuthority;
     private String registeredAddress;
     private String companyCreatTime;
-  
+    private String userId;
+    private String Account;
     
     
+	public String getAccount() {
+		return Account;
+	}
+	public void setAccount(String account) {
+		Account = account;
+	}
+	public String getUserId() {
+		return userId;
+	}
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
 	public String getCompanyNo() {
 		return companyNo;
 	}

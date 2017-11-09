@@ -88,7 +88,7 @@ public class CompanyController {
 	public ReturnData deleteByCompany(@RequestBody String companyId,HttpServletRequest request,HttpServletResponse response){		
 		ReturnData returnData = new ReturnData();
 		JSONObject obj = JSON.parseObject(companyId);		
-		String companyid=obj.getString("companyId");			
+		String companyid=obj.getString("companyId");		
 		if(companyId !=null){
 			companyService.deleteByCompany(companyid);	
 			returnData.setMessage("数据请求成功");
@@ -124,16 +124,44 @@ public class CompanyController {
 	 * @param response
 	 * @return
 	 */
-	@RequestMapping(value="/selectByCompany", produces = "application/json;charset=UTF-8", method=RequestMethod.POST)
-	public ReturnData selectByCompany(@RequestBody String companyId,HttpServletRequest request,HttpServletResponse response){
+	@RequestMapping(value="/selectByCompany", produces = "application/json;charset=UTF-8", method=RequestMethod.GET)
+	public ReturnData selectByCompany(HttpServletRequest request,HttpServletResponse response){
 		ReturnData returnData = new ReturnData();
-		JSONObject obj = JSON.parseObject(companyId);		
-		String companyid=obj.getString("companyId");
-		Company company =companyService.selectByCompany(companyid);	
-		if(company !=null){
+		//获取请求头信息
+		String companyId = request.getHeader("companyId");		
+		if(!companyId.equals("")){
+			Company company =companyService.selectByCompany(companyId);	
 			returnData.setData(company);
 			returnData.setMessage("数据请求成功");
 			returnData.setReturnCode("3000");			
+		}else{
+			returnData.setMessage("数据请求失败");
+			returnData.setReturnCode("3001");	
+		}
+		return returnData;
+	}
+	
+	/**
+	 * 查询一个人加入了哪些公司
+	 * @param userId
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping(value="/selectByUserCompany", produces = "application/json;charset=UTF-8", method=RequestMethod.GET)
+	public ReturnData selectByUserCompany(HttpServletRequest request,HttpServletResponse response){
+		ReturnData returnData = new ReturnData();	
+		//获取请求头信息
+		//String Account = request.getHeader("Account");
+		String Account="admin";		
+		if(!Account.equals("")){	
+			List<Company> list =companyService.selectByUserCompany(Account);
+			returnData.setData(list);
+			returnData.setMessage("数据请求成功");
+			returnData.setReturnCode("3000");			
+		}else{
+			returnData.setMessage("数据请求失败");
+			returnData.setReturnCode("3001");	
 		}
 		return returnData;
 	}

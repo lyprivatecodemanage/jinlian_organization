@@ -14,4 +14,7 @@ public interface CompanyService {
     String updateByCompany(Company company);
     
     List<Company> fingdByAllCompany();
+    
+    //查询一个人加入了哪些公司
+    List<Company>selectByUserCompany(String Account);
 }

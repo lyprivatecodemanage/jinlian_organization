@@ -73,6 +73,12 @@ public class CompanyServiceImpl implements CompanyService {
 		return companyDao.fingdByAllCompany();
 	}
 
+	@Override
+	public List<Company> selectByUserCompany(String Account) {
+		// TODO Auto-generated method stub
+		return companyDao.selectByUserCompany(Account);
+	}
+
 	
 	
 }

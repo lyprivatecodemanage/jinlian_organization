@@ -27,6 +27,8 @@ public interface DepartmentDao {
     List<Department> findDepartmentempTree (String departmentParentId);
     
     List<Department> findByMoreDepartment(Map<String,String> map);
+    //分页查询部门信息
+    List<Department> findByAllFenyeDepartment(Map<String,String> map);
     
     List<Department> findByAllDepartment(String companyId);
     

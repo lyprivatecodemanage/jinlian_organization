@@ -584,9 +584,9 @@ public class EmployeeController {
 		JSONObject obj = JSON.parseObject(employeeId);		
 		String employeeid = obj.getString("employeeId");	
 		ReturnData returnData = new ReturnData();
-		//String companyId = "977ACD3022C24B99AC9586CC50A8F786";
+		String companyId = "977ACD3022C24B99AC9586CC50A8F786";
 		//获取请求头信息			
-		String companyId = request.getHeader("companyId");
+		//String companyId = request.getHeader("companyId");
          if(!employeeId.equals("")){ 
         	 Employee emp =employeeService.selectByEmployee(employeeid,companyId);	
         	 String departmentId = emp.getDepartmentId();
@@ -594,13 +594,12 @@ public class EmployeeController {
              emp.setPostList(PostNamelist);
              returnData.setData(emp);
              returnData.setMessage("数据请求成功");
-			 returnData.setReturnCode("3000");
-			 return returnData;
+			 returnData.setReturnCode("3000");	
          }else{      	 
 	        	returnData.setMessage("数据请求失败");
-				returnData.setReturnCode("3001");
-				return returnData;
-         }		  
+				returnData.setReturnCode("3001");				
+         }	
+         return returnData;
 		}
 	
 	/**

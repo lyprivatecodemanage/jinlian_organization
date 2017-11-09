@@ -21,7 +21,16 @@
     department_id,department_numbe, department_name, department_describe, department_principal
   </sql>
   
-	
+	<!-- 分页查询部门信息-->
+  <select id="findByAllFenyeDepartment" parameterType="java.lang.String" resultMap="Department">
+    select 
+    d.department_id, d.department_numbe, d.department_name, d.department_describe,d.department_parent_id,d.company_id, d.employee_id,(select c.company_name from organization.company_ c  where c.company_id=d.company_id),(select e.employee_name from organization.employee_ e where e.employee_id=d.employee_id)
+    from organization.department_  d  
+    where	
+	d.company_id=#{companyId}	
+	limit #{pageRecordNum}::integer offset #{fromPageNum}::integer 	 
+  </select>
+  
 	<select id="findDepartmentTree"  resultMap="Department">
 	SELECT DISTINCT d.department_id,d.department_name  
     FROM organization.department_ d 
