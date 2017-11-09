@@ -26,6 +26,9 @@ public interface EmployeeService {
     String batchUpdateStatus(String employeeId);
     //调职
     String batchUpdateTransferJobStaus(String employeeId);
+    //分页查询员工信息
+    List<Employee> selectByAllFnyeEmployee(Map<String,String> map);
+    
     String updateByEmployeedept(Employee employee);
     Employee findByemployeeNo(String employeeNo);
     Employee findByemploginName(String loginName);

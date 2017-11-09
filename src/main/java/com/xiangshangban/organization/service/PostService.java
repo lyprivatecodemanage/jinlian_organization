@@ -17,8 +17,11 @@ public interface PostService {
     List<Post> selectByPostName(String employeeId,String departmentId);  
     
     List<Post> selectByAllPostInfo(String companyId);
-    
+    //查询所有岗位信息
     List<Post>findByMorePostIfon(Map<String,String> map);
+    //分页查询岗位信息
+    List<Post>selectByAllFenyePost(Map<String,String> map);
+    
     List<Post> selectByPostemp(String employeeId,String departmentId);
     
 }

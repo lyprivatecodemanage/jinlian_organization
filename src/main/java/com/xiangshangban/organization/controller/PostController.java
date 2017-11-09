@@ -2,9 +2,11 @@ package com.xiangshangban.organization.controller;
 
 
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -109,6 +111,7 @@ public class PostController {
 			return map;
 		}		
 		/**
+		 * @author 张慧
 		 * 查询所有岗位信息
 		 * @param request
 		 * @param response
@@ -129,6 +132,54 @@ public class PostController {
 			return returnData;
 			
 		}
+		/**
+		 * @author 张慧
+		 * 分页查询岗位信息
+		 * @param pageNum
+		 * @param pageRecordNum
+		 * @param request
+		 * @param response
+		 * @return
+		 */
+		@RequestMapping(value="/selectByAllFenyePost", produces = "application/json;charset=UTF-8", method=RequestMethod.POST)
+		public ReturnData selectByAllFenyePost(String pageNum, String pageRecordNum,HttpServletRequest request,HttpServletResponse response){	
+			ReturnData returnData = new ReturnData();
+			Map<String, String> params = new HashMap<String, String>();
+			//String companyId="977ACD3022C24B99AC9586CC50A8F786";
+			String companyId = request.getHeader("companyId");
+			String pageNumPattern = "\\d{1,}";
+			boolean pageNumFlag = Pattern.matches(pageNumPattern, pageNum);
+			boolean pageRecordNumFlag = Pattern.matches(pageNumPattern, pageRecordNum);
+			if(!pageNumFlag||!pageRecordNumFlag){
+				returnData.setMessage("参数格式不正确");
+				returnData.setReturnCode("3007");			
+				return returnData;
+			}
+			List<Post> list =new ArrayList<>();
+			if(!companyId.equals("")){			
+				if (pageNum != null && pageNum != "" && pageRecordNum != null && pageRecordNum != "") {
+				int number = (Integer.parseInt(pageNum) - 1) * Integer.parseInt(pageRecordNum);
+					String strNum = String.valueOf(number);
+					params.put("pageRecordNum", pageRecordNum);
+					params.put("fromPageNum", strNum);
+					params.put("companyId", companyId);
+					list=postService.selectByAllFenyePost(params);
+					returnData.setData(list);
+					returnData.setMessage("数据请求成功");
+					returnData.setReturnCode("3000");		
+			        return returnData;
+			}else{
+				returnData.setMessage("数据请求失败");
+				returnData.setReturnCode("3001");		
+				return returnData;	
+			}
+		}
+			returnData.setMessage("数据请求失败");
+			returnData.setReturnCode("3001");		
+			return returnData;				
+			
+		}
+		
 		
 		/** 
 		 * 根据岗位名称，所属部门查询岗位信息

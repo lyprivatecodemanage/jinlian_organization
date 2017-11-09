@@ -297,6 +297,59 @@ public class EmployeeController {
 	
 	
 	/**
+	 * 分页查询员工信息
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping(value = "/selectByAllFnyeEmployee",produces = "application/json;charset=UTF-8", method=RequestMethod.POST)	
+	public ReturnData selectByAllFnyeEmployee(String pageNum, String pageRecordNum,HttpServletRequest request,HttpServletResponse response){		
+		ReturnData returnData = new ReturnData();
+		Map<String,String> params = new HashMap<String, String>();
+		Map<String, Object> postnamelist = new HashMap<String, Object>();
+		//String companyId="977ACD3022C24B99AC9586CC50A8F786";
+		String companyId = request.getHeader("companyId");
+		String pageNumPattern = "\\d{1,}";
+		boolean pageNumFlag = Pattern.matches(pageNumPattern, pageNum);
+		boolean pageRecordNumFlag = Pattern.matches(pageNumPattern, pageRecordNum);
+		if(!pageNumFlag||!pageRecordNumFlag){
+			returnData.setMessage("参数格式不正确");
+			returnData.setReturnCode("3007");			
+			return returnData;
+		}
+		List<Employee> employeelistemp=new ArrayList<>();
+		if(!companyId.equals("")){
+			if (pageNum != null && pageNum != "" && pageRecordNum != null && pageRecordNum != "") {
+				int number = (Integer.parseInt(pageNum) - 1) * Integer.parseInt(pageRecordNum);
+				String strNum = String.valueOf(number);
+				params.put("pageRecordNum", pageRecordNum);
+				params.put("fromPageNum", strNum);
+				params.put("companyId", companyId);
+				employeelistemp =employeeService.selectByAllFnyeEmployee(params);
+				int s=0;	
+				for (int i = 0; i < employeelistemp.size(); i++) {
+				   s=s+1;
+		           String temps =String.valueOf(s);
+				   Employee employeelist = employeelistemp.get(i);
+				   String Employeeid = employeelist.getEmployeeId();
+				   String departmentId = employeelist.getDepartmentId();
+		           List<Post> PostNamelist = postService.selectByPostName(Employeeid,departmentId);	            
+		           employeelist.setPostList(PostNamelist);	                 
+		           postnamelist.put("employeelist"+temps, employeelist);			
+				}															 
+			}
+			returnData.setData(postnamelist);
+			returnData.setMessage("数据请求成功");
+			returnData.setReturnCode("3000");		
+	        return returnData;
+		}else{			
+			returnData.setMessage("数据请求失败");
+			returnData.setReturnCode("3001");		
+	        return returnData;
+		}				
+}
+	
+	/**
 	 * 所有在职员工的信息
 	 * @param request
 	 * @param response

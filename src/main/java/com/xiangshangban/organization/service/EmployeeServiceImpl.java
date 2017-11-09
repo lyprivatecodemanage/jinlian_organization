@@ -184,5 +184,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 		return employeeDao.selectByAllEmployee(companyId);
 	}
 
+	@Override
+	public List<Employee> selectByAllFnyeEmployee(Map<String, String> map) {
+		// TODO Auto-generated method stub
+		return employeeDao.selectByAllFnyeEmployee(map);
+	}
+
 	
 }

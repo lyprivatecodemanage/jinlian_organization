@@ -83,6 +83,12 @@ public class PostServiceImpl implements PostService {
 		return postDao.selectByPostemp(employeeId, departmentId);
 	}
 
+	@Override
+	public List<Post> selectByAllFenyePost(Map<String, String> map) {
+		// TODO Auto-generated method stub
+		return postDao.selectByAllFenyePost(map);
+	}
+
 	
 
 	

@@ -125,8 +125,8 @@ public class DepartmentController {
 	public ReturnData findByAllFenyeDepartment(String pageNum, String pageRecordNum,HttpServletRequest request,HttpServletResponse response){
 		ReturnData returnData = new ReturnData();
 		Map<String, String> params = new HashMap<String, String>();
-		String companyId="977ACD3022C24B99AC9586CC50A8F786";
-		//String companyId = request.getHeader("companyId");
+		//String companyId="977ACD3022C24B99AC9586CC50A8F786";
+		String companyId = request.getHeader("companyId");
 		String pageNumPattern = "\\d{1,}";
 		boolean pageNumFlag = Pattern.matches(pageNumPattern, pageNum);
 		boolean pageRecordNumFlag = Pattern.matches(pageNumPattern, pageRecordNum);

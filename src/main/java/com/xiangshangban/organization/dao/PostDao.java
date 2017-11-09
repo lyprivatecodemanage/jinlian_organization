@@ -27,8 +27,10 @@ public interface PostDao {
     List<Post> selectByPostName(@Param("employeeId")String employeeId,@Param("departmentId") String departmentId);
     //查询所有员工的岗位信息
     List<Post> selectByPostemp(@Param("employeeId")String employeeId,@Param("departmentId") String departmentId);  
-    
+    //查询所有岗位信息
     List<Post>findByMorePostIfon(Map<String,String> map);
+    //分页查询岗位信息
+    List<Post>selectByAllFenyePost(Map<String,String> map);
     
     List<Post> findBydepartmentPost (@Param("departmentId") String departmentId,@Param("companyId")String companyId);
 }

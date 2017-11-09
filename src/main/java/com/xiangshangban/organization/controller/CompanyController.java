@@ -124,13 +124,13 @@ public class CompanyController {
 	 * @param response
 	 * @return
 	 */
-	@RequestMapping(value="/selectByCompany", produces = "application/json;charset=UTF-8", method=RequestMethod.GET)
-	public ReturnData selectByCompany(HttpServletRequest request,HttpServletResponse response){
+	@RequestMapping(value="/selectByCompany", produces = "application/json;charset=UTF-8", method=RequestMethod.POST)
+	public ReturnData selectByCompany(@RequestBody String companyId,HttpServletRequest request,HttpServletResponse response){
 		ReturnData returnData = new ReturnData();
-		//获取请求头信息
-		String companyId = request.getHeader("companyId");		
-		if(!companyId.equals("")){
-			Company company =companyService.selectByCompany(companyId);	
+		JSONObject obj = JSON.parseObject(companyId);		
+		String companyid=obj.getString("companyId");
+		if(!companyid.equals("")){
+			Company company =companyService.selectByCompany(companyid);	
 			returnData.setData(company);
 			returnData.setMessage("数据请求成功");
 			returnData.setReturnCode("3000");			

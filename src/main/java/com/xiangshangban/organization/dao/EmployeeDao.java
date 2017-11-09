@@ -26,6 +26,8 @@ public interface EmployeeDao {
     List<Employee> findBydeptemployee(@Param("departmentId") String departmentId,@Param("companyId") String companyId);
     
     List<Employee> findByMoreEmployee(Map<String,String> map);
+    //分页查询员工信息
+    List<Employee> selectByAllFnyeEmployee(Map<String,String> map);
     
     int batchUpdateTest(String employeeId);
     
