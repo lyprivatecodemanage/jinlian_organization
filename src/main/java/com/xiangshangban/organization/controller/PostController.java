@@ -158,6 +158,7 @@ public class PostController {
 				returnData.setReturnCode("3007");			
 				return returnData;
 			}
+			List<Post> postlist = postService.selectByAllPostInfo(companyId);
 			List<Post> list =new ArrayList<>();
 			if(!companyId.equals("")){			
 				if (pageNum != null && pageNum != "" && pageRecordNum != null && pageRecordNum != "") {
@@ -167,6 +168,11 @@ public class PostController {
 					params.put("fromPageNum", strNum);
 					params.put("companyId", companyId);
 					list=postService.selectByAllFenyePost(params);
+					int totalPages = postlist.size();
+					double  pageCountnum =(double)totalPages/Integer.parseInt(pageRecordNum);	
+					int pagecountnum=(int) Math.ceil(pageCountnum);
+					returnData.setTotalPages(totalPages);
+					returnData.setPagecountNum(pagecountnum);
 					returnData.setData(list);
 					returnData.setMessage("数据请求成功");
 					returnData.setReturnCode("3000");		

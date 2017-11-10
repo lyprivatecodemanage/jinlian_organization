@@ -44,6 +44,7 @@ public class EmployeeController {
 	UserService userService;
 	@Autowired
 	TransferjobService  transferjobService;
+	private Object employeelistemp;
 	
 	
 	/**
@@ -380,6 +381,7 @@ public class EmployeeController {
 			returnData.setReturnCode("3007");			
 			return returnData;
 		}
+		List<Employee> emplist = employeeService.selectByAllEmployee(companyId);
 		List<Employee> employeelistemp=new ArrayList<>();
 		if(!companyId.equals("")){
 			if (pageNum != null && pageNum != "" && pageRecordNum != null && pageRecordNum != "") {
@@ -401,6 +403,11 @@ public class EmployeeController {
 		           postnamelist.put("employeelist"+temps, employeelist);			
 				}															 
 			}
+			int totalPages = emplist.size();
+			double  pageCountnum =(double)totalPages/Integer.parseInt(pageRecordNum);	
+			int pagecountnum=(int) Math.ceil(pageCountnum);
+			returnData.setTotalPages(totalPages);
+			returnData.setPagecountNum(pagecountnum);
 			returnData.setData(postnamelist);
 			returnData.setMessage("数据请求成功");
 			returnData.setReturnCode("3000");		

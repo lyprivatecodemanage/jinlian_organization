@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
@@ -90,7 +91,7 @@ public class DepartmentController {
 	public ReturnData getDepartmentempTree(HttpServletRequest request,HttpServletResponse response){
 		ReturnData returnData = new ReturnData();
 		//String companyId="977ACD3022C24B99AC9586CC50A8F786";
-		//获取请求头信息
+		//获取请求头信息    
 	    String companyId = request.getHeader("companyId");
 	    if(!companyId.equals("")){
 	    	List<DepartmentTree> treeNode =departmentService.getDepartmentempTreeAll(companyId);
@@ -137,10 +138,11 @@ public class DepartmentController {
 	 * @return
 	 */
 	@RequestMapping(value = "/findByAllFenyeDepartment",produces = "application/json;charset=UTF-8", method=RequestMethod.POST)	
-	public ReturnData findByAllFenyeDepartment(String pageNum, String pageRecordNum,HttpServletRequest request,HttpServletResponse response){
+	public ReturnData findByAllFenyeDepartment( String pageNum,String pageRecordNum,HttpServletRequest request,HttpServletResponse response){
 		ReturnData returnData = new ReturnData();
 		Map<String, String> params = new HashMap<String, String>();
 		//String companyId="977ACD3022C24B99AC9586CC50A8F786";
+		
 		String companyId = request.getHeader("companyId");
 		String pageNumPattern = "\\d{1,}";
 		boolean pageNumFlag = Pattern.matches(pageNumPattern, pageNum);
@@ -150,6 +152,7 @@ public class DepartmentController {
 			returnData.setReturnCode("3007");			
 			return returnData;
 		}
+		List<Department> list =departmentService.findByAllDepartment(companyId);		
 		List<Department>  treeNode = new ArrayList<>();
 		if(!companyId.equals("")){			
 			if (pageNum != null && pageNum != "" && pageRecordNum != null && pageRecordNum != "") {
@@ -157,8 +160,13 @@ public class DepartmentController {
 				String strNum = String.valueOf(number);
 				params.put("pageRecordNum", pageRecordNum);
 				params.put("fromPageNum", strNum);
-				params.put("companyId", companyId);
+				params.put("companyId", companyId);				
 				treeNode =departmentService.findByAllFenyeDepartment(params);
+				int totalPages = list.size();
+				double  pageCountnum =(double)totalPages/Integer.parseInt(pageRecordNum);	
+				int pagecountnum=(int) Math.ceil(pageCountnum);
+				returnData.setTotalPages(totalPages);
+				returnData.setPagecountNum(pagecountnum);
 				returnData.setData(treeNode);
 				returnData.setMessage("数据请求成功");
 				returnData.setReturnCode("3000");		

@@ -15,9 +15,15 @@ public class DepartmentTree implements Serializable {
 	private List<Post> postlist;
 	private int CountNumber;
 	private List<DepartmentTree> children = new ArrayList<DepartmentTree>();	
-	
+	private int totalPages;
 	
 		
+	public int getTotalPages() {
+		return totalPages;
+	}
+	public void setTotalPages(int totalPages) {
+		this.totalPages = totalPages;
+	}
 	public List<Post> getPostlist() {
 		return postlist;
 	}
