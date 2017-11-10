@@ -24,6 +24,7 @@ public class Employee {
     //---连表查询的---
     private List<Post> postList;//岗位   
     private String companyName;//
+    private String postId;//岗位ID
     private String departmentName;//部门名称
     private String postName;//岗位名称
     private String directPersonName;//直接汇报人名称    
@@ -44,9 +45,17 @@ public class Employee {
 //    private String employeeCardNumber;//员工工资卡
     
     
+    
+    
     @ExcelResources(title="岗位",order=5)
 	public String getPostName() {
 		return postName;
+	}
+	public String getPostId() {
+		return postId;
+	}
+	public void setPostId(String postId) {
+		this.postId = postId;
 	}
 	public void setPostName(String postName) {
 		this.postName = postName;

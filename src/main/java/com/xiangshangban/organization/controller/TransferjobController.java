@@ -62,31 +62,38 @@ public class TransferjobController {
 		String positionTime = obj.getString("positionTime");
 		params.put("positionTime",positionTime);
 		boolean positiontime = Pattern.matches("[0-9]{4}-[0-9]{2}-[0-9]{2}", positionTime);
-		if(obj.getString("employeeId").equals("")){
-			returnData.setMessage("数据请求失败");
-			returnData.setReturnCode("3001");
-			return returnData;
-		}
-		if (!positiontime) {				
-			returnData.setMessage("数据请求失败");
-			returnData.setReturnCode("3001");
-			return returnData;
-		}			
-			Transferjob transferjobemp=transferjobService.findByempinfo(params);
-			if(transferjobemp!=null){
-				returnData.setData(transferjobemp);
-				returnData.setMessage("数据请求成功");
-				returnData.setReturnCode("3000");			
-			}else{
-				Transferjob transferjobnullemp=transferjobService.findByempNullinfo(nullemp);
-				if(transferjobnullemp!=null){
-				returnData.setData(transferjobnullemp);
-				returnData.setMessage("数据请求成功");
-				returnData.setReturnCode("3000");
-				}					
-		}
-			return returnData;		
-	}
+		if(!companyId.equals("")){
+			if(obj.getString("employeeId").equals("")){
+				returnData.setMessage("数据请求失败");
+				returnData.setReturnCode("3001");
+				return returnData;
+			}
+			if (!positiontime) {				
+				returnData.setMessage("数据请求失败");
+				returnData.setReturnCode("3001");
+				return returnData;
+			}			
+				Transferjob transferjobemp=transferjobService.findByempinfo(params);
+				if(transferjobemp!=null){
+					returnData.setData(transferjobemp);
+					returnData.setMessage("数据请求成功");
+					returnData.setReturnCode("3000");	
+					return returnData;
+				}else{
+					Transferjob transferjobnullemp=transferjobService.findByempNullinfo(nullemp);
+					if(transferjobnullemp!=null){
+					returnData.setData(transferjobnullemp);
+					returnData.setMessage("数据请求成功");
+					returnData.setReturnCode("3000");
+					return returnData;
+					}					
+		   }
+	  }
+		returnData.setMessage("数据请求失败");
+		returnData.setReturnCode("3001");
+		return returnData;	
+		
+}
 	
 	/**
 	 * 添加调动记录
@@ -125,58 +132,59 @@ public class TransferjobController {
 			returnData.setReturnCode("3001");
 			return returnData;
 		}
-		Transferjob transferjobemp = transferjobService.selectByTransferjobpost(employeeId, companyId);
-		//上一次所在部门ID
-		String departmentid = transferjobemp.getDepartmentId();		
-		if(departmentId !=departmentid){
-			ConnectEmpPost EmpPost = new ConnectEmpPost();			
-			EmpPost.setEmployeeId(employeeId);
-			//原来所在部门ID
-			EmpPost.setDepartmentId(departmentid);
-			//把原来所在部门所对应的岗位的状态改为1
-			connectEmpPostService.updateConnectpostStaus(EmpPost);
-			//员工所在部门调动后，也要修改员工信息表现在所在部门的部门id
-			Employee employee = new Employee();		
-			employee.setDepartmentId(departmentId);
-			employee.setEmployeeId(employeeId);
-			employeeService.updateByEmployeedept(employee);
-		}		
-		if(!employeeId.equals("") || !departmentId.equals("") || userId.equals("") || !transferBeginTime.equals("")){
-			transferjobService.updateBytransferendtime(employeeId, transferEndtime);
-			transferjobService.insertTransferjob(transferjobs);
-			//添加调动部门对应的岗位
-			String postIdList = jsonObject.getString("postList");
-			JSONArray postIdList1 = JSON.parseArray(postIdList);			
-			for(int i =0;i<postIdList1.size();i++){
-				JSONObject jobj = jsonObject.parseObject(postIdList1.getString(i)) ;
-						String postId = jobj.getString("postId");
-						String postGrades = jobj.getString("postGrades");
-						ConnectEmpPost empPost = new ConnectEmpPost();
-						ConnectEmpPost connect = new ConnectEmpPost();
-						ConnectEmpPost connectemppos = connectEmpPostService.findByConnect(employeeId,departmentId, postGrades);
-						if(connectemppos==null){
-							empPost.setEmployeeId(employeeId);
-							empPost.setDepartmentId(departmentId);
-							empPost.setPostGrades(postGrades);
-							empPost.setPostId(postId);				          
-						    connectEmpPostService.saveConnect(empPost);
-						}
-						if(connectemppos!=null){
-							String postid = connectemppos.getPostId();
-							if(!postId.equals("postid")){
-								connect.setDepartmentId(departmentId);
-								connect.setEmployeeId(employeeId);
-								connect.setPostId(postid);
-								connectEmpPostService.updatetpostGradespostStaus(connect);
+		if(!companyId.equals("")){
+			Transferjob transferjobemp = transferjobService.selectByTransferjobpost(employeeId, companyId);
+			//上一次所在部门ID
+			String departmentid = transferjobemp.getDepartmentId();		
+			if(departmentId !=departmentid){
+				ConnectEmpPost EmpPost = new ConnectEmpPost();			
+				EmpPost.setEmployeeId(employeeId);
+				//原来所在部门ID
+				EmpPost.setDepartmentId(departmentid);
+				//把原来所在部门所对应的岗位的状态改为1
+				connectEmpPostService.updateConnectpostStaus(EmpPost);
+				//员工所在部门调动后，也要修改员工信息表现在所在部门的部门id
+				Employee employee = new Employee();		
+				employee.setDepartmentId(departmentId);
+				employee.setEmployeeId(employeeId);
+				employeeService.updateByEmployeedept(employee);
+			}		
+			if(!employeeId.equals("") || !departmentId.equals("") || userId.equals("") || !transferBeginTime.equals("")){
+				transferjobService.updateBytransferendtime(employeeId, transferEndtime);
+				transferjobService.insertTransferjob(transferjobs);
+				//添加调动部门对应的岗位
+				String postIdList = jsonObject.getString("postList");
+				JSONArray postIdList1 = JSON.parseArray(postIdList);			
+				for(int i =0;i<postIdList1.size();i++){
+					JSONObject jobj = jsonObject.parseObject(postIdList1.getString(i)) ;
+							String postId = jobj.getString("postId");
+							String postGrades = jobj.getString("postGrades");
+							ConnectEmpPost empPost = new ConnectEmpPost();
+							ConnectEmpPost connect = new ConnectEmpPost();
+							ConnectEmpPost connectemppos = connectEmpPostService.findByConnect(employeeId,departmentId, postGrades);
+							if(connectemppos==null){
 								empPost.setEmployeeId(employeeId);
 								empPost.setDepartmentId(departmentId);
 								empPost.setPostGrades(postGrades);
 								empPost.setPostId(postId);				          
 							    connectEmpPostService.saveConnect(empPost);
-							}continue;	
-						}						
-																					 				
-			}						
+							}
+							if(connectemppos!=null){
+								String postid = connectemppos.getPostId();
+								if(!postId.equals("postid")){
+									connect.setDepartmentId(departmentId);
+									connect.setEmployeeId(employeeId);
+									connect.setPostId(postid);
+									connectEmpPostService.updatetpostGradespostStaus(connect);
+									empPost.setEmployeeId(employeeId);
+									empPost.setDepartmentId(departmentId);
+									empPost.setPostGrades(postGrades);
+									empPost.setPostId(postId);				          
+								    connectEmpPostService.saveConnect(empPost);
+								}continue;	
+							}																												 				
+				}				
+		}				
 			returnData.setMessage("数据请求成功");
 			returnData.setReturnCode("3000");
 			return returnData;

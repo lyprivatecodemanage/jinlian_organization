@@ -35,6 +35,10 @@ public interface EmployeeService {
     
     List<Employee> findByposcounttemp(String postId,String companyId);
 	String updateByEmployeeapprove(Employee employee);
-	List<Employee>findByruzhiempinfo();
+	List<Employee>findByruzhiempinfo(String companyId);
 	List<Employee> selectByAllEmployee(String companyId);
+	//根据人员姓名，所属部门，主岗位动态查询所有在职人员以及所属部门和主岗位 
+    List<Employee> findBydynamicempadmin(Map<String,String> map);
+    //查询所有在职人员以及所属部门和主岗位
+    List<Employee> findByempadmin(String companyId);
 }

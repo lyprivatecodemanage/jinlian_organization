@@ -148,7 +148,7 @@ public class CompanyController {
 	 * @param response
 	 * @return
 	 */
-	@RequestMapping(value="/selectByUserCompany", produces = "application/json;charset=UTF-8", method=RequestMethod.GET)
+	@RequestMapping(value="/selectByUserCompany", produces = "application/json;charset=UTF-8", method=RequestMethod.POST)
 	public ReturnData selectByUserCompany(HttpServletRequest request,HttpServletResponse response){
 		ReturnData returnData = new ReturnData();	
 		//获取请求头信息

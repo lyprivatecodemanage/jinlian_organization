@@ -294,7 +294,70 @@ public class EmployeeController {
 	}
 		return returnData;
 }
-	
+	/**
+	 * 根据人员姓名，所属部门，主岗位动态查询所有在职人员以及所属部门和主岗位 
+	 * @param jsonString
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping(value = "/findBydynamicempadmin",produces = "application/json;charset=UTF-8", method=RequestMethod.POST)	
+	public ReturnData findBydynamicempadmin(@RequestBody String jsonString, HttpServletRequest request,HttpServletResponse response){				
+		 ReturnData returnData = new ReturnData();
+		 Map<String,String> params = new HashMap<String, String>();
+			JSONObject obj = JSON.parseObject(jsonString);
+			//String companyId="977ACD3022C24B99AC9586CC50A8F786";
+			//获取请求头信息
+			String companyId = request.getHeader("companyId");			
+			params.put("companyId",companyId);
+			params.put("employeeName", obj.getString("employeeName"));
+			params.put("departmentName", obj.getString("departmentName"));
+			params.put("postName", obj.getString("postName"));
+			String pageNum = obj.getString("pageNum");
+			String pageNumPattern = "\\d{1,}";
+			boolean pageNumFlag = Pattern.matches(pageNumPattern, pageNum);
+			params.put("pageNum", pageNum);
+			String pageRecordNum = obj.getString("pageRecordNum");
+			boolean pageRecordNumFlag = Pattern.matches(pageNumPattern, pageRecordNum);
+			if(!pageNumFlag||!pageRecordNumFlag){
+				returnData.setMessage("参数格式不正确");
+				returnData.setReturnCode("3007");			
+				return returnData;
+				}
+			if(!companyId.equals("")){
+				List<Employee> emplist = employeeService.findBydynamicempadmin(params);
+			    returnData.setData(emplist);
+				returnData.setMessage("数据请求成功");
+				returnData.setReturnCode("3000");
+			}else{
+				returnData.setMessage("数据请求失败");
+				returnData.setReturnCode("3001");
+			}		    		
+	        return returnData;				
+}
+	/**
+	 * 查询所有在职人员以及所属部门和主岗位 
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping(value = "/findByempadmin",produces = "application/json;charset=UTF-8", method=RequestMethod.POST)	
+	public ReturnData findByempadmin(HttpServletRequest request,HttpServletResponse response){				
+		 ReturnData returnData = new ReturnData();			
+			//String companyId="977ACD3022C24B99AC9586CC50A8F786";
+			//获取请求头信息
+			String companyId = request.getHeader("companyId");						
+			if(!companyId.equals("")){
+				List<Employee> emplist = employeeService.findByempadmin(companyId);
+			    returnData.setData(emplist);
+				returnData.setMessage("数据请求成功");
+				returnData.setReturnCode("3000");
+			}else{
+				returnData.setMessage("数据请求失败");
+				returnData.setReturnCode("3001");
+			}		    		
+	        return returnData;				
+}
 	
 	/**
 	 * 分页查询员工信息
@@ -355,7 +418,7 @@ public class EmployeeController {
 	 * @param response
 	 * @return
 	 */
-	@RequestMapping(value = "/findByAllEmployee",produces = "application/json;charset=UTF-8", method=RequestMethod.GET)	
+	@RequestMapping(value = "/findByAllEmployee",produces = "application/json;charset=UTF-8", method=RequestMethod.POST)	
 	public ReturnData findByAllEmployee(HttpServletRequest request,HttpServletResponse response){		
 		ReturnData returnData = new ReturnData();
 		Map<String, Object> postnamelist=new HashMap<String, Object>();
@@ -390,7 +453,7 @@ public class EmployeeController {
 	 * @return
 	 */
 	
-	@RequestMapping(value = "/findByLiZhiemployee",produces = "application/json;charset=UTF-8", method=RequestMethod.GET)	
+	@RequestMapping(value = "/findByLiZhiemployee",produces = "application/json;charset=UTF-8", method=RequestMethod.POST)	
 	public ReturnData findByLiZhiemployee(HttpServletRequest request,HttpServletResponse response){		
 		int s=0;	
 		ReturnData returnData = new ReturnData();
@@ -520,15 +583,20 @@ public class EmployeeController {
 	 * @param response
 	 * @return
 	 */
-	@RequestMapping(value = "/findByruzhiempinfo",produces = "application/json;charset=UTF-8", method=RequestMethod.GET)	
+	@RequestMapping(value = "/findByruzhiempinfo",produces = "application/json;charset=UTF-8", method=RequestMethod.POST)	
 	public ReturnData findByruzhiempinfo(HttpServletRequest request,HttpServletResponse response){		
 		ReturnData returnData = new ReturnData();
-		List<Employee> employeelist = employeeService.findByruzhiempinfo();
-		if(employeelist !=null){
-			returnData.setData(employeelist);
-			returnData.setMessage("数据请求成功");
-			returnData.setReturnCode("3000");			 
-		}
+		//获取请求头信息			
+		String companyId = request.getHeader("companyId");
+		if(!companyId.equals("")){
+			List<Employee> employeelist = employeeService.findByruzhiempinfo(companyId);			
+				returnData.setData(employeelist);
+				returnData.setMessage("数据请求成功");
+				returnData.setReturnCode("3000");			 
+		}else{
+			returnData.setMessage("数据请求失败");
+			returnData.setReturnCode("3001");
+		}		
 		return returnData;		  
 	}
 	
@@ -580,8 +648,7 @@ public class EmployeeController {
 					employeenew.setDirectPersonId(directPersonId);			
 					employeenew.setEntryTime(entryTime);			
 					employeenew.setProbationaryExpired(probationaryExpired);
-					employeenew.setDepartmentId(departmentId);
-					
+					employeenew.setDepartmentId(departmentId);					
 					employeeService.updateByEmployee(employeenew);   				
 				    //把员工关联的岗位添加到connect_emp_post_中间表里面					    
 					String postIdList = jsonObject.getString("postList");

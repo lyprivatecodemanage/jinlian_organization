@@ -18,7 +18,8 @@
     <result column="department_name" jdbcType="VARCHAR" property="departmentName" />
     <result column="company_name" jdbcType="VARCHAR" property="companyName" />
     <result column="company_id" jdbcType="VARCHAR" property="companyId" />
-    <result column="post_name" jdbcType="VARCHAR" property="postName" />       
+    <result column="post_name" jdbcType="VARCHAR" property="postName" />
+    <result column="post_id" jdbcType="VARCHAR" property="postId" />       
    
     <!-- <result column="employee_birthday" jdbcType="VARCHAR" property="employeeBirthday" />   
     <result column="employee_tell" jdbcType="VARCHAR" property="employeeTell" />     
@@ -37,6 +38,50 @@
     <result column="employee_card_number" jdbcType="VARCHAR" property="employeeCardNumber" />  -->          
   </resultMap>
    
+    
+  <!-- 根据人员姓名，所属部门，主岗位动态查询所有在职人员以及所属部门和主岗位 -->
+  <select id="findBydynamicempadmin" parameterType="java.util.Map" resultMap="Employee">
+    select DISTINCT 
+	 e.employee_id, e.employee_name,e.login_name,
+	 e.department_id,d.department_name,st.post_id,p.post_name
+	from organization.employee_ e 
+	lEFT JOIN  organization.department_ d  on d.department_id=e.department_id
+	LEFT JOIN  organization.connect_emp_post_ st on  st.employee_id=e.employee_id and st.post_grades='1'
+	LEFT JOIN  organization.post_  p on p.post_id=st.post_id
+	<where> 
+    <if test="companyId != null and companyId != ''">
+	 and e.company_id=#{companyId}   
+	 </if>   		
+	<if test="employeeName!=null and employeeName != ''">
+	and e.employee_id in (select e.employee_id from organization.employee_ e where e.employee_name like '%${employeeName}%')
+	</if>
+	<if test="departmentName!=null and departmentName != ''">
+	and e.employee_id in (select e.employee_id from organization.department_ d LEFT JOIN organization.employee_ e on d.department_id=e.department_id where d.department_name like '%${departmentName}%')
+	</if>
+	<if test="postName!=null and postName != ''">
+	and e.employee_id in (select st.employee_id from organization.post_ p LEFT JOIN organization.connect_emp_post_ st on st.post_id=p.post_id where p.post_name like '%${postName}%' )
+    </if>
+    and e.employee_status='0'    
+    </where>
+    limit #{pageRecordNum}::integer offset #{fromPageNum}::integer
+  </select>
+    
+   <!--查询所有在职人员以及所属部门和主岗位 -->
+  <select id="findByempadmin" parameterType="java.lang.String" resultMap="Employee">
+    select DISTINCT 
+	 e.employee_id, e.employee_name,e.login_name,
+	 e.department_id,d.department_name,st.post_id,p.post_name
+	from organization.employee_ e 
+	lEFT JOIN  organization.department_ d  on d.department_id=e.department_id
+	LEFT JOIN  organization.connect_emp_post_ st on  st.employee_id=e.employee_id and st.post_grades='1'
+	LEFT JOIN  organization.post_  p on p.post_id=st.post_id
+	where     
+	e.company_id=#{companyId}					
+    and 
+    e.employee_status='0'
+  </select> 
+    
+    
     
   <!-- 查询一个岗位下所有在职员工 -->
   <select id="findByposcounttemp" parameterType="java.lang.String" resultMap="Employee">
@@ -58,6 +103,8 @@
     e.employee_id,e.employee_name,e.employee_phone,e.login_name
     from employee_ e
     where 
+    e.company_id=#{companyId}
+    and
     e.employee_no IS null  
   </select>
   

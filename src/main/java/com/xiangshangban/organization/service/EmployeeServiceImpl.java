@@ -173,9 +173,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 	//查询申请入职的人员信息 
 	@Override
-	public List<Employee> findByruzhiempinfo() {
+	public List<Employee> findByruzhiempinfo(String companyId) {
 		// TODO Auto-generated method stub
-		return employeeDao.findByruzhiempinfo();
+		return employeeDao.findByruzhiempinfo(companyId);
 	}
 
 	@Override
@@ -188,6 +188,18 @@ public class EmployeeServiceImpl implements EmployeeService {
 	public List<Employee> selectByAllFnyeEmployee(Map<String, String> map) {
 		// TODO Auto-generated method stub
 		return employeeDao.selectByAllFnyeEmployee(map);
+	}
+
+	@Override
+	public List<Employee> findBydynamicempadmin(Map<String, String> map) {
+		// TODO Auto-generated method stub
+		return employeeDao.findBydynamicempadmin(map);
+	}
+
+	@Override
+	public List<Employee> findByempadmin(String companyId) {
+		// TODO Auto-generated method stub
+		return employeeDao.findByempadmin(companyId);
 	}
 
 	

@@ -44,7 +44,7 @@ public class DepartmentController {
 	public ReturnData findByMoreDepartment(@RequestBody String jsonString,HttpServletRequest request,HttpServletResponse response){		
 			Map<String,String> params = new HashMap<String, String>();
 			ReturnData returnData = new ReturnData();
-			JSONObject obj = JSON.parseObject(jsonString);
+			JSONObject obj = JSON.parseObject(jsonString);			
 			params.put("companyName", obj.getString("companyName"));
 			params.put("departmentName", obj.getString("departmentName"));
 			params.put("employeeName", obj.getString("employeeName"));								
@@ -63,16 +63,21 @@ public class DepartmentController {
 	 * @param response
 	 * @return
 	 */
-	@RequestMapping(value = "/findDepartmentTree",produces = "application/json;charset=UTF-8", method=RequestMethod.GET)	
+	@RequestMapping(value = "/findDepartmentTree",produces = "application/json;charset=UTF-8", method=RequestMethod.POST)	
 	public ReturnData findDepartmentTree(HttpServletRequest request,HttpServletResponse response){	
 		//String companyId="977ACD3022C24B99AC9586CC50A8F786";
 		//获取请求头信息
 	    String companyId = request.getHeader("companyId");
 		ReturnData returnData = new ReturnData();
-		List<DepartmentTree> treeNode =departmentService.getDepartmentTreeAll(companyId);
-		returnData.setData(treeNode);
-		returnData.setMessage("数据请求成功");
-		returnData.setReturnCode("3000");		
+		if(!companyId.equals("")){
+			List<DepartmentTree> treeNode =departmentService.getDepartmentTreeAll(companyId);
+			returnData.setData(treeNode);
+			returnData.setMessage("数据请求成功");
+			returnData.setReturnCode("3000");	
+		}else{
+			returnData.setMessage("数据请求失败");
+			returnData.setReturnCode("3001");
+		}			
 		return returnData;
 	}
 	/**
@@ -81,16 +86,21 @@ public class DepartmentController {
 	 * @param response
 	 * @return
 	 */
-	@RequestMapping(value = "/getDepartmentempTree",produces = "application/json;charset=UTF-8", method=RequestMethod.GET)	
+	@RequestMapping(value = "/getDepartmentempTree",produces = "application/json;charset=UTF-8", method=RequestMethod.POST)	
 	public ReturnData getDepartmentempTree(HttpServletRequest request,HttpServletResponse response){
 		ReturnData returnData = new ReturnData();
 		//String companyId="977ACD3022C24B99AC9586CC50A8F786";
 		//获取请求头信息
 	    String companyId = request.getHeader("companyId");
-		List<DepartmentTree> treeNode =departmentService.getDepartmentempTreeAll(companyId);
-		returnData.setData(treeNode);
-		returnData.setMessage("数据请求成功");
-		returnData.setReturnCode("3000");		
+	    if(!companyId.equals("")){
+	    	List<DepartmentTree> treeNode =departmentService.getDepartmentempTreeAll(companyId);
+			returnData.setData(treeNode);
+			returnData.setMessage("数据请求成功");
+			returnData.setReturnCode("3000");	
+	    }else{
+	    	returnData.setMessage("数据请求失败");
+			returnData.setReturnCode("3001");
+	    }			
 		return returnData;
 	}
 	
@@ -101,15 +111,20 @@ public class DepartmentController {
 		 * @param response
 		 * @return
 		 */
-	@RequestMapping(value = "/findByAllDepartment",produces = "application/json;charset=UTF-8", method=RequestMethod.GET)	
+	@RequestMapping(value = "/findByAllDepartment",produces = "application/json;charset=UTF-8", method=RequestMethod.POST)	
 	public ReturnData findByAllDepartment(HttpServletRequest request,HttpServletResponse response){
 		ReturnData returnData = new ReturnData();
 		//String companyId="977ACD3022C24B99AC9586CC50A8F786";
 		String companyId = request.getHeader("companyId");
-		List<Department> treeNode =departmentService.findByAllDepartment(companyId);
-		returnData.setData(treeNode);
-		returnData.setMessage("数据请求成功");
-		returnData.setReturnCode("3000");		
+		if(!companyId.equals("")){
+			List<Department> treeNode =departmentService.findByAllDepartment(companyId);
+			returnData.setData(treeNode);
+			returnData.setMessage("数据请求成功");
+			returnData.setReturnCode("3000");
+		}else{
+			returnData.setMessage("数据请求失败");
+			returnData.setReturnCode("3001");
+		}				
 		return returnData;
 	}
 	

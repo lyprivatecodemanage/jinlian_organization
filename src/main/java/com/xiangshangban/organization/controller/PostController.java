@@ -117,18 +117,21 @@ public class PostController {
 		 * @param response
 		 * @return
 		 */
-		@RequestMapping(value="/selectByAllPostInfo", produces = "application/json;charset=UTF-8", method=RequestMethod.GET)
+		@RequestMapping(value="/selectByAllPostInfo", produces = "application/json;charset=UTF-8", method=RequestMethod.POST)
 		public ReturnData selectByAllPostInfo(HttpServletRequest request,HttpServletResponse response){	
 			ReturnData returnData = new ReturnData();
 			//String companyId="977ACD3022C24B99AC9586CC50A8F786";
 			//获取请求头信息			
 			String companyId = request.getHeader("companyId");
-			List<Post> list=postService.selectByAllPostInfo(companyId);
-			if(list.size()!=0){				
-				returnData.setData(list);
-				returnData.setMessage("数据请求成功");
-				returnData.setReturnCode("3000");			
-			}
+			if(!companyId.equals("")){
+				List<Post> list=postService.selectByAllPostInfo(companyId);							
+					returnData.setData(list);
+					returnData.setMessage("数据请求成功");
+					returnData.setReturnCode("3000");			
+			}else{
+				returnData.setMessage("数据请求失败");
+				returnData.setReturnCode("3001");
+			}			
 			return returnData;
 			
 		}
@@ -199,12 +202,15 @@ public class PostController {
 			params.put("companyId", companyId);
 			params.put("postName", obj.getString("postName"));
 			params.put("departmentName", obj.getString("departmentName"));
-			List<Post> list=postService.findByMorePostIfon(params);				
-			if(list.size() !=0){				
-				returnData.setData(list);
-				returnData.setMessage("数据请求成功");
-				returnData.setReturnCode("3000");				
-			}
+			if(!companyId.equals("")){
+				List<Post> list=postService.findByMorePostIfon(params);											
+					returnData.setData(list);
+					returnData.setMessage("数据请求成功");
+					returnData.setReturnCode("3000");				
+			}else{
+				returnData.setMessage("数据请求失败");
+				returnData.setReturnCode("3001");
+			}			
 			return returnData;			
 		}
 		
