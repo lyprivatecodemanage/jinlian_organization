@@ -145,9 +145,12 @@ public class PostController {
 		 * @return
 		 */
 		@RequestMapping(value="/selectByAllFenyePost", produces = "application/json;charset=UTF-8", method=RequestMethod.POST)
-		public ReturnData selectByAllFenyePost(String pageNum, String pageRecordNum,HttpServletRequest request,HttpServletResponse response){	
+		public ReturnData selectByAllFenyePost(@RequestBody String jsonString,HttpServletRequest request,HttpServletResponse response){	
 			ReturnData returnData = new ReturnData();
 			Map<String, String> params = new HashMap<String, String>();
+			JSONObject obj = JSON.parseObject(jsonString);			
+			String pageNum = obj.getString("pageNum");
+			String pageRecordNum = obj.getString("pageRecordNum");
 			//String companyId="977ACD3022C24B99AC9586CC50A8F786";
 			String companyId = request.getHeader("companyId");
 			String pageNumPattern = "\\d{1,}";
@@ -185,10 +188,8 @@ public class PostController {
 		}
 			returnData.setMessage("数据请求失败");
 			returnData.setReturnCode("3001");		
-			return returnData;				
-			
-		}
-		
+			return returnData;							
+		}		
 		
 		/** 
 		 * 根据岗位名称，所属部门查询岗位信息

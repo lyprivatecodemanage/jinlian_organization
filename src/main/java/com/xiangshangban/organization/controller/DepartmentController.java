@@ -138,11 +138,13 @@ public class DepartmentController {
 	 * @return
 	 */
 	@RequestMapping(value = "/findByAllFenyeDepartment",produces = "application/json;charset=UTF-8", method=RequestMethod.POST)	
-	public ReturnData findByAllFenyeDepartment( String pageNum,String pageRecordNum,HttpServletRequest request,HttpServletResponse response){
+	public ReturnData findByAllFenyeDepartment(@RequestBody String jsonString,HttpServletRequest request,HttpServletResponse response){
 		ReturnData returnData = new ReturnData();
 		Map<String, String> params = new HashMap<String, String>();
-		//String companyId="977ACD3022C24B99AC9586CC50A8F786";
-		
+		JSONObject obj = JSON.parseObject(jsonString);			
+		String pageNum = obj.getString("pageNum");
+		String pageRecordNum = obj.getString("pageRecordNum");
+		//String companyId="977ACD3022C24B99AC9586CC50A8F786";		
 		String companyId = request.getHeader("companyId");
 		String pageNumPattern = "\\d{1,}";
 		boolean pageNumFlag = Pattern.matches(pageNumPattern, pageNum);
@@ -162,9 +164,9 @@ public class DepartmentController {
 				params.put("fromPageNum", strNum);
 				params.put("companyId", companyId);				
 				treeNode =departmentService.findByAllFenyeDepartment(params);
-				int totalPages = list.size();
+				int totalPages = list.size();//数据总条数
 				double  pageCountnum =(double)totalPages/Integer.parseInt(pageRecordNum);	
-				int pagecountnum=(int) Math.ceil(pageCountnum);
+				int pagecountnum=(int) Math.ceil(pageCountnum);//总页数
 				returnData.setTotalPages(totalPages);
 				returnData.setPagecountNum(pagecountnum);
 				returnData.setData(treeNode);

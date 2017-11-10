@@ -127,7 +127,7 @@ public class CompanyController {
 	@RequestMapping(value="/selectByCompany", produces = "application/json;charset=UTF-8", method=RequestMethod.POST)
 	public ReturnData selectByCompany(@RequestBody String companyId,HttpServletRequest request,HttpServletResponse response){
 		ReturnData returnData = new ReturnData();
-		JSONObject obj = JSON.parseObject(companyId);		
+		JSONObject obj = JSON.parseObject(companyId);
 		String companyid=obj.getString("companyId");
 		if(!companyid.equals("")){
 			Company company =companyService.selectByCompany(companyid);	
