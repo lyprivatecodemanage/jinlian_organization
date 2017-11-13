@@ -62,9 +62,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	@Override
-	public List<Employee> findByAllEmployee(String companyId) {
+	public List<Employee> findByAllEmployee(Map<String,String> map) {
 		// TODO Auto-generated method stub
-		return employeeDao.findByAllEmployee(companyId);
+		return employeeDao.findByAllEmployee(map);
 	}
 
 	@Override
@@ -197,9 +197,15 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	@Override
-	public List<Employee> findByempadmin(String companyId) {
+	public List<Employee> findByempadmin(Map<String,String> map) {
 		// TODO Auto-generated method stub
-		return employeeDao.findByempadmin(companyId);
+		return employeeDao.findByempadmin(map);
+	}
+
+	@Override
+	public List<Employee> findByempadmins(Map<String, String> map) {
+		// TODO Auto-generated method stub
+		return employeeDao.findByempadmins(map);
 	}
 
 	

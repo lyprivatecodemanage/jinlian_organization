@@ -20,13 +20,13 @@
     <result column="company_id" jdbcType="VARCHAR" property="companyId" />
     <result column="post_name" jdbcType="VARCHAR" property="postName" />
     <result column="post_id" jdbcType="VARCHAR" property="postId" />       
-   
+    <result column="employee_img_url" jdbcType="VARCHAR" property="employeeImgUrl" /> 
     <!-- <result column="employee_birthday" jdbcType="VARCHAR" property="employeeBirthday" />   
     <result column="employee_tell" jdbcType="VARCHAR" property="employeeTell" />     
     <result column="employee_email" jdbcType="VARCHAR" property="employeeEmail" />
     <result column="employee_position" jdbcType="VARCHAR" property="employeePosition" />
     <result column="employee_work_place" jdbcType="VARCHAR" property="employeeWorkPlace" />
-    <result column="employee_img_url" jdbcType="VARCHAR" property="employeeImgUrl" />    
+      
     <result column="contract_period" jdbcType="VARCHAR" property="contractPeriod" />   
     <result column="is_manager" jdbcType="VARCHAR" property="isManager" />
     <result column="contract_expired" jdbcType="VARCHAR" property="contractExpired" />  
@@ -42,7 +42,7 @@
   <!-- 根据人员姓名，所属部门，主岗位动态查询所有在职人员以及所属部门和主岗位 -->
   <select id="findBydynamicempadmin" parameterType="java.util.Map" resultMap="Employee">
     select DISTINCT 
-	 e.employee_id, e.employee_name,e.login_name,
+	 e.employee_id, e.employee_name,e.login_name,e.employee_img_url,
 	 e.department_id,d.department_name,st.post_id,p.post_name
 	from organization.employee_ e 
 	lEFT JOIN  organization.department_ d  on d.department_id=e.department_id
@@ -69,7 +69,7 @@
    <!--查询所有在职人员以及所属部门和主岗位 -->
   <select id="findByempadmin" parameterType="java.lang.String" resultMap="Employee">
     select DISTINCT 
-	 e.employee_id, e.employee_name,e.login_name,
+	 e.employee_id, e.employee_name,e.login_name,e.employee_img_url,
 	 e.department_id,d.department_name,st.post_id,p.post_name
 	from organization.employee_ e 
 	lEFT JOIN  organization.department_ d  on d.department_id=e.department_id
@@ -79,8 +79,22 @@
 	e.company_id=#{companyId}					
     and 
     e.employee_status='0'
+    limit #{pageRecordNum}::integer offset #{fromPageNum}::integer
   </select> 
-    
+     <!--查询所有在职人员以及所属部门和主岗位 -->
+  <select id="findByempadmins" parameterType="java.lang.String" resultMap="Employee">
+    select DISTINCT 
+	 e.employee_id, e.employee_name,e.login_name,e.employee_img_url,
+	 e.department_id,d.department_name,st.post_id,p.post_name
+	from organization.employee_ e 
+	lEFT JOIN  organization.department_ d  on d.department_id=e.department_id
+	LEFT JOIN  organization.connect_emp_post_ st on  st.employee_id=e.employee_id and st.post_grades='1'
+	LEFT JOIN  organization.post_  p on p.post_id=st.post_id
+	where     
+	e.company_id=#{companyId}					
+    and 
+    e.employee_status='0'   
+  </select> 
     
     
   <!-- 查询一个岗位下所有在职员工 -->
@@ -106,6 +120,7 @@
     e.company_id=#{companyId}
     and
     e.employee_no IS null  
+    limit #{pageRecordNum}::integer offset #{fromPageNum}::integer
   </select>
   
   
@@ -189,6 +204,8 @@
 	e.employee_status='1'
 	AND	
 	e.company_id=#{companyId}
+	ORDER BY e.entry_time DESC
+	limit #{pageRecordNum}::integer offset #{fromPageNum}::integer
   </select>
 
 
@@ -202,14 +219,14 @@
     e.employee_no= #{employeeNo,jdbcType=VARCHAR}
   </select>
 
-<select id="findByemploginName" parameterType="java.lang.String" resultMap="Employee">
+  <select id="findByemploginName" parameterType="java.lang.String" resultMap="Employee">
     select 
     e.login_name
     from organization.employee_ e
     where 
     e.login_name = #{loginName,jdbcType=VARCHAR}
   </select>
-
+  <!-- 查询单条人员信息 -->
   <select id="selectByEmployee" parameterType="java.lang.String" resultMap="Employee">  
     select DISTINCT e.employee_id, e.employee_name,e.login_name, e.employee_sex,e.employee_no, 
        e.employee_phone,(select d.department_name from organization.department_ d where d.department_id=e.department_id),
@@ -242,6 +259,7 @@
     AND	
 	e.company_id=#{companyId} 
     ORDER BY e.entry_time DESC
+    limit #{pageRecordNum}::integer offset #{fromPageNum}::integer
   </select>
   
   <!-- 根据姓名、联系方式、性别、所属部门、岗位、入职时间、在职状态查询员工信息 -->
@@ -288,6 +306,7 @@
 	 </if>     		        
      </where>     
      ORDER BY e.entry_time DESC 
+     limit #{pageRecordNum}::integer offset #{fromPageNum}::integer
   </select>     
   
   <delete id="deleteByEmployee" parameterType="java.lang.String"> 

@@ -11,18 +11,19 @@ public class DepartmentTree implements Serializable {
 	private static final long serialVersionUID = 5363551924502220248L;
 	private String label;//部门名称
 	private String value;//部门ID
-	private String key;	//部门ID	
+	 private String companyName;//公司名称
 	private List<Post> postlist;
 	private int CountNumber;
-	private List<DepartmentTree> children = new ArrayList<DepartmentTree>();	
-	private int totalPages;
+	private List<DepartmentTree> children = new ArrayList<DepartmentTree>();		
+	private String key;	//
 	
-		
-	public int getTotalPages() {
-		return totalPages;
+	
+	
+	public String getCompanyName() {
+		return companyName;
 	}
-	public void setTotalPages(int totalPages) {
-		this.totalPages = totalPages;
+	public void setCompanyName(String companyName) {
+		this.companyName = companyName;
 	}
 	public List<Post> getPostlist() {
 		return postlist;

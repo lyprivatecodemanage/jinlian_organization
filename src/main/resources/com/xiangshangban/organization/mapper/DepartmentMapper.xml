@@ -15,6 +15,8 @@
     <result  property="companyName" jdbcType="VARCHAR" column="company_name"/>    
     <result  property="CountNumber" jdbcType="VARCHAR" column="Count_number"/>
     <result  property="employeeName" jdbcType="VARCHAR" column="employee_name"/>
+ 
+    
  </resultMap>
   
   <sql id="Base_Column_List"> 
@@ -47,7 +49,7 @@
     from organization.department_  d      
     <where> 
      <if test="companyName!=null and companyName != ''">
-         and d.company_id in (select c.company_id from organization.company_ c where c.company_name like '%${companyName}%')
+       d.superior_organization_id in (select c.company_id from organization.company_ c  where c.company_name like '%${companyName}%')
      </if>
      <if test="departmentName != null and departmentName != ''">
 		 and d.department_name like '%${departmentName}%'
@@ -88,32 +90,29 @@
   <select id="findByDepartmentNumber" parameterType="java.lang.String" resultMap="Department">
     select d.department_id, d.department_numbe, d.department_name, d.department_describe,d.department_parent_id,d.company_id, d.employee_id,(select c.company_name from company_ c  where c.company_id=d.company_id),(select e.employee_name from employee_ e where e.employee_id=d.employee_id)
     from organization.department_  d  
-    where department_numbe = #{departmentNumbe,jdbcType=VARCHAR}
-    AND	
-	company_id=#{companyId}	
+    where 
+    department_numbe = #{departmentNumbe,jdbcType=VARCHAR}
   </select>
     
   <delete id="deleteByDepartment" parameterType="java.lang.String">
     delete from organization.department_
-    where department_id = #{departmentId,jdbcType=VARCHAR}
+    where 
+    department_id = #{departmentId,jdbcType=VARCHAR}   
   </delete>
   
   
   <insert id="insertDepartment" parameterType="com.xiangshangban.organization.bean.Department">   
     insert into organization.department_ (department_id, department_numbe, department_name,department_describe, 
-      employee_id, department_phone, department_fax, 
-      department_parent_id,company_id
+      employee_id,department_parent_id,company_id
       )
     values (
       #{departmentId,jdbcType=VARCHAR},
       #{departmentNumbe,jdbcType=VARCHAR},
       #{departmentName,jdbcType=VARCHAR}, 
       #{departmentDescribe,jdbcType=VARCHAR}, 
-      #{employeeId,jdbcType=VARCHAR}, 
-      #{departmentPhone,jdbcType=VARCHAR}, 
-      #{departmentFax,jdbcType=VARCHAR}, 
-      #{departmentParentId,jdbcType=VARCHAR},                
-      #{companyId,jdbcType=VARCHAR}          
+      #{employeeId,jdbcType=VARCHAR},        
+      #{departmentParentId,jdbcType=VARCHAR},                     
+      #{companyId,jdbcType=VARCHAR} 
       )
   </insert>
  

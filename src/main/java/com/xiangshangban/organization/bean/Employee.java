@@ -21,6 +21,7 @@ public class Employee {
     private String entryTime;//入职日期
     private String employeeStatus;//员工状态，0：在职，1：离职
     private String probationaryExpired;//试用到期日
+    private String employeeImgUrl;//头像 
     //---连表查询的---
     private List<Post> postList;//岗位   
     private String companyName;//
@@ -32,8 +33,7 @@ public class Employee {
 //    private String employeeBirthday;// 出生年月日    
 //    private String employeeTell;//电话号码  
 //    private String employeeEmail;//邮箱号
-//    private String employeeWorkPlace;//工作地
-//    private String employeeImgUrl;//头像  
+//    private String employeeWorkPlace;//工作地     
 //    private String contractPeriod;//合同期（月）  
 //    private String isManager;//是否为部门经理（1:是，2否）
 //    private String contractExpired;//合同到期日   
@@ -50,6 +50,12 @@ public class Employee {
     @ExcelResources(title="岗位",order=5)
 	public String getPostName() {
 		return postName;
+	}
+	public String getEmployeeImgUrl() {
+		return employeeImgUrl;
+	}
+	public void setEmployeeImgUrl(String employeeImgUrl) {
+		this.employeeImgUrl = employeeImgUrl;
 	}
 	public String getPostId() {
 		return postId;

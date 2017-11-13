@@ -224,147 +224,6 @@ public class EmployeeController {
 			return returnData;
 	}
 	
-	
-	
-	
-	/**
-	 * 根据姓名、登录名、联系方式、性别、所属部门、岗位、入职时间、在职状态查询员工信息
-	 * @param jsonString
-	 * @param request
-	 * @param response
-	 * @return
-	 */
-	@RequestMapping(value = "/findByMoreEmployee",produces = "application/json;charset=UTF-8", method=RequestMethod.POST)	
-	public ReturnData findByMoreEmployee(@RequestBody String jsonString,HttpServletRequest request,HttpServletResponse response){						   		 	    		   
-		    ReturnData returnData = new ReturnData();
-			Map<String, Object> postnamelist=new HashMap<String, Object>();						
-			Map<String,String> params = new HashMap<String, String>();
-			JSONObject obj = JSON.parseObject(jsonString);
-			//String companyId="977ACD3022C24B99AC9586CC50A8F786";
-			//获取请求头信息
-			String companyId = request.getHeader("companyId");			
-			params.put("companyId",companyId);
-			params.put("employeeName", obj.getString("employeeName"));
-			params.put("loginName", obj.getString("loginName"));			
-			params.put("employeePhone", obj.getString("employeePhone"));
-			params.put("employeeTwophone", obj.getString("employeeTwophone"));
-			params.put("employeeSex", obj.getString("employeeSex"));
-			params.put("departmentName", obj.getString("departmentName"));
-			params.put("postName", obj.getString("postName"));
-			params.put("entryTime", obj.getString("entryTime"));
-			params.put("employeeStatus", obj.getString("employeeStatus"));
-			List<Employee> employeelistemp =employeeService.findByMoreEmployee(params);	
-			int s=0;	
-			for (int i = 0; i < employeelistemp.size(); i++) {
-				s=s+1;
-                String temps =String.valueOf(s);
-				Employee employeelist = employeelistemp.get(i);
-				String Employeeid = employeelist.getEmployeeId();
-				String departmentId = employeelist.getDepartmentId();
-	            List<Post> PostNamelist = postService.selectByPostName(Employeeid,departmentId);	            
-	            employeelist.setPostList(PostNamelist);	                 
-	            postnamelist.put("employeelist"+temps, employeelist);				
-			}	
-			returnData.setData(postnamelist);
-			returnData.setMessage("数据请求成功");
-			returnData.setReturnCode("3000");
-			return returnData;
-	}
-	
-	/**
-	 * 查询一个岗位下的所有员工
-	 */
-	@RequestMapping(value = "/findByposcounttemp",produces = "application/json;charset=UTF-8", method=RequestMethod.POST)	
-	public ReturnData findByposcounttemp(@RequestBody String postId, HttpServletRequest request,HttpServletResponse response){				
-		 ReturnData returnData = new ReturnData();
-		//String companyId="977ACD3022C24B99AC9586CC50A8F786";
-		//获取请求头信息
-		String companyId = request.getHeader("companyId");	
-		if(!postId.equals("")){
-		List<Employee> emplist = employeeService.findByposcounttemp(postId, companyId);
-		if(emplist.size()!=0){
-			returnData.setData(emplist);
-			returnData.setMessage("数据请求成功");
-			returnData.setReturnCode("3000");	
-			return returnData;
-		}
-	}else{
-		returnData.setMessage("数据请求失败");
-		returnData.setReturnCode("3001");
-	}
-		return returnData;
-}
-	/**
-	 * 根据人员姓名，所属部门，主岗位动态查询所有在职人员以及所属部门和主岗位 
-	 * @param jsonString
-	 * @param request
-	 * @param response
-	 * @return
-	 */
-	@RequestMapping(value = "/findBydynamicempadmin",produces = "application/json;charset=UTF-8", method=RequestMethod.POST)	
-	public ReturnData findBydynamicempadmin(@RequestBody String jsonString, HttpServletRequest request,HttpServletResponse response){				
-		 ReturnData returnData = new ReturnData();		 
-		 Map<String,String> params = new HashMap<String, String>();
-			JSONObject obj = JSON.parseObject(jsonString);		
-			//String companyId="977ACD3022C24B99AC9586CC50A8F786";
-			//获取请求头信息
-			String companyId = request.getHeader("companyId");			
-			params.put("companyId",companyId);
-			params.put("employeeName", obj.getString("employeeName"));
-			params.put("departmentName", obj.getString("departmentName"));
-			params.put("postName", obj.getString("postName"));
-			String pageNum = obj.getString("pageNum");
-			String pageNumPattern = "\\d{1,}";
-			boolean pageNumFlag = Pattern.matches(pageNumPattern, pageNum);
-			params.put("pageNum", pageNum);
-			String pageRecordNum = obj.getString("pageRecordNum");
-			boolean pageRecordNumFlag = Pattern.matches(pageNumPattern, pageRecordNum);			
-			if(!pageNumFlag||!pageRecordNumFlag){
-				returnData.setMessage("参数格式不正确");
-				returnData.setReturnCode("3007");			
-				return returnData;
-				}
-			if(!companyId.equals("")){
-				List<Employee> list = employeeService.findByempadmin(companyId);
-				List<Employee> emplist = employeeService.findBydynamicempadmin(params);
-				int totalPages = list.size();//数据总条数
-				double  pageCountnum =(double)totalPages/Integer.parseInt(pageRecordNum);	
-				int pagecountnum=(int) Math.ceil(pageCountnum);//总页数
-				returnData.setTotalPages(totalPages);
-				returnData.setPagecountNum(pagecountnum);
-			    returnData.setData(emplist);
-				returnData.setMessage("数据请求成功");
-				returnData.setReturnCode("3000");
-			}else{
-				returnData.setMessage("数据请求失败");
-				returnData.setReturnCode("3001");
-			}		    		
-	        return returnData;				
-}
-	/**
-	 * 查询所有在职人员以及所属部门和主岗位 
-	 * @param request
-	 * @param response
-	 * @return
-	 */
-	@RequestMapping(value = "/findByempadmin",produces = "application/json;charset=UTF-8", method=RequestMethod.POST)	
-	public ReturnData findByempadmin(HttpServletRequest request,HttpServletResponse response){				
-		 ReturnData returnData = new ReturnData();			
-			//String companyId="977ACD3022C24B99AC9586CC50A8F786";
-			//获取请求头信息
-			String companyId = request.getHeader("companyId");						
-			if(!companyId.equals("")){
-				List<Employee> emplist = employeeService.findByempadmin(companyId);
-			    returnData.setData(emplist);
-				returnData.setMessage("数据请求成功");
-				returnData.setReturnCode("3000");
-			}else{
-				returnData.setMessage("数据请求失败");
-				returnData.setReturnCode("3001");
-			}		    		
-	        return returnData;				
-}
-	
 	/**
 	 * 分页查询员工信息
 	 * @param request
@@ -378,8 +237,7 @@ public class EmployeeController {
 		Map<String, Object> postnamelist = new HashMap<String, Object>();
 		JSONObject obj = JSON.parseObject(jsonString);			
 		String pageNum = obj.getString("pageNum");
-		String pageRecordNum = obj.getString("pageRecordNum");
-		//String companyId="977ACD3022C24B99AC9586CC50A8F786";
+		String pageRecordNum = obj.getString("pageRecordNum");		
 		String companyId = request.getHeader("companyId");
 		String pageNumPattern = "\\d{1,}";
 		boolean pageNumFlag = Pattern.matches(pageNumPattern, pageNum);
@@ -389,7 +247,6 @@ public class EmployeeController {
 			returnData.setReturnCode("3007");			
 			return returnData;
 		}		
-		List<Employee> employeelistemp=new ArrayList<>();
 		if(!companyId.equals("")){
 			if (pageNum != null && pageNum != "" && pageRecordNum != null && pageRecordNum != "") {
 				int number = (Integer.parseInt(pageNum) - 1) * Integer.parseInt(pageRecordNum);
@@ -397,7 +254,7 @@ public class EmployeeController {
 				params.put("pageRecordNum", pageRecordNum);
 				params.put("fromPageNum", strNum);
 				params.put("companyId", companyId);
-				employeelistemp =employeeService.selectByAllFnyeEmployee(params);
+				List<Employee> employeelistemp =employeeService.selectByAllFnyeEmployee(params);
 				int s=0;	
 				for (int i = 0; i < employeelistemp.size(); i++) {
 				   s=s+1;
@@ -427,6 +284,210 @@ public class EmployeeController {
 		}				
 }
 	
+	
+	/**
+	 * 根据姓名、登录名、联系方式、性别、所属部门、岗位、入职时间、在职状态查询员工信息
+	 * @param jsonString
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping(value = "/findByMoreEmployee",produces = "application/json;charset=UTF-8", method=RequestMethod.POST)	
+	public ReturnData findByMoreEmployee(@RequestBody String jsonString,HttpServletRequest request,HttpServletResponse response){						   		 	    		   
+		    ReturnData returnData = new ReturnData();
+		    Map<String,String> params = new HashMap<String, String>();
+		    Map<String,String> param = new HashMap<String, String>();
+			Map<String, Object> postnamelist=new HashMap<String, Object>();						
+			JSONObject obj = JSON.parseObject(jsonString);			
+			//获取请求头信息
+			String companyId = request.getHeader("companyId");			
+			params.put("companyId",companyId);
+			String employeeName = obj.getString("employeeName");			
+			String loginName = obj.getString("loginName");
+			String employeePhone = obj.getString("employeePhone");				
+			String employeeTwophone = obj.getString("employeeTwophone");		
+			String employeeSex = obj.getString("employeeSex");			
+			String departmentName = obj.getString("departmentName");
+			String postName = obj.getString("postName");
+			String entryTime = obj.getString("entryTime");
+			String employeeStatus = obj.getString("employeeStatus");
+			params.put("employeeSex",employeeSex);
+			params.put("employeeName", employeeName);
+			params.put("employeePhone", employeePhone);
+			params.put("loginName", loginName);	
+			params.put("employeeTwophone", employeeTwophone);
+			params.put("departmentName", departmentName);
+			params.put("postName", postName);
+			params.put("entryTime",entryTime);
+			params.put("employeeStatus", employeeStatus);
+			//分页
+			String pageNum = obj.getString("pageNum");
+			String pageRecordNum = obj.getString("pageRecordNum");					
+			String pageNumPattern = "\\d{1,}";
+			boolean pageNumFlag = Pattern.matches(pageNumPattern, pageNum);
+			boolean pageRecordNumFlag = Pattern.matches(pageNumPattern, pageRecordNum);
+			if(!pageNumFlag||!pageRecordNumFlag){
+				returnData.setMessage("参数格式不正确");
+				returnData.setReturnCode("3007");			
+				return returnData;
+			}	
+			if(employeeName.equals("")&& employeeSex.equals("") && departmentName.equals("") && postName.equals("")&& employeePhone.equals("")&&loginName.equals("")&&entryTime.equals("")&& employeeTwophone.equals("") &&employeeStatus.equals("")){
+					if (pageNum != null && pageNum != "" && pageRecordNum != null && pageRecordNum != "") {
+						int number = (Integer.parseInt(pageNum) - 1) * Integer.parseInt(pageRecordNum);
+						String strNum = String.valueOf(number);
+						param.put("pageRecordNum", pageRecordNum);
+						param.put("fromPageNum", strNum);
+						param.put("companyId", companyId);
+						List<Employee> employeelistemp =employeeService.selectByAllFnyeEmployee(param);
+						int s=0;	
+						for (int i = 0; i < employeelistemp.size(); i++) {
+						   s=s+1;
+				           String temps =String.valueOf(s);
+						   Employee employeelist = employeelistemp.get(i);
+						   String Employeeid = employeelist.getEmployeeId();
+						   String departmentId = employeelist.getDepartmentId();
+				           List<Post> PostNamelist = postService.selectByPostName(Employeeid,departmentId);	            
+				           employeelist.setPostList(PostNamelist);	                 
+				           postnamelist.put("employeelist"+temps, employeelist);			
+						}															 
+					}
+					List<Employee> emplist = employeeService.selectByAllEmployee(companyId);
+					int totalPages = emplist.size();
+					double  pageCountnum =(double)totalPages/Integer.parseInt(pageRecordNum);	
+					int pagecountnum=(int) Math.ceil(pageCountnum);
+					returnData.setTotalPages(totalPages);
+					returnData.setPagecountNum(pagecountnum);
+					returnData.setData(postnamelist);
+					returnData.setMessage("数据请求成功");
+					returnData.setReturnCode("3000");		
+				}else{		
+					if (pageNum != null && pageNum != "" && pageRecordNum != null && pageRecordNum != "") {
+						int number = (Integer.parseInt(pageNum) - 1) * Integer.parseInt(pageRecordNum);
+						String strNum = String.valueOf(number);
+						params.put("pageRecordNum", pageRecordNum);
+						params.put("fromPageNum", strNum);
+						params.put("companyId", companyId);
+						List<Employee> employeelistemp =employeeService.findByMoreEmployee(params);
+						int s=0;	
+						for (int i = 0; i < employeelistemp.size(); i++) {
+						   s=s+1;
+				           String temps =String.valueOf(s);
+						   Employee employeelist = employeelistemp.get(i);
+						   String Employeeid = employeelist.getEmployeeId();
+						   String departmentId = employeelist.getDepartmentId();
+				           List<Post> PostNamelist = postService.selectByPostName(Employeeid,departmentId);	            
+				           employeelist.setPostList(PostNamelist);	                 
+				           postnamelist.put("employeelist"+temps, employeelist);			
+						}						
+						int totalPages = employeelistemp.size();
+						double  pageCountnum =(double)totalPages/Integer.parseInt(pageRecordNum);	
+						int pagecountnum=(int) Math.ceil(pageCountnum);
+						returnData.setTotalPages(totalPages);
+						returnData.setPagecountNum(pagecountnum);
+						returnData.setData(postnamelist);
+						returnData.setMessage("数据请求成功");
+						returnData.setReturnCode("3000");		
+						
+					}																	
+			}
+			return returnData;
+		}
+
+	
+	/**
+	 * 查询一个岗位下的所有员工
+	 */
+	@RequestMapping(value = "/findByposcounttemp",produces = "application/json;charset=UTF-8", method=RequestMethod.POST)	
+	public ReturnData findByposcounttemp(@RequestBody String postId, HttpServletRequest request,HttpServletResponse response){				
+		 ReturnData returnData = new ReturnData();
+		//String companyId="977ACD3022C24B99AC9586CC50A8F786";
+		//获取请求头信息
+		String companyId = request.getHeader("companyId");	
+		if(!postId.equals("")){
+		List<Employee> emplist = employeeService.findByposcounttemp(postId, companyId);
+			returnData.setData(emplist);
+			returnData.setMessage("数据请求成功");
+			returnData.setReturnCode("3000");				
+	}else{
+		returnData.setMessage("数据请求失败");
+		returnData.setReturnCode("3001");
+	}
+		return returnData;
+}
+	/**
+	 * 根据人员姓名，所属部门，主岗位动态查询所有在职人员以及所属部门和主岗位 
+	 * @param jsonString
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping(value = "/findBydynamicempadmin",produces = "application/json;charset=UTF-8", method=RequestMethod.POST)	
+	public ReturnData findBydynamicempadmin(@RequestBody String jsonString, HttpServletRequest request,HttpServletResponse response){				
+		 ReturnData returnData = new ReturnData();		 
+		 Map<String,String> params = new HashMap<String, String>();
+		 Map<String,String> temp = new HashMap<String, String>();
+		 Map<String,String> temps = new HashMap<String, String>();
+			JSONObject obj = JSON.parseObject(jsonString);					
+			//获取请求头信息
+			String companyId = request.getHeader("companyId");			
+			params.put("companyId",companyId);
+			String employeeName = obj.getString("employeeName");
+			String departmentName = obj.getString("departmentName");
+			String postName = obj.getString("postName");			
+			String pageNum = obj.getString("pageNum");
+			String pageNumPattern = "\\d{1,}";
+			boolean pageNumFlag = Pattern.matches(pageNumPattern, pageNum);			
+			String pageRecordNum = obj.getString("pageRecordNum");
+			boolean pageRecordNumFlag = Pattern.matches(pageNumPattern, pageRecordNum);				
+			if(!pageNumFlag||!pageRecordNumFlag){
+				returnData.setMessage("参数格式不正确");
+				returnData.setReturnCode("3007");			
+				return returnData;
+		}					
+			if(employeeName.equals("") && departmentName.equals("") && postName.equals("")){
+				temps.put("companyId",companyId); 
+		    	List<Employee> Employeelist = employeeService.findByempadmins(temps);
+		    	if (pageNum != null && pageNum != "" && pageRecordNum != null && pageRecordNum != "") {
+					int number = (Integer.parseInt(pageNum) - 1) * Integer.parseInt(pageRecordNum);
+						String strNum = String.valueOf(number);
+						temp.put("pageRecordNum", pageRecordNum);
+						temp.put("fromPageNum", strNum);	
+						temp.put("companyId",companyId);
+						List<Employee> Emplist= employeeService.findByempadmin(temp);
+				    	int totalPages = Employeelist.size();//数据总条数
+						double  pageCountnum =(double)totalPages/Integer.parseInt(pageRecordNum);	
+						int pagecountnum=(int) Math.ceil(pageCountnum);//总页数
+						returnData.setTotalPages(totalPages);
+						returnData.setPagecountNum(pagecountnum);
+					    returnData.setData(Emplist);
+						returnData.setMessage("数据请求成功");
+						returnData.setReturnCode("3000");	
+		    	}			
+	    }else{
+	    	if (pageNum != null && pageNum != "" && pageRecordNum != null && pageRecordNum != "") {
+		    	int number = (Integer.parseInt(pageNum) - 1) * Integer.parseInt(pageRecordNum);
+				String strNum = String.valueOf(number);
+				params.put("employeeName", employeeName);
+				params.put("departmentName", departmentName);
+				params.put("postName", postName);
+				params.put("pageRecordNum", pageRecordNum);
+				params.put("fromPageNum", strNum);
+				List<Employee> emplist = employeeService.findBydynamicempadmin(params);
+				int totalPages = emplist.size();//数据总条数
+				double  pageCountnum =(double)totalPages/Integer.parseInt(pageRecordNum);	
+				int pagecountnum=(int) Math.ceil(pageCountnum);//总页数
+				returnData.setTotalPages(totalPages);
+				returnData.setPagecountNum(pagecountnum);
+			    returnData.setData(emplist);
+				returnData.setMessage("数据请求成功");
+				returnData.setReturnCode("3000");
+		}	
+	  }
+	        return returnData;				
+}
+	
+	
+	
 	/**
 	 * 所有在职员工的信息
 	 * @param request
@@ -434,31 +495,51 @@ public class EmployeeController {
 	 * @return
 	 */
 	@RequestMapping(value = "/findByAllEmployee",produces = "application/json;charset=UTF-8", method=RequestMethod.POST)	
-	public ReturnData findByAllEmployee(HttpServletRequest request,HttpServletResponse response){		
+	public ReturnData findByAllEmployee(@RequestBody String jsonString,HttpServletRequest request,HttpServletResponse response){		
 		ReturnData returnData = new ReturnData();
-		Map<String, Object> postnamelist=new HashMap<String, Object>();
-		//String companyId="977ACD3022C24B99AC9586CC50A8F786";	 
+		Map<String, String> params = new HashMap<String, String>();
+		Map<String, Object> postnamelist=new HashMap<String, Object>();		
 		//获取请求头信息
 		String companyId = request.getHeader("companyId");
-		List<Employee> employeelistemp =employeeService.findByAllEmployee(companyId);
-		int s=0;	
-		for (int i = 0; i < employeelistemp.size(); i++) {
-			 s=s+1;
-           String temps =String.valueOf(s);
-		   Employee employeelist = employeelistemp.get(i);
-		   String Employeeid = employeelist.getEmployeeId();
-		   String departmentId = employeelist.getDepartmentId();
-           List<Post> PostNamelist = postService.selectByPostName(Employeeid,departmentId);	            
-           employeelist.setPostList(PostNamelist);	                 
-           postnamelist.put("employeelist"+temps, employeelist);			
-		}	
-		if(postnamelist.size()!=0){
-			returnData.setData(postnamelist);
-			returnData.setMessage("数据请求成功");
-			returnData.setReturnCode("3000");				
+		JSONObject obj = JSON.parseObject(jsonString);			
+		String pageNum = obj.getString("pageNum");
+		String pageRecordNum = obj.getString("pageRecordNum");
+		String pageNumPattern = "\\d{1,}";
+		boolean pageNumFlag = Pattern.matches(pageNumPattern, pageNum);
+		boolean pageRecordNumFlag = Pattern.matches(pageNumPattern, pageRecordNum);
+		if(!pageNumFlag||!pageRecordNumFlag){
+			returnData.setMessage("参数格式不正确");
+			returnData.setReturnCode("3007");			
+			return returnData;
+		}
+		if(!companyId.equals("")){
+			if (pageNum != null && pageNum != "" && pageRecordNum != null && pageRecordNum != "") {
+				int number = (Integer.parseInt(pageNum) - 1) * Integer.parseInt(pageRecordNum);
+				String strNum = String.valueOf(number);
+				params.put("pageRecordNum", pageRecordNum);
+				params.put("fromPageNum", strNum);
+				params.put("companyId", companyId);			
+				List<Employee> employeelistemp =employeeService.findByAllEmployee(params);
+				int s=0;	
+				for (int i = 0; i < employeelistemp.size(); i++) {
+					 s=s+1;
+		           String temps =String.valueOf(s);
+				   Employee employeelist = employeelistemp.get(i);
+				   String Employeeid = employeelist.getEmployeeId();
+				   String departmentId = employeelist.getDepartmentId();
+		           List<Post> PostNamelist = postService.selectByPostName(Employeeid,departmentId);	            
+		           employeelist.setPostList(PostNamelist);	                 
+		           postnamelist.put("employeelist"+temps, employeelist);			
+				}				
+				returnData.setData(postnamelist);
+				returnData.setMessage("数据请求成功");
+				returnData.setReturnCode("3000");	
+			}																							
+		}else{
+			returnData.setMessage("数据请求失败");
+			returnData.setReturnCode("3001");
 		}					
-		return returnData;
-			
+		return returnData;			
 	}
 	
 	/**
@@ -469,7 +550,7 @@ public class EmployeeController {
 	 */
 	
 	@RequestMapping(value = "/findByLiZhiemployee",produces = "application/json;charset=UTF-8", method=RequestMethod.POST)	
-	public ReturnData findByLiZhiemployee(HttpServletRequest request,HttpServletResponse response){		
+	public ReturnData findByLiZhiemployee(@RequestBody String jsonString,HttpServletRequest request,HttpServletResponse response){		
 		int s=0;	
 		ReturnData returnData = new ReturnData();
 		Map<String, Object> postnamelist=new HashMap<String, Object>();
@@ -486,13 +567,11 @@ public class EmployeeController {
            List<Post> PostNamelist = postService.selectByPostName(Employeeid,departmentId);	            
           employeelist.setPostList(PostNamelist);	                 
           postnamelist.put("employeelist"+temps, employeelist);
-		}
-		if(postnamelist.size()!=0){			
+		}		
 			returnData.setData(postnamelist);
 			returnData.setMessage("数据请求成功");
-			returnData.setReturnCode("3000");				
-		}					
-		return returnData;
+			returnData.setReturnCode("3000");								
+		    return returnData;
 		 
 	}
 	
@@ -599,7 +678,7 @@ public class EmployeeController {
 	 * @return
 	 */
 	@RequestMapping(value = "/findByruzhiempinfo",produces = "application/json;charset=UTF-8", method=RequestMethod.POST)	
-	public ReturnData findByruzhiempinfo(HttpServletRequest request,HttpServletResponse response){		
+	public ReturnData findByruzhiempinfo(@RequestBody String jsonString,HttpServletRequest request,HttpServletResponse response){		
 		ReturnData returnData = new ReturnData();
 		//获取请求头信息			
 		String companyId = request.getHeader("companyId");

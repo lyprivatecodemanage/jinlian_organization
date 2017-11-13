@@ -16,7 +16,7 @@ public interface EmployeeService {
     Employee selectByEmployee(String employeeId,String companyId);  
     String updateByEmployee(Employee employee);
     //查询在职员工信息
-    List<Employee> findByAllEmployee(String companyId);
+    List<Employee> findByAllEmployee(Map<String,String> map);
     //查询离职员工信息
     List<Employee> findByLiZhiemployee(String companyId);   
     List<Employee> findByMoreEmployee(Map<String,String> map);
@@ -40,5 +40,6 @@ public interface EmployeeService {
 	//根据人员姓名，所属部门，主岗位动态查询所有在职人员以及所属部门和主岗位 
     List<Employee> findBydynamicempadmin(Map<String,String> map);
     //查询所有在职人员以及所属部门和主岗位
-    List<Employee> findByempadmin(String companyId);
+    List<Employee> findByempadmin(Map<String,String> map);
+    List<Employee> findByempadmins(Map<String,String> map);
 }

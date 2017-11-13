@@ -28,7 +28,7 @@ public interface DepartmentService {
 		List<DepartmentTree> getDepartmentempTree(String departmentParentId, String companyId,DepartmentTree departmentTree);
 
 		List<DepartmentTree> getDepartmentempTreeAll(String companyId);
-		
+		Department findByDepartmentNumber(String departmentNumbe);
 		//分页查询部门信息
 	    List<Department> findByAllFenyeDepartment(Map<String,String> map);
 }

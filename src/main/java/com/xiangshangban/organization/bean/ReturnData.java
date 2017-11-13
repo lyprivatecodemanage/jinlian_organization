@@ -10,9 +10,15 @@ public class ReturnData {
 	private String message;//请求状态描述
 	private String returnCode;//请求状态编码
 	private Object pagecountNum;//总页数
+	private String companyName;//公司名称
 	
 	
-	
+	public String getCompanyName() {
+		return companyName;
+	}
+	public void setCompanyName(String companyName) {
+		this.companyName = companyName;
+	}
 	public Object getPagecountNum() {
 		return pagecountNum;
 	}

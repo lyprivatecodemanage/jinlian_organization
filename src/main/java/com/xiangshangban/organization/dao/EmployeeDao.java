@@ -19,7 +19,7 @@ public interface EmployeeDao {
    
     int updateByEmployee(Employee employee);
     int updateByEmployeeapprove(Employee employee);
-    List<Employee> findByAllEmployee(String companyId);
+    List<Employee> findByAllEmployee(Map<String,String> map);
     
     List<Employee> findByLiZhiemployee(String companyId);
     
@@ -45,5 +45,6 @@ public interface EmployeeDao {
     //根据人员姓名，所属部门，主岗位动态查询所有在职人员以及所属部门和主岗位 
     List<Employee> findBydynamicempadmin(Map<String,String> map);
     //查询所有在职人员以及所属部门和主岗位
-    List<Employee> findByempadmin(String companyId);
+    List<Employee> findByempadmin(Map<String,String> map);
+    List<Employee> findByempadmins(Map<String,String> map);
 }

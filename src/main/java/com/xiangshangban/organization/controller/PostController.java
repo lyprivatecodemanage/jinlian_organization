@@ -39,8 +39,7 @@ public class PostController {
 		 * @return
 		 */
 		@RequestMapping(value="/insertPost", produces = "application/json;charset=UTF-8", method=RequestMethod.POST)
-		public ReturnData insertPost(@RequestBody String post,HttpServletRequest request,HttpServletResponse response){
-			//String companyId="977ACD3022C24B99AC9586CC50A8F786";
+		public ReturnData insertPost(@RequestBody String post,HttpServletRequest request,HttpServletResponse response){			
 			ReturnData returnData = new ReturnData();
 			//获取请求头信息			
 			String companyId = request.getHeader("companyId");
@@ -151,7 +150,6 @@ public class PostController {
 			JSONObject obj = JSON.parseObject(jsonString);			
 			String pageNum = obj.getString("pageNum");
 			String pageRecordNum = obj.getString("pageRecordNum");
-			//String companyId="977ACD3022C24B99AC9586CC50A8F786";
 			String companyId = request.getHeader("companyId");
 			String pageNumPattern = "\\d{1,}";
 			boolean pageNumFlag = Pattern.matches(pageNumPattern, pageNum);
@@ -201,24 +199,64 @@ public class PostController {
 		@RequestMapping(value="/findByMorePostIfon", produces = "application/json;charset=UTF-8", method=RequestMethod.POST)
 		public ReturnData findByMorePostIfon(@RequestBody String jsonString,HttpServletRequest request,HttpServletResponse response){			
 			Map<String,String> params = new HashMap<String, String>();
+			Map<String,String> param = new HashMap<String, String>();
 			JSONObject obj = JSON.parseObject(jsonString);
 			ReturnData returnData = new ReturnData();
-			//String companyId="977ACD3022C24B99AC9586CC50A8F786";
 			//获取请求头信息			
-			String companyId = request.getHeader("companyId");			
+			String companyId = request.getHeader("companyId");
+			String pageNum = obj.getString("pageNum");
+			String pageRecordNum = obj.getString("pageRecordNum");
 			params.put("companyId", companyId);
-			params.put("postName", obj.getString("postName"));
-			params.put("departmentName", obj.getString("departmentName"));
-			if(!companyId.equals("")){
-				List<Post> list=postService.findByMorePostIfon(params);											
-					returnData.setData(list);
-					returnData.setMessage("数据请求成功");
-					returnData.setReturnCode("3000");				
+			String postName = obj.getString("postName");
+			String departmentName = obj.getString("departmentName");
+			params.put("postName", postName);
+			params.put("departmentName",departmentName);
+			String pageNumPattern = "\\d{1,}";
+			boolean pageNumFlag = Pattern.matches(pageNumPattern, pageNum);
+			boolean pageRecordNumFlag = Pattern.matches(pageNumPattern, pageRecordNum);
+			if(!pageNumFlag||!pageRecordNumFlag){
+				returnData.setMessage("参数格式不正确");
+				returnData.setReturnCode("3007");			
+				return returnData;
+			}
+			if(postName.equals("") && departmentName.equals("")){
+				List<Post> postlist = postService.selectByAllPostInfo(companyId);						
+					if (pageNum != null && pageNum != "" && pageRecordNum != null && pageRecordNum != "") {
+					int number = (Integer.parseInt(pageNum) - 1) * Integer.parseInt(pageRecordNum);
+						String strNum = String.valueOf(number);
+						param.put("pageRecordNum", pageRecordNum);
+						param.put("fromPageNum", strNum);
+						param.put("companyId", companyId);
+						List<Post> list=postService.selectByAllFenyePost(param);
+						int totalPages = postlist.size();
+						double  pageCountnum =(double)totalPages/Integer.parseInt(pageRecordNum);	
+						int pagecountnum=(int) Math.ceil(pageCountnum);
+						returnData.setTotalPages(totalPages);
+						returnData.setPagecountNum(pagecountnum);
+						returnData.setData(list);
+						returnData.setMessage("数据请求成功");
+						returnData.setReturnCode("3000");		
+				        return returnData;
+			}				
 			}else{
-				returnData.setMessage("数据请求失败");
-				returnData.setReturnCode("3001");
-			}			
+				if (pageNum != null && pageNum != "" && pageRecordNum != null && pageRecordNum != "") {
+					int number = (Integer.parseInt(pageNum) - 1) * Integer.parseInt(pageRecordNum);
+						String strNum = String.valueOf(number);
+						params.put("pageRecordNum", pageRecordNum);
+						params.put("fromPageNum", strNum);
+						params.put("companyId", companyId);				
+						List<Post> list=postService.findByMorePostIfon(params);											
+						int totalPages = list.size();
+						double  pageCountnum =(double)totalPages/Integer.parseInt(pageRecordNum);	
+						int pagecountnum=(int) Math.ceil(pageCountnum);
+						returnData.setTotalPages(totalPages);
+						returnData.setPagecountNum(pagecountnum);
+						returnData.setData(list);
+						returnData.setMessage("数据请求成功");
+						returnData.setReturnCode("3000");		
+				        return returnData;
+			}
+			}
 			return returnData;			
 		}
-		
 }

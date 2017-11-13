@@ -11,12 +11,15 @@ public class Department {
     private String departmentPhone;//部门办公电话
     private String departmentFax;//部门传真
     private String departmentParentId;//部门父ID
-    private String companyName;//上级组织机构（公司名称）
+    private String companyName;//公司名称
     private String companyId;//公司ID
     private String employeeName;//部门负责人
     private String CountNumber;//部门总人数
     
     
+    
+    
+	
 	@ExcelResources(title="部门编号",order=1)
 	public String getDepartmentNumbe() {
 		return departmentNumbe;

@@ -22,7 +22,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 	@Autowired
 	EmployeeDao employeeDao;
 	@Autowired
-	PostDao postDao;
+	PostDao postDao;	
 
 
 	@Override
@@ -40,18 +40,14 @@ public class DepartmentServiceImpl implements DepartmentService {
 	@Override
 	public String insertDepartment(Department department) {
 		String i ="0";
-		Department departmentNumbe = departmentDao.findByDepartmentNumber(department.getDepartmentNumbe());
+		
 		try {
 			department.setDepartmentId(FormatUtil.createUuid());			
 			if(department.getDepartmentParentId().equals("")){
 				department.setDepartmentParentId("0");				
 			}else{
 				department.getDepartmentParentId();
-			}			
-			if(departmentNumbe != null ){
-				i="2";
-				return i;//部门编号已存在				
-			}						
+			}												
 			departmentDao.insertDepartment(department);
 			i="1";
 		} catch (Exception e) {
@@ -114,7 +110,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 
 	@Override
 	public List<DepartmentTree> getDepartmentTreeAll(String companyId) {
-		List<Department> DepartmentList=departmentDao.findDepartmentTree("0",companyId);		
+		List<Department> DepartmentList=departmentDao.findDepartmentTree("0",companyId);
 		List<DepartmentTree> list = new ArrayList<DepartmentTree>();
 		for(Department department: DepartmentList){
 			DepartmentTree departmentTree = new DepartmentTree();			
@@ -204,6 +200,12 @@ public class DepartmentServiceImpl implements DepartmentService {
 	public List<Department> findByAllFenyeDepartment(Map<String, String> map) {
 		// TODO Auto-generated method stub
 		return departmentDao.findByAllFenyeDepartment(map);
+	}
+
+	@Override
+	public Department findByDepartmentNumber(String departmentNumbe) {
+		// TODO Auto-generated method stub
+		return departmentDao.findByDepartmentNumber(departmentNumbe);
 	}
 
 	
