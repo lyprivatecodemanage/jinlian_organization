@@ -1,5 +1,6 @@
 package com.xiangshangban.organization.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -8,6 +9,8 @@ import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,11 +32,12 @@ import com.xiangshangban.organization.service.PostService;
 import com.xiangshangban.organization.service.TransferjobService;
 import com.xiangshangban.organization.service.UserService;
 import com.xiangshangban.organization.util.HttpRequestFactory;
+import com.xiangshangban.organization.util.PropertiesUtils;
 
 @RestController
 @RequestMapping("/EmployeeController")
 public class EmployeeController {
-
+	Logger logger = Logger.getLogger(EmployeeController.class);
 	@Autowired
 	EmployeeService employeeService;
 	@Autowired
@@ -831,7 +835,12 @@ public class EmployeeController {
 		cmdmap.put("action", "UPDATE_USER_INFO");
 		cmdlist.add(employeeId);
 		cmdmap.put("employeeIdCollection", cmdlist);
-		HttpRequestFactory.sendRequet("http://192.168.0.119:8080/employee/commandGenerate", cmdmap);
+		try {
+			HttpRequestFactory.sendRequet(PropertiesUtils.pathUrl("commandGenerate"), cmdmap);
+		} catch (IOException e) {
+			logger.info("将人员信息更新到设备模块时，获取路径出错");
+			e.printStackTrace();
+		}	
 		if(!employeeId.equals("")){
 			employeeService.batchUpdateTest(employeeId);
 			connectEmpPostService.updateConnectDelehipostStaus(employeeId);
@@ -863,7 +872,12 @@ public class EmployeeController {
 		cmdmap.put("action", "UPDATE_USER_INFO");
 		cmdlist.add(employeeId);
 		cmdmap.put("employeeIdCollection", cmdlist);
-		HttpRequestFactory.sendRequet("http://192.168.0.119:8080/employee/commandGenerate", cmdmap);
+		try {
+			HttpRequestFactory.sendRequet(PropertiesUtils.pathUrl("commandGenerate"), cmdmap);
+		} catch (IOException e) {
+			logger.info("将人员信息更新到设备模块时，获取路径出错");
+			e.printStackTrace();
+		}	
 		if(!employeeId.equals("")){
 			connectEmpPostService.deleteConnect(employeeId, postId);
 			returnData.setMessage("数据请求成功");
@@ -905,7 +919,12 @@ public class EmployeeController {
 			cmdmap.put("action", "UPDATE_USER_INFO");
 			cmdlist.add(empId);
 			cmdmap.put("employeeIdCollection", cmdlist);
-			HttpRequestFactory.sendRequet("http://192.168.0.119:8080/employee/commandGenerate", cmdmap);					
+			try {
+				HttpRequestFactory.sendRequet(PropertiesUtils.pathUrl("commandGenerate"), cmdmap);
+			} catch (IOException e) {
+				logger.info("将人员信息更新到设备模块时，获取路径出错");
+				e.printStackTrace();
+			}					
 		}
 		if(array.size() == 0){
 			returnData.setMessage("数据请求失败");
@@ -932,7 +951,12 @@ public class EmployeeController {
 				System.err.println(employeeId);
 				cmdlist.add(employeeId);
 				cmdmap.put("employeeIdCollection", cmdlist);
-				HttpRequestFactory.sendRequet("http://192.168.0.119:8080/employee/commandGenerate", cmdmap);
+				try {
+					HttpRequestFactory.sendRequet(PropertiesUtils.pathUrl("commandGenerate"), cmdmap);
+				} catch (IOException e) {
+					logger.info("将人员信息更新到设备模块时，获取路径出错");
+					e.printStackTrace();
+				}	
 			} catch (Exception e) {
 				System.err.println("设备模块不在线");
 			}
