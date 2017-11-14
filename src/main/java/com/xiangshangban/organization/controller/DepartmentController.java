@@ -10,6 +10,7 @@ import java.util.regex.Pattern;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -180,7 +181,29 @@ public class DepartmentController {
 		}				
 		return returnData;
 	}
-	
+	/**
+	 * 查询部门详细信息
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping(value = "/findDepartmentById",produces = "application/json;charset=UTF-8", method=RequestMethod.POST)	
+	public ReturnData findByDepartmentById(@RequestBody String jsonString, HttpServletRequest request,HttpServletResponse response){
+		ReturnData returnData = new ReturnData();
+		String companyId = request.getHeader("companyId");
+		JSONObject obj = JSON.parseObject(jsonString);
+		String deptId = obj.getString("departmentId");
+		if(StringUtils.isNotEmpty(companyId) && StringUtils.isNotEmpty(deptId)){
+			Department department =departmentService.findByDepartmentById(companyId, deptId);
+			returnData.setData(department);
+			returnData.setMessage("数据请求成功");
+			returnData.setReturnCode("3000");
+		}else{
+			returnData.setMessage("departmentId参数为空");
+			returnData.setReturnCode("3006");
+		}				
+		return returnData;
+	}
 	/**
 	 * 分页查询部门信息
 	 * @param pageNum

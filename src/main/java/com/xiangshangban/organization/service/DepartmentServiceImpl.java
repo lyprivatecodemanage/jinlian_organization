@@ -204,8 +204,12 @@ public class DepartmentServiceImpl implements DepartmentService {
 
 	@Override
 	public Department findByDepartmentNumber(String departmentNumbe) {
-		// TODO Auto-generated method stub
 		return departmentDao.findByDepartmentNumber(departmentNumbe);
+	}
+
+	@Override
+	public Department findByDepartmentById(String companyId, String deptId) {
+		return departmentDao.findByDepartmentById(companyId, deptId);
 	}
 
 	

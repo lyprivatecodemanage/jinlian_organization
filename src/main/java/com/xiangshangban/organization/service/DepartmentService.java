@@ -31,4 +31,6 @@ public interface DepartmentService {
 		Department findByDepartmentNumber(String departmentNumbe);
 		//分页查询部门信息
 	    List<Department> findByAllFenyeDepartment(Map<String,String> map);
+
+		Department findByDepartmentById(String companyId, String deptId);
 }

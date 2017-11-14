@@ -31,6 +31,8 @@ public interface DepartmentDao {
     List<Department> findByAllFenyeDepartment(Map<String,String> map);
     
     List<Department> findByAllDepartment(String companyId);
+
+	Department findByDepartmentById(@Param("companyId")String companyId, @Param("deptId")String deptId);
     
            
 }
