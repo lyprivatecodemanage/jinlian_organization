@@ -47,7 +47,6 @@ public class DepartmentController {
 	@RequestMapping(value = "/findByMoreDepartment",produces = "application/json;charset=UTF-8", method=RequestMethod.POST)	
 	public ReturnData findByMoreDepartment(@RequestBody String jsonString,HttpServletRequest request,HttpServletResponse response){		
 			Map<String,String> params = new HashMap<String, String>();
-			Map<String,String> param = new HashMap<String, String>();
 			ReturnData returnData = new ReturnData();
 			//获取请求头信息
 		    String companyId = request.getHeader("companyId");
@@ -58,54 +57,37 @@ public class DepartmentController {
 			params.put("companyName", companyName);
 			params.put("departmentName", departmentName);
 			params.put("employeeName", employeeName);	
-			String pageNum = obj.getString("pageNum");
-			String pageRecordNum = obj.getString("pageRecordNum");					
-			String pageNumPattern = "\\d{1,}";
-			boolean pageNumFlag = Pattern.matches(pageNumPattern, pageNum);
-			boolean pageRecordNumFlag = Pattern.matches(pageNumPattern, pageRecordNum);
-			if(!pageNumFlag||!pageRecordNumFlag){
-				returnData.setMessage("参数格式不正确");
-				returnData.setReturnCode("3007");			
-				return returnData;
-			}
-			if(companyName.equals("")&& departmentName.equals("")&& employeeName.equals("")){				
-				  List<Department> list =departmentService.findByAllDepartment(companyId);						  	
-				if (pageNum != null && pageNum != "" && pageRecordNum != null && pageRecordNum != "") {
-					int number = (Integer.parseInt(pageNum) - 1) * Integer.parseInt(pageRecordNum);
-						String strNum = String.valueOf(number);
-						param.put("pageRecordNum", pageRecordNum);
-						param.put("fromPageNum", strNum);
-						param.put("companyId", companyId);				
-						List<Department> treeNode =departmentService.findByAllFenyeDepartment(params);
-						int totalPages = list.size();//数据总条数
-						double  pageCountnum =(double)totalPages/Integer.parseInt(pageRecordNum);	
-						int pagecountnum=(int) Math.ceil(pageCountnum);//总页数
-						returnData.setTotalPages(totalPages);
-						returnData.setPagecountNum(pagecountnum);
-						returnData.setData(treeNode);
-						returnData.setMessage("数据请求成功");
-						returnData.setReturnCode("3000");		
+			String pageNum = obj.getString("pageNum");//页码
+			String pageRecordNum = obj.getString("pageRecordNum");//每页记录数	
+			if(StringUtils.isNotEmpty(pageNum) && StringUtils.isNotEmpty(pageRecordNum)){
+				String pageNumPattern = "\\d{1,}";
+				boolean pageNumFlag = Pattern.matches(pageNumPattern, pageNum);
+				boolean pageRecordNumFlag = Pattern.matches(pageNumPattern, pageRecordNum);
+				if(!pageNumFlag||!pageRecordNumFlag){
+					returnData.setMessage("参数格式不正确");
+					returnData.setReturnCode("3007");			
+					return returnData;
 				}
-			}else{
-				if (pageNum != null && pageNum != "" && pageRecordNum != null && pageRecordNum != "") {
-					int number = (Integer.parseInt(pageNum) - 1) * Integer.parseInt(pageRecordNum);
-						String strNum = String.valueOf(number);
-						params.put("pageRecordNum", pageRecordNum);
-						params.put("fromPageNum", strNum);
-						params.put("companyId", companyId);
-						List<Department> employeelist =departmentService.findByMoreDepartment(params);
-						int totalPages = employeelist.size();//数据总条数
-						double  pageCountnum =(double)totalPages/Integer.parseInt(pageRecordNum);	
-						int pagecountnum=(int) Math.ceil(pageCountnum);//总页数
-						returnData.setTotalPages(totalPages);
-						returnData.setPagecountNum(pagecountnum);
-						returnData.setData(employeelist);
-						returnData.setMessage("数据请求成功");
-						returnData.setReturnCode("3000");		
-				}				
+			}else{//默认设置
+				pageNum = "1";
+				pageRecordNum="10";
 			}
-			return returnData;
 			
+			String strNum = (Integer.parseInt(pageNum) - 1) * Integer.parseInt(pageRecordNum)+"";
+			params.put("pageRecordNum", pageRecordNum);
+			params.put("fromPageNum", strNum);
+			params.put("companyId", companyId);				
+			List<Department> treeNode =departmentService.findByAllFenyeDepartment(params);
+			int totalPages = departmentService.findDepartmentPageAllLength(params);//数据总条数
+			//总页数
+			int pageCountnum =totalPages%Integer.parseInt(pageRecordNum)==0?
+					(totalPages/Integer.parseInt(pageRecordNum)):(totalPages/Integer.parseInt(pageRecordNum)+1);	
+			returnData.setTotalPages(totalPages);
+			returnData.setPagecountNum(pageCountnum);
+			returnData.setData(treeNode);
+			returnData.setMessage("数据请求成功");
+			returnData.setReturnCode("3000");
+			return returnData;
 	}
 	
 	
@@ -160,12 +142,12 @@ public class DepartmentController {
 	}
 	
 	
-		/**
-		 * 查询所有部门信息
-		 * @param request
-		 * @param response
-		 * @return
-		 */
+	/**
+	 * 查询所有部门信息
+	 * @param request
+	 * @param response
+	 * @return
+	 */
 	@RequestMapping(value = "/findByAllDepartment",produces = "application/json;charset=UTF-8", method=RequestMethod.POST)	
 	public ReturnData findByAllDepartment(HttpServletRequest request,HttpServletResponse response){
 		ReturnData returnData = new ReturnData();
@@ -182,7 +164,7 @@ public class DepartmentController {
 		return returnData;
 	}
 	/**
-	 * 查询部门详细信息
+	 * 根据部门ID查询部门详细信息
 	 * @param request
 	 * @param response
 	 * @return
@@ -277,25 +259,24 @@ public class DepartmentController {
 		Department departmentNumbe = departmentService.findByDepartmentNumber(departmenttemp.getDepartmentNumbe());	
 		if(departmentNumbe!=null){
 			returnData.setMessage("部门编号已存在");
-			returnData.setReturnCode("3007");			
+			returnData.setReturnCode("4019");			
 			return returnData;	
 		}
-		departmenttemp.setCompanyId(companyId);		
-		String DepartmentNumbe = departmenttemp.getDepartmentNumbe();
+		departmenttemp.setCompanyId(companyId);
 		String DepartmentName = departmenttemp.getDepartmentName();
-		String EmployeeId = departmenttemp.getEmployeeId();
 		String departmentParentId = departmenttemp.getDepartmentParentId();		
 		if(departmentParentId.equals("")){
 			departmenttemp.setDepartmentParentId("0");
 		}		
-		if(!companyId.equals("") || !DepartmentNumbe.equals("") || !DepartmentName.equals("") || !EmployeeId.equals("") || !departmentParentId.equals("")){			
+		if(StringUtils.isNotEmpty(companyId) && StringUtils.isNotEmpty(DepartmentName)
+				&& StringUtils.isNotEmpty(departmentParentId)){			
 			departmentService.insertDepartment(departmenttemp);
 			returnData.setMessage("数据请求成功");
 			returnData.setReturnCode("3000");			
 			return returnData;						
 		}else{			
-			returnData.setMessage("数据请求失败");
-			returnData.setReturnCode("3001");
+			returnData.setMessage("必传参数为空");
+			returnData.setReturnCode("3006");
 			return returnData;
 		}		
 	}
@@ -317,8 +298,8 @@ public class DepartmentController {
 			returnData.setMessage("数据请求成功");
 			returnData.setReturnCode("3000");		
 		}else{
-			returnData.setMessage("数据请求失败");
-			returnData.setReturnCode("3001");
+			returnData.setMessage("必传参数为空");
+			returnData.setReturnCode("3006");
 		}
 		return returnData;	
 	}
@@ -344,8 +325,8 @@ public class DepartmentController {
 				returnData.setMessage("数据请求成功");
 				returnData.setReturnCode("3000");			
 			}else{
-				returnData.setMessage("数据请求失败");
-				returnData.setReturnCode("3001");	
+				returnData.setMessage("必传参数为空");
+				returnData.setReturnCode("3006");	
 			}			
 		}
 		return returnData;		

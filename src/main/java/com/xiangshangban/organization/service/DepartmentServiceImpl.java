@@ -85,7 +85,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 		List<Department> DepartmentList=departmentDao.findDepartmentTree(departmentParentId,companyId);
 		List<DepartmentTree> list = new ArrayList<DepartmentTree>();
 		 //根部门
-		if(departmentParentId.equals("0")){
+		if("0".equals(departmentParentId)){
 			departmentTree = new DepartmentTree();
 			departmentTree.setLabel(DepartmentList.get(0).getDepartmentName());
 			departmentTree.setValue("1");
@@ -198,7 +198,6 @@ public class DepartmentServiceImpl implements DepartmentService {
 
 	@Override
 	public List<Department> findByAllFenyeDepartment(Map<String, String> map) {
-		// TODO Auto-generated method stub
 		return departmentDao.findByAllFenyeDepartment(map);
 	}
 
@@ -209,7 +208,26 @@ public class DepartmentServiceImpl implements DepartmentService {
 
 	@Override
 	public Department findByDepartmentById(String companyId, String deptId) {
-		return departmentDao.findByDepartmentById(companyId, deptId);
+		Department department = departmentDao.findByDepartmentById(companyId, deptId);			
+		department.setChildren(this.getDepartmentChild(department.getDepartmentId(), companyId));
+		return department;
+	}
+	/**
+	 * 查询子部门
+	 * @param departmentParentId 部门ID
+	 * @param companyId 公司ID
+	 * @return
+	 */
+	public List<Department> getDepartmentChild(String departmentParentId,String companyId) {		
+		List<Department> DepartmentList=departmentDao.findDepartmentTree(departmentParentId,companyId);
+		for(Department department : DepartmentList){
+			department.setChildren(this.getDepartmentChild(department.getDepartmentId(), companyId));
+		}
+		return DepartmentList;
+	}
+	@Override
+	public Integer findDepartmentPageAllLength(Map<String, String> params) {
+		return departmentDao.findDepartmentPageAllLength(params);
 	}
 
 	

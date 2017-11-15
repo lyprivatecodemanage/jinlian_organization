@@ -29,8 +29,19 @@ public interface DepartmentService {
 
 		List<DepartmentTree> getDepartmentempTreeAll(String companyId);
 		Department findByDepartmentNumber(String departmentNumbe);
-		//分页查询部门信息
+		/**
+		 * 分页+模糊查询部门信息
+		 * @param map 必须传入companyId，pageRecordNum，fromPageNum，但是companyName，departmentName，employeeName可为空
+		 * @return 返回分页查询结果
+		 */
 	    List<Department> findByAllFenyeDepartment(Map<String,String> map);
+	    /**
+		 * 分页+模糊查询部门信息的总数目
+		 * @param map 必须传入companyId，但companyName，departmentName，employeeName可为空
+		 * @return 返回分页查询结果
+		 */
+	    Integer findDepartmentPageAllLength(Map<String, String> params);
+	    
+	    Department findByDepartmentById(String companyId, String deptId);
 
-		Department findByDepartmentById(String companyId, String deptId);
 }

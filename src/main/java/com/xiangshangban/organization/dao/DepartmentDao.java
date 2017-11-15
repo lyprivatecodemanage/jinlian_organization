@@ -33,6 +33,8 @@ public interface DepartmentDao {
     List<Department> findByAllDepartment(String companyId);
 
 	Department findByDepartmentById(@Param("companyId")String companyId, @Param("deptId")String deptId);
+
+	Integer findDepartmentPageAllLength(Map<String, String> map);
     
            
 }

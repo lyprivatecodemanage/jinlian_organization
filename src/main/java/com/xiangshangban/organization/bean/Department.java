@@ -1,5 +1,8 @@
 package com.xiangshangban.organization.bean;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.xiangshangban.organization.exportexcel.ExcelResources;
 
 public class Department {   
@@ -15,9 +18,7 @@ public class Department {
     private String companyId;//公司ID
     private String employeeName;//部门负责人
     private String CountNumber;//部门总人数
-    
-    
-    
+    private List<Department> children = new ArrayList<Department>();//子部门
     
 	
 	@ExcelResources(title="部门编号",order=1)
@@ -98,6 +99,12 @@ public class Department {
 	}
 	public void setCompanyId(String companyId) {
 		this.companyId = companyId;
+	}
+	public List<Department> getChildren() {
+		return children;
+	}
+	public void setChildren(List<Department> children) {
+		this.children = children;
 	}
     
 	

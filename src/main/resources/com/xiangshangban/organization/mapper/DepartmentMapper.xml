@@ -24,18 +24,51 @@
   </sql>
   
 	<!-- 分页查询部门信息-->
-  <select id="findByAllFenyeDepartment" parameterType="java.lang.String" resultMap="Department">
+  <select id="findByAllFenyeDepartment" parameterType="java.util.Map" resultMap="Department">
     select 
-    d.department_id, d.department_numbe, d.department_name, d.department_describe,d.department_parent_id,d.company_id, d.employee_id,(select c.company_name from organization.company_ c  where c.company_id=d.company_id),(select e.employee_name from organization.employee_ e where e.employee_id=d.employee_id)
+    d.department_id, d.department_numbe, d.department_name, d.department_describe,
+    d.department_parent_id,d.company_id, d.employee_id,
+    (select c.company_name from organization.company_ c  where c.company_id=d.company_id) AS company_name,
+    (select e.employee_name from organization.employee_ e where e.employee_id=d.employee_id) AS employee_name
     from organization.department_  d  
     where	
-	d.company_id=#{companyId}	
+	d.company_id=#{companyId}
+	<if test="companyName!=null and companyName!=''">
+		AND company_name like '%${companyName}%'
+	</if>
+	<if test="departmentName!=null and departmentName!='' ">
+		AND d.department_name like '%${departmentName}%'
+	</if>
+	<if test="employeeName!=null and employeeName!=''">
+		AND employeeName like '%${employeeName}%'
+	</if>
 	limit #{pageRecordNum}::integer offset #{fromPageNum}::integer 	 
   </select>
-  
+  <!-- 分页查询部门信息数目-->
+  <select id="findDepartmentPageAllLength" parameterType="java.util.Map" resultType="Integer">
+  	select count(department_id) FROM(
+    select 
+    d.department_id, d.department_numbe, d.department_name, d.department_describe,
+    d.department_parent_id,d.company_id, d.employee_id,
+    (select c.company_name from organization.company_ c  where c.company_id=d.company_id) AS company_name,
+    (select e.employee_name from organization.employee_ e where e.employee_id=d.employee_id) AS employee_name
+    from organization.department_  d  
+    where	
+	d.company_id=#{companyId}
+	<if test="companyName!=null and companyName!=''">
+		AND company_name like '%${companyName}%'
+	</if>
+	<if test="departmentName!=null and departmentName!='' ">
+		AND d.department_name like '%${departmentName}%'
+	</if>
+	<if test="employeeName!=null and employeeName!=''">
+		AND employeeName like '%${employeeName}%'
+	</if>
+	) AS dept
+  </select>
 	<select id="findDepartmentTree"  resultMap="Department">
-	SELECT DISTINCT d.department_id,d.department_name  
-    FROM organization.department_ d 
+	select d.department_id, d.department_numbe, d.department_name, d.department_describe,d.department_parent_id,d.company_id, d.employee_id,(select c.company_name from company_ c  where c.company_id=d.company_id),(select e.employee_name from employee_ e where e.employee_id=d.employee_id)
+    from organization.department_  d 
 	where		
 		department_parent_id=#{departmentParentId,jdbcType=VARCHAR}
 		AND	
