@@ -14,6 +14,7 @@ public class Department {
     private String departmentPhone;//部门办公电话
     private String departmentFax;//部门传真
     private String departmentParentId;//部门父ID
+    private String departmentParentName;//父部门名称
     private String companyName;//公司名称
     private String companyId;//公司ID
     private String employeeName;//部门负责人
@@ -105,6 +106,12 @@ public class Department {
 	}
 	public void setChildren(List<Department> children) {
 		this.children = children;
+	}
+	public String getDepartmentParentName() {
+		return departmentParentName;
+	}
+	public void setDepartmentParentName(String departmentParentName) {
+		this.departmentParentName = departmentParentName;
 	}
     
 	

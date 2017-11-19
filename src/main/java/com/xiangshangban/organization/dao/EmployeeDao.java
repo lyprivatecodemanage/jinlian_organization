@@ -13,7 +13,6 @@ public interface EmployeeDao {
 	
 	int deleteByEmployee(String employeeId);	   
 	int insertEmployee(Employee employee);
-	int insertEmployeeuser(Employee employee);
 	//查询单条员信息
     Employee selectByEmployee(@Param("employeeId") String employeeId,@Param("companyId") String companyId);               
    
@@ -33,7 +32,7 @@ public interface EmployeeDao {
     
     int batchUpdateStatus(String employeeId);
     Employee findByemploginName(String loginName);
-    Employee findByemployeeNo(String employeeNo);
+    Employee findByemployeeNo(@Param("employeeNo")String employeeNo, @Param("companyId")String companyId);
     int updateByEmployeedept(Employee employee);
     int batchUpdateTransferJobStaus(String employeeId);
     
@@ -47,4 +46,16 @@ public interface EmployeeDao {
     //查询所有在职人员以及所属部门和主岗位
     List<Employee> findByempadmin(Map<String,String> map);
     List<Employee> findByempadmins(Map<String,String> map);
+    /**
+     * 根据登录名查询是否用户Id
+     * @param loginName 登录名
+     * @return
+     */
+	String getUserIdByLoginName(String loginName);
+	/**
+	 * 添加用户信息
+	 * @param employee
+	 * @return
+	 */
+	int insertUser(Employee employee);
 }

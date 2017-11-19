@@ -1,8 +1,5 @@
 package com.xiangshangban.organization.dao;
 
-
-
-
 import java.util.List;
 import java.util.Map;
 
@@ -33,4 +30,6 @@ public interface PostDao {
     List<Post>selectByAllFenyePost(Map<String,String> map);
     
     List<Post> findBydepartmentPost (@Param("departmentId") String departmentId,@Param("companyId")String companyId);
+
+	Integer findPostPageAllLength(Map<String, String> params);
 }

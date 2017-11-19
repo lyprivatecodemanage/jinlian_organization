@@ -21,12 +21,11 @@
     <result column="post_name" jdbcType="VARCHAR" property="postName" />
     <result column="post_id" jdbcType="VARCHAR" property="postId" />       
     <result column="employee_img_url" jdbcType="VARCHAR" property="employeeImgUrl" /> 
+    <result column="work_address" jdbcType="VARCHAR" property="workAddress" />
     <!-- <result column="employee_birthday" jdbcType="VARCHAR" property="employeeBirthday" />   
     <result column="employee_tell" jdbcType="VARCHAR" property="employeeTell" />     
     <result column="employee_email" jdbcType="VARCHAR" property="employeeEmail" />
     <result column="employee_position" jdbcType="VARCHAR" property="employeePosition" />
-    <result column="employee_work_place" jdbcType="VARCHAR" property="employeeWorkPlace" />
-      
     <result column="contract_period" jdbcType="VARCHAR" property="contractPeriod" />   
     <result column="is_manager" jdbcType="VARCHAR" property="isManager" />
     <result column="contract_expired" jdbcType="VARCHAR" property="contractExpired" />  
@@ -129,7 +128,7 @@
    select DISTINCT e.employee_id, e.employee_name,e.login_name, e.employee_sex,e.employee_no, 
        e.employee_phone,(select d.department_name from organization.department_ d where d.department_id=e.department_id),
        e.employee_twophone,e.entry_time,e.department_id,e.company_id,c.company_name,
-       e.employee_status,e.probationary_expired,e.direct_person_id,y.employee_name AS direct_person_name
+       e.employee_status,e.probationary_expired,e.direct_person_id,y.employee_name AS direct_person_name,e.work_address
 	from organization.employee_ e 
  
 	lEFT JOIN  organization.employee_ y  on y.employee_id=e.direct_person_id
@@ -147,7 +146,7 @@
    select DISTINCT e.employee_id, e.employee_name,e.login_name, e.employee_sex,e.employee_no, 
        e.employee_phone,(select d.department_name from organization.department_ d where d.department_id=e.department_id),
        e.employee_twophone,e.entry_time,e.department_id,e.company_id,c.company_name,
-       e.employee_status,e.probationary_expired,e.direct_person_id,y.employee_name AS direct_person_name
+       e.employee_status,e.probationary_expired,e.direct_person_id,y.employee_name AS direct_person_name,y.work_address
 	from organization.employee_ e 
  
 	lEFT JOIN  organization.employee_ y  on y.employee_id=e.direct_person_id
@@ -194,7 +193,7 @@
    select DISTINCT e.employee_id, e.employee_name,e.login_name, e.employee_sex,e.employee_no, 
        e.employee_phone,(select d.department_name from organization.department_ d where d.department_id=e.department_id),
        e.employee_twophone,e.entry_time,e.department_id,e.company_id,c.company_name,
-       e.employee_status,e.probationary_expired,e.direct_person_id,y.employee_name AS direct_person_name
+       e.employee_status,e.probationary_expired,e.direct_person_id,y.employee_name AS direct_person_name,e.work_address
 	from organization.employee_ e 
  
 	lEFT JOIN  organization.employee_ y  on y.employee_id=e.direct_person_id
@@ -217,6 +216,8 @@
     e.employee_no IS NOT null
     AND 
     e.employee_no= #{employeeNo,jdbcType=VARCHAR}
+    and 
+    e.company_id=#{companyId}
   </select>
 
   <select id="findByemploginName" parameterType="java.lang.String" resultMap="Employee">
@@ -231,7 +232,7 @@
     select DISTINCT e.employee_id, e.employee_name,e.login_name, e.employee_sex,e.employee_no, 
        e.employee_phone,(select d.department_name from organization.department_ d where d.department_id=e.department_id),
        e.employee_twophone,e.entry_time,e.department_id,e.company_id,c.company_name,
-       e.employee_status,e.probationary_expired,e.direct_person_id,y.employee_name AS direct_person_name
+       e.employee_status,e.probationary_expired,e.direct_person_id,y.employee_name AS direct_person_name,e.work_address
 	from organization.employee_ e 
  
 	lEFT JOIN  organization.employee_ y  on y.employee_id=e.direct_person_id
@@ -248,7 +249,7 @@
     select DISTINCT e.employee_id, e.employee_name,e.login_name, e.employee_sex,e.employee_no, 
        e.employee_phone,(select d.department_name from organization.department_ d where d.department_id=e.department_id),
        e.employee_twophone,e.entry_time,e.department_id,e.company_id,c.company_name,
-       e.employee_status,e.probationary_expired,e.direct_person_id,y.employee_name AS direct_person_name
+       e.employee_status,e.probationary_expired,e.direct_person_id,y.employee_name AS direct_person_name,e.work_address
 	from organization.employee_ e 
  
 	lEFT JOIN  organization.employee_ y  on y.employee_id=e.direct_person_id
@@ -267,7 +268,7 @@
     select DISTINCT e.employee_id, e.employee_name,e.login_name, e.employee_sex,e.employee_no, 
        e.employee_phone,(select d.department_name from organization.department_ d where d.department_id=e.department_id),
        e.employee_twophone,e.entry_time,e.department_id,e.company_id,c.company_name,
-       e.employee_status,e.probationary_expired,e.direct_person_id,y.employee_name AS direct_person_name
+       e.employee_status,e.probationary_expired,e.direct_person_id,y.employee_name AS direct_person_name,e.work_address
 	from organization.employee_ e 
  
 	lEFT JOIN  organization.employee_ y  on y.employee_id=e.direct_person_id
@@ -308,7 +309,9 @@
      ORDER BY e.entry_time DESC 
      limit #{pageRecordNum}::integer offset #{fromPageNum}::integer
   </select>     
-  
+  <select id="getUserIdByLoginName" parameterType="String" resultType="String"> 
+  	select user_id from organization.u_users where phone=#{loginName} and status='1'
+  </select>
   <delete id="deleteByEmployee" parameterType="java.lang.String"> 
     delete from organization.employee_
     where 
@@ -329,7 +332,8 @@
       probationary_expired,               
       department_id,
       company_id,
-      employee_status
+      employee_status,
+      work_address
       )
     values (
       #{employeeId,jdbcType=VARCHAR}, 
@@ -344,23 +348,8 @@
       #{probationaryExpired,jdbcType=VARCHAR},                         
       #{departmentId,jdbcType=VARCHAR},
       #{companyId,jdbcType=VARCHAR},
-      #{employeeStatus,jdbcType=VARCHAR}    
-      )
-  </insert>
-  <insert id="insertEmployeeuser" parameterType="com.xiangshangban.organization.bean.Employee">    
-    insert into organization.employee_ (
-      employee_id, 
-      employee_name, 
-      login_name,       
-      employee_phone,     
-      company_id    
-      )
-    values (
-      #{employeeId,jdbcType=VARCHAR}, 
-      #{employeeName,jdbcType=VARCHAR},       
-      #{loginName,jdbcType=VARCHAR},                      
-      #{employeePhone,jdbcType=VARCHAR},     
-      #{companyId,jdbcType=VARCHAR} 
+      #{employeeStatus,jdbcType=VARCHAR}, 
+      #{workAddress}   
       )
   </insert>
   
@@ -375,7 +364,8 @@
       employee_twophone = #{employeeTwophone,jdbcType=VARCHAR},          
       entry_time = #{entryTime,jdbcType=VARCHAR},             
       probationary_expired = #{probationaryExpired,jdbcType=VARCHAR},           
-      department_id=#{departmentId,jdbcType=VARCHAR}                  
+      department_id=#{departmentId,jdbcType=VARCHAR},
+      work_address=#{workAddress}                  
     where 
        employee_id = #{employeeId,jdbcType=VARCHAR}
   </update>
@@ -392,7 +382,8 @@
       entry_time = #{entryTime,jdbcType=VARCHAR},             
       probationary_expired = #{probationaryExpired,jdbcType=VARCHAR},           
       department_id=#{departmentId,jdbcType=VARCHAR},
-      employee_status=#{employeeStatus,jdbcType=VARCHAR}                  
+      employee_status=#{employeeStatus,jdbcType=VARCHAR},
+      work_address=#{workAddress}                  
     where 
        employee_id = #{employeeId,jdbcType=VARCHAR}
   </update>

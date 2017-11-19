@@ -1,22 +1,17 @@
 package com.xiangshangban.organization.controller;
 
-
-
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.xiangshangban.organization.bean.Post;
@@ -43,17 +38,18 @@ public class PostController {
 			ReturnData returnData = new ReturnData();
 			//获取请求头信息			
 			String companyId = request.getHeader("companyId");
+			JSONObject obj = JSON.parseObject(post);
 			Post posttemp=JSON.parseObject(post,Post.class);
 			posttemp.setCompanyId(companyId);
 			String departmentId = posttemp.getDepartmentId();
 			String postName = posttemp.getPostName();			
-			if(!departmentId.equals("") || !postName.equals("") || !companyId.equals("")){				
+			if(StringUtils.isNotEmpty(departmentId) && StringUtils.isNotEmpty(postName) && StringUtils.isNotEmpty(companyId)){				
 				postService.insertPost(posttemp);
 				returnData.setMessage("数据请求成功");
 				returnData.setReturnCode("3000");
 			}else{
-				returnData.setMessage("数据请求失败");
-				returnData.setReturnCode("3001");
+				returnData.setMessage("必传参数为空");
+				returnData.setReturnCode("3006");
 			}
 			return returnData;
 		}
@@ -75,13 +71,13 @@ public class PostController {
 			posttemp.setCompanyId(companyId);
 			String departmentId = posttemp.getDepartmentId();
 			String postName = posttemp.getPostName();						
-			if(!departmentId.equals("") || !postName.equals("") || !companyId.equals("")){
+			if(StringUtils.isNotEmpty(departmentId) && StringUtils.isNotEmpty(postName) && StringUtils.isNotEmpty(companyId)){
 				postService.updateByPost(posttemp);	
 				returnData.setMessage("数据请求成功");
 				returnData.setReturnCode("3000");	
 			}else{
-				returnData.setMessage("数据请求失败");
-				returnData.setReturnCode("3001");
+				returnData.setMessage("必传参数为空");
+				returnData.setReturnCode("3006");
 			}
 			return returnData;
 		}
@@ -99,9 +95,9 @@ public class PostController {
 			ReturnData returnData = new ReturnData();
 			JSONObject obj = JSON.parseObject(postId);
 			postId=obj.getString("postId");
-			if(postId.equals("")){				
-				returnData.setMessage("数据请求失败");
-				returnData.setReturnCode("3001");				
+			if(StringUtils.isNotEmpty(postId)){				
+				returnData.setMessage("必传参数为空");
+				returnData.setReturnCode("3006");				
 			}else{
 				postService.deleteByPost(postId);
 				returnData.setMessage("数据请求成功");
@@ -122,23 +118,21 @@ public class PostController {
 			//String companyId="977ACD3022C24B99AC9586CC50A8F786";
 			//获取请求头信息			
 			String companyId = request.getHeader("companyId");
-			if(!companyId.equals("")){
+			if(StringUtils.isNotEmpty(companyId)){
 				List<Post> list=postService.selectByAllPostInfo(companyId);							
 					returnData.setData(list);
 					returnData.setMessage("数据请求成功");
 					returnData.setReturnCode("3000");			
 			}else{
-				returnData.setMessage("数据请求失败");
-				returnData.setReturnCode("3001");
+				returnData.setMessage("必传参数为空");
+				returnData.setReturnCode("3006");
 			}			
 			return returnData;
 			
 		}
 		/**
+		 * 分页+模糊查询岗位信息（模糊字段：岗位名称、所属部门名称）
 		 * @author 张慧
-		 * 分页查询岗位信息
-		 * @param pageNum
-		 * @param pageRecordNum
 		 * @param request
 		 * @param response
 		 * @return
@@ -151,41 +145,37 @@ public class PostController {
 			String pageNum = obj.getString("pageNum");
 			String pageRecordNum = obj.getString("pageRecordNum");
 			String companyId = request.getHeader("companyId");
-			String pageNumPattern = "\\d{1,}";
-			boolean pageNumFlag = Pattern.matches(pageNumPattern, pageNum);
-			boolean pageRecordNumFlag = Pattern.matches(pageNumPattern, pageRecordNum);
-			if(!pageNumFlag||!pageRecordNumFlag){
-				returnData.setMessage("参数格式不正确");
-				returnData.setReturnCode("3007");			
-				return returnData;
+			if(StringUtils.isNotEmpty(pageNum) && StringUtils.isNotEmpty(pageRecordNum)){
+				String pageNumPattern = "\\d{1,}";
+				boolean pageNumFlag = Pattern.matches(pageNumPattern, pageNum);
+				boolean pageRecordNumFlag = Pattern.matches(pageNumPattern, pageRecordNum);
+				if(!pageNumFlag||!pageRecordNumFlag){
+					returnData.setMessage("参数格式不正确");
+					returnData.setReturnCode("3007");			
+					return returnData;
+				}
+			}else{//默认设置
+				pageNum = "1";
+				pageRecordNum="10";
 			}
-			List<Post> postlist = postService.selectByAllPostInfo(companyId);
-			List<Post> list =new ArrayList<>();
-			if(!companyId.equals("")){			
-				if (pageNum != null && pageNum != "" && pageRecordNum != null && pageRecordNum != "") {
-				int number = (Integer.parseInt(pageNum) - 1) * Integer.parseInt(pageRecordNum);
-					String strNum = String.valueOf(number);
-					params.put("pageRecordNum", pageRecordNum);
-					params.put("fromPageNum", strNum);
-					params.put("companyId", companyId);
-					list=postService.selectByAllFenyePost(params);
-					int totalPages = postlist.size();
-					double  pageCountnum =(double)totalPages/Integer.parseInt(pageRecordNum);	
-					int pagecountnum=(int) Math.ceil(pageCountnum);
-					returnData.setTotalPages(totalPages);
-					returnData.setPagecountNum(pagecountnum);
-					returnData.setData(list);
-					returnData.setMessage("数据请求成功");
-					returnData.setReturnCode("3000");		
-			        return returnData;
-			}else{
-				returnData.setMessage("数据请求失败");
-				returnData.setReturnCode("3001");		
-				return returnData;	
-			}
-		}
-			returnData.setMessage("数据请求失败");
-			returnData.setReturnCode("3001");		
+			
+			String strNum = (Integer.parseInt(pageNum) - 1) * Integer.parseInt(pageRecordNum)+"";
+			params.put("pageRecordNum", pageRecordNum);
+			params.put("fromPageNum", strNum);
+			params.put("companyId", companyId);
+			params.put("postName", obj.getString("postName"));//岗位名称
+			params.put("departmentName", obj.getString("departmentName"));//所属部门名称
+			
+			List<Post> list =postService.selectByAllFenyePost(params);
+			int totalPages = postService.findPostPageAllLength(params);//数据总条数
+			//总页数
+			int pageCountnum =totalPages%Integer.parseInt(pageRecordNum)==0?
+					(totalPages/Integer.parseInt(pageRecordNum)):(totalPages/Integer.parseInt(pageRecordNum)+1);	
+			returnData.setTotalPages(totalPages);
+			returnData.setPagecountNum(pageCountnum);
+			returnData.setData(list);
+			returnData.setMessage("数据请求成功");
+			returnData.setReturnCode("3000");
 			return returnData;							
 		}		
 		

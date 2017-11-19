@@ -9,9 +9,9 @@ import com.xiangshangban.organization.bean.DepartmentTree;
 
 public interface DepartmentService {
 	
-		String deleteByDepartment(String departmentId);
+		int deleteByDepartment(String departmentId);
 	
-		String insertDepartment(Department department);
+		int insertDepartment(Department department);
 	  
 		Department selectByDepartment(String departmentId ,String companyId);
 	  

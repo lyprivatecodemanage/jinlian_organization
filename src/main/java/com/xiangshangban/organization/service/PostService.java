@@ -23,5 +23,7 @@ public interface PostService {
     List<Post>selectByAllFenyePost(Map<String,String> map);
     
     List<Post> selectByPostemp(String employeeId,String departmentId);
+
+	Integer findPostPageAllLength(Map<String, String> params);
     
 }

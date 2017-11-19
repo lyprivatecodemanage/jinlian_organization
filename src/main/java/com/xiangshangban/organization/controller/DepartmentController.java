@@ -1,22 +1,17 @@
 package com.xiangshangban.organization.controller;
 
-
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -54,6 +49,7 @@ public class DepartmentController {
 			String companyName = obj.getString("companyName");
 			String departmentName = obj.getString("departmentName");
 			String employeeName = obj.getString("employeeName");
+			String departmentId = obj.getString("departmentId");
 			params.put("companyName", companyName);
 			params.put("departmentName", departmentName);
 			params.put("employeeName", employeeName);	
@@ -76,7 +72,8 @@ public class DepartmentController {
 			String strNum = (Integer.parseInt(pageNum) - 1) * Integer.parseInt(pageRecordNum)+"";
 			params.put("pageRecordNum", pageRecordNum);
 			params.put("fromPageNum", strNum);
-			params.put("companyId", companyId);				
+			params.put("companyId", companyId);
+			params.put("departmentId", departmentId);
 			List<Department> treeNode =departmentService.findByAllFenyeDepartment(params);
 			int totalPages = departmentService.findDepartmentPageAllLength(params);//数据总条数
 			//总页数
@@ -105,15 +102,15 @@ public class DepartmentController {
 	    String companyId = request.getHeader("companyId");
 	    Company emp = companyService.selectByCompany(companyId);
 	    String companyName = emp.getCompanyName();
-		if(!companyId.equals("")){
+		if(StringUtils.isNotEmpty(companyId)){
 			List<DepartmentTree> treeNode =departmentService.getDepartmentTreeAll(companyId);
 			returnData.setCompanyName(companyName);
 			returnData.setData(treeNode);
 			returnData.setMessage("数据请求成功");
 			returnData.setReturnCode("3000");	
 		}else{
-			returnData.setMessage("数据请求失败");
-			returnData.setReturnCode("3001");
+			returnData.setMessage("必传参数为空");
+			returnData.setReturnCode("3006");
 		}			
 		return returnData;
 	}
@@ -129,14 +126,14 @@ public class DepartmentController {
 		//String companyId="977ACD3022C24B99AC9586CC50A8F786";
 		//获取请求头信息    
 	    String companyId = request.getHeader("companyId");
-	    if(!companyId.equals("")){
+	    if(StringUtils.isNotEmpty(companyId)){
 	    	List<DepartmentTree> treeNode =departmentService.getDepartmentempTreeAll(companyId);
 			returnData.setData(treeNode);
 			returnData.setMessage("数据请求成功");
 			returnData.setReturnCode("3000");	
 	    }else{
-	    	returnData.setMessage("数据请求失败");
-			returnData.setReturnCode("3001");
+	    	returnData.setMessage("必传参数为空");
+			returnData.setReturnCode("3006");
 	    }			
 		return returnData;
 	}
@@ -152,14 +149,14 @@ public class DepartmentController {
 	public ReturnData findByAllDepartment(HttpServletRequest request,HttpServletResponse response){
 		ReturnData returnData = new ReturnData();
 		String companyId = request.getHeader("companyId");
-		if(!companyId.equals("")){
+		if(StringUtils.isNotEmpty(companyId)){
 			List<Department> treeNode =departmentService.findByAllDepartment(companyId);
 			returnData.setData(treeNode);
 			returnData.setMessage("数据请求成功");
 			returnData.setReturnCode("3000");
 		}else{
-			returnData.setMessage("数据请求失败");
-			returnData.setReturnCode("3001");
+			returnData.setMessage("必传参数为空");
+			returnData.setReturnCode("3006");
 		}				
 		return returnData;
 	}
@@ -186,62 +183,6 @@ public class DepartmentController {
 		}				
 		return returnData;
 	}
-	/**
-	 * 分页查询部门信息
-	 * @param pageNum
-	 * @param pageRecordNum
-	 * @param request
-	 * @param response
-	 * @return
-	 */
-	@RequestMapping(value = "/findByAllFenyeDepartment",produces = "application/json;charset=UTF-8", method=RequestMethod.POST)	
-	public ReturnData findByAllFenyeDepartment(@RequestBody String jsonString,HttpServletRequest request,HttpServletResponse response){
-		ReturnData returnData = new ReturnData();
-		Map<String, String> params = new HashMap<String, String>();
-		JSONObject obj = JSON.parseObject(jsonString);	
-		String companyId = request.getHeader("companyId");
-		String pageNum = obj.getString("pageNum");
-		String pageRecordNum = obj.getString("pageRecordNum");					
-		String pageNumPattern = "\\d{1,}";
-		boolean pageNumFlag = Pattern.matches(pageNumPattern, pageNum);
-		boolean pageRecordNumFlag = Pattern.matches(pageNumPattern, pageRecordNum);
-		if(!pageNumFlag||!pageRecordNumFlag){
-			returnData.setMessage("参数格式不正确");
-			returnData.setReturnCode("3007");			
-			return returnData;
-		}
-		List<Department> list =departmentService.findByAllDepartment(companyId);		
-		List<Department>  treeNode = new ArrayList<>();
-		if(!companyId.equals("")){			
-			if (pageNum != null && pageNum != "" && pageRecordNum != null && pageRecordNum != "") {
-			int number = (Integer.parseInt(pageNum) - 1) * Integer.parseInt(pageRecordNum);
-				String strNum = String.valueOf(number);
-				params.put("pageRecordNum", pageRecordNum);
-				params.put("fromPageNum", strNum);
-				params.put("companyId", companyId);				
-				treeNode =departmentService.findByAllFenyeDepartment(params);
-				int totalPages = list.size();//数据总条数
-				double  pageCountnum =(double)totalPages/Integer.parseInt(pageRecordNum);	
-				int pagecountnum=(int) Math.ceil(pageCountnum);//总页数
-				returnData.setTotalPages(totalPages);
-				returnData.setPagecountNum(pagecountnum);
-				returnData.setData(treeNode);
-				returnData.setMessage("数据请求成功");
-				returnData.setReturnCode("3000");		
-		        return returnData;
-		}else{
-			returnData.setMessage("数据请求失败");
-			returnData.setReturnCode("3001");		
-			return returnData;	
-		}
-	}
-		returnData.setMessage("数据请求失败");
-		returnData.setReturnCode("3001");		
-		return returnData;	
-			
-	}
-	
-	
 	
 	/**
 	 * 添加部门
@@ -256,16 +197,20 @@ public class DepartmentController {
 		Department departmenttemp=JSON.parseObject(department,Department.class);
 		//获取请求头信息
 		String companyId = request.getHeader("companyId");
-		Department departmentNumbe = departmentService.findByDepartmentNumber(departmenttemp.getDepartmentNumbe());	
-		if(departmentNumbe!=null){
-			returnData.setMessage("部门编号已存在");
-			returnData.setReturnCode("4019");			
-			return returnData;	
+		if(StringUtils.isNotEmpty(departmenttemp.getDepartmentNumbe())){
+			Department departmentNumbe = departmentService
+					.findByDepartmentNumber(departmenttemp.getDepartmentNumbe());	
+			if(departmentNumbe!=null){
+				returnData.setMessage("部门编号已存在");
+				returnData.setReturnCode("4100");			
+				return returnData;	
+			}
 		}
+		
 		departmenttemp.setCompanyId(companyId);
 		String DepartmentName = departmenttemp.getDepartmentName();
 		String departmentParentId = departmenttemp.getDepartmentParentId();		
-		if(departmentParentId.equals("")){
+		if(StringUtils.isEmpty(departmentParentId)){
 			departmenttemp.setDepartmentParentId("0");
 		}		
 		if(StringUtils.isNotEmpty(companyId) && StringUtils.isNotEmpty(DepartmentName)
@@ -293,7 +238,7 @@ public class DepartmentController {
 		ReturnData returnData = new ReturnData();
 		Department departmenttemp=JSON.parseObject(department,Department.class);
 		String departmentId = departmenttemp.getDepartmentId();
-		if(!departmentId.equals("")){
+		if(StringUtils.isNotEmpty(departmentId)){
 			departmentService.updateByDepartment(departmenttemp);
 			returnData.setMessage("数据请求成功");
 			returnData.setReturnCode("3000");		
@@ -320,7 +265,7 @@ public class DepartmentController {
 			String departmentid = listdepartment.get(i).toString();
 			JSONObject objs = JSON.parseObject(departmentid);
 			departmentId=objs.getString("departmentId");	
-			if(!departmentId.equals("")){
+			if(StringUtils.isNotEmpty(departmentId)){
 				departmentService.deleteByDepartment(departmentId);
 				returnData.setMessage("数据请求成功");
 				returnData.setReturnCode("3000");			

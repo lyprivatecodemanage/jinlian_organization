@@ -10,7 +10,8 @@
     <result  property="employeeId" jdbcType="VARCHAR" column="employee_id"/>    
     <result  property="departmentPhone" jdbcType="VARCHAR" column="department_phone"/>
     <result  property="departmentFax" jdbcType="VARCHAR" column="department_fax"/>
-    <result  property="departmentParentId" jdbcType="VARCHAR" column="department_parent_id"/>   
+    <result  property="departmentParentId" jdbcType="VARCHAR" column="department_parent_id"/>
+    <result  property="departmentParentName" jdbcType="VARCHAR" column="department_parent_name"/>   
     <result  property="companyId" jdbcType="VARCHAR" column="company_id"/> 
     <result  property="companyName" jdbcType="VARCHAR" column="company_name"/>    
     <result  property="CountNumber" jdbcType="VARCHAR" column="Count_number"/>
@@ -26,13 +27,19 @@
 	<!-- 分页查询部门信息-->
   <select id="findByAllFenyeDepartment" parameterType="java.util.Map" resultMap="Department">
     select 
-    d.department_id, d.department_numbe, d.department_name, d.department_describe,
-    d.department_parent_id,d.company_id, d.employee_id,
-    (select c.company_name from organization.company_ c  where c.company_id=d.company_id) AS company_name,
-    (select e.employee_name from organization.employee_ e where e.employee_id=d.employee_id) AS employee_name
+	    d.department_id, d.department_numbe, d.department_name, d.department_describe,
+	    d.department_parent_id,d.company_id, d.employee_id, 
+		CASE d.department_parent_id WHEN '0' THEN c.company_name ELSE dp.department_name END AS department_parent_name,
+		c.company_name,e.employee_name
     from organization.department_  d  
+		LEFT JOIN organization.department_  dp ON d.department_parent_id=dp.department_id
+		LEFT JOIN organization.company_  c ON c.company_id=d.company_id
+		LEFT JOIN organization.employee_ e ON e.employee_id=d.employee_id
     where	
 	d.company_id=#{companyId}
+	<if test="departmentId!=null and departmentId!=''">
+		AND d.department_id =#{departmentId}
+	</if>
 	<if test="companyName!=null and companyName!=''">
 		AND company_name like '%${companyName}%'
 	</if>
@@ -46,25 +53,25 @@
   </select>
   <!-- 分页查询部门信息数目-->
   <select id="findDepartmentPageAllLength" parameterType="java.util.Map" resultType="Integer">
-  	select count(department_id) FROM(
-    select 
-    d.department_id, d.department_numbe, d.department_name, d.department_describe,
-    d.department_parent_id,d.company_id, d.employee_id,
-    (select c.company_name from organization.company_ c  where c.company_id=d.company_id) AS company_name,
-    (select e.employee_name from organization.employee_ e where e.employee_id=d.employee_id) AS employee_name
-    from organization.department_  d  
-    where	
-	d.company_id=#{companyId}
-	<if test="companyName!=null and companyName!=''">
-		AND company_name like '%${companyName}%'
-	</if>
-	<if test="departmentName!=null and departmentName!='' ">
-		AND d.department_name like '%${departmentName}%'
-	</if>
-	<if test="employeeName!=null and employeeName!=''">
-		AND employeeName like '%${employeeName}%'
-	</if>
-	) AS dept
+	  select count(d.department_id)
+	   from organization.department_  d  
+		LEFT JOIN organization.department_  dp ON d.department_parent_id=dp.department_id
+		LEFT JOIN organization.company_  c ON c.company_id=d.company_id
+		LEFT JOIN organization.employee_ e ON e.employee_id=d.employee_id  
+	    where	
+		d.company_id=#{companyId}
+		<if test="departmentId!=null and departmentId!=''">
+			AND (d.department_id =#{departmentId} OR d.department_parent_id =#{departmentId})
+		</if>
+		<if test="companyName!=null and companyName!=''">
+			AND company_name like '%${companyName}%'
+		</if>
+		<if test="departmentName!=null and departmentName!='' ">
+			AND d.department_name like '%${departmentName}%'
+		</if>
+		<if test="employeeName!=null and employeeName!=''">
+			AND employeeName like '%${employeeName}%'
+		</if>
   </select>
 	<select id="findDepartmentTree"  resultMap="Department">
 	select d.department_id, d.department_numbe, d.department_name, d.department_describe,d.department_parent_id,d.company_id, d.employee_id,(select c.company_name from company_ c  where c.company_id=d.company_id),(select e.employee_name from employee_ e where e.employee_id=d.employee_id)

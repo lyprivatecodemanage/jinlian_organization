@@ -60,38 +60,32 @@ public class PostServiceImpl implements PostService {
 
 	@Override
 	public List<Post> selectByPostName(String employeeId,String departmentId) {
-		// TODO Auto-generated method stub
 		return postDao.selectByPostName(employeeId, departmentId);
 	}
 
 
 	@Override
 	public List<Post> selectByAllPostInfo(String companyId) {
-		// TODO Auto-generated method stub
 		return postDao.selectByAllPostInfo(companyId);
 	}
 
 	@Override
 	public List<Post> findByMorePostIfon(Map<String, String> map) {
-		// TODO Auto-generated method stub
 		return postDao.findByMorePostIfon(map);
 	}
 
 	@Override
 	public List<Post> selectByPostemp(String employeeId, String departmentId) {
-		// TODO Auto-generated method stub
 		return postDao.selectByPostemp(employeeId, departmentId);
 	}
 
 	@Override
 	public List<Post> selectByAllFenyePost(Map<String, String> map) {
-		// TODO Auto-generated method stub
 		return postDao.selectByAllFenyePost(map);
 	}
 
-	
-
-	
-	
-
+	@Override
+	public Integer findPostPageAllLength(Map<String, String> params) {
+		return postDao.findPostPageAllLength(params);
+	}
 }

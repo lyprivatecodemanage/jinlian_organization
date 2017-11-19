@@ -6,10 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
+import org.apache.commons.lang.StringUtils;
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -30,9 +29,9 @@ import com.xiangshangban.organization.service.ConnectEmpPostService;
 import com.xiangshangban.organization.service.EmployeeService;
 import com.xiangshangban.organization.service.PostService;
 import com.xiangshangban.organization.service.TransferjobService;
-import com.xiangshangban.organization.service.UserService;
 import com.xiangshangban.organization.util.HttpRequestFactory;
 import com.xiangshangban.organization.util.PropertiesUtils;
+import com.xiangshangban.organization.util.RegexUtil;
 
 @RestController
 @RequestMapping("/EmployeeController")
@@ -45,8 +44,6 @@ public class EmployeeController {
 	@Autowired
 	PostService postService;
 	@Autowired
-	UserService userService;
-	@Autowired
 	TransferjobService  transferjobService;
 	
 	
@@ -58,7 +55,7 @@ public class EmployeeController {
 	 * @return
 	 * 
 	 */
-	@RequestMapping(value="/saveUserEmp", produces = "application/json;charset=UTF-8", method=RequestMethod.POST)
+	/*@RequestMapping(value="/saveUserEmp", produces = "application/json;charset=UTF-8", method=RequestMethod.POST)
 	public ReturnData saveUserEmp(@RequestBody String employeeId,HttpServletRequest request,HttpServletResponse response){
 		JSONObject obj = JSON.parseObject(employeeId);
 		ReturnData returnData = new ReturnData();
@@ -73,15 +70,17 @@ public class EmployeeController {
 		user.setUserId(employeeId);
 		user.setUserName(LoginName);				
 		if(!employeeId.equals("") || useremp ==null){
+			//用户操作
+			//加入注册表
 			userService.saveUser(user);
 			returnData.setMessage("数据请求成功");
 			returnData.setReturnCode("3000");							
 		}else{
-			returnData.setMessage("业务错误");
-			returnData.setReturnCode("4000");				
+			returnData.setMessage("参数格式错误");
+			returnData.setReturnCode("3007");				
 		}	
 		return returnData;	
-	}
+	}*/
 	
 	/**
 	 * 用户申请加入公司(如果用户已经注册，调该方法)
@@ -101,7 +100,7 @@ public class EmployeeController {
 		String Account = obj.getString("Account");
 		String companyId = obj.getString("companyId");						
 		String userId = obj.getString("userId");
-		 Employee loginname=employeeService.findByemploginName(Account);		 
+		Employee loginname=employeeService.findByemploginName(Account);		 
 		if(loginname != null){			
 			returnData.setMessage("业务错误");
 			returnData.setReturnCode("4000");  
@@ -113,7 +112,7 @@ public class EmployeeController {
 			employeenew.setLoginName(Account);
 			employeenew.setCompanyId(companyId);						
 			if(!userName.equals("") || !Phone.equals("") || !userId.equals("") || !Account.equals("") || !companyId.equals("")){
-				employeeService.insertEmployeeuser(employeenew);
+				employeeService.insertEmployee(employeenew);
 				returnData.setMessage("数据请求成功");
 				returnData.setReturnCode("3000");				
 			}else{
@@ -122,7 +121,139 @@ public class EmployeeController {
 			}				
 				return returnData;										    			
 		}					
-	}		
+	}
+	/**
+	 *  
+	 * 添加员工信息
+	 * @param employee
+	 * @param request
+	 * @param response
+	 * @return
+	 * @throws JsonProcessingException
+	 */
+	@RequestMapping(value="/insertEmployee", produces = "application/json;charset=UTF-8", method=RequestMethod.POST)
+	public ReturnData insertEmployee(@RequestBody String jsonString,HttpServletRequest request,HttpServletResponse response){								
+		ReturnData returnData = new ReturnData();
+		//获取请求头信息
+		String companyId = request.getHeader("companyId");			
+		String operateUserId = request.getHeader("accessUserId");
+		
+		Employee employeenew = JSON.parseObject(jsonString, Employee.class);
+		employeenew.setOperateUserId(operateUserId);
+		String employeeNo = employeenew.getEmployeeNo();
+		if(StringUtils.isNotEmpty(employeeNo)){
+			Employee employeeNotemp =employeeService.findByemployeeNo(employeeNo, companyId);
+			if(employeeNotemp != null ){			
+				returnData.setMessage("工号已存在");
+				returnData.setReturnCode("4101");
+				return returnData;			
+			}
+		}
+		
+		String loginName = employeenew.getLoginName();
+		boolean loginNameMatch = RegexUtil.matchPhone(loginName);
+		if(!loginNameMatch){
+			returnData.setMessage("登录名格式必须为11位手机号");
+			returnData.setReturnCode("4102");
+			return returnData;
+		}
+		String employeeName = employeenew.getEmployeeName();
+		if(StringUtils.isEmpty(employeeName)){
+			returnData.setMessage("必传参数为空");
+			returnData.setReturnCode("3006");
+			return returnData;
+		}
+		
+		if (!RegexUtil.matchDate(employeenew.getEntryTime()) 
+				|| !RegexUtil.matchDate(employeenew.getProbationaryExpired())) {				
+			returnData.setMessage("日期格式错误（yyyy-MM-dd）");
+			returnData.setReturnCode("3009");
+			return returnData;
+		}
+		int result = employeeService.insertEmployee(employeenew);					
+		returnData.setMessage("数据请求成功");
+		returnData.setReturnCode("3000");
+		return returnData;
+	}
+	/**
+	 * 编辑员工信息
+	 * @param jsonString
+	 * @param request
+	 * @param response
+	 * @return
+	 */
+	@RequestMapping(value="/updateByEmployee", produces = "application/json;charset=UTF-8", method=RequestMethod.POST)
+	public ReturnData updateByEmployee(@RequestBody String jsonString,HttpServletRequest request,HttpServletResponse response){		 		
+		JSONObject jsonObject = JSONObject.parseObject(jsonString);	
+		ReturnData returnData = new ReturnData();		
+		String employeeId = jsonObject.getString("employeeId");
+		if(StringUtils.isNotEmpty(employeeId)){
+			Employee employeenew = JSON.parseObject(jsonString, Employee.class);
+			//获取请求头信息
+			String companyId = request.getHeader("companyId");
+			String operateUserId = request.getHeader("accessUserId");
+			employeenew.setOperateUserId(operateUserId);
+			
+			employeenew.setCompanyId(companyId);
+			employeenew.setEmployeeId(employeeId);
+			employeeService.updateByEmployee(employeenew);
+			
+			Transferjob transferjob = transferjobService.selectByTransferjobpost(employeeId, companyId);
+			//上一次所在部门ID
+			String departmentid = transferjob.getDepartmentId();
+			//修改后传的部门id
+			
+			if(employeenew.getDepartmentId().equals(departmentid)){
+				ConnectEmpPost EmpPost = new ConnectEmpPost();			
+				EmpPost.setEmployeeId(employeeId);
+				//原来所在部门ID
+				EmpPost.setDepartmentId(departmentid);
+				//把原来所在部门所对应的岗位的状态改为1
+				connectEmpPostService.updateConnectpostStaus(EmpPost);
+				//员工所在部门修改后，也要修改调动表现在所在部门的员工部门
+				transferjobService.updateByTrandepartmentId(employeenew.getDepartmentId());
+			}
+		    //把员工关联的岗位添加到connect_emp_post_中间表里面					    
+			String postIdList = jsonObject.getString("postList");
+			JSONArray postIdList1 = JSON.parseArray(postIdList);			
+			for(int i =0;i<postIdList1.size();i++){
+				JSONObject jobj = jsonObject.parseObject(postIdList1.getString(i)) ;
+				String postId = jobj.getString("postId");
+				String postGrades = jobj.getString("postGrades");
+				ConnectEmpPost empPost = new ConnectEmpPost();
+				ConnectEmpPost connect = new ConnectEmpPost();
+				ConnectEmpPost connectemppos = connectEmpPostService.findByConnect(employeeId,employeenew.getDepartmentId(), postGrades);
+				if(connectemppos==null){
+					empPost.setEmployeeId(employeeId);
+					empPost.setDepartmentId(employeenew.getDepartmentId());
+					empPost.setPostGrades(postGrades);
+					empPost.setPostId(postId);				          
+				    connectEmpPostService.saveConnect(empPost);
+				}
+				if(connectemppos!=null){
+					String postid = connectemppos.getPostId();
+					if(!postId.equals("postid")){
+						connect.setDepartmentId(employeenew.getDepartmentId());
+						connect.setEmployeeId(employeeId);
+						connect.setPostId(postid);
+						connectEmpPostService.updatetpostGradespostStaus(connect);
+						empPost.setEmployeeId(employeeId);
+						empPost.setDepartmentId(employeenew.getDepartmentId());
+						empPost.setPostGrades(postGrades);
+						empPost.setPostId(postId);				          
+					    connectEmpPostService.saveConnect(empPost);
+					}continue;	
+				}												 				
+			}				
+			returnData.setMessage("数据请求成功");
+			returnData.setReturnCode("3000");	
+			return returnData;
+		}else{
+			returnData.setMessage("必传参数为空");
+			returnData.setReturnCode("3006");
+			return returnData;
+		}
+	}
 	/**
 	 * 完善申请入职员工的入职信息
 	 * @param jsonString
@@ -133,10 +264,14 @@ public class EmployeeController {
 	@RequestMapping(value="/ImproveEmployeeOrientation", produces = "application/json;charset=UTF-8", method=RequestMethod.POST)
 	public ReturnData ImproveEmployeeOrientation(@RequestBody String jsonString,HttpServletRequest request,HttpServletResponse response){		 		
 		ReturnData returnData = new ReturnData();
+		//获取请求头信息
+		String companyId = request.getHeader("companyId");			
+		String operateUserId = request.getHeader("accessUserId");
+		
 		Employee employeenew = new Employee();
 		JSONObject obj = JSON.parseObject(jsonString);	
 		String employeeNo = obj.getString("employeeNo");		
-		Employee employeeNotemp =employeeService.findByemployeeNo(employeeNo);	
+		Employee employeeNotemp =employeeService.findByemployeeNo(employeeNo, companyId);	
 		if(employeeNotemp != null ){			
 			returnData.setMessage("数据请求失败");
 			returnData.setReturnCode("3001");
@@ -147,14 +282,14 @@ public class EmployeeController {
 		String employeeSex = obj.getString("employeeSex");
 		String loginName = obj.getString("loginName");
 		String employeePhone = obj.getString("employeePhone");
-		boolean employeephone = Pattern.matches("^[1][3,4,5,7,8][0-9]{9}$", employeePhone);
+		boolean employeephone = RegexUtil.matchPhone(employeePhone);
 		String employeeTwophone = obj.getString("employeeTwophone");
-		boolean employeetwophone = Pattern.matches("^[1][3,4,5,7,8][0-9]{9}$", employeeTwophone);
+		boolean employeetwophone = RegexUtil.matchPhone(employeeTwophone);
 		String directPersonId = obj.getString("directPersonId");
 		String entryTime = obj.getString("entryTime");
-		boolean entrytime = Pattern.matches("[0-9]{4}-[0-9]{2}-[0-9]{2}", entryTime);
+		boolean entrytime = RegexUtil.matchDate(entryTime);
 		String probationaryExpired = obj.getString("probationaryExpired");
-		boolean probationaryexpired = Pattern.matches("[0-9]{4}-[0-9]{2}-[0-9]{2}", probationaryExpired);
+		boolean probationaryexpired = RegexUtil.matchDate(probationaryExpired);
 		String departmentId = obj.getString("departmentId");
 		employeenew.setEmployeeId(employeeId);
 		employeenew.setEmployeeName(employeeName);
@@ -180,10 +315,7 @@ public class EmployeeController {
 		    transferjob.setDepartmentId(departmentId);
 		    transferjob.setTransferBeginTime(entryTime);
 		    transferjob.setTransferJobCause("新员工入职该岗位");
-		    //获取请求头信息
-			String companyId = request.getHeader("companyId");
-			String userId = request.getHeader("userId");
-		    transferjob.setUserId(userId);//操作人ID	
+		    transferjob.setUserId(operateUserId);//操作人ID	
 		    transferjob.setCompanyId(companyId);
 		    transferjobService.insertTransferjob(transferjob);
 		    //把员工关联的岗位添加到connect_emp_post_中间表里面					    
@@ -580,101 +712,7 @@ public class EmployeeController {
 	}
 	
 	
-	/**
-	 *  
-	 * 添加员工信息(如果用户没有注册，调该方法)
-	 * @param employee
-	 * @param request
-	 * @param response
-	 * @return
-	 * @throws JsonProcessingException
-	 */
-	@RequestMapping(value="/insertEmployee", produces = "application/json;charset=UTF-8", method=RequestMethod.POST)
-	public ReturnData insertEmployee(@RequestBody String employee,HttpServletRequest request,HttpServletResponse response) throws JsonProcessingException{								
-		ReturnData returnData = new ReturnData();
-		Employee employeenew = new Employee();
-		JSONObject jsonObject = JSONObject.parseObject(employee);
-		String employeeNo = jsonObject.getString("employeeNo");		
-		Employee employeeNotemp =employeeService.findByemployeeNo(employeeNo);	
-		if(employeeNotemp != null ){			
-			returnData.setMessage("数据请求失败");
-			returnData.setReturnCode("3001");
-			return returnData;			
-		}
-		 String loginName = jsonObject.getString("loginName");		 
-		 Employee loginname=employeeService.findByemploginName(loginName);		 
-		if(loginname != null ){			
-			returnData.setMessage("数据请求失败");
-			returnData.setReturnCode("3001");
-			return returnData;			
-		}else{
-			String employeeName = jsonObject.getString("employeeName");			
-			String employeeSex = jsonObject.getString("employeeSex");			
-			String employeePhone = jsonObject.getString("employeePhone");
-			boolean employeephone = Pattern.matches("^[1][3,4,5,7,8][0-9]{9}$", employeePhone);
-			String employeeTwophone = jsonObject.getString("employeeTwophone");
-			boolean employeetwophone = Pattern.matches("^[1][3,4,5,7,8][0-9]{9}$", employeeTwophone);
-			String directPersonId = jsonObject.getString("directPersonId");
-			String entryTime = jsonObject.getString("entryTime");
-			boolean entrytime = Pattern.matches("[0-9]{4}-[0-9]{2}-[0-9]{2}", entryTime);
-			String probationaryExpired = jsonObject.getString("probationaryExpired");
-			boolean probationaryexpired = Pattern.matches("[0-9]{4}-[0-9]{2}-[0-9]{2}", probationaryExpired);
-			String departmentId = jsonObject.getString("departmentId");
-			//String companyId ="977ACD3022C24B99AC9586CC50A8F786";
-			//获取请求头信息
-			String companyId = request.getHeader("companyId");
-			employeenew.setCompanyId(companyId);
-			employeenew.setEmployeeName(employeeName);
-			employeenew.setEmployeeSex(employeeSex);
-			employeenew.setLoginName(loginName);
-			employeenew.setEmployeePhone(employeePhone);
-			employeenew.setEmployeeTwophone(employeeTwophone);
-			employeenew.setDirectPersonId(directPersonId);			
-			employeenew.setEntryTime(entryTime);
-			employeenew.setEmployeeNo(employeeNo);
-			employeenew.setProbationaryExpired(probationaryExpired);
-			employeenew.setDepartmentId(departmentId);
-			employeenew.setEmployeeStatus("0");
-			if (!employeephone || !employeetwophone || !entrytime || !probationaryexpired) {				
-				returnData.setMessage("数据请求失败");
-				returnData.setReturnCode("3001");
-				return returnData;
-			}else{
-				employeeService.insertEmployee(employeenew);				
-				//添加员工信息的同时把员工形象添加到调动表里
-				Employee employeeNotemps =employeeService.findByemployeeNo(employeeNo);
-				String EmployeeId = employeeNotemps.getEmployeeId();
-			    Transferjob transferjob = new Transferjob();		    
-			    transferjob.setEmployeeId(EmployeeId);
-			    transferjob.setDepartmentId(departmentId);
-			    transferjob.setTransferBeginTime(entryTime);
-			    transferjob.setTransferJobCause("新员工入职该岗位");
-			    //获取请求头信息			
-				String userId = request.getHeader("userId");
-			    transferjob.setUserId(userId);//操作人ID	
-			    transferjob.setCompanyId(companyId);
-			    transferjobService.insertTransferjob(transferjob);
-			    //把员工关联的岗位添加到connect_emp_post_中间表里面
-			    String empId=employeenew.getEmployeeId();						
-				String postIdList = jsonObject.getString("postList");
-				JSONArray postIdList1 = JSON.parseArray(postIdList);
-				for(int i =0;i<postIdList1.size();i++){
-					JSONObject jobj = jsonObject.parseObject(postIdList1.getString(i)) ;
-							String postId = jobj.getString("postId");
-							String postGrades = jobj.getString("postGrades");
-							ConnectEmpPost empPost = new ConnectEmpPost();
-							empPost.setEmployeeId(empId);
-							empPost.setDepartmentId(departmentId);
-							empPost.setPostGrades(postGrades);
-							empPost.setPostId(postId);				          
-					 connectEmpPostService.saveConnect(empPost);				 				
-				}									
-				returnData.setMessage("数据请求成功");
-				returnData.setReturnCode("3000");
-				return returnData;
-			}								    			
-		}					
-	}
+	
 	/**
 	 * 查询申请入职的人员信息 
 	 * @param request
@@ -698,97 +736,7 @@ public class EmployeeController {
 		return returnData;		  
 	}
 	
-	/**
-	 * 编辑员工信息
-	 * @param employee
-	 * @param request
-	 * @param response
-	 * @return
-	 */
-	@RequestMapping(value="/updateByEmployee", produces = "application/json;charset=UTF-8", method=RequestMethod.POST)
-	public ReturnData updateByEmployee(@RequestBody String employee,HttpServletRequest request,HttpServletResponse response){		 		
-		JSONObject jsonObject = JSONObject.parseObject(employee);	
-		ReturnData returnData = new ReturnData();		
-		String employeeId = jsonObject.getString("employeeId");
-			if(!employeeId.equals("")){
-				Employee employeenew = new Employee();									
-					//String companyId ="977ACD3022C24B99AC9586CC50A8F786";
-					//获取请求头信息			
-					String companyId = request.getHeader("companyId");
-					Transferjob transferjob = transferjobService.selectByTransferjobpost(employeeId, companyId);
-					//上一次所在部门ID
-					String departmentid = transferjob.getDepartmentId();
-					//修改后传的部门id
-					String departmentId = jsonObject.getString("departmentId");	
-					if(departmentId !=departmentid){
-						ConnectEmpPost EmpPost = new ConnectEmpPost();			
-						EmpPost.setEmployeeId(employeeId);
-						//原来所在部门ID
-						EmpPost.setDepartmentId(departmentid);
-						//把原来所在部门所对应的岗位的状态改为1
-						connectEmpPostService.updateConnectpostStaus(EmpPost);
-						//员工所在部门修改后，也要修改调动表现在所在部门的员工部门
-						transferjobService.updateByTrandepartmentId(departmentId);
-					}
-					String employeeName = jsonObject.getString("employeeName");
-					String employeeSex = jsonObject.getString("employeeSex");
-					String loginName = jsonObject.getString("loginName");
-					String employeePhone = jsonObject.getString("employeePhone");
-					String employeeTwophone = jsonObject.getString("employeeTwophone");
-					String directPersonId = jsonObject.getString("directPersonId");
-					String entryTime = jsonObject.getString("entryTime");
-					String probationaryExpired = jsonObject.getString("probationaryExpired");
-					employeenew.setEmployeeName(employeeName);
-					employeenew.setEmployeeSex(employeeSex);
-					employeenew.setLoginName(loginName);
-					employeenew.setEmployeePhone(employeePhone);
-					employeenew.setEmployeeTwophone(employeeTwophone);
-					employeenew.setDirectPersonId(directPersonId);			
-					employeenew.setEntryTime(entryTime);			
-					employeenew.setProbationaryExpired(probationaryExpired);
-					employeenew.setDepartmentId(departmentId);					
-					employeeService.updateByEmployee(employeenew);   				
-				    //把员工关联的岗位添加到connect_emp_post_中间表里面					    
-					String postIdList = jsonObject.getString("postList");
-					JSONArray postIdList1 = JSON.parseArray(postIdList);			
-					for(int i =0;i<postIdList1.size();i++){
-						JSONObject jobj = jsonObject.parseObject(postIdList1.getString(i)) ;
-								String postId = jobj.getString("postId");
-								String postGrades = jobj.getString("postGrades");
-								ConnectEmpPost empPost = new ConnectEmpPost();
-								ConnectEmpPost connect = new ConnectEmpPost();
-								ConnectEmpPost connectemppos = connectEmpPostService.findByConnect(employeeId,departmentId, postGrades);
-								if(connectemppos==null){
-									empPost.setEmployeeId(employeeId);
-									empPost.setDepartmentId(departmentId);
-									empPost.setPostGrades(postGrades);
-									empPost.setPostId(postId);				          
-								    connectEmpPostService.saveConnect(empPost);
-								}
-								if(connectemppos!=null){
-									String postid = connectemppos.getPostId();
-									if(!postId.equals("postid")){
-										connect.setDepartmentId(departmentId);
-										connect.setEmployeeId(employeeId);
-										connect.setPostId(postid);
-										connectEmpPostService.updatetpostGradespostStaus(connect);
-										empPost.setEmployeeId(employeeId);
-										empPost.setDepartmentId(departmentId);
-										empPost.setPostGrades(postGrades);
-										empPost.setPostId(postId);				          
-									    connectEmpPostService.saveConnect(empPost);
-									}continue;	
-								}												 				
-					}				
-				returnData.setMessage("数据请求成功");
-				returnData.setReturnCode("3000");	
-				return returnData;
-			}else{
-				returnData.setMessage("数据请求失败");
-				returnData.setReturnCode("3001");
-				return returnData;
-			}
-	}
+	
 	
 	/**
 	 * 查询单条员工信息
@@ -798,24 +746,25 @@ public class EmployeeController {
 	 * @return
 	 */
 	@RequestMapping(value = "/selectByEmployee",produces = "application/json;charset=UTF-8", method=RequestMethod.POST)	
-	public ReturnData selectByEmployee(@RequestBody String employeeId,HttpServletRequest request,HttpServletResponse response){									
-		JSONObject obj = JSON.parseObject(employeeId);		
-		String employeeid = obj.getString("employeeId");	
+	public ReturnData selectByEmployee(@RequestBody String jsonString,HttpServletRequest request,HttpServletResponse response){									
+		JSONObject obj = JSON.parseObject(jsonString);
 		ReturnData returnData = new ReturnData();
-		String companyId = "977ACD3022C24B99AC9586CC50A8F786";
-		//获取请求头信息			
-		//String companyId = request.getHeader("companyId");
-         if(!employeeId.equals("")){ 
-        	 Employee emp =employeeService.selectByEmployee(employeeid,companyId);	
+		String employeeId = obj.getString("employeeId");	
+		String companyId = obj.getString("companyId");	
+		if(StringUtils.isEmpty(employeeId)){
+			companyId = request.getHeader("companyId");
+		}			
+         if(StringUtils.isNotEmpty(employeeId) && StringUtils.isNotEmpty(employeeId)){ 
+        	 Employee emp =employeeService.selectByEmployee(employeeId,companyId);	
         	 String departmentId = emp.getDepartmentId();
-             List<Post> PostNamelist = postService.selectByPostName(employeeid,departmentId);
+             List<Post> PostNamelist = postService.selectByPostName(employeeId,departmentId);
              emp.setPostList(PostNamelist);
              returnData.setData(emp);
              returnData.setMessage("数据请求成功");
 			 returnData.setReturnCode("3000");	
          }else{      	 
-	        	returnData.setMessage("数据请求失败");
-				returnData.setReturnCode("3001");				
+	        	returnData.setMessage("必传参数为空");
+				returnData.setReturnCode("3006");				
          }	
          return returnData;
 		}

@@ -3,9 +3,6 @@ package com.xiangshangban.organization.bean;
 import java.util.List;
 
 import com.xiangshangban.organization.exportexcel.ExcelResources;
-
-
-
 public class Employee {
    // ---现在用到的----
     private String employeeId;//员工ID
@@ -22,6 +19,7 @@ public class Employee {
     private String employeeStatus;//员工状态，0：在职，1：离职
     private String probationaryExpired;//试用到期日
     private String employeeImgUrl;//头像 
+    private String workAddress;//工作地
     //---连表查询的---
     private List<Post> postList;//岗位   
     private String companyName;//
@@ -29,6 +27,8 @@ public class Employee {
     private String departmentName;//部门名称
     private String postName;//岗位名称
     private String directPersonName;//直接汇报人名称    
+    private String operateUserId;// 操作人ID
+    private String infoStatus="1";//信息完整状态 0：不完整，1：完整
     //----现在没用到的----
 //    private String employeeBirthday;// 出生年月日    
 //    private String employeeTell;//电话号码  
@@ -178,6 +178,24 @@ public class Employee {
 	}
 	public void setCompanyName(String companyName) {
 		this.companyName = companyName;
+	}
+	public String getOperateUserId() {
+		return operateUserId;
+	}
+	public void setOperateUserId(String operateUserId) {
+		this.operateUserId = operateUserId;
+	}
+	public String getWorkAddress() {
+		return workAddress;
+	}
+	public void setWorkAddress(String workAddress) {
+		this.workAddress = workAddress;
+	}
+	public String getInfoStatus() {
+		return infoStatus;
+	}
+	public void setInfoStatus(String infoStatus) {
+		this.infoStatus = infoStatus;
 	}
 	
 	

@@ -15,6 +15,8 @@ import com.xiangshangban.organization.dao.EmployeeDao;
 import com.xiangshangban.organization.dao.PostDao;
 import com.xiangshangban.organization.util.FormatUtil;
 
+import scala.annotation.meta.setter;
+
 @Service
 public class DepartmentServiceImpl implements DepartmentService {
 	@Autowired
@@ -26,39 +28,18 @@ public class DepartmentServiceImpl implements DepartmentService {
 
 
 	@Override
-	public String deleteByDepartment(String departmentId) {
-		String i ="0";
-		try {
-			departmentDao.deleteByDepartment(departmentId);
-			i="1";
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return i;
+	public int deleteByDepartment(String departmentId) {
+		return departmentDao.deleteByDepartment(departmentId);
 	}
 
 	@Override
-	public String insertDepartment(Department department) {
-		String i ="0";
-		
-		try {
-			department.setDepartmentId(FormatUtil.createUuid());			
-			if(department.getDepartmentParentId().equals("")){
-				department.setDepartmentParentId("0");				
-			}else{
-				department.getDepartmentParentId();
-			}												
-			departmentDao.insertDepartment(department);
-			i="1";
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return i;
+	public int insertDepartment(Department department) {
+		department.setDepartmentId(FormatUtil.createUuid());
+		return departmentDao.insertDepartment(department);
 	}
 
 	@Override
 	public Department selectByDepartment(String departmentId,String companyId) {
-		// TODO Auto-generated method stub
 		return departmentDao.selectByDepartment(departmentId,companyId);
 	}
 

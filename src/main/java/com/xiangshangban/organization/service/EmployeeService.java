@@ -5,13 +5,16 @@ import java.util.Map;
 
 
 import com.xiangshangban.organization.bean.Employee;
+import com.xiangshangban.organization.bean.ReturnData;
 
 public interface EmployeeService {
 	String deleteByEmployee(String employeeId);
-	//用户注册调用方法
-	String insertEmployeeuser(Employee employee);  
-	//用户未注册调用方法
-	String insertEmployee(Employee employee);
+	/**
+	 * 添加员工。用户未注册时，加入注册操作；用户已注册，则做绑定操作。
+	 * @param employee
+	 * @return
+	 */
+	int insertEmployee(Employee employee);
    //查询单条员信息
     Employee selectByEmployee(String employeeId,String companyId);  
     String updateByEmployee(Employee employee);
@@ -30,7 +33,6 @@ public interface EmployeeService {
     List<Employee> selectByAllFnyeEmployee(Map<String,String> map);
     
     String updateByEmployeedept(Employee employee);
-    Employee findByemployeeNo(String employeeNo);
     Employee findByemploginName(String loginName);
     
     List<Employee> findByposcounttemp(String postId,String companyId);
@@ -42,4 +44,11 @@ public interface EmployeeService {
     //查询所有在职人员以及所属部门和主岗位
     List<Employee> findByempadmin(Map<String,String> map);
     List<Employee> findByempadmins(Map<String,String> map);
+    /**
+     * 根据工号查询人员信息
+     * @param employeeNo
+     * @param companyId
+     * @return
+     */
+	Employee findByemployeeNo(String employeeNo, String companyId);
 }

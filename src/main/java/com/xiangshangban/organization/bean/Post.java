@@ -14,6 +14,7 @@ public class Post {
     private String companyId;//公司ID   
     private String employeeName;//直属上司名称
     private String companyName;//公司名称    
+    private String postGrades;//岗位等级（0.副岗位，1.主岗位）
     private List<Employee> employeelist;
     
 	
@@ -91,6 +92,12 @@ public class Post {
 	}
 	public void setCompanyName(String companyName) {
 		this.companyName = companyName;
+	}
+	public String getPostGrades() {
+		return postGrades;
+	}
+	public void setPostGrades(String postGrades) {
+		this.postGrades = postGrades;
 	}
     
     
