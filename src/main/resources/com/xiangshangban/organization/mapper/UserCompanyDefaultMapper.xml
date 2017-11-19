@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiangshangban.organization.dao.UserCompanyDefaultDao">
+	<resultMap id="BaseResultMap" type="com.xiangshangban.organization.bean.UserCompanyDefault" >
+		<constructor >
+			<idArg column="user_id" jdbcType="VARCHAR" javaType="java.lang.String" />
+			<idArg column="company_id" jdbcType="VARCHAR" javaType="java.lang.String" />
+			<idArg column="current_option" jdbcType="VARCHAR" javaType="java.lang.String" />
+		</constructor>
+	</resultMap>
+	<sql id="Base_Column_List">
+		user_id, company_id, current_option
+	</sql>
+	<select id="selectByUserId" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select 
+		<include refid="Base_Column_List"/>
+		from user_company
+		where user_id = #{userId} 
+	</select>
+	<select id="selectByUserCompanyDefault" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select 
+		<include refid="Base_Column_List"/>
+		from user_company
+		where user_id = #{userId} AND current_option='1'
+	</select>
+	<select id="selectByUserIdAndCompanyId" resultMap="BaseResultMap">
+		select 
+		<include refid="Base_Column_List"/>
+		from user_company
+		where user_id = #{userId} AND company_id=#{companyId}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="com.xiangshangban.organization.bean.UserCompanyDefault" >
+		delete from user_company
+		where user_id = #{userId,jdbcType=VARCHAR}
+		and company_id = #{companyId,jdbcType=VARCHAR}
+	</delete>
+	<insert id="insert" parameterType="com.xiangshangban.organization.bean.UserCompanyDefault" >
+		insert into user_company (user_id, company_id, current_option
+		)
+		values (#{userId,jdbcType=VARCHAR}, #{companyId,jdbcType=VARCHAR}, #{currentOption,jdbcType=VARCHAR}
+		)
+	</insert>
+	<insert id="insertSelective" parameterType="com.xiangshangban.organization.bean.UserCompanyDefault" >
+		insert into user_company
+		<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="userId != null" >
+				user_id,
+			</if>
+			<if test="companyId != null" >
+				company_id,
+			</if>
+			<if test="currentOption != null" >
+				current_option,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides="," >
+			<if test="userId != null" >
+				#{userId,jdbcType=VARCHAR},
+			</if>
+			<if test="companyId != null" >
+				#{companyId,jdbcType=VARCHAR},
+			</if>
+			<if test="currentOption != null" >
+				#{currentOption,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+</mapper>

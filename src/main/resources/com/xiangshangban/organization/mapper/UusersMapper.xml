@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiangshangban.organization.dao.UusersDao">
+	<resultMap id="BaseResultMap" type="com.xiangshangban.organization.bean.Uusers">
+		<id column="userid" property="userid" />
+		<result column="account" property="account" />
+		<result column="userpwd" property="userpwd" />
+		<result column="temporarypwd" property="temporarypwd" />
+		<result column="salt" property="salt" />
+		<result column="username" property="username" />
+		<result column="phone" property="phone" />
+		<result column="create_time" property="createTime" />
+		<result column="last_login_time" jdbcType="DATE" property="lastLoginTime" />
+		<result column="status" property="status" />
+		<result column="wechat_id" property="wechatId" />
+		<result column="wechat_code" property="wechatCode" />
+		<result column="wechat_name" property="wecharName" />
+		<result column="company_id" property="companyId" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		userid, account, userpwd, temporarypwd, salt, username,
+		phone, create_time, last_login_time, status, wechat_id, wechat_code,
+		wechat_name
+	</sql>
+	<sql id="Base_Column_List_A">
+		u.userid, u.account, u.userpwd, u.temporarypwd, u.salt,
+		u.username, u.phone, u.create_time, u.last_login_time, u.status,
+		u.wechat_id, u.wechat_code, u.wechat_name
+	</sql>
+	
+	<select id="selectByPrimaryKey" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from organization.u_users
+		where status = '0' and userid = #{userid}
+	</select>
+	
+	<select id="selectById" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from organization.u_users
+		where userid = #{userid}
+	</select>
+	
+	
+	<select id="selectByPhone" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from u_users
+		where status = '1' and phone = #{phone}
+	</select>
+	<insert id="insert" parameterType="com.xiangshangban.organization.bean.Uusers">
+		insert into
+		organization.u_users (userid, account, userpwd,
+		temporarypwd, salt,
+		username, phone, create_time,
+		last_login_time, status, wechat_id,
+		wechat_code, wechat_name)
+		values (#{userid}, #{account},#{userpwd},
+		#{temporarypwd}, #{salt}, #{username}, #{phone}, #{createTime}
+		#{lastLoginTime}, #{status}, #{wechatId}, #{wechatCode},
+		#{wechatName})
+	</insert>
+	<insert id="insertSelective" parameterType="com.xiangshangban.organization.bean.Uusers">
+		insert into organization.u_users
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="userid != null">
+				userid,
+			</if>
+			<if test="account != null">
+				account,
+			</if>
+			<if test="userpwd != null">
+				userpwd,
+			</if>
+			<if test="temporarypwd != null">
+				temporarypwd,
+			</if>
+			<if test="salt != null">
+				salt,
+			</if>
+			<if test="username != null">
+				username,
+			</if>
+			<if test="phone != null">
+				phone,
+			</if>
+			<if test="createTime != null">
+				create_time,
+			</if>
+			<if test="lastLoginTime != null">
+				last_login_time,
+			</if>
+			<if test="status != null">
+				status,
+			</if>
+			<if test="wechatId != null">
+				wechat_id,
+			</if>
+			<if test="wechatCode != null">
+				wechat_code,
+			</if>
+			<if test="wechatName != null">
+				wechat_name,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="userid != null">
+				#{userid},
+			</if>
+			<if test="account != null">
+				#{account},
+			</if>
+			<if test="userpwd != null">
+				#{userpwd},
+			</if>
+			<if test="temporarypwd != null">
+				#{temporarypwd},
+			</if>
+			<if test="salt != null">
+				#{salt},
+			</if>
+			<if test="username != null">
+				#{username},
+			</if>
+			<if test="phone != null">
+				#{phone},
+			</if>
+			<if test="createTime != null">
+				to_char(now(), 'yyyy-MM-dd hh24:mi:ss'),
+			</if>
+			<if test="lastLoginTime != null">
+				#{lastLoginTime},
+			</if>
+			<if test="status != null">
+				#{status},
+			</if>
+			<if test="wechatId != null">
+				#{wechatId},
+			</if>
+			<if test="wechatCode != null">
+				#{wechatCode},
+			</if>
+			<if test="wechatName != null">
+				#{wechatName},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.xiangshangban.organization.bean.Uusers">
+		update organization.u_users
+		<set>
+			<if test="account != null">
+				account = #{account},
+			</if>
+			<if test="userpwd != null">
+				userpwd = #{userpwd},
+			</if>
+			<if test="temporarypwd != null">
+				temporarypwd = #{temporarypwd},
+			</if>
+			<if test="salt != null">
+				salt = #{salt},
+			</if>
+			<if test="username != null">
+				username = #{username},
+			</if>
+			<if test="phone != null">
+				phone = #{phone},
+			</if>
+			<if test="createTime != null">
+				create_time = #{createTime},
+			</if>
+			<if test="lastLoginTime != null">
+				last_login_time = #{lastLoginTime},
+			</if>
+			<if test="status != null">
+				status = #{status},
+			</if>
+			<if test="wechatId != null">
+				wechat_id = #{wechatId},
+			</if>
+			<if test="wechatCode != null">
+				wechat_code = #{wechatCode},
+			</if>
+			<if test="wechatName != null">
+				wechat_name = #{wechatName},
+			</if>
+		</set>
+		where userid = #{userid}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.xiangshangban.organization.bean.Uusers">
+		update
+		organization.u_users
+		set account = #{account},
+		userpwd = #{userpwd},
+		temporarypwd = #{temporarypwd},
+		salt = #{salt},
+		username = #{username},
+		phone = #{phone},
+		create_time = #{createTime},
+		last_login_time =
+		#{lastLoginTime,jdbcType=DATE},
+		status = #{status},
+		wechat_id =
+		#{wechatId},
+		wechat_code = #{wechatCode},
+		wechat_name = #{wechatName}
+		where userid = #{userid}
+	</update>
+	
+	<select id="SelectCountByPhone" parameterType="java.lang.String"
+		resultType="java.lang.Integer">
+		select count(userid)
+		from organization.u_users
+		where phone =
+		#{phone}
+	</select>
+</mapper>
