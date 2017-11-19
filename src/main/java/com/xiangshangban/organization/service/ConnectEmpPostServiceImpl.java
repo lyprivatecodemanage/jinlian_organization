@@ -1,6 +1,8 @@
 package com.xiangshangban.organization.service;
 
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.xiangshangban.organization.bean.ConnectEmpPost;
@@ -47,7 +49,7 @@ public class ConnectEmpPostServiceImpl implements ConnectEmpPostService {
 		}
 		return i;
 	}
-	@Override
+	/*@Override
 	public String updateConnectpostStaus(ConnectEmpPost connect) {
 		String i="0";
 		try {			
@@ -57,7 +59,7 @@ public class ConnectEmpPostServiceImpl implements ConnectEmpPostService {
 			e.printStackTrace();
 		}
 		return i;
-	}
+	}*/
 
 	@Override
 	public ConnectEmpPost findByConnectpostemp(String employeeId,String postId) {
@@ -92,8 +94,12 @@ public class ConnectEmpPostServiceImpl implements ConnectEmpPostService {
 
 	@Override
 	public ConnectEmpPost findByConnect(String employeeId, String departmentId,String postGrades) {
-		// TODO Auto-generated method stub
 		return connectEmpPostDao.findByConnect(employeeId, departmentId, postGrades);
+	}
+
+	@Override
+	public List<ConnectEmpPost> findEmpByPostId(String companyId, String postId) {
+		return null;
 	}
 
 

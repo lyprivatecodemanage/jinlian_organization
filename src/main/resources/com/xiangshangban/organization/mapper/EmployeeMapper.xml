@@ -64,7 +64,12 @@
     </where>
     limit #{pageRecordNum}::integer offset #{fromPageNum}::integer
   </select>
-    
+  <!-- 部门下在职员工 -->
+  <select id="findEmployeeByDepartmentId" resultMap="Employee">
+  	 select e.employee_id, e.employee_name,e.login_name, e.department_id
+	 from organization.employee_ e
+	 WHERE e.employee_status='1' AND e.company_id=#{companyId} AND e.department_id=#{e.departmentId}
+  </select>  
    <!--查询所有在职人员以及所属部门和主岗位 -->
   <select id="findByempadmin" parameterType="java.lang.String" resultMap="Employee">
     select DISTINCT 

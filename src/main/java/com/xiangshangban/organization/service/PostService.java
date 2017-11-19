@@ -6,7 +6,7 @@ import java.util.Map;
 import com.xiangshangban.organization.bean.Post;
 
 public interface PostService {
-	String deleteByPost(String postId);
+	int deleteByPost(String postId);
 	   
 	String insertPost(Post post);
  

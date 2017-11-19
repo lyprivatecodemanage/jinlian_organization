@@ -46,7 +46,6 @@ public class TransferjobServiceImpl implements TransferjobService {
 
 	@Override
 	public Transferjob selectByTransferjob(String transferJobId,String companyId) {
-		// TODO Auto-generated method stub
 		return transferjobDao.selectByTransferjob(transferJobId, companyId);
 	}
 
@@ -64,7 +63,6 @@ public class TransferjobServiceImpl implements TransferjobService {
 
 	@Override
 	public Transferjob selectByTransferjobpost(String employeeId,String companyId) {
-		// TODO Auto-generated method stub
 		return transferjobDao.selectByTransferjobpost(employeeId, companyId);
 	}
 
@@ -94,13 +92,11 @@ public class TransferjobServiceImpl implements TransferjobService {
 
 	@Override
 	public Transferjob findByempinfo(Map<String, String> map) {
-		// TODO Auto-generated method stub
 		return transferjobDao.findByempinfo(map);
 	}
 
 	@Override
 	public Transferjob findByempNullinfo(Map<String, String> map) {
-		// TODO Auto-generated method stub
 		return transferjobDao.findByempNullinfo(map);
 	}
 

@@ -43,5 +43,12 @@ public interface DepartmentService {
 	    Integer findDepartmentPageAllLength(Map<String, String> params);
 	    
 	    Department findByDepartmentById(String companyId, String deptId);
+	    /**
+	     * 查询所有子部门
+	     * @param departmentParentId
+	     * @param companyId
+	     * @return
+	     */
+	    public List<Department> getDepartmentChild(String departmentParentId,String companyId);
 
 }

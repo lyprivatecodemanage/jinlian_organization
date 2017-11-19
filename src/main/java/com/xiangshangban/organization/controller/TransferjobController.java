@@ -142,7 +142,7 @@ public class TransferjobController {
 				//原来所在部门ID
 				EmpPost.setDepartmentId(departmentid);
 				//把原来所在部门所对应的岗位的状态改为1
-				connectEmpPostService.updateConnectpostStaus(EmpPost);
+				//connectEmpPostService.updateConnectpostStaus(EmpPost);
 				//员工所在部门调动后，也要修改员工信息表现在所在部门的部门id
 				Employee employee = new Employee();		
 				employee.setDepartmentId(departmentId);
@@ -244,7 +244,7 @@ public class TransferjobController {
 			//原来所在部门ID
 			EmpPost.setDepartmentId(departmentid);
 			//把原来所在部门所对应的岗位的状态改为1
-			connectEmpPostService.updateConnectpostStaus(EmpPost);
+			//connectEmpPostService.updateConnectpostStaus(EmpPost);
 			//员工所在部门调动后，也要修改员工信息表现在所在部门的部门id
 			Employee employee = new Employee();		
 			employee.setDepartmentId(departmentId);

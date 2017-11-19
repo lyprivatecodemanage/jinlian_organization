@@ -36,9 +36,9 @@
 		LEFT JOIN organization.company_  c ON c.company_id=d.company_id
 		LEFT JOIN organization.employee_ e ON e.employee_id=d.employee_id
     where	
-	d.company_id=#{companyId}
+	d.company_id=#{companyId} AND d.status='1'
 	<if test="departmentId!=null and departmentId!=''">
-		AND d.department_id =#{departmentId}
+		AND (d.department_id =#{departmentId} OR d.department_parent_id =#{departmentId})
 	</if>
 	<if test="companyName!=null and companyName!=''">
 		AND company_name like '%${companyName}%'
@@ -59,7 +59,7 @@
 		LEFT JOIN organization.company_  c ON c.company_id=d.company_id
 		LEFT JOIN organization.employee_ e ON e.employee_id=d.employee_id  
 	    where	
-		d.company_id=#{companyId}
+		d.company_id=#{companyId} AND d.status='1' 
 		<if test="departmentId!=null and departmentId!=''">
 			AND (d.department_id =#{departmentId} OR d.department_parent_id =#{departmentId})
 		</if>
@@ -74,12 +74,14 @@
 		</if>
   </select>
 	<select id="findDepartmentTree"  resultMap="Department">
-	select d.department_id, d.department_numbe, d.department_name, d.department_describe,d.department_parent_id,d.company_id, d.employee_id,(select c.company_name from company_ c  where c.company_id=d.company_id),(select e.employee_name from employee_ e where e.employee_id=d.employee_id)
+	select d.department_id, d.department_numbe, d.department_name, d.department_describe,
+	d.department_parent_id,d.company_id, d.employee_id,
+	(select c.company_name from company_ c where c.company_id=d.company_id),
+	(select e.employee_name from employee_ e where e.employee_id=d.employee_id)
     from organization.department_  d 
 	where		
 		department_parent_id=#{departmentParentId,jdbcType=VARCHAR}
-		AND	
-		company_id=#{companyId}	
+		AND	d.company_id=#{companyId}	AND d.status='1'
 	</select>
   
    <select id="findByMoreDepartment"   parameterType="java.util.Map" resultMap="Department">  
@@ -104,27 +106,34 @@
   <!-- 查询所有部门 -->
   <select id="findByAllDepartment" parameterType="java.lang.String" resultMap="Department">
     select 
-    d.department_id, d.department_numbe, d.department_name, d.department_describe,d.department_parent_id,d.company_id, d.employee_id,(select c.company_name from organization.company_ c  where c.company_id=d.company_id),(select e.employee_name from organization.employee_ e where e.employee_id=d.employee_id)
+	    d.department_id, d.department_numbe, d.department_name, d.department_describe,
+	    d.department_parent_id,d.company_id, d.employee_id,
+	    (select c.company_name from organization.company_ c  where c.company_id=d.company_id),
+	    (select e.employee_name from organization.employee_ e where e.employee_id=d.employee_id)
     from organization.department_  d  
-    where	
-	d.company_id=#{companyId}	 
+    where d.company_id=#{companyId}	AND d.status='1' 
   </select>
   <!-- 查询部门下的所有子部门 -->
   <select id="findSingleAllDepartment" parameterType="java.lang.String" resultMap="Department">
-    select d.department_id, d.department_numbe, d.department_name, d.department_describe,d.department_parent_id,d.company_id, d.employee_id,(select c.company_name from organization.company_ c  where c.company_id=d.company_id),(select e.employee_name from organization.employee_ e where e.employee_id=d.employee_id)
+    select d.department_id, d.department_numbe, d.department_name, d.department_describe,
+    d.department_parent_id,d.company_id, d.employee_id,
+    (select c.company_name from organization.company_ c  where c.company_id=d.company_id),
+    (select e.employee_name from organization.employee_ e where e.employee_id=d.employee_id)
     from organization.department_  d  
     where d.department_parent_id = #{departmentId,jdbcType=VARCHAR}
     AND	
-	company_id=#{companyId}	
+	company_id=#{companyId} AND d.status='1'
   </select>
   
   <!-- 查询单个部门 --> 
   <select id="selectByDepartment" parameterType="java.lang.String" resultMap="Department">
-    select d.department_id, d.department_numbe, d.department_name, d.department_describe,d.department_parent_id,d.company_id, d.employee_id,(select c.company_name from organization.company_ c  where c.company_id=d.company_id),(select e.employee_name from organization.employee_ e where e.employee_id=d.employee_id)
+    select d.department_id, d.department_numbe, d.department_name, d.department_describe,
+    d.department_parent_id,d.company_id, d.employee_id,
+    (select c.company_name from organization.company_ c  where c.company_id=d.company_id),
+    (select e.employee_name from organization.employee_ e where e.employee_id=d.employee_id)
     from organization.department_  d  
     where department_id = #{departmentId,jdbcType=VARCHAR}
-    AND	
-	company_id=#{companyId}	
+    AND	company_id=#{companyId}	
   </select>
   
   <select id="findByDepartmentNumber" parameterType="java.lang.String" resultMap="Department">
@@ -138,11 +147,9 @@
     from organization.department_  d  
     where d.department_id=#{deptId} AND d.company_id=#{companyId}
   </select>  
-  <delete id="deleteByDepartment" parameterType="java.lang.String">
-    delete from organization.department_
-    where 
-    department_id = #{departmentId,jdbcType=VARCHAR}   
-  </delete>
+  <update id="deleteByDepartment" parameterType="java.lang.String">
+    update organization.department_ SET status='0' 
+  </update>
   
   
   <insert id="insertDepartment" parameterType="com.xiangshangban.organization.bean.Department">   

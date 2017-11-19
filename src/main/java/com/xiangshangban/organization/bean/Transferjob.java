@@ -33,9 +33,6 @@ public class Transferjob {
 	private String directPersonName;//调动直接汇报人名称
 	private String postId;//岗位ID
   
-    
-    
-    
 	public String getDirectPersonId() {
 		return directPersonId;
 	}

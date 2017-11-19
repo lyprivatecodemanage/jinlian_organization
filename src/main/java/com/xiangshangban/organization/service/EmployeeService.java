@@ -51,4 +51,11 @@ public interface EmployeeService {
      * @return
      */
 	Employee findByemployeeNo(String employeeNo, String companyId);
+	/**
+	 * 查询部门下在职人员
+	 * @param companyId 公司ID
+	 * @param departmentId 部门ID
+	 * @return
+	 */
+	List<Employee> findEmployeeByDepartmentId(String companyId, String departmentId);
 }

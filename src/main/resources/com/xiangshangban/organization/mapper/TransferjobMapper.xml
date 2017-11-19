@@ -27,7 +27,6 @@
 	    <result column="company_name" jdbcType="VARCHAR" property="companyName" />
 	    <result column="post_name" jdbcType="VARCHAR" property="postName" />  
 	    <result column="entry_time" jdbcType="VARCHAR" property="entryTime" />
-	    <result property="postStaus" column="post_staus" />
         <result property="isDelete" column="is_delete" /> 
         <result property="postGrades" column="post_grades" /> 
         <result property="postId" column="post_id" /> 
@@ -102,8 +101,7 @@
 	</select>
 
 
-	<select id="findByTransferjobInfo" parameterType="java.lang.String"
-		resultMap="Transferjob">
+	<select id="findByTransferjobInfo" parameterType="java.lang.String" resultMap="Transferjob">
 		select
 		t.transfer_job_id, t.transfer_begin_time,t.transfer_job_cause, t.transfer_end_time,
 		t.transfer_job_person, t.operating_time,e.employee_name,
@@ -155,7 +153,7 @@
 		insert into organization.transfer_job_ (transfer_job_id, employee_id,
 		transfer_begin_time,
 		department_id,transfer_job_cause, transfer_end_time,
-		operating_time,user_id,company_id,direct_person_id
+		operating_time,user_id,company_id,direct_person_id,post_id
 		)
 		values (
 		#{transferJobId,jdbcType=VARCHAR}, #{employeeId,jdbcType=VARCHAR},
@@ -163,7 +161,8 @@
 		#{departmentId,jdbcType=VARCHAR},#{transferJobCause,jdbcType=VARCHAR},
 		#{transferEndTime,jdbcType=VARCHAR},
 		#{operatingTime,jdbcType=VARCHAR},#{userId,jdbcType=VARCHAR},
-		#{companyId,jdbcType=VARCHAR},#{directPersonId,jdbcType=VARCHAR}
+		#{companyId,jdbcType=VARCHAR},#{directPersonId,jdbcType=VARCHAR},
+		#{postId}
 		)
 	</insert>
 
@@ -177,8 +176,8 @@
 		transfer_job_cause = #{transferJobCause,jdbcType=VARCHAR},
 		transfer_end_time = #{transferEndTime,jdbcType=VARCHAR},
 		operating_time = #{operatingTime,jdbcType=VARCHAR},
-		direct_person_id = #{directPersonId,jdbcType=VARCHAR}
-
+		direct_person_id = #{directPersonId,jdbcType=VARCHAR}, 
+		post_id = #{postId}
 		where
 		transfer_job_id = #{transferJobId,jdbcType=VARCHAR}
 	</update>

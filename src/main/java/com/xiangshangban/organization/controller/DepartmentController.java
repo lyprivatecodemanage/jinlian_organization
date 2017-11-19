@@ -18,9 +18,11 @@ import com.alibaba.fastjson.JSONObject;
 import com.xiangshangban.organization.bean.Company;
 import com.xiangshangban.organization.bean.Department;
 import com.xiangshangban.organization.bean.DepartmentTree;
+import com.xiangshangban.organization.bean.Employee;
 import com.xiangshangban.organization.bean.ReturnData;
 import com.xiangshangban.organization.service.CompanyService;
 import com.xiangshangban.organization.service.DepartmentService;
+import com.xiangshangban.organization.service.EmployeeService;
 
 @RestController
 @RequestMapping("/DepartmentController")
@@ -30,7 +32,8 @@ public class DepartmentController {
 	DepartmentService departmentService;
 	@Autowired
 	CompanyService companyService;
-	
+	@Autowired
+	EmployeeService employeeService;
 	
 	/**
 	 * 根据当前组织机构、部门名称、部门负责人查询部门信息
@@ -259,8 +262,35 @@ public class DepartmentController {
 	@RequestMapping(value="/deleteByDepartment", produces = "application/json;charset=UTF-8", method=RequestMethod.POST)
 	public ReturnData deleteByDepartment(@RequestBody String departmentId,HttpServletRequest request,HttpServletResponse response){				
 		ReturnData returnData = new ReturnData();
+		//获取请求头信息
+		String companyId = request.getHeader("companyId");
 		JSONObject obj = JSON.parseObject(departmentId);
 		JSONArray listdepartment = obj.getJSONArray("listdepartment");
+		if(listdepartment.size()==0){
+			returnData.setMessage("删除部门错误：未选择要删除的部门");
+			returnData.setReturnCode("4105");
+			return returnData;
+		}
+		//检查是否可以删除
+		for(int i=0;i<listdepartment.size();i++){
+			String departmentid = listdepartment.get(i).toString();
+			JSONObject objs = JSON.parseObject(departmentid);
+			departmentId=objs.getString("departmentId");	
+			if(StringUtils.isNotEmpty(departmentId)){
+				List<Department> deptlist = departmentService.getDepartmentChild(departmentId, companyId);
+				if(deptlist.size()>0){
+					returnData.setMessage("删除部门错误：存在子部门");
+					returnData.setReturnCode("4103");
+					return returnData;
+				}
+				List<Employee> emplist = employeeService.findEmployeeByDepartmentId(companyId, departmentId);
+				if(emplist.size()>0){
+					returnData.setMessage("删除部门错误：部门下有人员");
+					returnData.setReturnCode("4103");
+					return returnData;
+				}
+			}			
+		}
 		for(int i=0;i<listdepartment.size();i++){
 			String departmentid = listdepartment.get(i).toString();
 			JSONObject objs = JSON.parseObject(departmentid);
@@ -269,9 +299,6 @@ public class DepartmentController {
 				departmentService.deleteByDepartment(departmentId);
 				returnData.setMessage("数据请求成功");
 				returnData.setReturnCode("3000");			
-			}else{
-				returnData.setMessage("必传参数为空");
-				returnData.setReturnCode("3006");	
 			}			
 		}
 		return returnData;		

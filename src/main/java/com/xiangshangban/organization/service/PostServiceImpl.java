@@ -16,15 +16,8 @@ public class PostServiceImpl implements PostService {
 	PostDao postDao;
 	
 	@Override
-	public String deleteByPost(String postId) {
-		String i ="0";
-		try {
-			postDao.deleteByPost(postId);
-			i="1";
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return i;
+	public int deleteByPost(String postId) {
+		return postDao.deleteByPost(postId);
 	}
 
 	@Override

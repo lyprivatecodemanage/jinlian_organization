@@ -14,9 +14,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.xiangshangban.organization.bean.ConnectEmpPost;
+import com.xiangshangban.organization.bean.Employee;
 import com.xiangshangban.organization.bean.Post;
 import com.xiangshangban.organization.bean.ReturnData;
 import com.xiangshangban.organization.service.ConnectEmpPostService;
+import com.xiangshangban.organization.service.EmployeeService;
 import com.xiangshangban.organization.service.PostService;
 
 @RestController
@@ -90,20 +93,25 @@ public class PostController {
 		 * @return
 		 */
 		@RequestMapping(value="/deleteByPost", produces = "application/json;charset=UTF-8", method=RequestMethod.POST)
-		public Map<String, Object> deleteByPost(@RequestBody String postId,HttpServletRequest request,HttpServletResponse response){				
-			Map<String, Object> map=new HashMap<String, Object>();
+		public ReturnData deleteByPost(@RequestBody String postId,HttpServletRequest request,HttpServletResponse response){				
 			ReturnData returnData = new ReturnData();
-			JSONObject obj = JSON.parseObject(postId);
-			postId=obj.getString("postId");
+			//获取请求头信息
+			String companyId = request.getHeader("companyId");
 			if(StringUtils.isNotEmpty(postId)){				
 				returnData.setMessage("必传参数为空");
 				returnData.setReturnCode("3006");				
 			}else{
+				List<ConnectEmpPost> connectEmpPostlist = connectEmpPostService.findEmpByPostId(companyId, postId);
+				if(connectEmpPostlist.size()>0){
+					returnData.setMessage("删除岗位错误：岗位下有人员");
+					returnData.setReturnCode("4106");
+					return returnData;
+				}
 				postService.deleteByPost(postId);
 				returnData.setMessage("数据请求成功");
 				returnData.setReturnCode("3000");		
 			}	
-			return map;
+			return returnData;
 		}		
 		/**
 		 * @author 张慧

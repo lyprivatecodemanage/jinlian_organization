@@ -58,4 +58,7 @@ public interface EmployeeDao {
 	 * @return
 	 */
 	int insertUser(Employee employee);
+	
+	List<Employee> findEmployeeByDepartmentId(@Param("companyId")String companyId, 
+			@Param("departmentId")String departmentId);
 }

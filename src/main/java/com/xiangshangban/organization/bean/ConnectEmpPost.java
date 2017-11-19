@@ -4,12 +4,9 @@ public class ConnectEmpPost {
 	private String employeeId;//员工ID
 	private String postId;//岗位ID
 	private String departmentId;//部门ID
-	private String postStaus;//岗位状态（0.现在所在岗位  1原先所在岗位）	
 	private String isDelete;//岗位是否删除
 	private String postGrades;//岗位等级（0.副岗位  1.主岗位）
 
-	
-	
 	public String getPostGrades() {
 		return postGrades;
 	}
@@ -34,21 +31,9 @@ public class ConnectEmpPost {
 		return departmentId;
 	}
 
-
 	public void setDepartmentId(String departmentId) {
 		this.departmentId = departmentId;
 	}
-
-
-	public String getPostStaus() {
-		return postStaus;
-	}
-
-
-	public void setPostStaus(String postStaus) {
-		this.postStaus = postStaus;
-	}
-
 
 	public ConnectEmpPost(){}
 	

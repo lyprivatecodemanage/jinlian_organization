@@ -1,20 +1,19 @@
 package com.xiangshangban.organization.service;
 
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.xiangshangban.organization.bean.ConnectEmpPost;
 import com.xiangshangban.organization.bean.Employee;
 import com.xiangshangban.organization.bean.Post;
-import com.xiangshangban.organization.bean.ReturnData;
 import com.xiangshangban.organization.bean.Transferjob;
 import com.xiangshangban.organization.bean.UserCompanyDefault;
 import com.xiangshangban.organization.bean.Uusers;
@@ -24,9 +23,13 @@ import com.xiangshangban.organization.dao.TransferjobDao;
 import com.xiangshangban.organization.dao.UserCompanyDefaultDao;
 import com.xiangshangban.organization.dao.UusersDao;
 import com.xiangshangban.organization.util.FormatUtil;
+import com.xiangshangban.organization.util.HttpClientUtil;
+import com.xiangshangban.organization.util.HttpRequestFactory;
+import com.xiangshangban.organization.util.PropertiesUtils;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
+	Logger logger = Logger.getLogger(EmployeeServiceImpl.class);
 	@Autowired
 	EmployeeDao employeeDao;
 	@Autowired
@@ -53,12 +56,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public int insertEmployee(Employee employee) {
-		
 		Uusers user = usersDao.selectByPhone(employee.getLoginName());
 		if(user==null || StringUtils.isEmpty(user.getUserid())){//未注册，写入注册表	
 			user = new Uusers();
 			String employeeId = FormatUtil.createUuid();			
-			employee.setEmployeeId(employeeId);						
+			employee.setEmployeeId(employeeId);	
+			employee.setEmployeeStatus("0");
 			employeeDao.insertEmployee(employee);
 			
 			user.setUserid(employeeId);
@@ -75,6 +78,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 		}else{//添加绑定关系
 			UserCompanyDefault userCompany = userCompanyDefaultDao.selectByUserIdAndCompanyId(user.getUserid(), employee.getCompanyId());
 			if(userCompany==null || StringUtils.isEmpty(userCompany.getCompanyId())){//不存在绑定关系
+				userCompany = new UserCompanyDefault();
 				userCompany.setCompanyId(employee.getCompanyId());
 				userCompany.setCurrentOption("2");
 				userCompany.setUserId(user.getUserid());
@@ -85,15 +89,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 			employee.setEmployeeId(user.getUserid());						
 			employeeDao.insertEmployee(employee);//插入人员表
 		}
-	    Transferjob transferjob = new Transferjob();
-	    transferjob.setTransferJobId(FormatUtil.createUuid());
-	    transferjob.setEmployeeId(employee.getEmployeeId());
-	    transferjob.setDepartmentId(employee.getDepartmentId());
-	    transferjob.setTransferBeginTime(employee.getEntryTime());
-	    transferjob.setTransferJobCause("入职");		
-	    transferjob.setUserId(employee.getOperateUserId());//操作人ID	
-	    transferjob.setCompanyId(employee.getCompanyId());
-	    transferjobDao.insertTransferjob(transferjob);
+	    
 	    //把员工关联的岗位添加到connect_emp_post_中间表里面
 		for(Post post:employee.getPostList()){
 			String postId = post.getPostId();
@@ -102,8 +98,29 @@ public class EmployeeServiceImpl implements EmployeeService {
 			empPost.setDepartmentId(employee.getDepartmentId());
 			empPost.setPostGrades(post.getPostGrades());
 			empPost.setPostId(postId);				          
-			connectEmpPostDao.saveConnect(empPost);				 				
-		}	
+			connectEmpPostDao.saveConnect(empPost);	
+			if("1".equals(post.getPostGrades())){//主岗位添加调动记录
+				Transferjob transferjob = new Transferjob();
+			    transferjob.setTransferJobId(FormatUtil.createUuid());
+			    transferjob.setEmployeeId(employee.getEmployeeId());
+			    transferjob.setDepartmentId(employee.getDepartmentId());
+			    transferjob.setTransferBeginTime(employee.getEntryTime());
+			    transferjob.setTransferJobCause("入职");		
+			    transferjob.setUserId(employee.getOperateUserId());//操作人ID	
+			    transferjob.setCompanyId(employee.getCompanyId());
+			    transferjob.setPostId(postId);
+			    transferjobDao.insertTransferjob(transferjob);
+			}
+		}
+		List<Employee> cmdlist=new ArrayList<Employee>();
+		cmdlist.add(employee);
+		try {
+			String result = HttpClientUtil.sendRequet(PropertiesUtils.pathUrl("commandGenerate"), cmdlist);
+			logger.info("设备访问成功"+result);
+		} catch (IOException e) {
+			logger.info("将人员信息更新到设备模块时，获取路径出错");
+			e.printStackTrace();
+		}
 		return 1;
 	}
 	//查询单条员信息
@@ -126,13 +143,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public List<Employee> findByAllEmployee(Map<String,String> map) {
-		// TODO Auto-generated method stub
 		return employeeDao.findByAllEmployee(map);
 	}
 
 	@Override
 	public List<Employee> findByMoreEmployee(Map<String, String> map) {
-		// TODO Auto-generated method stub
 		return employeeDao.findByMoreEmployee(map);
 	}
 
@@ -257,6 +272,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 	public List<Employee> findByempadmins(Map<String, String> map) {
 		// TODO Auto-generated method stub
 		return employeeDao.findByempadmins(map);
+	}
+
+	@Override
+	public List<Employee> findEmployeeByDepartmentId(String companyId, String departmentId) {
+		return employeeDao.findEmployeeByDepartmentId(companyId, departmentId);
 	}
 
 	

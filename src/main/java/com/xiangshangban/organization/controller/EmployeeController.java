@@ -24,7 +24,6 @@ import com.xiangshangban.organization.bean.Employee;
 import com.xiangshangban.organization.bean.Post;
 import com.xiangshangban.organization.bean.ReturnData;
 import com.xiangshangban.organization.bean.Transferjob;
-import com.xiangshangban.organization.bean.User;
 import com.xiangshangban.organization.service.ConnectEmpPostService;
 import com.xiangshangban.organization.service.EmployeeService;
 import com.xiangshangban.organization.service.PostService;
@@ -108,7 +107,7 @@ public class EmployeeController {
 		}else{						
 			employeenew.setEmployeeName(userName);
 			employeenew.setEmployeePhone(Phone);
-			employeenew.setEmployeeId(userId);
+			employeenew.setOperateUserId(userId);
 			employeenew.setLoginName(Account);
 			employeenew.setCompanyId(companyId);						
 			if(!userName.equals("") || !Phone.equals("") || !userId.equals("") || !Account.equals("") || !companyId.equals("")){
@@ -140,6 +139,7 @@ public class EmployeeController {
 		
 		Employee employeenew = JSON.parseObject(jsonString, Employee.class);
 		employeenew.setOperateUserId(operateUserId);
+		employeenew.setCompanyId(companyId);
 		String employeeNo = employeenew.getEmployeeNo();
 		if(StringUtils.isNotEmpty(employeeNo)){
 			Employee employeeNotemp =employeeService.findByemployeeNo(employeeNo, companyId);
@@ -208,8 +208,6 @@ public class EmployeeController {
 				EmpPost.setEmployeeId(employeeId);
 				//原来所在部门ID
 				EmpPost.setDepartmentId(departmentid);
-				//把原来所在部门所对应的岗位的状态改为1
-				connectEmpPostService.updateConnectpostStaus(EmpPost);
 				//员工所在部门修改后，也要修改调动表现在所在部门的员工部门
 				transferjobService.updateByTrandepartmentId(employeenew.getDepartmentId());
 			}

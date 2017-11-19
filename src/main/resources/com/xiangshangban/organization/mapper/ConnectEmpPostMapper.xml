@@ -5,14 +5,13 @@
    		<result property="employeeId" column="employee_id" />
         <result property="postId" column="post_id" />       
         <result property="departmentId" column="department_id" /> 
-        <result property="postStaus" column="post_staus" />
         <result property="isDelete" column="is_delete" /> 
         <result property="postGrades" column="post_grades" />        
    </resultMap>
 
 
    <select id="findByConnect" parameterType="java.util.Map" resultMap="ConnectEmpPost">
-    select c.employee_id,e.employee_name,c.department_id,d.department_name,c.post_id,p.post_name,c.post_grades,c.post_staus
+    select c.employee_id,e.employee_name,c.department_id,d.department_name,c.post_id,p.post_name,c.post_grades
     from organization.connect_emp_post_ c 
     LEFT JOIN  organization.post_ p on  c.post_id=p.post_id
     LEFT JOIN  organization.employee_ e on e.employee_id=c.employee_id
@@ -23,8 +22,6 @@
     c.department_id=#{departmentId}
     and
     c.post_grades=#{postGrades}
-   and
-   c.post_staus='0'
    </select>
      
     <select id="findByConnectpostemp" parameterType="java.lang.String" resultMap="ConnectEmpPost">
@@ -59,8 +56,6 @@
 		employee_id=#{employeeId,jdbcType=VARCHAR}
 		and 
 		post_id=#{postId,jdbcType=VARCHAR}
-		and
-		
 	</delete>
 	
 	<delete id="deleteTransferjobConnect" parameterType="java.lang.String">
@@ -84,17 +79,6 @@
 		c.department_id=#{departmentId} 
 	</update>
 	
-	
-	<update id="updateConnectpostStaus" parameterType="com.xiangshangban.organization.bean.ConnectEmpPost">
-		update 
-		organization.connect_emp_post_
-		set 
-		post_staus='1' 
-		where 
-		employee_id=#{employeeId,jdbcType=VARCHAR}
-		and 
-		department_id=#{departmentId,jdbcType=VARCHAR}
-	</update>
 		
 	<update id="updateConnectDelehipostStaus" parameterType="com.xiangshangban.organization.bean.ConnectEmpPost">
 		update 
@@ -103,19 +87,6 @@
 		is_delete='1' 
 		where 
 		employee_id=#{employeeId,jdbcType=VARCHAR}		
-	</update>
-	
-	<update id="updatetpostGradespostStaus" parameterType="com.xiangshangban.organization.bean.ConnectEmpPost">
-		update 
-		organization.connect_emp_post_
-		set 
-		post_staus='1' 
-		where 
-		employee_id=#{employeeId,jdbcType=VARCHAR}
-		and
-		post_id=#{postId,jdbcType=VARCHAR}
-		and
-		department_id=#{departmentId,jdbcType=VARCHAR}				
 	</update>
 	
 	
