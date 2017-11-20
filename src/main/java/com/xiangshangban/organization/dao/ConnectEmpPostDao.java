@@ -1,6 +1,8 @@
 package com.xiangshangban.organization.dao;
 
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -16,4 +18,6 @@ public interface ConnectEmpPostDao {
 	int updatetpostGradespostStaus(ConnectEmpPost connect);	
 	ConnectEmpPost findByConnect(@Param("employeeId") String employeeId,@Param("departmentId") String departmentId,@Param("postGrades")String postGrades);	
 	ConnectEmpPost findByConnectpostemp(@Param("employeeId") String employeeId,@Param("postId") String postId);
+	
+	List<ConnectEmpPost> findEmpByPostId(String companyId, String postId);
 }

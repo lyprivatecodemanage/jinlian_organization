@@ -99,7 +99,7 @@ public class ConnectEmpPostServiceImpl implements ConnectEmpPostService {
 
 	@Override
 	public List<ConnectEmpPost> findEmpByPostId(String companyId, String postId) {
-		return null;
+		return connectEmpPostDao.findEmpByPostId(companyId, postId);
 	}
 
 
