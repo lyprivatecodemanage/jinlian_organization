@@ -1,9 +1,4 @@
 package com.xiangshangban.organization.controller;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Pattern;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
@@ -14,11 +9,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.xiangshangban.organization.bean.Post;
 import com.xiangshangban.organization.bean.ReturnData;
 import com.xiangshangban.organization.service.CheckPersonService;
-import com.xiangshangban.organization.service.ConnectEmpPostService;
-import com.xiangshangban.organization.service.PostService;
 
 @RestController
 @RequestMapping("/CheckPersonController")
@@ -27,7 +19,7 @@ public class CheckPersonController {
 	CheckPersonService checkPersonService;
 	/**
 	 * 加入公司企业管理员审核通过
-	 * @param post
+	 * @param userid
 	 * @param request
 	 * @param response
 	 * @return
@@ -38,10 +30,10 @@ public class CheckPersonController {
 		//获取请求头信息			
 		String companyId = request.getHeader("companyId");
 		JSONObject obj = JSON.parseObject(jsonString);
-		String userId = obj.getString("userId");
+		String userId = obj.getString("userid");
 		String status = obj.getString("status");
-		if(StringUtils.isNotEmpty(userId) && StringUtils.isNotEmpty(status) && ("0".equals(status)||"1".equals(status))){
-			if(!("0".equals(status)||"1".equals(status))){
+		if(StringUtils.isNotEmpty(userId) && StringUtils.isNotEmpty(status)){
+			if(!"1".equals(status)||!"2".equals(status)){
 				returnData.setMessage("参数格式错误");
 				returnData.setReturnCode("3007");
 				return returnData;

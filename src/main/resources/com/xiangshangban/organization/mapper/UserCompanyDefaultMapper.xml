@@ -6,10 +6,12 @@
 			<idArg column="user_id" jdbcType="VARCHAR" javaType="java.lang.String" />
 			<idArg column="company_id" jdbcType="VARCHAR" javaType="java.lang.String" />
 			<idArg column="current_option" jdbcType="VARCHAR" javaType="java.lang.String" />
+			<idArg column="is_active" jdbcType="VARCHAR" javaType="java.lang.String" />
+			<idArg column="info_status" jdbcType="VARCHAR" javaType="java.lang.String" />
 		</constructor>
 	</resultMap>
 	<sql id="Base_Column_List">
-		user_id, company_id, current_option
+		user_id, company_id, current_option,is_active,info_status
 	</sql>
 	<select id="selectByUserId" parameterType="java.lang.String" resultMap="BaseResultMap">
 		select 
@@ -35,9 +37,9 @@
 		and company_id = #{companyId,jdbcType=VARCHAR}
 	</delete>
 	<insert id="insert" parameterType="com.xiangshangban.organization.bean.UserCompanyDefault" >
-		insert into user_company (user_id, company_id, current_option
+		insert into user_company (user_id, company_id, current_option,is_active,info_status
 		)
-		values (#{userId,jdbcType=VARCHAR}, #{companyId,jdbcType=VARCHAR}, #{currentOption,jdbcType=VARCHAR}
+		values (#{userId,jdbcType=VARCHAR}, #{companyId,jdbcType=VARCHAR}, #{currentOption,jdbcType=VARCHAR}, #{isActive},#{infoStatus}
 		)
 	</insert>
 	<insert id="insertSelective" parameterType="com.xiangshangban.organization.bean.UserCompanyDefault" >
@@ -52,6 +54,12 @@
 			<if test="currentOption != null" >
 				current_option,
 			</if>
+			<if test="isActive!=null">
+				is_active,
+			</if>
+			<if test="infoStatus!=null">
+				info_status,
+			</if>
 		</trim>
 		<trim prefix="values (" suffix=")" suffixOverrides="," >
 			<if test="userId != null" >
@@ -63,6 +71,32 @@
 			<if test="currentOption != null" >
 				#{currentOption,jdbcType=VARCHAR},
 			</if>
+			<if test="isActive!=null">
+				#{isActive,jdbcType=VARCHAR},
+			</if>
+			<if test="infoStatus!=null">
+				#{infoStatus},
+			</if>
 		</trim>
 	</insert>
+	<update id="updateSelective" parameterType="com.xiangshangban.organization.bean.UserCompanyDefault" >
+		update user_company
+		<set>
+			<if test="userId != null" >
+				user_id=#{userId,jdbcType=VARCHAR},
+			</if>
+			<if test="companyId != null" >
+				company_id=#{companyId,jdbcType=VARCHAR},
+			</if>
+			<if test="currentOption != null" >
+				current_option=#{currentOption,jdbcType=VARCHAR},
+			</if>
+			<if test="isActive!=null">
+				is_active=#{isActive,jdbcType=VARCHAR}
+			</if>
+			<if test="infoStatus!=null">
+				info_status=#{infoStatus},
+			</if>
+		</set>
+	</update>
 </mapper>
