@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xiangshangban.organization.dao.CheckPersonDao">
-
-  <resultMap id="Company" type="com.xiangshangban.organization.bean.CheckPerson">
+  <resultMap id="BaseResultMap" type="com.xiangshangban.organization.bean.CheckPerson">
 	  <result column="userid" property="userid"/>
       <result column="companyid" property="companyid"/>
       <result column="status" property="status"/>
@@ -55,7 +54,7 @@
         #{status,jdbcType=VARCHAR},
       </if>
       <if test="applyTime != null">
-      	#{applyTime,jdbcType=VARCHAR},
+      	to_char(now(),'yyyy-MM-dd hh24:mi:ss'),
       </if>
     </trim>
   </insert>
