@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xiangshangban.organization.dao.CheckPersonDao">
+
+  <resultMap id="Company" type="com.xiangshangban.organization.bean.CheckPerson">
+	  <result column="userid" property="userid"/>
+      <result column="companyid" property="companyid"/>
+      <result column="status" property="status"/>
+      <result column="apply_time" property="applyTime"/>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    userid, companyid, status ,apply_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from check_pending_joincompany
+    where userid = #{userid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from check_pending_joincompany
+    where userid = #{userid,jdbcType=VARCHAR}
+    and companyid = #{companyid,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.xiangshangban.organization.bean.CheckPerson" >
+    insert into check_pending_joincompany (userid, companyid, status,apply_time
+      )
+    values (#{userid,jdbcType=VARCHAR}, #{companyid,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR},#{applyTime,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.xiangshangban.organization.bean.CheckPerson" >
+    insert into check_pending_joincompany
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="userid != null" >
+        userid,
+      </if>
+      <if test="companyid != null" >
+        companyid,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="applyTime != null">
+      	apply_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="userid != null" >
+        #{userid,jdbcType=VARCHAR},
+      </if>
+      <if test="companyid != null" >
+        #{companyid,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="applyTime != null">
+      	#{applyTime,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" >
+    update check_pending_joincompany
+    <set >
+      <if test="applyTime != null" >
+        apply_time = #{applyTime,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where userid = #{userid,jdbcType=VARCHAR}
+    and companyid = #{companyid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xiangshangban.organization.bean.CheckPerson" >
+    update check_pending_joincompany
+    set apply_time = #{applyTime,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR}
+    where userid = #{userid,jdbcType=VARCHAR}
+    and companyid = #{companyid,jdbcType=VARCHAR}
+  </update>
+  
+  <delete id="deleteById">
+  	delete from check_pending_joincompany
+  	where userid = #(userId,jdbcType=VARCHAR)
+  	and companyid = #{companyid,jdbcType=VARCHAR}
+  </delete>
+</mapper>
