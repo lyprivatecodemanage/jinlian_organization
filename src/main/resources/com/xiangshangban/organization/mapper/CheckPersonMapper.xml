@@ -6,6 +6,9 @@
       <result column="companyid" property="companyid"/>
       <result column="status" property="status"/>
       <result column="apply_time" property="applyTime"/>
+      <result column="username" property="username"/>
+      <result column="phone" property="phone"/>
+      <result column="info_status" property="infoStatus"/>
   </resultMap>
   <sql id="Base_Column_List" >
     userid, companyid, status ,apply_time
@@ -15,6 +18,19 @@
     <include refid="Base_Column_List" />
     from check_pending_joincompany
     where userid = #{userid,jdbcType=VARCHAR}
+  </select>
+  <select id="getcheckListByPage" parameterType="java.util.Map" resultMap="BaseResultMap">
+  	select a.userid, a.companyid, a.status , a.apply_time, b.info_status
+  	FROM check_pending_joincompany AS a
+	LEFT JOIN user_company AS b ON a.companyid=b.company_id AND a.userid=b.user_id
+	WHERE a.companyid=#{companyId} AND a.status='0' OR b.info_status='0'
+	limit #{pageRecordNum}::integer offset #{fromPageNum}::integer
+  </select>
+  <select id="getcheckListByPageAllLength" parameterType="java.util.Map" resultType="int">
+  	select count(a.userid)
+  	FROM check_pending_joincompany AS a
+	LEFT JOIN user_company AS b ON a.companyid=b.company_id AND a.userid=b.user_id
+	WHERE a.companyid=#{companyId} AND a.status='0' OR b.info_status='0'
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
     delete from check_pending_joincompany
