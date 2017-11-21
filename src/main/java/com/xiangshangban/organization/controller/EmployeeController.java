@@ -330,7 +330,8 @@ public class EmployeeController {
 	public Map<String,Object> selectByAllFnyeEmployee(@RequestBody String jsonString,HttpServletRequest request,HttpServletResponse response){		
 		Map<String,Object> result = new HashMap<String,Object>();
 		try{
-		String companyId = request.getHeader("companyId");
+		String companyId = request.getHeader("companyId");//公司id
+		String userId = request.getHeader("userId");//操作人id
 		JSONObject obj = JSON.parseObject(jsonString);			
 		String employeeName = obj.getString("employeeName");//员工姓名
 		String employeeSex = obj.getString("employeeSex");//员工性别
@@ -338,25 +339,80 @@ public class EmployeeController {
 		String postName = obj.getString("postName");//岗位名称
 		String employeeStatus = obj.getString("employeeStatus");//员工状态，0,在职，1,离职，2,删除
 		
-		String pageNum = obj.getString("pageNum");
-		String pageRecordNum = obj.getString("pageRecordNum");		
+		String pageNum = obj.getString("pageNum");//页码
+		String pageRecordNum = obj.getString("pageRecordNum");//页记录行数		
 		boolean pageNumFlag = Pattern.matches("\\d{1,}", pageNum);
 		boolean pageRecordNumFlag = Pattern.matches("\\d{1,}", pageRecordNum);
+		if(StringUtils.isEmpty("pageNum") || StringUtils.isEmpty(pageRecordNum)){
+			result.put("message", "参数不完整");
+			result.put("returnCode", "4018");
+			return result;
+		}
 		if(!pageNumFlag||!pageRecordNumFlag){
 			result.put("message", "参数格式不正确");
 			result.put("returnCode", "3007");			
 			return result;
-		}		
+		}
+		pageNum = String.valueOf((Integer.valueOf(pageNum)-1)*Integer.valueOf(pageRecordNum));
+		if(!StringUtils.isEmpty(employeeName)){
+			employeeName = "%"+employeeName+"%";
+		}
+		if(!StringUtils.isEmpty(employeeSex)){
+			boolean employeeSexFlag = Pattern.matches("0|1", employeeSex);
+			if(!employeeSexFlag){
+				result.put("message", "参数格式不正确");
+				result.put("returnCode", "3007");			
+				return result;
+			}
+		}
+		if(!StringUtils.isEmpty(departmentName)){
+			departmentName = "%"+departmentName+"%";
+		}
+		if(!StringUtils.isEmpty(postName)){
+			postName = "%"+postName+"%";
+		}
+		if(!StringUtils.isEmpty(employeeStatus)){
+			boolean employeeStatusFlag = Pattern.matches("0|1", employeeStatus);
+			if(!employeeStatusFlag){
+				result.put("message", "参数格式不正确");
+				result.put("returnCode", "3007");			
+				return result;
+			}
+		}
+		List<Employee> employeeList = employeeService.selectByAllFnyeEmployee(companyId,pageNum, pageRecordNum, employeeName, employeeSex, departmentName, postName, employeeStatus);
+		result.put("data", employeeList);
+		result.put("message","成功");
+		result.put("returnCode","3000");
+		return result;
+		}catch(Exception e){
+			e.printStackTrace();
+			result.put("message", "服务器错误");
+			result.put("returnCode", "3001");
+			return result;
+		}
+}
+	@RequestMapping("")
+	public Map<String,Object> search(@RequestBody String jsonString,HttpServletRequest request){
+		Map<String,Object> result = new HashMap<String,Object>();
+		try{
+			String companyId = request.getHeader("companyId");//公司id
+			String userId = request.getHeader("userId");//操作人id
+			JSONObject jsonObj = JSON.parseObject(jsonString);
+			String employeeId = jsonObj.getString("employeeId");
+			employeeService.selectByEmployee(employeeId, companyId);
+			result.put("message","成功");
+			result.put("returnCode","3000");
 			return result;
 		}catch(Exception e){
 			e.printStackTrace();
+			result.put("message", "服务器错误");
+			result.put("returnCode", "3001");
 			return result;
 		}
 		
 		
 		
-}
-	
+	}
 	
 	/**
 	 * 根据姓名、登录名、联系方式、性别、所属部门、岗位、入职时间、在职状态查询员工信息
@@ -365,7 +421,7 @@ public class EmployeeController {
 	 * @param response
 	 * @return
 	 */
-	@RequestMapping(value = "/findByMoreEmployee",produces = "application/json;charset=UTF-8", method=RequestMethod.POST)	
+	/*@RequestMapping(value = "/findByMoreEmployee",produces = "application/json;charset=UTF-8", method=RequestMethod.POST)	
 	public ReturnData findByMoreEmployee(@RequestBody String jsonString,HttpServletRequest request,HttpServletResponse response){						   		 	    		   
 		    ReturnData returnData = new ReturnData();
 		    Map<String,String> params = new HashMap<String, String>();
@@ -464,7 +520,7 @@ public class EmployeeController {
 					}																	
 			}
 			return returnData;
-		}
+		}*/
 
 	
 	/**
