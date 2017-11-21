@@ -1,405 +1,478 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xiangshangban.organization.dao.EmployeeDao">
-  <resultMap id="Employee" type="com.xiangshangban.organization.bean.Employee">     
-    <result column="employee_id" jdbcType="VARCHAR" property="employeeId" />
-    <result column="employee_name" jdbcType="VARCHAR" property="employeeName" />
-    <result column="login_name" jdbcType="VARCHAR" property="loginName" />    
-    <result column="employee_sex" jdbcType="VARCHAR" property="employeeSex" />
-    <result column="employee_no" jdbcType="VARCHAR" property="employeeNo" />
-    <result column="direct_person_id" jdbcType="VARCHAR" property="directPersonId" />
-    <result column="direct_person_name" jdbcType="VARCHAR" property="directPersonName" /> 
-    <result column="employee_phone" jdbcType="VARCHAR" property="employeePhone" />
-    <result column="employee_twophone" jdbcType="VARCHAR" property="employeeTwophone" />
-    <result column="entry_time" jdbcType="VARCHAR" property="entryTime" />
-    <result column="employee_status" jdbcType="VARCHAR" property="employeeStatus" />
-    <result column="probationary_expired" jdbcType="VARCHAR" property="probationaryExpired" />
-    <result column="department_id" jdbcType="VARCHAR" property="departmentId" /> 
-    <result column="department_name" jdbcType="VARCHAR" property="departmentName" />
-    <result column="company_name" jdbcType="VARCHAR" property="companyName" />
-    <result column="company_id" jdbcType="VARCHAR" property="companyId" />
-    <result column="post_name" jdbcType="VARCHAR" property="postName" />
-    <result column="post_id" jdbcType="VARCHAR" property="postId" />       
-    <result column="employee_img_url" jdbcType="VARCHAR" property="employeeImgUrl" /> 
-    <result column="work_address" jdbcType="VARCHAR" property="workAddress" />
-    <!-- <result column="employee_birthday" jdbcType="VARCHAR" property="employeeBirthday" />   
-    <result column="employee_tell" jdbcType="VARCHAR" property="employeeTell" />     
-    <result column="employee_email" jdbcType="VARCHAR" property="employeeEmail" />
-    <result column="employee_position" jdbcType="VARCHAR" property="employeePosition" />
-    <result column="contract_period" jdbcType="VARCHAR" property="contractPeriod" />   
-    <result column="is_manager" jdbcType="VARCHAR" property="isManager" />
-    <result column="contract_expired" jdbcType="VARCHAR" property="contractExpired" />  
-    <result column="probationary_period" jdbcType="VARCHAR" property="probationaryPeriod" />
-    <result column="emergency_contact_phone" jdbcType="VARCHAR" property="emergencyContactPhone" />
-    <result column="emergency_contact" jdbcType="VARCHAR" property="emergencyContact" />
-    <result column="phone_public" jdbcType="VARCHAR" property="phonePublic" />
-    <result column="shift_time" jdbcType="VARCHAR" property="shiftTime" /> 
-    <result column="employee_card_number" jdbcType="VARCHAR" property="employeeCardNumber" />  -->          
-  </resultMap>
-   
-    
-  <!-- 根据人员姓名，所属部门，主岗位动态查询所有在职人员以及所属部门和主岗位 -->
-  <select id="findBydynamicempadmin" parameterType="java.util.Map" resultMap="Employee">
-    select DISTINCT 
-	 e.employee_id, e.employee_name,e.login_name,e.employee_img_url,
-	 e.department_id,d.department_name,st.post_id,p.post_name
-	from organization.employee_ e 
-	lEFT JOIN  organization.department_ d  on d.department_id=e.department_id
-	LEFT JOIN  organization.connect_emp_post_ st on  st.employee_id=e.employee_id and st.post_grades='1'
-	LEFT JOIN  organization.post_  p on p.post_id=st.post_id
-	<where> 
-    <if test="companyId != null and companyId != ''">
-	 and e.company_id=#{companyId}   
-	 </if>   		
-	<if test="employeeName!=null and employeeName != ''">
-	and e.employee_id in (select e.employee_id from organization.employee_ e where e.employee_name like '%${employeeName}%')
-	</if>
-	<if test="departmentName!=null and departmentName != ''">
-	and e.employee_id in (select e.employee_id from organization.department_ d LEFT JOIN organization.employee_ e on d.department_id=e.department_id where d.department_name like '%${departmentName}%')
-	</if>
-	<if test="postName!=null and postName != ''">
-	and e.employee_id in (select st.employee_id from organization.post_ p LEFT JOIN organization.connect_emp_post_ st on st.post_id=p.post_id where p.post_name like '%${postName}%' )
-    </if>
-    and e.employee_status='0'    
-    </where>
-    limit #{pageRecordNum}::integer offset #{fromPageNum}::integer
-  </select>
-  <!-- 部门下在职员工 -->
-  <select id="findEmployeeByDepartmentId" resultMap="Employee">
-  	 select e.employee_id, e.employee_name,e.login_name, e.department_id
-	 from organization.employee_ e
-	 WHERE e.employee_status='1' AND e.company_id=#{companyId} AND e.department_id=#{e.departmentId}
-  </select>  
-   <!--查询所有在职人员以及所属部门和主岗位 -->
-  <select id="findByempadmin" parameterType="java.lang.String" resultMap="Employee">
-    select DISTINCT 
-	 e.employee_id, e.employee_name,e.login_name,e.employee_img_url,
-	 e.department_id,d.department_name,st.post_id,p.post_name
-	from organization.employee_ e 
-	lEFT JOIN  organization.department_ d  on d.department_id=e.department_id
-	LEFT JOIN  organization.connect_emp_post_ st on  st.employee_id=e.employee_id and st.post_grades='1'
-	LEFT JOIN  organization.post_  p on p.post_id=st.post_id
-	where     
-	e.company_id=#{companyId}					
-    and 
-    e.employee_status='0'
-    limit #{pageRecordNum}::integer offset #{fromPageNum}::integer
-  </select> 
-     <!--查询所有在职人员以及所属部门和主岗位 -->
-  <select id="findByempadmins" parameterType="java.lang.String" resultMap="Employee">
-    select DISTINCT 
-	 e.employee_id, e.employee_name,e.login_name,e.employee_img_url,
-	 e.department_id,d.department_name,st.post_id,p.post_name
-	from organization.employee_ e 
-	lEFT JOIN  organization.department_ d  on d.department_id=e.department_id
-	LEFT JOIN  organization.connect_emp_post_ st on  st.employee_id=e.employee_id and st.post_grades='1'
-	LEFT JOIN  organization.post_  p on p.post_id=st.post_id
-	where     
-	e.company_id=#{companyId}					
-    and 
-    e.employee_status='0'   
-  </select> 
-    
-    
-  <!-- 查询一个岗位下所有在职员工 -->
-  <select id="findByposcounttemp" parameterType="java.lang.String" resultMap="Employee">
-   SELECT  
-    e.employee_id,e.employee_name
-    FROM  organization.employee_ e 
-	LEFT JOIN organization.connect_emp_post_ c on c.employee_id=e.employee_id  and c.is_delete='0'
-	LEFT JOIN organization.post_ p  on  c.post_id = p.post_id  
-	where 
-	e.employee_status='0'	
-	and
-	p.post_id=#{postId}
-	and
-	e.company_id=#{companyId}		
-  </select>
-  <!-- 查询申请入职的人员信息 -->
-  <select id="findByruzhiempinfo" parameterType="java.lang.String" resultMap="Employee">
-  select 
-    e.employee_id,e.employee_name,e.employee_phone,e.login_name
-    from employee_ e
-    where 
-    e.company_id=#{companyId}
-    and
-    e.employee_no IS null  
-    limit #{pageRecordNum}::integer offset #{fromPageNum}::integer
-  </select>
-  
-  
-  <!-- 分页查询员工信息 -->
-   <select id="selectByAllFnyeEmployee" parameterType="java.lang.String" resultMap="Employee">
-   select DISTINCT e.employee_id, e.employee_name,e.login_name, e.employee_sex,e.employee_no, 
-       e.employee_phone,(select d.department_name from organization.department_ d where d.department_id=e.department_id),
-       e.employee_twophone,e.entry_time,e.department_id,e.company_id,c.company_name,
-       e.employee_status,e.probationary_expired,e.direct_person_id,y.employee_name AS direct_person_name,e.work_address
-	from organization.employee_ e 
- 
-	lEFT JOIN  organization.employee_ y  on y.employee_id=e.direct_person_id
-	lEFT JOIN  organization.department_ d  on d.department_id=e.department_id
-	lEFT JOIN  organization.company_ c on c.company_id=e.company_id
-	where  	
-	e.company_id=#{companyId}
-    and 
-    e.employee_status IN ('0','1')
-    limit #{pageRecordNum}::integer offset #{fromPageNum}::integer		 	  
-  </select>
-  
-  <!-- 查询所有员工信息 -->
-   <select id="selectByAllEmployee" parameterType="java.lang.String" resultMap="Employee">
-   select DISTINCT e.employee_id, e.employee_name,e.login_name, e.employee_sex,e.employee_no, 
-       e.employee_phone,(select d.department_name from organization.department_ d where d.department_id=e.department_id),
-       e.employee_twophone,e.entry_time,e.department_id,e.company_id,c.company_name,
-       e.employee_status,e.probationary_expired,e.direct_person_id,y.employee_name AS direct_person_name,y.work_address
-	from organization.employee_ e 
- 
-	lEFT JOIN  organization.employee_ y  on y.employee_id=e.direct_person_id
-	lEFT JOIN  organization.department_ d  on d.department_id=e.department_id
-	lEFT JOIN  organization.company_ c on c.company_id=e.company_id
-	where  	
-	e.company_id=#{companyId}
-    and 
-    e.employee_status IN ('0','1')    		 	  
-  </select>
-  
-  <select id="findBydeptemployee" parameterType="java.lang.String" resultMap="Employee">
-   SELECT 
-     e.employee_id, e.employee_name 
-  FROM  organization.employee_ e     	
-  LEFT JOIN organization.department_ d  on d.department_id=e.department_id 
-	where  	
-	d.department_id=#{departmentId}
-	and
-	e.company_id=#{companyId}
-    and 
-    e.employee_status='0'		 	  
-  </select>
-  
-  <!--员工批量删除,逻辑删除-->
-  <update id="batchUpdateTest" parameterType="java.lang.String">	
-	update organization.employee_ 
-	set 
-	employee_status='2'
-	where 
-	employee_id= #{employeeId}	
-  </update>
-  
-  <!--员工离职-->
-  <update id="batchUpdateStatus" parameterType="java.lang.String">	
-	update organization.employee_ 
-	set 
-	employee_status='1'
-	where 
-	employee_id= #{employeeId}	
-  </update>
-
-  <select id="findByLiZhiemployee" parameterType="java.lang.String" resultMap="Employee">
-   select DISTINCT e.employee_id, e.employee_name,e.login_name, e.employee_sex,e.employee_no, 
-       e.employee_phone,(select d.department_name from organization.department_ d where d.department_id=e.department_id),
-       e.employee_twophone,e.entry_time,e.department_id,e.company_id,c.company_name,
-       e.employee_status,e.probationary_expired,e.direct_person_id,y.employee_name AS direct_person_name,e.work_address
-	from organization.employee_ e 
- 
-	lEFT JOIN  organization.employee_ y  on y.employee_id=e.direct_person_id
-	lEFT JOIN  organization.department_ d  on d.department_id=e.department_id
-	lEFT JOIN  organization.company_ c on c.company_id=e.company_id
-	where 
-	e.employee_status='1'
-	AND	
-	e.company_id=#{companyId}
-	ORDER BY e.entry_time DESC
-	limit #{pageRecordNum}::integer offset #{fromPageNum}::integer
-  </select>
+	<resultMap id="Employee" type="com.xiangshangban.organization.bean.Employee">
+		<result column="employee_id" jdbcType="VARCHAR" property="employeeId" />
+		<result column="employee_name" jdbcType="VARCHAR" property="employeeName" />
+		<result column="login_name" jdbcType="VARCHAR" property="loginName" />
+		<result column="employee_sex" jdbcType="VARCHAR" property="employeeSex" />
+		<result column="employee_no" jdbcType="VARCHAR" property="employeeNo" />
+		<result column="direct_person_id" jdbcType="VARCHAR" property="directPersonId" />
+		<result column="direct_person_name" jdbcType="VARCHAR"
+			property="directPersonName" />
+		<result column="employee_phone" jdbcType="VARCHAR" property="employeePhone" />
+		<result column="employee_twophone" jdbcType="VARCHAR" property="employeeTwophone" />
+		<result column="entry_time" jdbcType="VARCHAR" property="entryTime" />
+		<result column="employee_status" jdbcType="VARCHAR" property="employeeStatus" />
+		<result column="probationary_expired" jdbcType="VARCHAR"
+			property="probationaryExpired" />
+		<result column="department_id" jdbcType="VARCHAR" property="departmentId" />
+		<result column="department_name" jdbcType="VARCHAR" property="departmentName" />
+		<result column="company_name" jdbcType="VARCHAR" property="companyName" />
+		<result column="company_id" jdbcType="VARCHAR" property="companyId" />
+		<result column="post_name" jdbcType="VARCHAR" property="postName" />
+		<result column="post_id" jdbcType="VARCHAR" property="postId" />
+		<result column="employee_img_url" jdbcType="VARCHAR" property="employeeImgUrl" />
+		<result column="work_address" jdbcType="VARCHAR" property="workAddress" />
+		<!-- <result column="employee_birthday" jdbcType="VARCHAR" property="employeeBirthday" 
+			/> <result column="employee_tell" jdbcType="VARCHAR" property="employeeTell" 
+			/> <result column="employee_email" jdbcType="VARCHAR" property="employeeEmail" 
+			/> <result column="employee_position" jdbcType="VARCHAR" property="employeePosition" 
+			/> <result column="contract_period" jdbcType="VARCHAR" property="contractPeriod" 
+			/> <result column="is_manager" jdbcType="VARCHAR" property="isManager" /> 
+			<result column="contract_expired" jdbcType="VARCHAR" property="contractExpired" 
+			/> <result column="probationary_period" jdbcType="VARCHAR" property="probationaryPeriod" 
+			/> <result column="emergency_contact_phone" jdbcType="VARCHAR" property="emergencyContactPhone" 
+			/> <result column="emergency_contact" jdbcType="VARCHAR" property="emergencyContact" 
+			/> <result column="phone_public" jdbcType="VARCHAR" property="phonePublic" 
+			/> <result column="shift_time" jdbcType="VARCHAR" property="shiftTime" /> 
+			<result column="employee_card_number" jdbcType="VARCHAR" property="employeeCardNumber" 
+			/> -->
+	</resultMap>
 
 
- <select id="findByemployeeNo" parameterType="java.lang.String" resultMap="Employee">
-    select 
-    e.employee_no,employee_id
-    from employee_ e
-    where 
-    e.employee_no IS NOT null
-    AND 
-    e.employee_no= #{employeeNo,jdbcType=VARCHAR}
-    and 
-    e.company_id=#{companyId}
-  </select>
+	<!-- 根据人员姓名，所属部门，主岗位动态查询所有在职人员以及所属部门和主岗位 -->
+	<select id="findBydynamicempadmin" parameterType="java.util.Map"
+		resultMap="Employee">
+		select DISTINCT
+		e.employee_id, e.employee_name,e.login_name,e.employee_img_url,
+		e.department_id,d.department_name,st.post_id,p.post_name
+		from organization.employee_ e
+		lEFT JOIN organization.department_ d on d.department_id=e.department_id
+		LEFT JOIN organization.connect_emp_post_ st on
+		st.employee_id=e.employee_id and st.post_grades='1'
+		LEFT JOIN organization.post_ p on p.post_id=st.post_id
+		<where>
+			<if test="companyId != null and companyId != ''">
+				and e.company_id=#{companyId}
+			</if>
+			<if test="employeeName!=null and employeeName != ''">
+				and e.employee_id in (select e.employee_id from organization.employee_
+				e where e.employee_name like '%${employeeName}%')
+			</if>
+			<if test="departmentName!=null and departmentName != ''">
+				and e.employee_id in (select e.employee_id from
+				organization.department_ d LEFT JOIN organization.employee_ e on
+				d.department_id=e.department_id where d.department_name like
+				'%${departmentName}%')
+			</if>
+			<if test="postName!=null and postName != ''">
+				and e.employee_id in (select st.employee_id from organization.post_ p
+				LEFT JOIN organization.connect_emp_post_ st on st.post_id=p.post_id
+				where p.post_name like '%${postName}%' )
+			</if>
+			and e.employee_status='0'
+		</where>
+		limit #{pageRecordNum}::integer offset #{fromPageNum}::integer
+	</select>
+	<!-- 部门下在职员工 -->
+	<select id="findEmployeeByDepartmentId" resultMap="Employee">
+		select e.employee_id, e.employee_name,e.login_name, e.department_id
+		from organization.employee_ e
+		WHERE e.employee_status='1' AND e.company_id=#{companyId} AND
+		e.department_id=#{e.departmentId}
+	</select>
+	<!--查询所有在职人员以及所属部门和主岗位 -->
+	<select id="findByempadmin" parameterType="java.lang.String"
+		resultMap="Employee">
+		select DISTINCT
+		e.employee_id, e.employee_name,e.login_name,e.employee_img_url,
+		e.department_id,d.department_name,st.post_id,p.post_name
+		from organization.employee_ e
+		lEFT JOIN organization.department_ d on d.department_id=e.department_id
+		LEFT JOIN organization.connect_emp_post_ st on
+		st.employee_id=e.employee_id and st.post_grades='1'
+		LEFT JOIN organization.post_ p on p.post_id=st.post_id
+		where
+		e.company_id=#{companyId}
+		and
+		e.employee_status='0'
+		limit #{pageRecordNum}::integer offset #{fromPageNum}::integer
+	</select>
+	<!--查询所有在职人员以及所属部门和主岗位 -->
+	<select id="findByempadmins" parameterType="java.lang.String"
+		resultMap="Employee">
+		select DISTINCT
+		e.employee_id, e.employee_name,e.login_name,e.employee_img_url,
+		e.department_id,d.department_name,st.post_id,p.post_name
+		from organization.employee_ e
+		lEFT JOIN organization.department_ d on d.department_id=e.department_id
+		LEFT JOIN organization.connect_emp_post_ st on
+		st.employee_id=e.employee_id and st.post_grades='1'
+		LEFT JOIN organization.post_ p on p.post_id=st.post_id
+		where
+		e.company_id=#{companyId}
+		and
+		e.employee_status='0'
+	</select>
 
-  <select id="findByemploginName" parameterType="java.lang.String" resultMap="Employee">
-    select 
-    e.login_name
-    from organization.employee_ e
-    where 
-    e.login_name = #{loginName,jdbcType=VARCHAR}
-  </select>
-  <!-- 查询单条人员信息 -->
-  <select id="selectByEmployee" parameterType="java.lang.String" resultMap="Employee">  
-    select DISTINCT e.employee_id, e.employee_name,e.login_name, e.employee_sex,e.employee_no, 
-       e.employee_phone,(select d.department_name from organization.department_ d where d.department_id=e.department_id),
-       e.employee_twophone,e.entry_time,e.department_id,e.company_id,c.company_name,
-       e.employee_status,e.probationary_expired,e.direct_person_id,y.employee_name AS direct_person_name,e.work_address
-	from organization.employee_ e 
- 
-	lEFT JOIN  organization.employee_ y  on y.employee_id=e.direct_person_id
-	lEFT JOIN  organization.department_ d  on d.department_id=e.department_id
-	lEFT JOIN  organization.company_ c on c.company_id=e.company_id
-    where  
-     e.employee_id = #{employeeId,jdbcType=VARCHAR}
-   and 
-    e.company_id=#{companyId}        
-  </select>
-  
-  <!-- 所有在职员工的信息 -->
-  <select id="findByAllEmployee" parameterType="java.lang.String" resultMap="Employee">  
-    select DISTINCT e.employee_id, e.employee_name,e.login_name, e.employee_sex,e.employee_no, 
-       e.employee_phone,(select d.department_name from organization.department_ d where d.department_id=e.department_id),
-       e.employee_twophone,e.entry_time,e.department_id,e.company_id,c.company_name,
-       e.employee_status,e.probationary_expired,e.direct_person_id,y.employee_name AS direct_person_name,e.work_address
-	from organization.employee_ e 
- 
-	lEFT JOIN  organization.employee_ y  on y.employee_id=e.direct_person_id
-	lEFT JOIN  organization.department_ d  on d.department_id=e.department_id
-	lEFT JOIN  organization.company_ c on c.company_id=e.company_id
-    where 
-    e.employee_status='0'
-    AND	
-	e.company_id=#{companyId} 
-    ORDER BY e.entry_time DESC
-    limit #{pageRecordNum}::integer offset #{fromPageNum}::integer
-  </select>
-  
-  <!-- 根据姓名、联系方式、性别、所属部门、岗位、入职时间、在职状态查询员工信息 -->
-  <select id="findByMoreEmployee"   parameterType="java.util.Map" resultMap="Employee">  
-    select DISTINCT e.employee_id, e.employee_name,e.login_name, e.employee_sex,e.employee_no, 
-       e.employee_phone,(select d.department_name from organization.department_ d where d.department_id=e.department_id),
-       e.employee_twophone,e.entry_time,e.department_id,e.company_id,c.company_name,
-       e.employee_status,e.probationary_expired,e.direct_person_id,y.employee_name AS direct_person_name,e.work_address
-	from organization.employee_ e 
- 
-	lEFT JOIN  organization.employee_ y  on y.employee_id=e.direct_person_id
-	lEFT JOIN  organization.department_ d  on d.department_id=e.department_id
-	lEFT JOIN  organization.company_ c on c.company_id=e.company_id
-    <where> 
-     <if test="employeeName!=null and employeeName != ''">
-      and e.employee_id in (select employee_id from  organization.employee_  where  employee_name like '%${employeeName}%')
-     </if>
-     <if test="loginName!=null and loginName != ''">
-      and e.employee_id in (select employee_id from  organization.employee_  where  login_name like '%${loginName}%')
-     </if>     
-     <if test="employeePhone!=null and employeePhone != ''">
-     and e.employee_id  in (select employee_id from  organization.employee_  where  employee_phone like '%${employeePhone}%')
-     </if>
-     <if test="employeeTwophone!=null and employeeTwophone != ''">
-     and e.employee_id in (select employee_id from  organization.employee_  where  employee_twophone like '%${employeeTwophone}%') 
-     </if>     
-     <if test="employeeSex!=null and employeeSex != ''">
-     and e.employee_id in (select employee_id from  organization.employee_  where  employee_sex like '%${employeeSex}%')
-     </if>         
-     <if test="departmentName!=null and departmentName != ''">
-     and e.employee_id in (select employee_id from  organization.employee_  where  department_id in (select DISTINCT d.department_id from organization.department_ d where d.department_name like '%${departmentName}%'))
-     </if> 
-     <if test="postName!=null and postName != ''">
-     and e.employee_id in (select DISTINCT c.employee_id from organization.connect_emp_post_ c LEFT JOIN organization.post_ p on c.post_id=p.post_id   where c.post_id in (select p.post_id from organization.post_ p where p.post_name like '%${postName}%'))  
-     </if>     
-     <if test="entryTime!=null and entryTime != ''">
-     and e.employee_id in (select employee_id from  organization.employee_  where  entry_time like '%${entryTime}%')
-     </if>        
-     <if test="employeeStatus!=null and employeeStatus != ''">
-     and e.employee_id in (select employee_id from  organization.employee_  where  employee_status like '%${employeeStatus}%')
-     </if> 
-	 <if test="companyId != null and companyId != ''">
-	 and e.company_id=#{companyId}   
-	 </if>     		        
-     </where>     
-     ORDER BY e.entry_time DESC 
-     limit #{pageRecordNum}::integer offset #{fromPageNum}::integer
-  </select>     
-  <select id="getUserIdByLoginName" parameterType="String" resultType="String"> 
-  	select user_id from organization.u_users where phone=#{loginName} and status='1'
-  </select>
-  <delete id="deleteByEmployee" parameterType="java.lang.String"> 
-    delete from organization.employee_
-    where 
-    employee_id = #{employeeId,jdbcType=VARCHAR}
-  </delete>
-  
-  <insert id="insertEmployee" parameterType="com.xiangshangban.organization.bean.Employee">    
-    insert into organization.employee_ (
-      employee_id, 
-      employee_name, 
-      employee_sex,
-      login_name,       
-      employee_phone,
-      employee_twophone,
-      employee_no,
-      direct_person_id, 
-      entry_time, 
-      probationary_expired,               
-      department_id,
-      company_id,
-      employee_status,
-      work_address
-      )
-    values (
-      #{employeeId,jdbcType=VARCHAR}, 
-      #{employeeName,jdbcType=VARCHAR}, 
-      #{employeeSex,jdbcType=VARCHAR}, 
-      #{loginName,jdbcType=VARCHAR},                      
-      #{employeePhone,jdbcType=VARCHAR},
-      #{employeeTwophone,jdbcType=VARCHAR}, 
-      #{employeeNo,jdbcType=VARCHAR}, 
-      #{directPersonId,jdbcType=VARCHAR}, 
-      #{entryTime,jdbcType=VARCHAR}, 
-      #{probationaryExpired,jdbcType=VARCHAR},                         
-      #{departmentId,jdbcType=VARCHAR},
-      #{companyId,jdbcType=VARCHAR},
-      #{employeeStatus,jdbcType=VARCHAR}, 
-      #{workAddress}   
-      )
-  </insert>
-  
-  <update id="updateByEmployee" parameterType="com.xiangshangban.organization.bean.Employee"> 
-    update organization.employee_
-    set 
-      employee_name = #{employeeName,jdbcType=VARCHAR},
-      employee_sex = #{employeeSex,jdbcType=VARCHAR},
-      login_name = #{loginName,jdbcType=VARCHAR},        
-      direct_person_id = #{directPersonId,jdbcType=VARCHAR},    
-      employee_phone = #{employeePhone,jdbcType=VARCHAR},
-      employee_twophone = #{employeeTwophone,jdbcType=VARCHAR},          
-      entry_time = #{entryTime,jdbcType=VARCHAR},             
-      probationary_expired = #{probationaryExpired,jdbcType=VARCHAR},           
-      department_id=#{departmentId,jdbcType=VARCHAR},
-      work_address=#{workAddress}                  
-    where 
-       employee_id = #{employeeId,jdbcType=VARCHAR}
-  </update>
-  
-  <update id="updateByEmployeeapprove" parameterType="com.xiangshangban.organization.bean.Employee"> 
-    update organization.employee_
-    set 
-      employee_name = #{employeeName,jdbcType=VARCHAR},
-      employee_sex = #{employeeSex,jdbcType=VARCHAR},
-      login_name = #{loginName,jdbcType=VARCHAR},        
-      direct_person_id = #{directPersonId,jdbcType=VARCHAR},    
-      employee_phone = #{employeePhone,jdbcType=VARCHAR},
-      employee_twophone = #{employeeTwophone,jdbcType=VARCHAR},          
-      entry_time = #{entryTime,jdbcType=VARCHAR},             
-      probationary_expired = #{probationaryExpired,jdbcType=VARCHAR},           
-      department_id=#{departmentId,jdbcType=VARCHAR},
-      employee_status=#{employeeStatus,jdbcType=VARCHAR},
-      work_address=#{workAddress}                  
-    where 
-       employee_id = #{employeeId,jdbcType=VARCHAR}
-  </update>
-  
-  
-  <update id="updateByEmployeedept" parameterType="com.xiangshangban.organization.bean.Employee"> 
-    update organization.employee_
-    set                  
-      department_id=#{departmentId,jdbcType=VARCHAR}                  
-    where 
-      employee_id = #{employeeId,jdbcType=VARCHAR}
-  </update>
-  
+
+	<!-- 查询一个岗位下所有在职员工 -->
+	<select id="findByposcounttemp" parameterType="java.lang.String"
+		resultMap="Employee">
+		SELECT
+		e.employee_id,e.employee_name
+		FROM organization.employee_ e
+		LEFT JOIN organization.connect_emp_post_ c on c.employee_id=e.employee_id
+		and c.is_delete='0'
+		LEFT JOIN organization.post_ p on c.post_id = p.post_id
+		where
+		e.employee_status='0'
+		and
+		p.post_id=#{postId}
+		and
+		e.company_id=#{companyId}
+	</select>
+	<!-- 查询申请入职的人员信息 -->
+	<select id="findByruzhiempinfo" parameterType="java.lang.String"
+		resultMap="Employee">
+		select
+		e.employee_id,e.employee_name,e.employee_phone,e.login_name
+		from employee_ e
+		where
+		e.company_id=#{companyId}
+		and
+		e.employee_no IS null
+		limit #{pageRecordNum}::integer offset #{fromPageNum}::integer
+	</select>
+
+	<sql id="BaseColumnList">
+		employee_id, employee_name, employeeSex, department_id, company_id,
+		direct_person_id,employee_phone, employee_twophone, entry_time,
+		employee_status, probationary_expired,employee_img_url, work_address
+	</sql>
+	<!-- 分页查询员工信息 -->
+	<select id="selectByAllFnyeEmployee" parameterType="java.lang.String"
+		resultMap="Employee">
+		select <include refid="BaseColumnList"/>
+		from organization.employee_ e,department_ d,post_ p 
+		where 
+		company_id = #{companyId} and e.department_id = d.department_id and d.department_id = p.department_id
+			<if test="employeeName != null">
+				and employee_name = #{employeeName}
+			</if>
+			<if test="employeeSex != null">
+				and employee_sex = #{employeeSex}
+			</if>
+			<if test="departmentName != null">
+				and department_name = #{departmentName}
+			</if>
+			<if test="postName != null">
+				and post_name = #{postName}
+			</if>
+			<if test="employeeStatus != null">
+				and employee_status = #{employeeStatus}
+			</if>
+		limit #{numRecordCount} :: integer offset #{numPage} 
+	</select>
+
+	<!-- 查询所有员工信息 -->
+	<select id="selectByAllEmployee" parameterType="java.lang.String"
+		resultMap="Employee">
+		select DISTINCT e.employee_id, e.employee_name,e.login_name,
+		e.employee_sex,e.employee_no,
+		e.employee_phone,(select d.department_name from organization.department_ d where
+		d.department_id=e.department_id),
+		e.employee_twophone,e.entry_time,e.department_id,e.company_id,c.company_name,
+		e.employee_status,e.probationary_expired,e.direct_person_id,y.employee_name
+		AS direct_person_name,y.work_address
+		from organization.employee_ e
+
+		lEFT JOIN organization.employee_ y on y.employee_id=e.direct_person_id
+		lEFT JOIN organization.department_ d on
+		d.department_id=e.department_id
+		lEFT JOIN organization.company_ c on c.company_id=e.company_id
+		where
+		e.company_id=#{companyId}
+		and
+		e.employee_status IN ('0','1')
+	</select>
+
+	<select id="findBydeptemployee" parameterType="java.lang.String"
+		resultMap="Employee">
+		SELECT
+		e.employee_id, e.employee_name
+		FROM organization.employee_ e
+		LEFT JOIN organization.department_ d on d.department_id=e.department_id
+		where
+		d.department_id=#{departmentId}
+		and
+		e.company_id=#{companyId}
+		and
+		e.employee_status='0'
+	</select>
+
+	<!--员工批量删除,逻辑删除 -->
+	<update id="batchUpdateTest" parameterType="java.lang.String">
+		update organization.employee_
+		set
+		employee_status='2'
+		where
+		employee_id= #{employeeId}
+	</update>
+
+	<!--员工离职 -->
+	<update id="batchUpdateStatus" parameterType="java.lang.String">
+		update organization.employee_
+		set
+		employee_status='1'
+		where
+		employee_id= #{employeeId}
+	</update>
+
+	<select id="findByLiZhiemployee" parameterType="java.lang.String"
+		resultMap="Employee">
+		select DISTINCT e.employee_id, e.employee_name,e.login_name,
+		e.employee_sex,e.employee_no,
+		e.employee_phone,(select d.department_name from organization.department_ d where
+		d.department_id=e.department_id),
+		e.employee_twophone,e.entry_time,e.department_id,e.company_id,c.company_name,
+		e.employee_status,e.probationary_expired,e.direct_person_id,y.employee_name
+		AS direct_person_name,e.work_address
+		from organization.employee_ e
+
+		lEFT JOIN organization.employee_ y on y.employee_id=e.direct_person_id
+		lEFT JOIN organization.department_ d on
+		d.department_id=e.department_id
+		lEFT JOIN organization.company_ c on c.company_id=e.company_id
+		where
+		e.employee_status='1'
+		AND
+		e.company_id=#{companyId}
+		ORDER BY e.entry_time DESC
+		limit #{pageRecordNum}::integer offset #{fromPageNum}::integer
+	</select>
+
+
+	<select id="findByemployeeNo" parameterType="java.lang.String"
+		resultMap="Employee">
+		select
+		e.employee_no,employee_id
+		from employee_ e
+		where
+		e.employee_no IS NOT null
+		AND
+		e.employee_no= #{employeeNo,jdbcType=VARCHAR}
+		and
+		e.company_id=#{companyId}
+	</select>
+
+	<select id="findByemploginName" parameterType="java.lang.String"
+		resultMap="Employee">
+		select
+		e.login_name
+		from organization.employee_ e
+		where
+		e.login_name = #{loginName,jdbcType=VARCHAR}
+	</select>
+	<!-- 查询单条人员信息 -->
+	<select id="selectByEmployee" parameterType="java.lang.String"
+		resultMap="Employee">
+		select DISTINCT e.employee_id, e.employee_name,e.login_name,
+		e.employee_sex,e.employee_no,
+		e.employee_phone,(select d.department_name from organization.department_ d where
+		d.department_id=e.department_id),
+		e.employee_twophone,e.entry_time,e.department_id,e.company_id,c.company_name,
+		e.employee_status,e.probationary_expired,e.direct_person_id,y.employee_name
+		AS direct_person_name,e.work_address
+		from organization.employee_ e
+
+		lEFT JOIN organization.employee_ y on y.employee_id=e.direct_person_id
+		lEFT JOIN organization.department_ d on
+		d.department_id=e.department_id
+		lEFT JOIN organization.company_ c on c.company_id=e.company_id
+		where
+		e.employee_id = #{employeeId,jdbcType=VARCHAR}
+		and
+		e.company_id=#{companyId}
+	</select>
+
+	<!-- 所有在职员工的信息 -->
+	<select id="findByAllEmployee" parameterType="java.lang.String"
+		resultMap="Employee">
+		select DISTINCT e.employee_id, e.employee_name,e.login_name,
+		e.employee_sex,e.employee_no,
+		e.employee_phone,(select d.department_name from organization.department_ d where
+		d.department_id=e.department_id),
+		e.employee_twophone,e.entry_time,e.department_id,e.company_id,c.company_name,
+		e.employee_status,e.probationary_expired,e.direct_person_id,y.employee_name
+		AS direct_person_name,e.work_address
+		from organization.employee_ e
+
+		lEFT JOIN organization.employee_ y on y.employee_id=e.direct_person_id
+		lEFT JOIN organization.department_ d on
+		d.department_id=e.department_id
+		lEFT JOIN organization.company_ c on c.company_id=e.company_id
+		where
+		e.employee_status='0'
+		AND
+		e.company_id=#{companyId}
+		ORDER BY e.entry_time DESC
+		limit #{pageRecordNum}::integer offset #{fromPageNum}::integer
+	</select>
+
+	<!-- 根据姓名、联系方式、性别、所属部门、岗位、入职时间、在职状态查询员工信息 -->
+	<select id="findByMoreEmployee" parameterType="java.util.Map"
+		resultMap="Employee">
+		select DISTINCT e.employee_id, e.employee_name,e.login_name,
+		e.employee_sex,e.employee_no,
+		e.employee_phone,(select d.department_name from organization.department_ d where
+		d.department_id=e.department_id),
+		e.employee_twophone,e.entry_time,e.department_id,e.company_id,c.company_name,
+		e.employee_status,e.probationary_expired,e.direct_person_id,y.employee_name
+		AS direct_person_name,e.work_address
+		from organization.employee_ e
+
+		lEFT JOIN organization.employee_ y on y.employee_id=e.direct_person_id
+		lEFT JOIN organization.department_ d on
+		d.department_id=e.department_id
+		lEFT JOIN organization.company_ c on c.company_id=e.company_id
+		<where>
+			<if test="employeeName!=null and employeeName != ''">
+				and e.employee_id in (select employee_id from organization.employee_
+				where employee_name like '%${employeeName}%')
+			</if>
+			<if test="loginName!=null and loginName != ''">
+				and e.employee_id in (select employee_id from organization.employee_
+				where login_name like '%${loginName}%')
+			</if>
+			<if test="employeePhone!=null and employeePhone != ''">
+				and e.employee_id in (select employee_id from organization.employee_
+				where employee_phone like '%${employeePhone}%')
+			</if>
+			<if test="employeeTwophone!=null and employeeTwophone != ''">
+				and e.employee_id in (select employee_id from organization.employee_
+				where employee_twophone like '%${employeeTwophone}%')
+			</if>
+			<if test="employeeSex!=null and employeeSex != ''">
+				and e.employee_id in (select employee_id from organization.employee_
+				where employee_sex like '%${employeeSex}%')
+			</if>
+			<if test="departmentName!=null and departmentName != ''">
+				and e.employee_id in (select employee_id from organization.employee_
+				where department_id in (select DISTINCT d.department_id from
+				organization.department_ d where d.department_name like
+				'%${departmentName}%'))
+			</if>
+			<if test="postName!=null and postName != ''">
+				and e.employee_id in (select DISTINCT c.employee_id from
+				organization.connect_emp_post_ c LEFT JOIN organization.post_ p on
+				c.post_id=p.post_id where c.post_id in (select p.post_id from
+				organization.post_ p where p.post_name like '%${postName}%'))
+			</if>
+			<if test="entryTime!=null and entryTime != ''">
+				and e.employee_id in (select employee_id from organization.employee_
+				where entry_time like '%${entryTime}%')
+			</if>
+			<if test="employeeStatus!=null and employeeStatus != ''">
+				and e.employee_id in (select employee_id from organization.employee_
+				where employee_status like '%${employeeStatus}%')
+			</if>
+			<if test="companyId != null and companyId != ''">
+				and e.company_id=#{companyId}
+			</if>
+		</where>
+		ORDER BY e.entry_time DESC
+		limit #{pageRecordNum}::integer offset #{fromPageNum}::integer
+	</select>
+	<select id="getUserIdByLoginName" parameterType="String"
+		resultType="String">
+		select user_id from organization.u_users where phone=#{loginName} and
+		status='1'
+	</select>
+	<delete id="deleteByEmployee" parameterType="java.lang.String">
+		delete from organization.employee_
+		where
+		employee_id = #{employeeId,jdbcType=VARCHAR}
+	</delete>
+
+	<insert id="insertEmployee" parameterType="com.xiangshangban.organization.bean.Employee">
+		insert into organization.employee_ (
+		employee_id,
+		employee_name,
+		employee_sex,
+		login_name,
+		employee_phone,
+		employee_twophone,
+		employee_no,
+		direct_person_id,
+		entry_time,
+		probationary_expired,
+		department_id,
+		company_id,
+		employee_status,
+		work_address
+		)
+		values (
+		#{employeeId,jdbcType=VARCHAR},
+		#{employeeName,jdbcType=VARCHAR},
+		#{employeeSex,jdbcType=VARCHAR},
+		#{loginName,jdbcType=VARCHAR},
+		#{employeePhone,jdbcType=VARCHAR},
+		#{employeeTwophone,jdbcType=VARCHAR},
+		#{employeeNo,jdbcType=VARCHAR},
+		#{directPersonId,jdbcType=VARCHAR},
+		#{entryTime,jdbcType=VARCHAR},
+		#{probationaryExpired,jdbcType=VARCHAR},
+		#{departmentId,jdbcType=VARCHAR},
+		#{companyId,jdbcType=VARCHAR},
+		#{employeeStatus,jdbcType=VARCHAR},
+		#{workAddress}
+		)
+	</insert>
+
+	<update id="updateByEmployee" parameterType="com.xiangshangban.organization.bean.Employee">
+		update organization.employee_
+		set
+		employee_name = #{employeeName,jdbcType=VARCHAR},
+		employee_sex = #{employeeSex,jdbcType=VARCHAR},
+		login_name = #{loginName,jdbcType=VARCHAR},
+		direct_person_id = #{directPersonId,jdbcType=VARCHAR},
+		employee_phone = #{employeePhone,jdbcType=VARCHAR},
+		employee_twophone = #{employeeTwophone,jdbcType=VARCHAR},
+		entry_time = #{entryTime,jdbcType=VARCHAR},
+		probationary_expired = #{probationaryExpired,jdbcType=VARCHAR},
+		department_id=#{departmentId,jdbcType=VARCHAR},
+		work_address=#{workAddress}
+		where
+		employee_id = #{employeeId,jdbcType=VARCHAR}
+	</update>
+
+	<update id="updateByEmployeeapprove" parameterType="com.xiangshangban.organization.bean.Employee">
+		update organization.employee_
+		set
+		employee_name = #{employeeName,jdbcType=VARCHAR},
+		employee_sex = #{employeeSex,jdbcType=VARCHAR},
+		login_name = #{loginName,jdbcType=VARCHAR},
+		direct_person_id = #{directPersonId,jdbcType=VARCHAR},
+		employee_phone = #{employeePhone,jdbcType=VARCHAR},
+		employee_twophone = #{employeeTwophone,jdbcType=VARCHAR},
+		entry_time = #{entryTime,jdbcType=VARCHAR},
+		probationary_expired = #{probationaryExpired,jdbcType=VARCHAR},
+		department_id=#{departmentId,jdbcType=VARCHAR},
+		employee_status=#{employeeStatus,jdbcType=VARCHAR},
+		work_address=#{workAddress}
+		where
+		employee_id = #{employeeId,jdbcType=VARCHAR}
+	</update>
+
+
+	<update id="updateByEmployeedept" parameterType="com.xiangshangban.organization.bean.Employee">
+		update organization.employee_
+		set
+		department_id=#{departmentId,jdbcType=VARCHAR}
+		where
+		employee_id = #{employeeId,jdbcType=VARCHAR}
+	</update>
+
 </mapper>

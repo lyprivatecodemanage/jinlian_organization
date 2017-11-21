@@ -81,46 +81,7 @@ public class EmployeeController {
 		return returnData;	
 	}*/
 	
-	/**
-	 * 用户申请加入公司(如果用户已经注册，调该方法)
-	 * @param employee
-	 * @param request
-	 * @param response
-	 * @return
-	 * @throws JsonProcessingException
-	 */
-	@RequestMapping(value="/insertEmployeeuser", produces = "application/json;charset=UTF-8", method=RequestMethod.POST)
-	public ReturnData insertEmployeeuser(@RequestBody String jsonString,HttpServletRequest request,HttpServletResponse response) throws JsonProcessingException{								
-		ReturnData returnData = new ReturnData();
-		Employee employeenew = new Employee();
-		JSONObject obj = JSON.parseObject(jsonString);
-		String userName = obj.getString("userName");		
-		String Phone = obj.getString("Phone");
-		String Account = obj.getString("Account");
-		String companyId = obj.getString("companyId");						
-		String userId = obj.getString("userId");
-		Employee loginname=employeeService.findByemploginName(Account);		 
-		if(loginname != null){			
-			returnData.setMessage("业务错误");
-			returnData.setReturnCode("4000");  
-			return returnData;			
-		}else{						
-			employeenew.setEmployeeName(userName);
-			employeenew.setEmployeePhone(Phone);
-			employeenew.setOperateUserId(userId);
-			employeenew.setLoginName(Account);
-			employeenew.setCompanyId(companyId);						
-			if(!userName.equals("") || !Phone.equals("") || !userId.equals("") || !Account.equals("") || !companyId.equals("")){
-				employeeService.insertEmployee(employeenew);
-				returnData.setMessage("数据请求成功");
-				returnData.setReturnCode("3000");				
-			}else{
-				returnData.setMessage("数据请求失败");
-				returnData.setReturnCode("3001");
-			}				
-				return returnData;										    			
-		}					
-	}
+	
 	/**
 	 *  
 	 * 添加员工信息
@@ -366,57 +327,34 @@ public class EmployeeController {
 	 * @return
 	 */
 	@RequestMapping(value = "/selectByAllFnyeEmployee",produces = "application/json;charset=UTF-8", method=RequestMethod.POST)	
-	public ReturnData selectByAllFnyeEmployee(@RequestBody String jsonString,HttpServletRequest request,HttpServletResponse response){		
-		ReturnData returnData = new ReturnData();
-		Map<String,String> params = new HashMap<String, String>();
-		Map<String, Object> postnamelist = new HashMap<String, Object>();
+	public Map<String,Object> selectByAllFnyeEmployee(@RequestBody String jsonString,HttpServletRequest request,HttpServletResponse response){		
+		Map<String,Object> result = new HashMap<String,Object>();
+		try{
+		String companyId = request.getHeader("companyId");
 		JSONObject obj = JSON.parseObject(jsonString);			
+		String employeeName = obj.getString("employeeName");//员工姓名
+		String employeeSex = obj.getString("employeeSex");//员工性别
+		String departmentName = obj.getString("departmentName");//部门名称
+		String postName = obj.getString("postName");//岗位名称
+		String employeeStatus = obj.getString("employeeStatus");//员工状态，0,在职，1,离职，2,删除
+		
 		String pageNum = obj.getString("pageNum");
 		String pageRecordNum = obj.getString("pageRecordNum");		
-		String companyId = request.getHeader("companyId");
-		String pageNumPattern = "\\d{1,}";
-		boolean pageNumFlag = Pattern.matches(pageNumPattern, pageNum);
-		boolean pageRecordNumFlag = Pattern.matches(pageNumPattern, pageRecordNum);
+		boolean pageNumFlag = Pattern.matches("\\d{1,}", pageNum);
+		boolean pageRecordNumFlag = Pattern.matches("\\d{1,}", pageRecordNum);
 		if(!pageNumFlag||!pageRecordNumFlag){
-			returnData.setMessage("参数格式不正确");
-			returnData.setReturnCode("3007");			
-			return returnData;
+			result.put("message", "参数格式不正确");
+			result.put("returnCode", "3007");			
+			return result;
 		}		
-		if(!companyId.equals("")){
-			if (pageNum != null && pageNum != "" && pageRecordNum != null && pageRecordNum != "") {
-				int number = (Integer.parseInt(pageNum) - 1) * Integer.parseInt(pageRecordNum);
-				String strNum = String.valueOf(number);
-				params.put("pageRecordNum", pageRecordNum);
-				params.put("fromPageNum", strNum);
-				params.put("companyId", companyId);
-				List<Employee> employeelistemp =employeeService.selectByAllFnyeEmployee(params);
-				int s=0;	
-				for (int i = 0; i < employeelistemp.size(); i++) {
-				   s=s+1;
-		           String temps =String.valueOf(s);
-				   Employee employeelist = employeelistemp.get(i);
-				   String Employeeid = employeelist.getEmployeeId();
-				   String departmentId = employeelist.getDepartmentId();
-		           List<Post> PostNamelist = postService.selectByPostName(Employeeid,departmentId);	            
-		           employeelist.setPostList(PostNamelist);	                 
-		           postnamelist.put("employeelist"+temps, employeelist);			
-				}															 
-			}
-			List<Employee> emplist = employeeService.selectByAllEmployee(companyId);
-			int totalPages = emplist.size();
-			double  pageCountnum =(double)totalPages/Integer.parseInt(pageRecordNum);	
-			int pagecountnum=(int) Math.ceil(pageCountnum);
-			returnData.setTotalPages(totalPages);
-			returnData.setPagecountNum(pagecountnum);
-			returnData.setData(postnamelist);
-			returnData.setMessage("数据请求成功");
-			returnData.setReturnCode("3000");		
-	        return returnData;
-		}else{			
-			returnData.setMessage("数据请求失败");
-			returnData.setReturnCode("3001");		
-	        return returnData;
-		}				
+			return result;
+		}catch(Exception e){
+			e.printStackTrace();
+			return result;
+		}
+		
+		
+		
 }
 	
 	
