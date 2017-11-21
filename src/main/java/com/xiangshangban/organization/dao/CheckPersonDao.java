@@ -1,5 +1,8 @@
 package com.xiangshangban.organization.dao;
 
+import java.util.List;
+import java.util.Map;
+
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -23,4 +26,10 @@ public interface CheckPersonDao {
      */
     CheckPerson selectByPrimaryKey(@Param("companyId") String companyId, 
     		@Param("userid")String userid);
+    
+    int insertSelective(CheckPerson checkPerson);
+    
+	List<CheckPerson> getcheckListByPage(Map<String, String> params);
+	
+	int getcheckListByPageAllLength(Map<String, String> params);
 }
