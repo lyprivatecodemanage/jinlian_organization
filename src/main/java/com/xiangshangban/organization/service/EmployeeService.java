@@ -8,7 +8,7 @@ import com.xiangshangban.organization.bean.Employee;
 import com.xiangshangban.organization.bean.ReturnData;
 
 public interface EmployeeService {
-	String deleteByEmployee(String employeeId);
+	int deleteByEmployee(String employeeId);
 	/**
 	 * 添加员工。用户未注册时，加入注册操作；用户已注册，则做绑定操作。
 	 * @param employee
@@ -29,8 +29,32 @@ public interface EmployeeService {
     String batchUpdateStatus(String employeeId);
     //调职
     String batchUpdateTransferJobStaus(String employeeId);
-    //分页查询员工信息
+    /**
+     * @author 李业:分页条件查询员工信息
+     * @param companyId
+     * @param numPage
+     * @param numRecordCount
+     * @param employeeName
+     * @param employeeSex
+     * @param departmentName
+     * @param postName
+     * @param employeeStatus
+     * @return
+     */
     List<Employee> selectByAllFnyeEmployee(String companyId,String numPage,String numRecordCount, String employeeName, String employeeSex, String departmentName,String postName,String employeeStatus);
+    /**
+     * 分页条件查询总记录数
+     * @param companyId
+     * @param numPage
+     * @param numRecordCount
+     * @param employeeName
+     * @param employeeSex
+     * @param departmentName
+     * @param postName
+     * @param employeeStatus
+     * @return
+     */
+    int selectCountEmployeeFromCompany(String companyId,String numPage,String numRecordCount, String employeeName, String employeeSex, String departmentName,String postName,String employeeStatus);
     
     String updateByEmployeedept(Employee employee);
     Employee findByemploginName(String loginName);

@@ -32,4 +32,6 @@ public interface PostDao {
     List<Post> findBydepartmentPost (@Param("departmentId") String departmentId,@Param("companyId")String companyId);
 
 	Integer findPostPageAllLength(Map<String, String> params);
+	
+	List<Post> selectVicePositionByEmployeeId(@Param("companyId")String companyId,@Param("employeeId")String employeeId);
 }

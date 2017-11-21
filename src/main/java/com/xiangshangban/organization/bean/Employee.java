@@ -20,6 +20,7 @@ public class Employee {
     private String probationaryExpired;//试用到期日
     private String employeeImgUrl;//头像 
     private String workAddress;//工作地
+    private String regularWorkTime;//转正时间
     //---连表查询的---
     private List<Post> postList;//岗位   
     private String companyName;//
@@ -35,7 +36,7 @@ public class Employee {
 //    private String employeeTell;//电话号码  
 //    private String employeeEmail;//邮箱号
 //    private String employeeWorkPlace;//工作地     
-//    private String contractPeriod;//合同期（月）  
+   private String contractPeriod;//合同期（月）  
 //    private String isManager;//是否为部门经理（1:是，2否）
 //    private String contractExpired;//合同到期日   
 //    private String probationaryPeriod;//试用期（月）
@@ -51,6 +52,18 @@ public class Employee {
     @ExcelResources(title="岗位",order=5)
 	public String getPostName() {
 		return postName;
+	}
+	public String getRegularWorkTime() {
+		return regularWorkTime;
+	}
+	public void setRegularWorkTime(String regularWorkTime) {
+		this.regularWorkTime = regularWorkTime;
+	}
+	public String getContractPeriod() {
+		return contractPeriod;
+	}
+	public void setContractPeriod(String contractPeriod) {
+		this.contractPeriod = contractPeriod;
 	}
 	public String getIs_active() {
 		return is_active;

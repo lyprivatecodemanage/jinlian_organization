@@ -48,14 +48,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Autowired
 	CheckPersonDao checkPersonDao;
 	@Override
-	public String deleteByEmployee(String connectEmpPostId) {
-		String i ="0";
-		try {
-			employeeDao.deleteByEmployee(connectEmpPostId);
-			i="1";
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	public int deleteByEmployee(String employeeId) {
+		int i = 0;
+		i=i+connectEmpPostDao.deleteEmpConnectPost(employeeId);
+		i=i+employeeDao.deleteByEmployee(employeeId);
 		return i;
 	}
 
@@ -309,6 +305,13 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Override
 	public List<Employee> findEmployeeByDepartmentId(String companyId, String departmentId) {
 		return employeeDao.findEmployeeByDepartmentId(companyId, departmentId);
+	}
+
+	@Override
+	public int selectCountEmployeeFromCompany(String companyId, String numPage, String numRecordCount,
+			String employeeName, String employeeSex, String departmentName, String postName, String employeeStatus) {
+		
+		return employeeDao.selectCountEmployeeFromCompany(companyId, numPage, numRecordCount, employeeName, employeeSex, departmentName, postName, employeeStatus);
 	}
 
 	

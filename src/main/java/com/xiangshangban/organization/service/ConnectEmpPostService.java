@@ -20,4 +20,10 @@ public interface ConnectEmpPostService {
 	 * @return
 	 */
 	List<ConnectEmpPost> findEmpByPostId(String companyId, String postId);
+	/**
+	 * 删除员工跟部门岗位间的关联关系
+	 * @param employeeId
+	 * @return
+	 */
+	int deleteEmpConnectPost(String employeeId);
 }

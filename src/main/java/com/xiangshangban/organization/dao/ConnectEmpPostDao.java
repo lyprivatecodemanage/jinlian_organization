@@ -20,4 +20,6 @@ public interface ConnectEmpPostDao {
 	ConnectEmpPost findByConnectpostemp(@Param("employeeId") String employeeId,@Param("postId") String postId);
 	
 	List<ConnectEmpPost> findEmpByPostId(String companyId, String postId);
+	
+	int deleteEmpConnectPost(String employeeId);
 }

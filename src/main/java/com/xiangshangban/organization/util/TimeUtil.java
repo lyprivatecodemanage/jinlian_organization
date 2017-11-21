@@ -533,4 +533,17 @@ public class TimeUtil {
 	public static void main(String[] args) {
 		System.out.println(getLongAfterDate("2017-10-16", -2, Calendar.DATE));
 	}
+	public static String getDateAfterString(String time,String period){
+		try{
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		Date date =format.parse(time);
+		Calendar now = Calendar.getInstance();
+		now.setTime(date);
+		now.add(Calendar.MONTH, Integer.valueOf(period));
+		return format.format(now.getTime());
+		}catch(Exception e){
+			e.printStackTrace();
+			return null;
+		}
+	}
 }

@@ -17,6 +17,16 @@
     <result column="count_number" jdbcType="VARCHAR" property="countNumber" />
     <result column="company_id" jdbcType="VARCHAR" property="companyId" />      
   </resultMap>
+  <!-- 查询员工的副岗位 -->
+  <select id="selectVicePositionByEmployeeId" parameterType="java.lang.String" resultMap="Post">
+  	select post_name 
+  	from employee_ e, post_ p, connect_emp_post cep 
+  	where e.company_id = #{companyId} and e.employee_id = #{employeeId} and e.employee_id = cep.employee_id
+  	and cep.post_id = p.post_id
+  </select>
+  
+  
+  
   <!-- 查询所有在职员工信息 -->
  <select id="selectByPostName" parameterType="java.lang.String" resultMap="Post">  
     select 

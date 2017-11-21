@@ -47,6 +47,11 @@
             
         )
 	</insert>
+	<update id="deleteEmpConnectPost" parameterType="java.lang.String">
+		update connect_emp_post_
+		set is_delete = '1'
+		where employee_id = #{employeeId}
+	</update>
 	
 	<delete id="deleteConnect" parameterType="java.lang.String">
 		delete 

@@ -81,4 +81,10 @@ public class PostServiceImpl implements PostService {
 	public Integer findPostPageAllLength(Map<String, String> params) {
 		return postDao.findPostPageAllLength(params);
 	}
+
+	@Override
+	public List<Post> selectVicePositionByEmployeeId(String companyId, String employeeId) {
+		
+		return postDao.selectVicePositionByEmployeeId(companyId, employeeId);
+	}
 }

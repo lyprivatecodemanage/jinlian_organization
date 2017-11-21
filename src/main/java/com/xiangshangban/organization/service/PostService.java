@@ -3,6 +3,7 @@ package com.xiangshangban.organization.service;
 import java.util.List;
 import java.util.Map;
 
+
 import com.xiangshangban.organization.bean.Post;
 
 public interface PostService {
@@ -25,5 +26,11 @@ public interface PostService {
     List<Post> selectByPostemp(String employeeId,String departmentId);
 
 	Integer findPostPageAllLength(Map<String, String> params);
-    
+	/**
+	 * 查询副岗位
+	 * @param companyId
+	 * @param employeeId
+	 * @return
+	 */
+	List<Post> selectVicePositionByEmployeeId(String companyId,String employeeId);
 }
