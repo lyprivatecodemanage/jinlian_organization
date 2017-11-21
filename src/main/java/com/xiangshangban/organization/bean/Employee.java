@@ -28,7 +28,8 @@ public class Employee {
     private String postName;//岗位名称
     private String directPersonName;//直接汇报人名称    
     private String operateUserId;// 操作人ID
-    private String infoStatus="1";//信息完整状态 0：不完整，1：完整
+    private String is_active;//激活状态，0：未激活，1：已激活
+    private String infoStatus;//信息完整状态 0：不完整，1：完整
     //----现在没用到的----
 //    private String employeeBirthday;// 出生年月日    
 //    private String employeeTell;//电话号码  
@@ -50,6 +51,12 @@ public class Employee {
     @ExcelResources(title="岗位",order=5)
 	public String getPostName() {
 		return postName;
+	}
+	public String getIs_active() {
+		return is_active;
+	}
+	public void setIs_active(String is_active) {
+		this.is_active = is_active;
 	}
 	public String getEmployeeImgUrl() {
 		return employeeImgUrl;

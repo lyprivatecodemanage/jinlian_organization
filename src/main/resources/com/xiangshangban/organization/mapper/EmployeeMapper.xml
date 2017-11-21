@@ -45,20 +45,28 @@
 	<select id="findBydynamicempadmin" parameterType="java.util.Map"
 		resultMap="Employee">
 		select DISTINCT
-		e.employee_id, e.employee_name,e.login_name,e.employee_img_url,
+		e.employee_id,
+		e.employee_name,e.login_name,e.employee_img_url,
 		e.department_id,d.department_name,st.post_id,p.post_name
-		from organization.employee_ e
-		lEFT JOIN organization.department_ d on d.department_id=e.department_id
-		LEFT JOIN organization.connect_emp_post_ st on
-		st.employee_id=e.employee_id and st.post_grades='1'
-		LEFT JOIN organization.post_ p on p.post_id=st.post_id
+		from
+		organization.employee_ e
+		lEFT JOIN organization.department_ d on
+		d.department_id=e.department_id
+		LEFT JOIN
+		organization.connect_emp_post_ st on
+		st.employee_id=e.employee_id and
+		st.post_grades='1'
+		LEFT JOIN organization.post_ p on
+		p.post_id=st.post_id
 		<where>
 			<if test="companyId != null and companyId != ''">
 				and e.company_id=#{companyId}
 			</if>
 			<if test="employeeName!=null and employeeName != ''">
-				and e.employee_id in (select e.employee_id from organization.employee_
-				e where e.employee_name like '%${employeeName}%')
+				and e.employee_id in (select e.employee_id from
+				organization.employee_
+				e where e.employee_name like
+				'%${employeeName}%')
 			</if>
 			<if test="departmentName!=null and departmentName != ''">
 				and e.employee_id in (select e.employee_id from
@@ -67,8 +75,10 @@
 				'%${departmentName}%')
 			</if>
 			<if test="postName!=null and postName != ''">
-				and e.employee_id in (select st.employee_id from organization.post_ p
-				LEFT JOIN organization.connect_emp_post_ st on st.post_id=p.post_id
+				and e.employee_id in (select st.employee_id from
+				organization.post_ p
+				LEFT JOIN organization.connect_emp_post_ st on
+				st.post_id=p.post_id
 				where p.post_name like '%${postName}%' )
 			</if>
 			and e.employee_status='0'
@@ -77,39 +87,55 @@
 	</select>
 	<!-- 部门下在职员工 -->
 	<select id="findEmployeeByDepartmentId" resultMap="Employee">
-		select e.employee_id, e.employee_name,e.login_name, e.department_id
-		from organization.employee_ e
-		WHERE e.employee_status='1' AND e.company_id=#{companyId} AND
+		select
+		e.employee_id, e.employee_name,e.login_name, e.department_id
+		from
+		organization.employee_ e
+		WHERE e.employee_status='1' AND
+		e.company_id=#{companyId} AND
 		e.department_id=#{e.departmentId}
 	</select>
 	<!--查询所有在职人员以及所属部门和主岗位 -->
 	<select id="findByempadmin" parameterType="java.lang.String"
 		resultMap="Employee">
 		select DISTINCT
-		e.employee_id, e.employee_name,e.login_name,e.employee_img_url,
+		e.employee_id,
+		e.employee_name,e.login_name,e.employee_img_url,
 		e.department_id,d.department_name,st.post_id,p.post_name
-		from organization.employee_ e
-		lEFT JOIN organization.department_ d on d.department_id=e.department_id
-		LEFT JOIN organization.connect_emp_post_ st on
-		st.employee_id=e.employee_id and st.post_grades='1'
-		LEFT JOIN organization.post_ p on p.post_id=st.post_id
+		from
+		organization.employee_ e
+		lEFT JOIN organization.department_ d on
+		d.department_id=e.department_id
+		LEFT JOIN
+		organization.connect_emp_post_ st on
+		st.employee_id=e.employee_id and
+		st.post_grades='1'
+		LEFT JOIN organization.post_ p on
+		p.post_id=st.post_id
 		where
 		e.company_id=#{companyId}
 		and
 		e.employee_status='0'
-		limit #{pageRecordNum}::integer offset #{fromPageNum}::integer
+		limit #{pageRecordNum}::integer offset
+		#{fromPageNum}::integer
 	</select>
 	<!--查询所有在职人员以及所属部门和主岗位 -->
 	<select id="findByempadmins" parameterType="java.lang.String"
 		resultMap="Employee">
 		select DISTINCT
-		e.employee_id, e.employee_name,e.login_name,e.employee_img_url,
+		e.employee_id,
+		e.employee_name,e.login_name,e.employee_img_url,
 		e.department_id,d.department_name,st.post_id,p.post_name
-		from organization.employee_ e
-		lEFT JOIN organization.department_ d on d.department_id=e.department_id
-		LEFT JOIN organization.connect_emp_post_ st on
-		st.employee_id=e.employee_id and st.post_grades='1'
-		LEFT JOIN organization.post_ p on p.post_id=st.post_id
+		from
+		organization.employee_ e
+		lEFT JOIN organization.department_ d on
+		d.department_id=e.department_id
+		LEFT JOIN
+		organization.connect_emp_post_ st on
+		st.employee_id=e.employee_id and
+		st.post_grades='1'
+		LEFT JOIN organization.post_ p on
+		p.post_id=st.post_id
 		where
 		e.company_id=#{companyId}
 		and
@@ -122,10 +148,13 @@
 		resultMap="Employee">
 		SELECT
 		e.employee_id,e.employee_name
-		FROM organization.employee_ e
-		LEFT JOIN organization.connect_emp_post_ c on c.employee_id=e.employee_id
+		FROM
+		organization.employee_ e
+		LEFT JOIN organization.connect_emp_post_ c on
+		c.employee_id=e.employee_id
 		and c.is_delete='0'
-		LEFT JOIN organization.post_ p on c.post_id = p.post_id
+		LEFT JOIN
+		organization.post_ p on c.post_id = p.post_id
 		where
 		e.employee_status='0'
 		and
@@ -138,7 +167,8 @@
 		resultMap="Employee">
 		select
 		e.employee_id,e.employee_name,e.employee_phone,e.login_name
-		from employee_ e
+		from
+		employee_ e
 		where
 		e.company_id=#{companyId}
 		and
@@ -146,34 +176,48 @@
 		limit #{pageRecordNum}::integer offset #{fromPageNum}::integer
 	</select>
 
-	<sql id="BaseColumnList">
-		employee_id, employee_name, employeeSex, department_id, company_id,
-		direct_person_id,employee_phone, employee_twophone, entry_time,
-		employee_status, probationary_expired,employee_img_url, work_address
-	</sql>
+	<resultMap id="PagingColumnList" type="com.xiangshangban.organization.bean.Employee">
+		<id column = "employee_id" property = "employeeId"/>
+		<id column = "employee_name" property = "employeeId"/>
+		<id column = "employee_sex" property = "employeeId"/>
+		<id column = "login_name" property = "employeeId"/>
+		<id column = "employee_phone" property = "employeeId"/>
+		<id column = "post_id" property = "employeeId"/>
+		<id column = "post_name" property = "employeeId"/>
+		<id column = "department_id" property = "employeeId"/>
+		<id column = "department_name" property = "employeeId"/>
+		<id column = "entry_time" property = "employeeId"/>
+		<id column = "employee_status" property = "employeeId"/>
+		<id column = "is_active" property = "employeeId"/>
+	</resultMap>
+	
 	<!-- 分页查询员工信息 -->
 	<select id="selectByAllFnyeEmployee" parameterType="java.lang.String"
-		resultMap="Employee">
-		select <include refid="BaseColumnList"/>
-		from organization.employee_ e,department_ d,post_ p 
-		where 
-		company_id = #{companyId} and e.department_id = d.department_id and d.department_id = p.department_id
-			<if test="employeeName != null">
-				and employee_name = #{employeeName}
-			</if>
-			<if test="employeeSex != null">
-				and employee_sex = #{employeeSex}
-			</if>
-			<if test="departmentName != null">
-				and department_name = #{departmentName}
-			</if>
-			<if test="postName != null">
-				and post_name = #{postName}
-			</if>
-			<if test="employeeStatus != null">
-				and employee_status = #{employeeStatus}
-			</if>
-		limit #{numRecordCount} :: integer offset #{numPage} 
+		resultMap="PagingColumnList">
+		select
+		e.employee_id,e.employee_name,e.employee_sex,e.login_name,e.employee_phone,
+		p.post_id,p.post_name,e.department_id,d.department_name,
+		e.entry_time,e.employee_status,uc.is_active
+		from organization.employee_ e,department_ d,post_ p,user_company uc
+		where
+		e.company_id = #{companyId} and e.department_id = d.department_id and
+		d.department_id = p.department_id and e.company_id = uc.company_id and uc.is_active = '1'
+		<if test="employeeName != null">
+			and employee_name like #{employeeName}
+		</if>
+		<if test="employeeSex != null">
+			and employee_sex = #{employeeSex}
+		</if>
+		<if test="departmentName != null">
+			and department_name like #{departmentName}
+		</if>
+		<if test="postName != null">
+			and post_name like #{postName}
+		</if>
+		<if test="employeeStatus != null">
+			and employee_status = #{employeeStatus}
+		</if>
+		limit #{numRecordCount} :: integer offset #{numPage} :: integer
 	</select>
 
 	<!-- 查询所有员工信息 -->
@@ -181,17 +225,21 @@
 		resultMap="Employee">
 		select DISTINCT e.employee_id, e.employee_name,e.login_name,
 		e.employee_sex,e.employee_no,
-		e.employee_phone,(select d.department_name from organization.department_ d where
+		e.employee_phone,(select
+		d.department_name from organization.department_ d where
 		d.department_id=e.department_id),
 		e.employee_twophone,e.entry_time,e.department_id,e.company_id,c.company_name,
 		e.employee_status,e.probationary_expired,e.direct_person_id,y.employee_name
 		AS direct_person_name,y.work_address
 		from organization.employee_ e
 
-		lEFT JOIN organization.employee_ y on y.employee_id=e.direct_person_id
-		lEFT JOIN organization.department_ d on
+		lEFT
+		JOIN organization.employee_ y on y.employee_id=e.direct_person_id
+		lEFT
+		JOIN organization.department_ d on
 		d.department_id=e.department_id
-		lEFT JOIN organization.company_ c on c.company_id=e.company_id
+		lEFT
+		JOIN organization.company_ c on c.company_id=e.company_id
 		where
 		e.company_id=#{companyId}
 		and
@@ -202,8 +250,10 @@
 		resultMap="Employee">
 		SELECT
 		e.employee_id, e.employee_name
-		FROM organization.employee_ e
-		LEFT JOIN organization.department_ d on d.department_id=e.department_id
+		FROM
+		organization.employee_ e
+		LEFT JOIN organization.department_ d on
+		d.department_id=e.department_id
 		where
 		d.department_id=#{departmentId}
 		and
@@ -214,42 +264,51 @@
 
 	<!--员工批量删除,逻辑删除 -->
 	<update id="batchUpdateTest" parameterType="java.lang.String">
-		update organization.employee_
+		update
+		organization.employee_
 		set
 		employee_status='2'
 		where
-		employee_id= #{employeeId}
+		employee_id=
+		#{employeeId}
 	</update>
 
 	<!--员工离职 -->
 	<update id="batchUpdateStatus" parameterType="java.lang.String">
-		update organization.employee_
+		update
+		organization.employee_
 		set
 		employee_status='1'
 		where
-		employee_id= #{employeeId}
+		employee_id=
+		#{employeeId}
 	</update>
 
 	<select id="findByLiZhiemployee" parameterType="java.lang.String"
 		resultMap="Employee">
 		select DISTINCT e.employee_id, e.employee_name,e.login_name,
 		e.employee_sex,e.employee_no,
-		e.employee_phone,(select d.department_name from organization.department_ d where
+		e.employee_phone,(select
+		d.department_name from organization.department_ d where
 		d.department_id=e.department_id),
 		e.employee_twophone,e.entry_time,e.department_id,e.company_id,c.company_name,
 		e.employee_status,e.probationary_expired,e.direct_person_id,y.employee_name
 		AS direct_person_name,e.work_address
 		from organization.employee_ e
 
-		lEFT JOIN organization.employee_ y on y.employee_id=e.direct_person_id
-		lEFT JOIN organization.department_ d on
+		lEFT
+		JOIN organization.employee_ y on y.employee_id=e.direct_person_id
+		lEFT
+		JOIN organization.department_ d on
 		d.department_id=e.department_id
-		lEFT JOIN organization.company_ c on c.company_id=e.company_id
+		lEFT
+		JOIN organization.company_ c on c.company_id=e.company_id
 		where
 		e.employee_status='1'
 		AND
 		e.company_id=#{companyId}
-		ORDER BY e.entry_time DESC
+		ORDER BY e.entry_time
+		DESC
 		limit #{pageRecordNum}::integer offset #{fromPageNum}::integer
 	</select>
 
@@ -262,7 +321,8 @@
 		where
 		e.employee_no IS NOT null
 		AND
-		e.employee_no= #{employeeNo,jdbcType=VARCHAR}
+		e.employee_no=
+		#{employeeNo,jdbcType=VARCHAR}
 		and
 		e.company_id=#{companyId}
 	</select>
@@ -278,23 +338,12 @@
 	<!-- 查询单条人员信息 -->
 	<select id="selectByEmployee" parameterType="java.lang.String"
 		resultMap="Employee">
-		select DISTINCT e.employee_id, e.employee_name,e.login_name,
-		e.employee_sex,e.employee_no,
-		e.employee_phone,(select d.department_name from organization.department_ d where
-		d.department_id=e.department_id),
-		e.employee_twophone,e.entry_time,e.department_id,e.company_id,c.company_name,
-		e.employee_status,e.probationary_expired,e.direct_person_id,y.employee_name
-		AS direct_person_name,e.work_address
-		from organization.employee_ e
-
-		lEFT JOIN organization.employee_ y on y.employee_id=e.direct_person_id
-		lEFT JOIN organization.department_ d on
-		d.department_id=e.department_id
-		lEFT JOIN organization.company_ c on c.company_id=e.company_id
-		where
-		e.employee_id = #{employeeId,jdbcType=VARCHAR}
-		and
-		e.company_id=#{companyId}
+		select  e.employee_id, e.employee_name,e.employee_sex,e.login_name,
+		e.employee_phone,e.employee_twophone,e.
+		e.employee_no,
+		from employee_ e,connect_emp_post cep
+		where company_id = #{companyId} and employee_id = #{employeeId}
+		and e.employee_id = cep.employee_id and cep.post_grades = '1' 
 	</select>
 
 	<!-- 所有在职员工的信息 -->
@@ -302,22 +351,27 @@
 		resultMap="Employee">
 		select DISTINCT e.employee_id, e.employee_name,e.login_name,
 		e.employee_sex,e.employee_no,
-		e.employee_phone,(select d.department_name from organization.department_ d where
+		e.employee_phone,(select
+		d.department_name from organization.department_ d where
 		d.department_id=e.department_id),
 		e.employee_twophone,e.entry_time,e.department_id,e.company_id,c.company_name,
 		e.employee_status,e.probationary_expired,e.direct_person_id,y.employee_name
 		AS direct_person_name,e.work_address
 		from organization.employee_ e
 
-		lEFT JOIN organization.employee_ y on y.employee_id=e.direct_person_id
-		lEFT JOIN organization.department_ d on
+		lEFT
+		JOIN organization.employee_ y on y.employee_id=e.direct_person_id
+		lEFT
+		JOIN organization.department_ d on
 		d.department_id=e.department_id
-		lEFT JOIN organization.company_ c on c.company_id=e.company_id
+		lEFT
+		JOIN organization.company_ c on c.company_id=e.company_id
 		where
 		e.employee_status='0'
 		AND
 		e.company_id=#{companyId}
-		ORDER BY e.entry_time DESC
+		ORDER BY e.entry_time
+		DESC
 		limit #{pageRecordNum}::integer offset #{fromPageNum}::integer
 	</select>
 
@@ -326,42 +380,56 @@
 		resultMap="Employee">
 		select DISTINCT e.employee_id, e.employee_name,e.login_name,
 		e.employee_sex,e.employee_no,
-		e.employee_phone,(select d.department_name from organization.department_ d where
+		e.employee_phone,(select
+		d.department_name from organization.department_ d where
 		d.department_id=e.department_id),
 		e.employee_twophone,e.entry_time,e.department_id,e.company_id,c.company_name,
 		e.employee_status,e.probationary_expired,e.direct_person_id,y.employee_name
 		AS direct_person_name,e.work_address
 		from organization.employee_ e
 
-		lEFT JOIN organization.employee_ y on y.employee_id=e.direct_person_id
-		lEFT JOIN organization.department_ d on
+		lEFT
+		JOIN organization.employee_ y on y.employee_id=e.direct_person_id
+		lEFT
+		JOIN organization.department_ d on
 		d.department_id=e.department_id
-		lEFT JOIN organization.company_ c on c.company_id=e.company_id
+		lEFT
+		JOIN organization.company_ c on c.company_id=e.company_id
 		<where>
 			<if test="employeeName!=null and employeeName != ''">
-				and e.employee_id in (select employee_id from organization.employee_
+				and e.employee_id in (select employee_id from
+				organization.employee_
 				where employee_name like '%${employeeName}%')
 			</if>
 			<if test="loginName!=null and loginName != ''">
-				and e.employee_id in (select employee_id from organization.employee_
+				and e.employee_id in (select employee_id from
+				organization.employee_
 				where login_name like '%${loginName}%')
 			</if>
 			<if test="employeePhone!=null and employeePhone != ''">
-				and e.employee_id in (select employee_id from organization.employee_
-				where employee_phone like '%${employeePhone}%')
+				and e.employee_id in (select employee_id from
+				organization.employee_
+				where employee_phone like
+				'%${employeePhone}%')
 			</if>
 			<if test="employeeTwophone!=null and employeeTwophone != ''">
-				and e.employee_id in (select employee_id from organization.employee_
-				where employee_twophone like '%${employeeTwophone}%')
+				and e.employee_id in (select employee_id from
+				organization.employee_
+				where employee_twophone like
+				'%${employeeTwophone}%')
 			</if>
 			<if test="employeeSex!=null and employeeSex != ''">
-				and e.employee_id in (select employee_id from organization.employee_
+				and e.employee_id in (select employee_id from
+				organization.employee_
 				where employee_sex like '%${employeeSex}%')
 			</if>
 			<if test="departmentName!=null and departmentName != ''">
-				and e.employee_id in (select employee_id from organization.employee_
-				where department_id in (select DISTINCT d.department_id from
-				organization.department_ d where d.department_name like
+				and e.employee_id in (select employee_id from
+				organization.employee_
+				where department_id in (select DISTINCT
+				d.department_id from
+				organization.department_ d where
+				d.department_name like
 				'%${departmentName}%'))
 			</if>
 			<if test="postName!=null and postName != ''">
@@ -371,33 +439,41 @@
 				organization.post_ p where p.post_name like '%${postName}%'))
 			</if>
 			<if test="entryTime!=null and entryTime != ''">
-				and e.employee_id in (select employee_id from organization.employee_
+				and e.employee_id in (select employee_id from
+				organization.employee_
 				where entry_time like '%${entryTime}%')
 			</if>
 			<if test="employeeStatus!=null and employeeStatus != ''">
-				and e.employee_id in (select employee_id from organization.employee_
-				where employee_status like '%${employeeStatus}%')
+				and e.employee_id in (select employee_id from
+				organization.employee_
+				where employee_status like
+				'%${employeeStatus}%')
 			</if>
 			<if test="companyId != null and companyId != ''">
 				and e.company_id=#{companyId}
 			</if>
 		</where>
 		ORDER BY e.entry_time DESC
-		limit #{pageRecordNum}::integer offset #{fromPageNum}::integer
+		limit #{pageRecordNum}::integer offset
+		#{fromPageNum}::integer
 	</select>
 	<select id="getUserIdByLoginName" parameterType="String"
 		resultType="String">
-		select user_id from organization.u_users where phone=#{loginName} and
+		select user_id from organization.u_users where
+		phone=#{loginName} and
 		status='1'
 	</select>
 	<delete id="deleteByEmployee" parameterType="java.lang.String">
-		delete from organization.employee_
+		delete from
+		organization.employee_
 		where
-		employee_id = #{employeeId,jdbcType=VARCHAR}
+		employee_id =
+		#{employeeId,jdbcType=VARCHAR}
 	</delete>
 
 	<insert id="insertEmployee" parameterType="com.xiangshangban.organization.bean.Employee">
-		insert into organization.employee_ (
+		insert into
+		organization.employee_ (
 		employee_id,
 		employee_name,
 		employee_sex,
@@ -432,47 +508,69 @@
 	</insert>
 
 	<update id="updateByEmployee" parameterType="com.xiangshangban.organization.bean.Employee">
-		update organization.employee_
+		update
+		organization.employee_
 		set
-		employee_name = #{employeeName,jdbcType=VARCHAR},
-		employee_sex = #{employeeSex,jdbcType=VARCHAR},
-		login_name = #{loginName,jdbcType=VARCHAR},
-		direct_person_id = #{directPersonId,jdbcType=VARCHAR},
-		employee_phone = #{employeePhone,jdbcType=VARCHAR},
-		employee_twophone = #{employeeTwophone,jdbcType=VARCHAR},
-		entry_time = #{entryTime,jdbcType=VARCHAR},
-		probationary_expired = #{probationaryExpired,jdbcType=VARCHAR},
+		employee_name =
+		#{employeeName,jdbcType=VARCHAR},
+		employee_sex =
+		#{employeeSex,jdbcType=VARCHAR},
+		login_name =
+		#{loginName,jdbcType=VARCHAR},
+		direct_person_id =
+		#{directPersonId,jdbcType=VARCHAR},
+		employee_phone =
+		#{employeePhone,jdbcType=VARCHAR},
+		employee_twophone =
+		#{employeeTwophone,jdbcType=VARCHAR},
+		entry_time =
+		#{entryTime,jdbcType=VARCHAR},
+		probationary_expired =
+		#{probationaryExpired,jdbcType=VARCHAR},
 		department_id=#{departmentId,jdbcType=VARCHAR},
 		work_address=#{workAddress}
 		where
-		employee_id = #{employeeId,jdbcType=VARCHAR}
+		employee_id =
+		#{employeeId,jdbcType=VARCHAR}
 	</update>
 
 	<update id="updateByEmployeeapprove" parameterType="com.xiangshangban.organization.bean.Employee">
-		update organization.employee_
+		update
+		organization.employee_
 		set
-		employee_name = #{employeeName,jdbcType=VARCHAR},
-		employee_sex = #{employeeSex,jdbcType=VARCHAR},
-		login_name = #{loginName,jdbcType=VARCHAR},
-		direct_person_id = #{directPersonId,jdbcType=VARCHAR},
-		employee_phone = #{employeePhone,jdbcType=VARCHAR},
-		employee_twophone = #{employeeTwophone,jdbcType=VARCHAR},
-		entry_time = #{entryTime,jdbcType=VARCHAR},
-		probationary_expired = #{probationaryExpired,jdbcType=VARCHAR},
+		employee_name =
+		#{employeeName,jdbcType=VARCHAR},
+		employee_sex =
+		#{employeeSex,jdbcType=VARCHAR},
+		login_name =
+		#{loginName,jdbcType=VARCHAR},
+		direct_person_id =
+		#{directPersonId,jdbcType=VARCHAR},
+		employee_phone =
+		#{employeePhone,jdbcType=VARCHAR},
+		employee_twophone =
+		#{employeeTwophone,jdbcType=VARCHAR},
+		entry_time =
+		#{entryTime,jdbcType=VARCHAR},
+		probationary_expired =
+		#{probationaryExpired,jdbcType=VARCHAR},
 		department_id=#{departmentId,jdbcType=VARCHAR},
 		employee_status=#{employeeStatus,jdbcType=VARCHAR},
 		work_address=#{workAddress}
 		where
-		employee_id = #{employeeId,jdbcType=VARCHAR}
+		employee_id =
+		#{employeeId,jdbcType=VARCHAR}
 	</update>
 
 
 	<update id="updateByEmployeedept" parameterType="com.xiangshangban.organization.bean.Employee">
-		update organization.employee_
+		update
+		organization.employee_
 		set
 		department_id=#{departmentId,jdbcType=VARCHAR}
 		where
-		employee_id = #{employeeId,jdbcType=VARCHAR}
+		employee_id =
+		#{employeeId,jdbcType=VARCHAR}
 	</update>
 
 </mapper>

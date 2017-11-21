@@ -184,7 +184,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	//查询离职
 	@Override
 	public List<Employee> findByLiZhiemployee(String companyId) {
-		// TODO Auto-generated method stub
+		
 		return employeeDao.findByLiZhiemployee(companyId);
 	}
 	//调职
@@ -251,9 +251,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	@Override
-	public List<Employee> selectByAllFnyeEmployee(Map<String, String> map) {
+	public List<Employee> selectByAllFnyeEmployee(String companyId,String numPage,String numRecordCount, String employeeName, String employeeSex, String departmentName,String postName,String employeeStatus) {
 		// TODO Auto-generated method stub
-		return employeeDao.selectByAllFnyeEmployee(map);
+		return employeeDao.selectByAllFnyeEmployee(companyId, numPage, numRecordCount,  employeeName,  employeeSex,  departmentName, postName, employeeStatus);
 	}
 
 	@Override

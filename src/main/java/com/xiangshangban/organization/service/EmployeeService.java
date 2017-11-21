@@ -30,7 +30,7 @@ public interface EmployeeService {
     //调职
     String batchUpdateTransferJobStaus(String employeeId);
     //分页查询员工信息
-    List<Employee> selectByAllFnyeEmployee(Map<String,String> map);
+    List<Employee> selectByAllFnyeEmployee(String companyId,String numPage,String numRecordCount, String employeeName, String employeeSex, String departmentName,String postName,String employeeStatus);
     
     String updateByEmployeedept(Employee employee);
     Employee findByemploginName(String loginName);
