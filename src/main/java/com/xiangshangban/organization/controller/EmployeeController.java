@@ -338,7 +338,7 @@ public class EmployeeController {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			String companyId = request.getHeader("companyId");// 公司id
-			String userId = request.getHeader("userId");// 操作人id
+			String userId = request.getHeader("accessUserId");// 操作人id
 			JSONObject obj = JSON.parseObject(jsonString);
 			String employeeName = obj.getString("employeeName");// 员工姓名
 			String employeeSex = obj.getString("employeeSex");// 员工性别
@@ -421,7 +421,7 @@ public class EmployeeController {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			String companyId = request.getHeader("companyId");// 公司id
-			String userId = request.getHeader("userId");// 操作人id
+			String userId = request.getHeader("accessUserId");// 操作人id
 			JSONObject jsonObj = JSON.parseObject(jsonString);
 			String employeeId = jsonObj.getString("employeeId");
 			Employee emp = employeeService.selectByEmployee(employeeId, companyId);
@@ -455,9 +455,9 @@ public class EmployeeController {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			String companyId = request.getHeader("companyId");// 公司id
-			String userId = request.getHeader("userId");// 操作人id
-			JSONObject jsonObj = JSON.parseObject(jsonString);
-			String employeeId = jsonObj.getString("employeeId");
+			String employeeId = request.getHeader("accessUserId");// 操作人id
+			/*JSONObject jsonObj = JSON.parseObject(jsonString);
+			String employeeId = jsonObj.getString("employeeId");*/
 			Employee emp = employeeService.selectByEmployee(employeeId, companyId);
 			if (emp != null) {
 				List<Post> postList = postService.selectVicePositionByEmployeeId(companyId, employeeId);
@@ -490,7 +490,7 @@ public class EmployeeController {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			String companyId = request.getHeader("companyId");// 公司id
-			String userId = request.getHeader("userId");// 操作人id
+			String userId = request.getHeader("accessUserId");// 操作人id
 			JSONArray jsonArray = JSON.parseArray(jsonStrng);
 			for (int i = 0; i < jsonArray.size(); i++) {
 				String employeeId = jsonArray.get(i).toString();

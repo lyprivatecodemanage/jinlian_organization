@@ -28,7 +28,7 @@ public class Employee {
     private String postName;//岗位名称
     private String directPersonName;//直接汇报人名称    
     private String operateUserId;// 操作人ID
-    private String is_active;//激活状态，0：未激活，1：已激活
+    private String isActive;//激活状态，0：未激活，1：已激活
     private String infoStatus;//信息完整状态 0：不完整，1：完整
     //----现在没用到的----
 //    private String employeeBirthday;// 出生年月日    
@@ -58,11 +58,11 @@ public class Employee {
 	public void setContractPeriod(String contractPeriod) {
 		this.contractPeriod = contractPeriod;
 	}
-	public String getIs_active() {
-		return is_active;
+	public String getisActive() {
+		return isActive;
 	}
-	public void setIs_active(String is_active) {
-		this.is_active = is_active;
+	public void setisActive(String isActive) {
+		this.isActive = isActive;
 	}
 	public String getEmployeeImgUrl() {
 		return employeeImgUrl;
