@@ -20,17 +20,19 @@
     where userid = #{userid,jdbcType=VARCHAR}
   </select>
   <select id="getcheckListByPage" parameterType="java.util.Map" resultMap="BaseResultMap">
-  	select a.userid, a.companyid, a.status , a.apply_time, b.info_status
-  	FROM check_pending_joincompany AS a
+  	select a.userid, a.companyid, a.status , a.apply_time, COALESCE(b.info_status,'0') AS info_status,
+	 u.username, u.phone
+	  	FROM check_pending_joincompany AS a
 	LEFT JOIN user_company AS b ON a.companyid=b.company_id AND a.userid=b.user_id
-	WHERE a.companyid=#{companyId} AND a.status='0' OR b.info_status='0'
+	LEFT JOIN u_users AS u ON a.userid=u.userid
+	WHERE a.companyid=#{companyId} AND (a.status='0' OR b.info_status='0')
 	limit #{pageRecordNum}::integer offset #{fromPageNum}::integer
   </select>
   <select id="getcheckListByPageAllLength" parameterType="java.util.Map" resultType="int">
   	select count(a.userid)
   	FROM check_pending_joincompany AS a
 	LEFT JOIN user_company AS b ON a.companyid=b.company_id AND a.userid=b.user_id
-	WHERE a.companyid=#{companyId} AND a.status='0' OR b.info_status='0'
+	WHERE a.companyid=#{companyId} AND (a.status='0' OR b.info_status='0')
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
     delete from check_pending_joincompany
