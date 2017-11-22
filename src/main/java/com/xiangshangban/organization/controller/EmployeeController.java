@@ -412,14 +412,19 @@ public class EmployeeController {
 			String userId = request.getHeader("accessUserId");// 操作人id
 			JSONArray jsonArray = JSON.parseArray(jsonStrng);
 			for (int i = 0; i < jsonArray.size(); i++) {
-				String employeeId = jsonArray.get(i).toString();
+				String employeeId = JSON.parseObject(jsonArray.get(i).toString()).getString("employeeId");
+				String departmentId = JSON.parseObject(jsonArray.get(i).toString()).getString("departmentId");
+				String postId = JSON.parseObject(jsonArray.get(i).toString()).getString("postId");
 				int num = employeeService.deleteByEmployee(companyId,employeeId);
 				if (num < 2) {
 					result.put("message", "删除失败");
 					result.put("returnCode", "");
 					return result;
 				}
+				//改变员工部门关联表删除状态
 				connectEmpPostService.deleteEmpConnectPost(employeeId);
+				//岗位移动表添加岗位离职时间
+				transferjobService.updateTransferEndTimeWhereDeleteEmployee(companyId, employeeId, departmentId,postId);
 			}
 			result.put("message", "成功");
 			result.put("returnCode", "3000");
@@ -471,8 +476,16 @@ public class EmployeeController {
 			}
 			params = JSON.parseObject(jsonString,Map.class);
 			employeeService.updateEmployeeInformation(params);
-			//ConnectEmpPost formerConnectEmpPost = connectEmpPostService.
-			connectEmpPostService.updateEmployeeWithPost(employeeId, departmentId, postId);
+			ConnectEmpPost formerConnectEmpPost = connectEmpPostService.selectEmployeePostInformation(employeeId, departmentId);
+			if(!postId.equals(formerConnectEmpPost.getPostId())){
+				connectEmpPostService.updateEmployeeWithPost(employeeId, departmentId, postId);
+				//添加更换之前主岗位的换岗时间(transferEndTime)
+				transferjobService.updateTransferEndTimeWhereDeleteEmployee(companyId, employeeId, departmentId,formerConnectEmpPost.getPostId());
+				//添加新岗位的记录
+				Transferjob transferjob = new Transferjob();
+				
+				transferjobService.insertTransferjob(transferjob);
+			}
 			connectEmpPostService.deleteEmployeeWithPost(employeeId, departmentId);
 			JSONArray array = obj.getJSONArray("postList");
 			List<ConnectEmpPost> list = new ArrayList<ConnectEmpPost>();

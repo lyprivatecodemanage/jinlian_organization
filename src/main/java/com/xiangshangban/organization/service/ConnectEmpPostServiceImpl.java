@@ -126,6 +126,12 @@ public class ConnectEmpPostServiceImpl implements ConnectEmpPostService {
 		return connectEmpPostDao.updateEmployeeWithPost(employeeId, departmentId, postId);
 	}
 
+	@Override
+	public ConnectEmpPost selectEmployeePostInformation(String employeeId, String departmentId) {
+		
+		return connectEmpPostDao.selectEmployeePostInformation(employeeId, departmentId);
+	}
+
 
 
 

@@ -30,6 +30,7 @@ public interface ConnectEmpPostService {
 	int deleteEmpConnectPost(String employeeId);
 	/**
 	 * @author 李业:编辑个人信息(副岗位)
+	 * 删除副岗位信息
 	 * @param employeeId
 	 * @param departmentId
 	 * @return
@@ -37,16 +38,26 @@ public interface ConnectEmpPostService {
 	int deleteEmployeeWithPost(String employeeId,String departmentId);
 	/**
 	 * @author 李业:编辑个人信息(副岗位)
+	 * 添加副岗位信息
 	 * @param list
 	 * @return
 	 */
 	int insertEmployeeWithPost(List<ConnectEmpPost> list);
 	/**
 	 * @author 李业:编辑个人信息(主岗位)
+	 * 更新主岗位信息
 	 * @param employeeId
 	 * @param departmentId
 	 * @param postId
 	 * @return
 	 */
 	int updateEmployeeWithPost(String employeeId,String departmentId,String postId);
+	/**
+	 * @author 李业:编辑个人信息(主岗位)
+	 * 查询主岗位信息
+	 * @param employeeId
+	 * @param departmentId
+	 * @return
+	 */
+	ConnectEmpPost selectEmployeePostInformation(String employeeId,String departmentId);
 }
