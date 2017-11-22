@@ -122,8 +122,9 @@ public class EmployeeController {
 			return returnData;
 		}
 
-		if (!RegexUtil.matchDate(employeenew.getEntryTime())
-				|| !RegexUtil.matchDate(employeenew.getProbationaryExpired())) {
+		if ((StringUtils.isNotEmpty(employeenew.getEntryTime()) && !RegexUtil.matchDate(employeenew.getEntryTime()))
+				|| (StringUtils.isNotEmpty(employeenew.getProbationaryExpired()) 
+						&& !RegexUtil.matchDate(employeenew.getProbationaryExpired()))) {
 			returnData.setMessage("日期格式错误（yyyy-MM-dd）");
 			returnData.setReturnCode("3009");
 			return returnData;

@@ -7,11 +7,17 @@ public class UserCompanyDefault {
 	private String isActive;//是否激活 0：未激活  1：已激活
 	private String infoStatus;//信息是否完善  0:否  1：是
 	public UserCompanyDefault(){}
-	public UserCompanyDefault(String userId, String companyId, String currentOption) {
+	
+	public UserCompanyDefault(String userId, String companyId, String currentOption, String isActive,
+			String infoStatus) {
+		super();
 		this.userId = userId;
 		this.companyId = companyId;
 		this.currentOption = currentOption;
+		this.isActive = isActive;
+		this.infoStatus = infoStatus;
 	}
+
 	public String getUserId() {
 		return userId;
 	}
