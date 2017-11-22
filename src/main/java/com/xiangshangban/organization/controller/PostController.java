@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.xiangshangban.organization.bean.ConnectEmpPost;
+import com.xiangshangban.organization.bean.Department;
 import com.xiangshangban.organization.bean.Employee;
 import com.xiangshangban.organization.bean.Post;
 import com.xiangshangban.organization.bean.ReturnData;
@@ -93,24 +95,38 @@ public class PostController {
 		 * @return
 		 */
 		@RequestMapping(value="/deleteByPost", produces = "application/json;charset=UTF-8", method=RequestMethod.POST)
-		public ReturnData deleteByPost(@RequestBody String postId,HttpServletRequest request,HttpServletResponse response){				
+		public ReturnData deleteByPost(@RequestBody String listPostString,HttpServletRequest request,HttpServletResponse response){				
 			ReturnData returnData = new ReturnData();
 			//获取请求头信息
 			String companyId = request.getHeader("companyId");
-			if(StringUtils.isNotEmpty(postId)){				
-				returnData.setMessage("必传参数为空");
-				returnData.setReturnCode("3006");				
-			}else{
+			JSONObject obj = JSON.parseObject(listPostString);
+			JSONArray listPost = obj.getJSONArray("listPost");
+			if(listPost.size()==0){
+				returnData.setMessage("删除岗位错误：未选择要删除的岗位");
+				returnData.setReturnCode("4112");
+				return returnData;
+			}
+			//检查是否可以删除
+			for(int i=0;i<listPost.size();i++){
+				String departmentid = listPost.get(i).toString();
+				JSONObject objs = JSON.parseObject(departmentid);
+				String postId=objs.getString("postId");	
 				List<ConnectEmpPost> connectEmpPostlist = connectEmpPostService.findEmpByPostId(companyId, postId);
 				if(connectEmpPostlist.size()>0){
 					returnData.setMessage("删除岗位错误：岗位下有人员");
 					returnData.setReturnCode("4106");
 					return returnData;
-				}
+				}				
+			}
+			for(int i=0;i<listPost.size();i++){
+				String departmentid = listPost.get(i).toString();
+				JSONObject objs = JSON.parseObject(departmentid);
+				String postId=objs.getString("postId");	
 				postService.deleteByPost(postId);
-				returnData.setMessage("数据请求成功");
-				returnData.setReturnCode("3000");		
-			}	
+							
+			}
+			returnData.setMessage("数据请求成功");
+			returnData.setReturnCode("3000");
 			return returnData;
 		}		
 		/**
@@ -171,6 +187,7 @@ public class PostController {
 			params.put("pageRecordNum", pageRecordNum);
 			params.put("fromPageNum", strNum);
 			params.put("companyId", companyId);
+			params.put("departmentId", obj.getString("departmentId"));
 			params.put("postName", obj.getString("postName"));//岗位名称
 			params.put("departmentName", obj.getString("departmentName"));//所属部门名称
 			

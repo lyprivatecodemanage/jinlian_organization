@@ -130,6 +130,9 @@
     LEFT JOIN organization.department_ d  on d.department_id=p.department_id 
     where 
     p.company_id=#{companyId}
+    <if test="departmentId!=null and departmentId!=''">
+		AND (p.department_id = #{departmentId} OR d.department_parent_id = #{departmentId})
+	</if>
     <if test="postName!=null and postName!=''">
 		AND p.post_name like '%${postName}%'
 	</if>
