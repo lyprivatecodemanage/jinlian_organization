@@ -79,7 +79,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 			userCompany.setCompanyId(employee.getCompanyId());
 			userCompany.setCurrentOption("2");
 			userCompany.setUserId(user.getUserid());
-			userCompanyDefaultDao.insert(userCompany);//添加用户公司的绑定关系
+			userCompanyDefaultDao.insertSelective(userCompany);//添加用户公司的绑定关系
 			
 			CheckPerson checkPerson = new CheckPerson();
 			checkPerson.setUserid(employeeId);
@@ -88,6 +88,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 			checkPerson.setApplyTime(TimeUtil.getCurrentTime());
 			checkPersonDao.insertSelective(checkPerson );
 		}else{
+			employee.setEmployeeId(user.getUserid());
 			if(!user.getUsername().equals(employee.getEmployeeName())){//姓名不匹配，添加失败
 				return 0;
 			}
@@ -98,7 +99,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 				userCompany.setCompanyId(employee.getCompanyId());
 				userCompany.setCurrentOption("2");
 				userCompany.setUserId(user.getUserid());
-				userCompanyDefaultDao.insert(userCompany);//添加用户公司的绑定关系
+				userCompanyDefaultDao.insertSelective(userCompany);//添加用户公司的绑定关系
 			}else if(userCompany!=null && userCompany.getCompanyId().equals(employee.getCompanyId())){//已存在绑定关系，则直接返回
 				if("2".equals(userCompany.getIsActive())){
 					userCompany.setIsActive("0");
@@ -107,7 +108,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 				this.updateTransfer(employee);//岗位信息设置
 				return 1;
 			}
-			employee.setEmployeeId(user.getUserid());						
 			employeeDao.insertEmployee(employee);//插入人员表
 		}
 	    
@@ -140,6 +140,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 				empPost.setPostGrades(post.getPostGrades());
 				empPost.setPostId(postId);
 				empPost.setIsDelete("0");
+				empPost.setEmployeeId(employee.getEmployeeId());
 				connectEmpPostDao.saveConnect(empPost);	
 				if("1".equals(post.getPostGrades())){//主岗位添加调动记录
 					Transferjob transferjob = new Transferjob();
