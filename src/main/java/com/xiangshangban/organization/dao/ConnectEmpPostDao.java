@@ -22,4 +22,10 @@ public interface ConnectEmpPostDao {
 	List<ConnectEmpPost> findEmpByPostId(String companyId, String postId);
 	
 	int deleteEmpConnectPost(String employeeId);
+	
+	int deleteEmployeeWithPost(@Param("employeeId")String employeeId,@Param("departmentId")String departmentId);
+	
+	int insertEmployeeWithPost(List<ConnectEmpPost> list);
+	
+	int updateEmployeeWithPost(@Param("employeeId")String employeeId,@Param("departmentId")String departmentId,@Param("postId")String postId);
 }

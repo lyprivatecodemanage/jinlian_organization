@@ -1,17 +1,45 @@
 package com.xiangshangban.organization.service;
 
-import java.util.List;
-
-import org.apache.ibatis.annotations.Param;
-
+import java.io.InputStream;
+import org.springframework.web.multipart.MultipartFile;
 import com.xiangshangban.organization.bean.OSSFile;
 
 public interface OSSFileService {
-	void insertOssfile(OSSFile oSSFile);
+	/**
+	 * 上传文件
+	 * @param token
+	 * @param file
+	 * @return
+	 */
+	public OSSFile addOSSFile(String customerId,  String directory, MultipartFile file);
 	
-    List<OSSFile> selectByAllossfilet(String customerId);
+	/**
+	 * 自动上传
+	 * @param customerId
+	 * @param type
+	 * @param input
+	 * @return
+	 */
+	public OSSFile autoAddOSSFile(String customerId, String directory,String type,InputStream input);
 	
-    OSSFile selectBysingleossfilet(@Param("key") String key,@Param("customerId") String customerId);
-    
-	void deleteByossfile(@Param("key") String key,@Param("customerId") String customerId);
+	/**
+	 * 设备上传专用
+	 * @param customerId
+	 * @param SN
+	 * @param edtion
+	 * @param type
+	 * @param content
+	 * @return
+	 */
+	public String deviceFileUpload(String customerId, String directory,String SN,String edtion,String type,String fileMd5,byte[] content);
+	
+	/**
+	 * 根据KEY获取文件路径
+	 * @param customerId
+	 * @param key
+	 * @return
+	 */
+	public String getPathByKey(String customerId,  String directory, String key);
+
+	public OSSFile autoAddOSSFileByLength(String customerId,  String directory, String string, int contentLength, InputStream inputStream);
 }

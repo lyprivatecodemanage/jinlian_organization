@@ -108,6 +108,24 @@ public class ConnectEmpPostServiceImpl implements ConnectEmpPostService {
 		return connectEmpPostDao.deleteEmpConnectPost(employeeId);
 	}
 
+	@Override
+	public int insertEmployeeWithPost(List<ConnectEmpPost> list) {
+		
+		return connectEmpPostDao.insertEmployeeWithPost(list);
+	}
+
+	@Override
+	public int deleteEmployeeWithPost(String employeeId, String departmentId) {
+		
+		return connectEmpPostDao.deleteEmployeeWithPost(employeeId, departmentId);
+	}
+
+	@Override
+	public int updateEmployeeWithPost(String employeeId, String departmentId, String postId) {
+		
+		return connectEmpPostDao.updateEmployeeWithPost(employeeId, departmentId, postId);
+	}
+
 
 
 
