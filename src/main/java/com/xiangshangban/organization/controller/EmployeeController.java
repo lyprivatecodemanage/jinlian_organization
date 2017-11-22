@@ -29,25 +29,27 @@ import com.xiangshangban.organization.bean.ReturnData;
 import com.xiangshangban.organization.bean.Transferjob;
 import com.xiangshangban.organization.service.ConnectEmpPostService;
 import com.xiangshangban.organization.service.EmployeeService;
+import com.xiangshangban.organization.service.OSSFileService;
 import com.xiangshangban.organization.service.PostService;
 import com.xiangshangban.organization.service.TransferjobService;
 import com.xiangshangban.organization.util.HttpRequestFactory;
 import com.xiangshangban.organization.util.PropertiesUtils;
 import com.xiangshangban.organization.util.RegexUtil;
-import com.xiangshangban.organization.util.TimeUtil;
 
 @RestController
 @RequestMapping("/EmployeeController")
 public class EmployeeController {
 	Logger logger = Logger.getLogger(EmployeeController.class);
 	@Autowired
-	EmployeeService employeeService;
+	private EmployeeService employeeService;
 	@Autowired
-	ConnectEmpPostService connectEmpPostService;
+	private ConnectEmpPostService connectEmpPostService;
 	@Autowired
-	PostService postService;
+	private PostService postService;
 	@Autowired
-	TransferjobService transferjobService;
+	private TransferjobService transferjobService;
+	@Autowired
+	private OSSFileService oSSFileService;
 
 	/**
 	 * 点击激活，管理员把员工登录名注册到用户注册表里
@@ -266,7 +268,7 @@ public class EmployeeController {
 			String departmentName = obj.getString("departmentName");// 部门名称
 			String postName = obj.getString("postName");// 岗位名称
 			String employeeStatus = obj.getString("employeeStatus");// 员工状态，0,在职，1,离职，2,删除
-
+			String departmentId = obj.getString("departmentId");//部门id
 			String pageNum = obj.getString("pageNum");// 页码
 			String pageRecordNum = obj.getString("pageRecordNum");// 页记录行数
 			boolean pageNumFlag = Pattern.matches("\\d{1,}", pageNum);
@@ -308,7 +310,7 @@ public class EmployeeController {
 				}
 			}
 			List<Employee> employeeList = employeeService.selectByAllFnyeEmployee(companyId, pageNum, pageRecordNum,
-					employeeName, employeeSex, departmentName, postName, employeeStatus);
+					employeeName, employeeSex, departmentName, postName, employeeStatus,departmentId);
 			// 查询总记录数
 			int intCount=employeeService.selectCountEmployeeFromCompany(companyId, pageNum, pageRecordNum, employeeName, employeeSex,
 					departmentName, postName, employeeStatus);
@@ -378,6 +380,11 @@ public class EmployeeController {
 			String companyId = request.getHeader("companyId");// 公司id
 			String userId = request.getHeader("accessUserId");// 操作人id
 			Employee emp = employeeService.selectByEmployeeFromApp(companyId, userId);
+			String key = emp.getEmployeeImgUrl();
+			String companyNo = emp.getCompanyNo();
+			String directory = PropertiesUtils.ossProperty("portraitDirectory");
+			String url = oSSFileService.getPathByKey(companyNo, directory, key);
+			emp.setEmployeeImgUrl(url);
 			result.put("result", emp);
 			result.put("message", "成功");
 			result.put("returnCode", "3000");
@@ -413,6 +420,7 @@ public class EmployeeController {
 					result.put("returnCode", "");
 					return result;
 				}
+				connectEmpPostService.deleteEmpConnectPost(employeeId);
 			}
 			result.put("message", "成功");
 			result.put("returnCode", "3000");
@@ -440,27 +448,45 @@ public class EmployeeController {
 			String companyId = request.getHeader("companyId");//公司id
 			String userId = request.getHeader("accessUserId");//操作人id
 			JSONObject obj = JSON.parseObject(jsonString);
-			String employeeId = obj.getString("employeeId");
-			String employeeName = obj.getString("employeeName");
-			String employeeSex = obj.getString("employeeSex");
-			String loginName = obj.getString("loginName");
-			String employeePhone = obj.getString("employeePhone");
-			String employeeTwophone = obj.getString("employeeTwophone");
-			String postName = obj.getString("postName");
-			String departmentName = obj.getString("departmentName");
-			String employeeNo = obj.getString("employeeNo");
-			String derectPersonName = obj.getString("derectPersonName");
-			String entryTime = obj.getString("entryTime");
-			String probationaryExpired = obj.getString("probationaryExpired");
+			String employeeId = obj.getString("employeeId");//员工id
+			String employeeName = obj.getString("employeeName");//员工姓名
+			String employeeSex = obj.getString("employeeSex");//性别
+			String loginName = obj.getString("loginName");//登录名
+			String employeePhone = obj.getString("employeePhone");//联系方式1
+			String employeeTwophone = obj.getString("employeeTwophone");//联系方式2
+			String postId = obj.getString("postId");//主岗位id
+			String workAddress = obj.getString("workAddress");//工作地
+			String marriageStatus = obj.getString("marriageStatus");//婚姻状况
+			String seniority = obj.getString("seniority");//工龄
+			String departmentId = obj.getString("departmentId");//部门id
+			String employeeNo = obj.getString("employeeNo");//员工编号
+			String derectPersonId = obj.getString("derectPersonId");//
+			String entryTime = obj.getString("entryTime");//直接汇报人id
+			String probationaryExpired = obj.getString("probationaryExpired");//试用到期日
 			if(StringUtils.isEmpty(employeeName) || StringUtils.isEmpty(employeeSex) || StringUtils.isEmpty(loginName)
-				|| StringUtils.isEmpty(departmentName) || StringUtils.isEmpty(entryTime) || StringUtils.isEmpty(probationaryExpired)
-				|| StringUtils.isEmpty(postName)){
+				|| StringUtils.isEmpty(departmentId) || StringUtils.isEmpty(entryTime) || StringUtils.isEmpty(probationaryExpired)
+				|| StringUtils.isEmpty(postId) || StringUtils.isEmpty(workAddress)){
 				result.put("message", "必传参数为空");
 				result.put("returnCode", "3006");
 				return result;
 			}
 			params = JSON.parseObject(jsonString,Map.class);
-			
+			employeeService.updateEmployeeInformation(params);
+			//ConnectEmpPost formerConnectEmpPost = connectEmpPostService.
+			connectEmpPostService.updateEmployeeWithPost(employeeId, departmentId, postId);
+			connectEmpPostService.deleteEmployeeWithPost(employeeId, departmentId);
+			JSONArray array = obj.getJSONArray("postList");
+			List<ConnectEmpPost> list = new ArrayList<ConnectEmpPost>();
+			ConnectEmpPost connectEmpPost = new ConnectEmpPost();
+			connectEmpPost.setEmployeeId(employeeId);
+			connectEmpPost.setDepartmentId(departmentId);
+			connectEmpPost.setPostGrades("0");
+			connectEmpPost.setIsDelete("0");
+			for(int i =0 ;i<array.size();i++){
+				connectEmpPost.setPostId(array.getString(i));
+				list.add(connectEmpPost);
+			}
+			connectEmpPostService.insertEmployeeWithPost(list);
 			result.put("message","成功");
 			result.put("returnCode","3000");
 			return result;
@@ -495,79 +521,7 @@ public class EmployeeController {
 		return returnData;
 	}
 
-	/**
-	 * 根据人员姓名，所属部门，主岗位动态查询所有在职人员以及所属部门和主岗位
-	 * 
-	 * @param jsonString
-	 * @param request
-	 * @param response
-	 * @return
-	 */
-	@RequestMapping(value = "/findBydynamicempadmin", produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
-	public ReturnData findBydynamicempadmin(@RequestBody String jsonString, HttpServletRequest request,
-			HttpServletResponse response) {
-		ReturnData returnData = new ReturnData();
-		Map<String, String> params = new HashMap<String, String>();
-		Map<String, String> temp = new HashMap<String, String>();
-		Map<String, String> temps = new HashMap<String, String>();
-		JSONObject obj = JSON.parseObject(jsonString);
-		// 获取请求头信息
-		String companyId = request.getHeader("companyId");
-		params.put("companyId", companyId);
-		String employeeName = obj.getString("employeeName");
-		String departmentName = obj.getString("departmentName");
-		String postName = obj.getString("postName");
-		String pageNum = obj.getString("pageNum");
-		String pageNumPattern = "\\d{1,}";
-		boolean pageNumFlag = Pattern.matches(pageNumPattern, pageNum);
-		String pageRecordNum = obj.getString("pageRecordNum");
-		boolean pageRecordNumFlag = Pattern.matches(pageNumPattern, pageRecordNum);
-		if (!pageNumFlag || !pageRecordNumFlag) {
-			returnData.setMessage("参数格式不正确");
-			returnData.setReturnCode("3007");
-			return returnData;
-		}
-		if (employeeName.equals("") && departmentName.equals("") && postName.equals("")) {
-			temps.put("companyId", companyId);
-			List<Employee> Employeelist = employeeService.findByempadmins(temps);
-			if (pageNum != null && pageNum != "" && pageRecordNum != null && pageRecordNum != "") {
-				int number = (Integer.parseInt(pageNum) - 1) * Integer.parseInt(pageRecordNum);
-				String strNum = String.valueOf(number);
-				temp.put("pageRecordNum", pageRecordNum);
-				temp.put("fromPageNum", strNum);
-				temp.put("companyId", companyId);
-				List<Employee> Emplist = employeeService.findByempadmin(temp);
-				int totalPages = Employeelist.size();// 数据总条数
-				double pageCountnum = (double) totalPages / Integer.parseInt(pageRecordNum);
-				int pagecountnum = (int) Math.ceil(pageCountnum);// 总页数
-				returnData.setTotalPages(totalPages);
-				returnData.setPagecountNum(pagecountnum);
-				returnData.setData(Emplist);
-				returnData.setMessage("数据请求成功");
-				returnData.setReturnCode("3000");
-			}
-		} else {
-			if (pageNum != null && pageNum != "" && pageRecordNum != null && pageRecordNum != "") {
-				int number = (Integer.parseInt(pageNum) - 1) * Integer.parseInt(pageRecordNum);
-				String strNum = String.valueOf(number);
-				params.put("employeeName", employeeName);
-				params.put("departmentName", departmentName);
-				params.put("postName", postName);
-				params.put("pageRecordNum", pageRecordNum);
-				params.put("fromPageNum", strNum);
-				List<Employee> emplist = employeeService.findBydynamicempadmin(params);
-				int totalPages = emplist.size();// 数据总条数
-				double pageCountnum = (double) totalPages / Integer.parseInt(pageRecordNum);
-				int pagecountnum = (int) Math.ceil(pageCountnum);// 总页数
-				returnData.setTotalPages(totalPages);
-				returnData.setPagecountNum(pagecountnum);
-				returnData.setData(emplist);
-				returnData.setMessage("数据请求成功");
-				returnData.setReturnCode("3000");
-			}
-		}
-		return returnData;
-	}
+	
 
 	/**
 	 * 所有在职员工的信息

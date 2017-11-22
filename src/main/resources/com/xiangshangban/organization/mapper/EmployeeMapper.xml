@@ -26,67 +26,9 @@
 		<result column="work_address" jdbcType="VARCHAR" property="workAddress" />
 		<result column="marriage_status" jdbcType="VARCHAR" property="marriageStatus" />
 		<result column="seniority" jdbcType="VARCHAR" property="seniority" />
-		<!-- <result column="employee_birthday" jdbcType="VARCHAR" property="employeeBirthday" 
-			/> <result column="employee_tell" jdbcType="VARCHAR" property="employeeTell" 
-			/> <result column="employee_email" jdbcType="VARCHAR" property="employeeEmail" 
-			/> <result column="employee_position" jdbcType="VARCHAR" property="employeePosition" 
-			/> <result column="contract_period" jdbcType="VARCHAR" property="contractPeriod" 
-			/> <result column="is_manager" jdbcType="VARCHAR" property="isManager" /> 
-			<result column="contract_expired" jdbcType="VARCHAR" property="contractExpired" 
-			/> <result column="probationary_period" jdbcType="VARCHAR" property="probationaryPeriod" 
-			/> <result column="emergency_contact_phone" jdbcType="VARCHAR" property="emergencyContactPhone" 
-			/> <result column="emergency_contact" jdbcType="VARCHAR" property="emergencyContact" 
-			/> <result column="phone_public" jdbcType="VARCHAR" property="phonePublic" 
-			/> <result column="shift_time" jdbcType="VARCHAR" property="shiftTime" /> 
-			<result column="employee_card_number" jdbcType="VARCHAR" property="employeeCardNumber" 
-			/> -->
 	</resultMap>
 
-
-	<!-- 根据人员姓名，所属部门，主岗位动态查询所有在职人员以及所属部门和主岗位 -->
-	<select id="findBydynamicempadmin" parameterType="java.util.Map"
-		resultMap="Employee">
-		select DISTINCT
-		e.employee_id,
-		e.employee_name,e.login_name,e.employee_img_url,
-		e.department_id,d.department_name,st.post_id,p.post_name
-		from
-		organization.employee_ e
-		lEFT JOIN organization.department_ d on
-		d.department_id=e.department_id
-		LEFT JOIN
-		organization.connect_emp_post_ st on
-		st.employee_id=e.employee_id and
-		st.post_grades='1'
-		LEFT JOIN organization.post_ p on
-		p.post_id=st.post_id
-		<where>
-			<if test="companyId != null and companyId != ''">
-				and e.company_id=#{companyId}
-			</if>
-			<if test="employeeName!=null and employeeName != ''">
-				and e.employee_id in (select e.employee_id from
-				organization.employee_
-				e where e.employee_name like
-				'%${employeeName}%')
-			</if>
-			<if test="departmentName!=null and departmentName != ''">
-				and e.employee_id in (select e.employee_id from
-				organization.department_ d LEFT JOIN organization.employee_ e on
-				d.department_id=e.department_id where d.department_name like
-				'%${departmentName}%')
-			</if>
-			<if test="postName!=null and postName != ''">
-				and e.employee_id in (select st.employee_id from
-				organization.post_ p
-				LEFT JOIN organization.connect_emp_post_ st on
-				st.post_id=p.post_id
-				where p.post_name like '%${postName}%' )
-			</if>
-			and e.employee_status='0'
-		</where>
-		limit #{pageRecordNum}::integer offset #{fromPageNum}::integer
-	</select>
+	
 	<!-- 部门下在职员工 -->
 	<select id="findEmployeeByDepartmentId" resultMap="Employee">
 		select
@@ -223,6 +165,9 @@
 		<if test="employeeStatus != null">
 			and employee_status = #{employeeStatus}
 		</if>
+		<if test="departmentId != null">
+			and department_id = #{departmentId}
+		</if>
 		limit #{numRecordCount} :: integer offset #{numPage} :: integer
 	</select>
 
@@ -238,7 +183,6 @@
 		e.employee_status,e.probationary_expired,e.direct_person_id,y.employee_name
 		AS direct_person_name,y.work_address
 		from organization.employee_ e
-
 		lEFT
 		JOIN organization.employee_ y on y.employee_id=e.direct_person_id
 		lEFT
@@ -301,7 +245,6 @@
 		e.employee_status,e.probationary_expired,e.direct_person_id,y.employee_name
 		AS direct_person_name,e.work_address
 		from organization.employee_ e
-
 		lEFT
 		JOIN organization.employee_ y on y.employee_id=e.direct_person_id
 		lEFT
@@ -354,6 +297,9 @@
 		<result column="derect_person_name" property="directPersonName" />
 		<result column="entry_time" property="entrytime" />
 		<result column="probationary_expired" property="probationaryExpired" />
+		<result column="work_address" property="workAddress" />
+		<result column="marriage_status" property="marriageStatus" />
+		<result column="seniority" property="seniority" />
 	</resultMap>
 	<!-- 李业:查询单条人员信息 -->
 	<select id="selectByEmployee" parameterType="java.lang.String"
@@ -363,13 +309,13 @@
 		e.employee_twophone,p.post_name,d.department_name,e.employee_no,
 		(select employee_name as derect_person_name from employee_ where
 		employee_id = e.direct_person_id ),
-		e.entry_time,e.probationary_expired
+		e.entry_time,e.probationary_expired,e.work_address,e.marriage_status,e.seniority
 		from employee_ as
 		e,connect_emp_post_ as cep,post_ p,department_ d
 		where e.company_id =
 		#{companyId} and e.employee_id = #{employeeId}
 		and e.employee_id =
-		cep.employee_id and cep.post_grades = '1' and cep.post_id = p.post_id
+		cep.employee_id and cep.post_grades = '1' and cep.is_delete = '0' and cep.post_id = p.post_id
 		and cep.department_id = d.department_id
 	</select>
 	<resultMap type="com.xiangshangban.organization.bean.Employee"
@@ -409,7 +355,7 @@
 		left join
 		connect_emp_post_ cep
 		on a.userid = cep.employee_id and d.department_id
-		= cep.department_id and cep.post_grades = '1'
+		= cep.department_id and cep.post_grades = '1' and cep.is_delete = '0'
 		left join post_ p
 		on cep.post_id = p.post_id
 	</select>
@@ -444,17 +390,43 @@
 		</if>
 	</select>
 	<!-- 李业:编辑人员信息 -->
-	<update id="">
+	<update id="updateEmployeeInformation" parameterType="java.util.Map">
 		update employee_
 		set employee_name = #{employeeName}
-		and employee_sex = #{employeeSex} and
-		login_name = #{loginName}
-		and
-		entry_time = #{entryTime} and probationary_expired =
-		#{probationaryExpired}
+		and employee_sex = #{employeeSex} 
+		and employee_status = #{employeeStatus}
+		and login_name = #{loginName}
+		and entry_time = #{entryTime} 
+		and probationary_expired = #{probationaryExpired}
+		and work_address = #{workAddress}
+		<if test="employeePhone != null">
+			and employee_phone =#{employeePhone}
+		</if>
+		<if test="employeeTwophone != null">
+			and employee_twophone =#{employeeTwophone}
+		</if>
+		<if test="employeeNo != null">
+			and employee_no =#{employeeNo}
+		</if>
+		<if test="derectPersonId != null">
+			and derect_person_id =#{derectPersonId}
+		</if>
+		<if test="marriageStatus != null">
+			and marriage_status =#{marriageStatus}
+		</if>
+		<if test="seniority != null">
+			and seniority =#{seniority}
+		</if>
 		where company_id = #{companyId} and employee_id
 		= #{employeeId}
 	</update>
+	
+	
+	
+	
+	
+	
+	
 	<!-- 所有在职员工的信息 -->
 	<select id="findByAllEmployee" parameterType="java.lang.String"
 		resultMap="Employee">

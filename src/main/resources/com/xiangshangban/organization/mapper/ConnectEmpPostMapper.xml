@@ -52,6 +52,31 @@
             
         )
 	</insert>
+	<!-- 李业:编辑个人信息(主岗位) -->
+	<select id="selectEmployeePostInformation" parameterType="java.lang.String" resultMap="ConnectEmpPost">
+		select employee_id,post_id,department_id
+		from connect_emp_post_
+		where is_delete = '0' and post_grades = '1' and employee_id = #{employeeId} and department_id = #{departmentId}
+	</select>
+	<update id="updateEmployeeWithPost" parameterType="java.lang.String">
+		update connect_emp_post
+		set post_id = #{postId}
+		where employee_id = #{employeeId} and department_id = #{departmentId} and post_grades = '1'
+	</update>
+	
+	<!-- 李业:编辑个人信息(副岗位) -->
+	<delete id="deleteEmployeeWithPost" parameterType="java.lang.String">
+		delete from connect_emp_post_
+		where employee_id = #{employeeId} and department_id = #{departmentId} and post_grades = '0'
+	</delete>
+	<insert id="insertEmployeeWithPost" parameterType="java.util.List">
+		insert into connect_emp_post_ (employee_id, post_id, department_id, post_grades, is_delete) values
+		<foreach collection="list" item="cnctEmpPost" separator=",">
+			(#{cnctEmpPost.employeeId},#{cnctEmpPost.postId},#{cnctEmpPost.departmentId},#{cnctEmpPost.postGrades},#{cnctEmpPost.isDelete})
+		</foreach>
+	</insert>
+	
+	<!-- 李业:删除员工信息 -->
 	<update id="deleteEmpConnectPost" parameterType="java.lang.String">
 		update connect_emp_post_
 		set is_delete = '1'

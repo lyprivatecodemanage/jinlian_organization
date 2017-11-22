@@ -46,7 +46,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 	TransferjobDao transferjobDao;
 	@Autowired
 	ConnectEmpPostDao connectEmpPostDao;
-	
 	@Autowired
 	CheckPersonDao checkPersonDao;
 	@Autowired
@@ -286,16 +285,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	@Override
-	public List<Employee> selectByAllFnyeEmployee(String companyId,String numPage,String numRecordCount, String employeeName, String employeeSex, String departmentName,String postName,String employeeStatus) {
+	public List<Employee> selectByAllFnyeEmployee(String companyId,String numPage,String numRecordCount, String employeeName, String employeeSex, String departmentName,String postName,String employeeStatus,String departmentId) {
 		// TODO Auto-generated method stub
-		return employeeDao.selectByAllFnyeEmployee(companyId, numPage, numRecordCount,  employeeName,  employeeSex,  departmentName, postName, employeeStatus);
+		return employeeDao.selectByAllFnyeEmployee(companyId, numPage, numRecordCount,  employeeName,  employeeSex,  departmentName, postName, employeeStatus,departmentId);
 	}
 
-	@Override
-	public List<Employee> findBydynamicempadmin(Map<String, String> map) {
-		// TODO Auto-generated method stub
-		return employeeDao.findBydynamicempadmin(map);
-	}
+
 
 	@Override
 	public List<Employee> findByempadmin(Map<String,String> map) {
@@ -331,6 +326,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 	public Employee selectByEmployeeFromApp(String companyId, String userId) {
 	
 		return employeeDao.selectByEmployeeFromApp(companyId, userId);
+	}
+
+	@Override
+	public int updateEmployeeInformation(Map<String, String> params) {
+		
+		return employeeDao.updateEmployeeInformation(params);
 	}
 
 	

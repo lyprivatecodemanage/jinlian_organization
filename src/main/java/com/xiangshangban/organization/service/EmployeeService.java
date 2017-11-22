@@ -42,7 +42,7 @@ public interface EmployeeService {
      * @param employeeStatus
      * @return
      */
-    List<Employee> selectByAllFnyeEmployee(String companyId,String numPage,String numRecordCount, String employeeName, String employeeSex, String departmentName,String postName,String employeeStatus);
+    List<Employee> selectByAllFnyeEmployee(String companyId,String numPage,String numRecordCount, String employeeName, String employeeSex, String departmentName,String postName,String employeeStatus,String departmentId);
     /**
      * 分页条件查询总记录数
      * @param companyId
@@ -64,8 +64,7 @@ public interface EmployeeService {
 	String updateByEmployeeapprove(Employee employee);
 	List<Employee>findByruzhiempinfo(String companyId);
 	List<Employee> selectByAllEmployee(String companyId);
-	//根据人员姓名，所属部门，主岗位动态查询所有在职人员以及所属部门和主岗位 
-    List<Employee> findBydynamicempadmin(Map<String,String> map);
+	
     //查询所有在职人员以及所属部门和主岗位
     List<Employee> findByempadmin(Map<String,String> map);
     List<Employee> findByempadmins(Map<String,String> map);
@@ -97,4 +96,11 @@ public interface EmployeeService {
 	 * @return
 	 */
 	Employee selectByEmployeeFromApp(String companyId,String userId);
+	
+	/**
+	 * @author 李业/编辑个人信息
+	 * @param params
+	 * @return
+	 */
+	int updateEmployeeInformation(Map<String,String> params);
 }

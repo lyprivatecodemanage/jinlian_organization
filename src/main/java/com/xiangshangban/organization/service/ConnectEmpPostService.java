@@ -2,6 +2,8 @@ package com.xiangshangban.organization.service;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.xiangshangban.organization.bean.ConnectEmpPost;
 
 public interface ConnectEmpPostService {
@@ -26,4 +28,25 @@ public interface ConnectEmpPostService {
 	 * @return
 	 */
 	int deleteEmpConnectPost(String employeeId);
+	/**
+	 * @author 李业:编辑个人信息(副岗位)
+	 * @param employeeId
+	 * @param departmentId
+	 * @return
+	 */
+	int deleteEmployeeWithPost(String employeeId,String departmentId);
+	/**
+	 * @author 李业:编辑个人信息(副岗位)
+	 * @param list
+	 * @return
+	 */
+	int insertEmployeeWithPost(List<ConnectEmpPost> list);
+	/**
+	 * @author 李业:编辑个人信息(主岗位)
+	 * @param employeeId
+	 * @param departmentId
+	 * @param postId
+	 * @return
+	 */
+	int updateEmployeeWithPost(String employeeId,String departmentId,String postId);
 }
