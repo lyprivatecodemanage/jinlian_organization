@@ -134,87 +134,7 @@ public class EmployeeController {
 		return returnData;
 	}
 
-	/**
-	 * 编辑员工信息
-	 * 
-	 * @param jsonString
-	 * @param request
-	 * @param response
-	 * @return
-	 */
-	@RequestMapping(value = "/updateByEmployee", produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
-	public ReturnData updateByEmployee(@RequestBody String jsonString, HttpServletRequest request,
-			HttpServletResponse response) {
-		JSONObject jsonObject = JSONObject.parseObject(jsonString);
-		ReturnData returnData = new ReturnData();
-		String employeeId = jsonObject.getString("employeeId");
-		if (StringUtils.isNotEmpty(employeeId)) {
-			Employee employeenew = JSON.parseObject(jsonString, Employee.class);
-			// 获取请求头信息
-			String companyId = request.getHeader("companyId");
-			String operateUserId = request.getHeader("accessUserId");
-			employeenew.setOperateUserId(operateUserId);
-
-			employeenew.setCompanyId(companyId);
-			employeenew.setEmployeeId(employeeId);
-			employeeService.updateByEmployee(employeenew);
-
-			Transferjob transferjob = transferjobService.selectByTransferjobpost(employeeId, companyId);
-			// 上一次所在部门ID
-			String departmentid = transferjob.getDepartmentId();
-			// 修改后传的部门id
-
-			if (employeenew.getDepartmentId().equals(departmentid)) {
-				ConnectEmpPost EmpPost = new ConnectEmpPost();
-				EmpPost.setEmployeeId(employeeId);
-				// 原来所在部门ID
-				EmpPost.setDepartmentId(departmentid);
-				// 员工所在部门修改后，也要修改调动表现在所在部门的员工部门
-				transferjobService.updateByTrandepartmentId(employeenew.getDepartmentId());
-			}
-			// 把员工关联的岗位添加到connect_emp_post_中间表里面
-			String postIdList = jsonObject.getString("postList");
-			JSONArray postIdList1 = JSON.parseArray(postIdList);
-			for (int i = 0; i < postIdList1.size(); i++) {
-				JSONObject jobj = jsonObject.parseObject(postIdList1.getString(i));
-				String postId = jobj.getString("postId");
-				String postGrades = jobj.getString("postGrades");
-				ConnectEmpPost empPost = new ConnectEmpPost();
-				ConnectEmpPost connect = new ConnectEmpPost();
-				ConnectEmpPost connectemppos = connectEmpPostService.findByConnect(employeeId,
-						employeenew.getDepartmentId(), postGrades);
-				if (connectemppos == null) {
-					empPost.setEmployeeId(employeeId);
-					empPost.setDepartmentId(employeenew.getDepartmentId());
-					empPost.setPostGrades(postGrades);
-					empPost.setPostId(postId);
-					connectEmpPostService.saveConnect(empPost);
-				}
-				if (connectemppos != null) {
-					String postid = connectemppos.getPostId();
-					if (!postId.equals("postid")) {
-						connect.setDepartmentId(employeenew.getDepartmentId());
-						connect.setEmployeeId(employeeId);
-						connect.setPostId(postid);
-						connectEmpPostService.updatetpostGradespostStaus(connect);
-						empPost.setEmployeeId(employeeId);
-						empPost.setDepartmentId(employeenew.getDepartmentId());
-						empPost.setPostGrades(postGrades);
-						empPost.setPostId(postId);
-						connectEmpPostService.saveConnect(empPost);
-					}
-					continue;
-				}
-			}
-			returnData.setMessage("数据请求成功");
-			returnData.setReturnCode("3000");
-			return returnData;
-		} else {
-			returnData.setMessage("必传参数为空");
-			returnData.setReturnCode("3006");
-			return returnData;
-		}
-	}
+	
 
 	/**
 	 * 完善申请入职员工的入职信息
@@ -458,7 +378,7 @@ public class EmployeeController {
 			String userId = request.getHeader("accessUserId");// 操作人id
 			//JSONObject jsonObj = JSON.parseObject(jsonString);
 			//String employeeId = jsonObj.getString("employeeId");
-			Employee emp = employeeService.selectByEmployeeFromApp(companyId, userId);
+			Employee emp = employeeService.selectByEmployee(userId, companyId);
 			if (emp != null) {
 				List<Post> postList = postService.selectVicePositionByEmployeeId(companyId, userId);
 				if (postList.size() > 0) {
