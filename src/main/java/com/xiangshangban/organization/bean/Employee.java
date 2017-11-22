@@ -12,6 +12,7 @@ public class Employee {
     private String employeeSex;//员工性别(0：男，1：女)
     private String departmentId;//部门ID
     private String companyId;//公司ID
+    private String companyNo;//公司编号
     private String employeeNo;//员工工号
     private String directPersonId;//直接汇报人id
     private String employeePhone;//联系方式1   
@@ -24,7 +25,6 @@ public class Employee {
     //---连表查询的---
     private List<Post> postList;//岗位   
     private String companyName;//
-    private String companyNo;
     private String postId;//岗位ID
     private String departmentName;//部门名称
     private String postName;//岗位名称
@@ -55,12 +55,6 @@ public class Employee {
     @ExcelResources(title="岗位",order=5)
 	public String getPostName() {
 		return postName;
-	}
-	public String getCompanyNo() {
-		return companyNo;
-	}
-	public void setCompanyNo(String companyNo) {
-		this.companyNo = companyNo;
 	}
 	public String getIsActive() {
 		return isActive;
@@ -232,6 +226,12 @@ public class Employee {
 	}
 	public void setInfoStatus(String infoStatus) {
 		this.infoStatus = infoStatus;
+	}
+	public String getCompanyNo() {
+		return companyNo;
+	}
+	public void setCompanyNo(String companyNo) {
+		this.companyNo = companyNo;
 	}
 	
 	

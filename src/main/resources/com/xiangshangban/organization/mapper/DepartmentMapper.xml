@@ -49,6 +49,7 @@
 	<if test="employeeName!=null and employeeName!=''">
 		AND employeeName like '%${employeeName}%'
 	</if>
+	order by d.department_name
 	limit #{pageRecordNum}::integer offset #{fromPageNum}::integer 	 
   </select>
   <!-- 分页查询部门信息数目-->
@@ -82,6 +83,7 @@
 	where		
 		department_parent_id=#{departmentParentId,jdbcType=VARCHAR}
 		AND	d.company_id=#{companyId}	AND d.status='1'
+	order by d.department_name
 	</select>
   
    <select id="findByMoreDepartment"   parameterType="java.util.Map" resultMap="Department">  
@@ -100,7 +102,7 @@
 	     and d.employee_id in(select d.employee_id from organization.department_  d  LEFT JOIN organization.employee_ e on e.employee_id=d.employee_id where employee_name like '%${employeeName}%')
 	 </if> 				 
      </where>
-     ORDER BY d.department_numbe ASC
+     order by d.department_name
   </select> 
     
   <!-- 查询所有部门 -->
@@ -112,6 +114,7 @@
 	    (select e.employee_name from organization.employee_ e where e.employee_id=d.employee_id)
     from organization.department_  d  
     where d.company_id=#{companyId}	AND d.status='1' 
+    order by d.department_name
   </select>
   <!-- 查询部门下的所有子部门 -->
   <select id="findSingleAllDepartment" parameterType="java.lang.String" resultMap="Department">
@@ -123,6 +126,7 @@
     where d.department_parent_id = #{departmentId,jdbcType=VARCHAR}
     AND	
 	company_id=#{companyId} AND d.status='1'
+	order by d.department_name
   </select>
   
   <!-- 查询单个部门 --> 
@@ -148,7 +152,7 @@
     where d.department_id=#{deptId} AND d.company_id=#{companyId}
   </select>  
   <update id="deleteByDepartment" parameterType="java.lang.String">
-    update organization.department_ SET status='0' 
+    update organization.department_ SET status='0' where department_id=#{departmentId}
   </update>
   
   

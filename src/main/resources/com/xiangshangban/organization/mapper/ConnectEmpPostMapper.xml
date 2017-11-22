@@ -32,7 +32,12 @@
    where 
      p.post_id=#{postId}
    </select>
-   
+   <select id="findEmpByPostId" resultMap="ConnectEmpPost">
+   	  select c.*
+      from organization.connect_emp_post_ c  
+      LEFT JOIN  organization.post_ p  on c.post_id = p.post_id   
+      where c.post_id=#{postId} AND p.company_id=#{companyId}
+   </select>
 
 	<insert id="saveConnect" parameterType="com.xiangshangban.organization.bean.ConnectEmpPost">
 		insert into 

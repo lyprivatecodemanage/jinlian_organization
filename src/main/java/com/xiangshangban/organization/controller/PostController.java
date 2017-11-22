@@ -205,73 +205,24 @@ public class PostController {
 		}		
 		
 		/** 
-		 * 根据岗位名称，所属部门查询岗位信息
+		 * 根据岗位Id，查询岗位信息
 		 * @param jsonString
 		 * @param request
 		 * @param response
 		 * @return
 		 */
-		@RequestMapping(value="/findByMorePostIfon", produces = "application/json;charset=UTF-8", method=RequestMethod.POST)
-		public ReturnData findByMorePostIfon(@RequestBody String jsonString,HttpServletRequest request,HttpServletResponse response){			
-			Map<String,String> params = new HashMap<String, String>();
-			Map<String,String> param = new HashMap<String, String>();
-			JSONObject obj = JSON.parseObject(jsonString);
+		@RequestMapping(value="/findByPostId", produces = "application/json;charset=UTF-8", method=RequestMethod.POST)
+		public ReturnData findByMorePostIfon(@RequestBody String postId,HttpServletRequest request,HttpServletResponse response){			
 			ReturnData returnData = new ReturnData();
-			//获取请求头信息			
 			String companyId = request.getHeader("companyId");
-			String pageNum = obj.getString("pageNum");
-			String pageRecordNum = obj.getString("pageRecordNum");
-			params.put("companyId", companyId);
-			String postName = obj.getString("postName");
-			String departmentName = obj.getString("departmentName");
-			params.put("postName", postName);
-			params.put("departmentName",departmentName);
-			String pageNumPattern = "\\d{1,}";
-			boolean pageNumFlag = Pattern.matches(pageNumPattern, pageNum);
-			boolean pageRecordNumFlag = Pattern.matches(pageNumPattern, pageRecordNum);
-			if(!pageNumFlag||!pageRecordNumFlag){
-				returnData.setMessage("参数格式不正确");
-				returnData.setReturnCode("3007");			
+			if(StringUtils.isEmpty(postId)){
+				returnData.setMessage("必传参数为空");
+				returnData.setReturnCode("3006");
 				return returnData;
 			}
-			if(postName.equals("") && departmentName.equals("")){
-				List<Post> postlist = postService.selectByAllPostInfo(companyId);						
-					if (pageNum != null && pageNum != "" && pageRecordNum != null && pageRecordNum != "") {
-					int number = (Integer.parseInt(pageNum) - 1) * Integer.parseInt(pageRecordNum);
-						String strNum = String.valueOf(number);
-						param.put("pageRecordNum", pageRecordNum);
-						param.put("fromPageNum", strNum);
-						param.put("companyId", companyId);
-						List<Post> list=postService.selectByAllFenyePost(param);
-						int totalPages = postlist.size();
-						double  pageCountnum =(double)totalPages/Integer.parseInt(pageRecordNum);	
-						int pagecountnum=(int) Math.ceil(pageCountnum);
-						returnData.setTotalPages(totalPages);
-						returnData.setPagecountNum(pagecountnum);
-						returnData.setData(list);
-						returnData.setMessage("数据请求成功");
-						returnData.setReturnCode("3000");		
-				        return returnData;
-			}				
-			}else{
-				if (pageNum != null && pageNum != "" && pageRecordNum != null && pageRecordNum != "") {
-					int number = (Integer.parseInt(pageNum) - 1) * Integer.parseInt(pageRecordNum);
-						String strNum = String.valueOf(number);
-						params.put("pageRecordNum", pageRecordNum);
-						params.put("fromPageNum", strNum);
-						params.put("companyId", companyId);				
-						List<Post> list=postService.findByMorePostIfon(params);											
-						int totalPages = list.size();
-						double  pageCountnum =(double)totalPages/Integer.parseInt(pageRecordNum);	
-						int pagecountnum=(int) Math.ceil(pageCountnum);
-						returnData.setTotalPages(totalPages);
-						returnData.setPagecountNum(pagecountnum);
-						returnData.setData(list);
-						returnData.setMessage("数据请求成功");
-						returnData.setReturnCode("3000");		
-				        return returnData;
-			}
-			}
+			returnData.setData(postService.selectByPost(postId, companyId));
+			returnData.setMessage("数据请求成功");
+			returnData.setReturnCode("3000");
 			return returnData;			
 		}
 }

@@ -11,11 +11,11 @@ import com.xiangshangban.organization.bean.Post;
 @Mapper
 public interface PostDao {
     
-    int deleteByPost(String postId);
+    int deleteByPost(@Param("postId")String postId);
    
     int insertPost(Post post);
  
-    Post selectByPost(String postId,String companyId);
+    Post selectByPost(@Param("postId")String postId,@Param("companyId")String companyId);
 
     int updateByPost(Post post);
     

@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.xiangshangban.organization.bean.CheckPerson;
+import com.xiangshangban.organization.bean.Company;
 import com.xiangshangban.organization.bean.ConnectEmpPost;
 import com.xiangshangban.organization.bean.Employee;
 import com.xiangshangban.organization.bean.Post;
@@ -20,6 +21,7 @@ import com.xiangshangban.organization.bean.Transferjob;
 import com.xiangshangban.organization.bean.UserCompanyDefault;
 import com.xiangshangban.organization.bean.Uusers;
 import com.xiangshangban.organization.dao.CheckPersonDao;
+import com.xiangshangban.organization.dao.CompanyDao;
 import com.xiangshangban.organization.dao.ConnectEmpPostDao;
 import com.xiangshangban.organization.dao.EmployeeDao;
 import com.xiangshangban.organization.dao.TransferjobDao;
@@ -46,6 +48,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 	ConnectEmpPostDao connectEmpPostDao;
 	@Autowired
 	CheckPersonDao checkPersonDao;
+	@Autowired
+	CompanyDao companyDao;
 	@Override
 	public int deleteByEmployee(String employeeId,String companyId) {
 		int i = 0;
@@ -108,6 +112,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 	    
 	    this.updateTransfer(employee);//岗位信息设置
 	    
+	    Company company = companyDao.selectByCompany(employee.getCompanyId());
+	    employee.setCompanyNo(company.getCompanyNo());
 		List<Employee> cmdlist=new ArrayList<Employee>();
 		cmdlist.add(employee);
 		try {
