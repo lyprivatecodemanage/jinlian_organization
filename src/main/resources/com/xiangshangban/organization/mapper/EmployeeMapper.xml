@@ -95,7 +95,7 @@
 		organization.employee_ e
 		WHERE e.employee_status='1' AND
 		e.company_id=#{companyId} AND
-		e.department_id=#{e.departmentId}
+		e.department_id=#{departmentId}
 	</select>
 	<!--查询所有在职人员以及所属部门和主岗位 -->
 	<select id="findByempadmin" parameterType="java.lang.String"
@@ -179,20 +179,20 @@
 	</select>
 
 	<resultMap id="PagingColumnList" type="com.xiangshangban.organization.bean.Employee">
-		<id column = "employee_id" property = "employeeId"/>
-		<id column = "employee_name" property = "employeeId"/>
-		<id column = "employee_sex" property = "employeeId"/>
-		<id column = "login_name" property = "employeeId"/>
-		<id column = "employee_phone" property = "employeeId"/>
-		<id column = "post_id" property = "employeeId"/>
-		<id column = "post_name" property = "employeeId"/>
-		<id column = "department_id" property = "employeeId"/>
-		<id column = "department_name" property = "employeeId"/>
-		<id column = "entry_time" property = "employeeId"/>
-		<id column = "employee_status" property = "employeeId"/>
-		<id column = "is_active" property = "employeeId"/>
+		<id column="employee_id" property="employeeId" />
+		<id column="employee_name" property="employeeId" />
+		<id column="employee_sex" property="employeeId" />
+		<id column="login_name" property="employeeId" />
+		<id column="employee_phone" property="employeeId" />
+		<id column="post_id" property="employeeId" />
+		<id column="post_name" property="employeeId" />
+		<id column="department_id" property="employeeId" />
+		<id column="department_name" property="employeeId" />
+		<id column="entry_time" property="employeeId" />
+		<id column="employee_status" property="employeeId" />
+		<id column="is_active" property="isActive" />
 	</resultMap>
-	
+
 	<!-- 李业:分页查询员工信息 -->
 	<select id="selectByAllFnyeEmployee" parameterType="java.lang.String"
 		resultMap="PagingColumnList">
@@ -200,10 +200,14 @@
 		e.employee_id,e.employee_name,e.employee_sex,e.login_name,e.employee_phone,
 		p.post_id,p.post_name,e.department_id,d.department_name,
 		e.entry_time,e.employee_status,uc.is_active
-		from organization.employee_ e,department_ d,post_ p,user_company uc
+		from organization.employee_
+		e,department_ d,post_ p,user_company uc
 		where
-		e.company_id = #{companyId} and e.department_id = d.department_id and
-		d.department_id = p.department_id and e.company_id = uc.company_id and uc.is_active = '1'
+		e.company_id =
+		#{companyId} and e.department_id = d.department_id and
+		d.department_id
+		= p.department_id and e.company_id = uc.company_id and uc.is_active =
+		'1'
 		<if test="employeeName != null">
 			and employee_name like #{employeeName}
 		</if>
@@ -337,37 +341,75 @@
 		where
 		e.login_name = #{loginName,jdbcType=VARCHAR}
 	</select>
-	<resultMap type="com.xiangshangban.organization.bean.Employee" id="EmployeeResultMap">
-		<result column="employee_id" property="employeeId"/>
-		<result column="employee_name" property="employeeName"/>
-		<result column="employee_sex" property="employeeSex"/>
-		<result column="employee_phone" property="employeePhone"/>
-		<result column="employee_twophone" property="employeeTwophone"/>
-		<result column="post_name" property="postName"/>
-		<result column="department_name" property="departmentName"/>
-		<result column="employee_no" property="employeeNo"/>
-		<result column="derect_person_name" property="directPersonName"/>
-		<result column="entry_time" property="entrytime"/>
-		<result column="probationary_expired" property="probationaryExpired"/>
+	<resultMap type="com.xiangshangban.organization.bean.Employee"
+		id="EmployeeResultMap">
+		<result column="employee_id" property="employeeId" />
+		<result column="employee_name" property="employeeName" />
+		<result column="employee_sex" property="employeeSex" />
+		<result column="employee_phone" property="employeePhone" />
+		<result column="employee_twophone" property="employeeTwophone" />
+		<result column="post_name" property="postName" />
+		<result column="department_name" property="departmentName" />
+		<result column="employee_no" property="employeeNo" />
+		<result column="derect_person_name" property="directPersonName" />
+		<result column="entry_time" property="entrytime" />
+		<result column="probationary_expired" property="probationaryExpired" />
 	</resultMap>
 	<!-- 李业:查询单条人员信息 -->
 	<select id="selectByEmployee" parameterType="java.lang.String"
 		resultMap="EmployeeResultMap">
-		select  e.employee_id, e.employee_name,e.employee_sex,e.login_name,e.employee_phone,
+		select e.employee_id,
+		e.employee_name,e.employee_sex,e.login_name,e.employee_phone,
 		e.employee_twophone,p.post_name,d.department_name,e.employee_no,
-		(select employee_name as derect_person_name from employee_ where employee_id = e.direct_person_id ),
+		(select employee_name as derect_person_name from employee_ where
+		employee_id = e.direct_person_id ),
 		e.entry_time,e.probationary_expired
-		from employee_ as e,connect_emp_post_ as cep,post_ p,department_ d
-		where e.company_id = #{companyId} and e.employee_id = #{employeeId}
-		and e.employee_id = cep.employee_id and cep.post_grades = '1' and cep.post_id = p.post_id and cep.department_id = d.department_id
+		from employee_ as
+		e,connect_emp_post_ as cep,post_ p,department_ d
+		where e.company_id =
+		#{companyId} and e.employee_id = #{employeeId}
+		and e.employee_id =
+		cep.employee_id and cep.post_grades = '1' and cep.post_id = p.post_id
+		and cep.department_id = d.department_id
+	</select>
+	<resultMap type="com.xiangshangban.organization.bean.Employee" id="EmployeeAppResultMap">
+		<result column="userid" property="employeeId"/>
+		<result column="employee_img_url" property="employeeImgUrl"/>
+		<result column="username" property="employee_name"/>
+		<result column="employee_sex" property="employeeSex"/>
+		<result column="company_name" property="companyName"/>
+		<result column="department_name" property="departmentName"/>
+		<result column="employee_no" property="employeeNo"/>
+		<result column="phone" property="employeePhone"/>
+	</resultMap>
+	<!-- 李业:app查询单条人员信息 -->
+	<select id="selectByEmployeeFromApp" parameterType="java.lang.String"
+		resultMap="EmployeeAppResultMap">
+		select
+		userid,employee_img_url,username,employee_sex,company_name,department_name,employee_no,phone
+		from (select u.userid,
+		u.username,c.company_name,u.phone
+		from u_users u,user_company uc,company_ c
+		where u.userid =#{userId} and u.userid = uc.user_id and uc.company_id =
+		#{companyId} and c.company_id = uc.company_id
+		) a
+		left join employee_ e
+		on a.userid = e.employee_id
+		left join department_ d
+		on
+		e.department_id = d.department_id
 	</select>
 	<!-- 李业:查询员工信息总记录数 -->
-	<select id="selectCountEmployeeFromCompany" parameterType="java.lang.String" resultType="java.lang.Integer">
+	<select id="selectCountEmployeeFromCompany" parameterType="java.lang.String"
+		resultType="java.lang.Integer">
 		select count(e.employee_id)
-		from organization.employee_ e,department_ d,post_ p,user_company uc
+		from organization.employee_ e,department_
+		d,post_ p,user_company uc
 		where
-		e.company_id = #{companyId} and e.department_id = d.department_id and
-		d.department_id = p.department_id and e.company_id = uc.company_id and uc.is_active = '1'
+		e.company_id = #{companyId} and
+		e.department_id = d.department_id and
+		d.department_id = p.department_id
+		and e.company_id = uc.company_id and uc.is_active = '1'
 		<if test="employeeName != null">
 			and employee_name like #{employeeName}
 		</if>
@@ -389,10 +431,12 @@
 	</select>
 	<!-- 李业:编辑人员信息 -->
 	<update id="">
-			update employee_
-			set employee_name = #{employeeName} and employee_sex = #{employeeSex} and login_name = #{loginName}
-			and entry_time = #{entryTime} and probationary_expired = #{probationaryExpired}
-			where company_id = #{companyId} and employee_id = #{employeeId}
+		update employee_
+		set employee_name = #{employeeName} and employee_sex = #{employeeSex} and
+		login_name = #{loginName}
+		and entry_time = #{entryTime} and probationary_expired =
+		#{probationaryExpired}
+		where company_id = #{companyId} and employee_id = #{employeeId}
 	</update>
 	<!-- 所有在职员工的信息 -->
 	<select id="findByAllEmployee" parameterType="java.lang.String"
@@ -516,7 +560,8 @@
 		update
 		organization.employee_ e
 		set e.employee_status = '1'
-		where company_id = #{companyId}
+		where company_id =
+		#{companyId}
 		employee_id =
 		#{employeeId}
 	</update>

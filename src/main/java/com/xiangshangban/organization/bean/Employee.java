@@ -79,12 +79,6 @@ public class Employee {
 	public void setContractPeriod(String contractPeriod) {
 		this.contractPeriod = contractPeriod;
 	}
-	public String getisActive() {
-		return isActive;
-	}
-	public void setisActive(String isActive) {
-		this.isActive = isActive;
-	}
 
 	public String getEmployeeImgUrl() {
 		return employeeImgUrl;

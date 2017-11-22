@@ -86,4 +86,6 @@ public interface EmployeeDao {
 
 	List<Employee> findEmployeeByDepartmentId(@Param("companyId") String companyId,
 			@Param("departmentId") String departmentId);
+	
+	Employee selectByEmployeeFromApp(@Param("companyId")String companyId,@Param("userId")String userId);
 }

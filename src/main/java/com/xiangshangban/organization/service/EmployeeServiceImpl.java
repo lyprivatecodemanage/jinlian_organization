@@ -33,7 +33,7 @@ import com.xiangshangban.organization.util.TimeUtil;
 
 @Service
 public class EmployeeServiceImpl implements EmployeeService {
-	Logger logger = Logger.getLogger(EmployeeServiceImpl.class);
+	private static final Logger logger = Logger.getLogger(EmployeeServiceImpl.class);
 	@Autowired
 	EmployeeDao employeeDao;
 	@Autowired
@@ -318,6 +318,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 	public int deleteUserFromCompany(String companyId, String employeeId) {
 		
 		return userCompanyDefaultDao.deleteUserFromCompany(companyId, employeeId);
+	}
+
+	@Override
+	public Employee selectByEmployeeFromApp(String companyId, String userId) {
+	
+		return employeeDao.selectByEmployeeFromApp(companyId, userId);
 	}
 
 	

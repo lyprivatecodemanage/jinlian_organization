@@ -458,7 +458,7 @@ public class EmployeeController {
 			String userId = request.getHeader("accessUserId");// 操作人id
 			//JSONObject jsonObj = JSON.parseObject(jsonString);
 			//String employeeId = jsonObj.getString("employeeId");
-			Employee emp = employeeService.selectByEmployee(userId, companyId);
+			Employee emp = employeeService.selectByEmployeeFromApp(companyId, userId);
 			if (emp != null) {
 				List<Post> postList = postService.selectVicePositionByEmployeeId(companyId, userId);
 				if (postList.size() > 0) {

@@ -90,4 +90,11 @@ public interface EmployeeService {
 	 * @return
 	 */
 	int deleteUserFromCompany(String companyId,String employeeId);
+	/**
+	 *@author 李业/app查询个人信息
+	 * @param companyId
+	 * @param userId
+	 * @return
+	 */
+	Employee selectByEmployeeFromApp(String companyId,String userId);
 }
