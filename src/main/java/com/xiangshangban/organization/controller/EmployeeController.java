@@ -455,12 +455,12 @@ public class EmployeeController {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			String companyId = request.getHeader("companyId");// 公司id
-			String employeeId = request.getHeader("accessUserId");// 操作人id
-			/*JSONObject jsonObj = JSON.parseObject(jsonString);
-			String employeeId = jsonObj.getString("employeeId");*/
-			Employee emp = employeeService.selectByEmployee(employeeId, companyId);
+			String userId = request.getHeader("accessUserId");// 操作人id
+			//JSONObject jsonObj = JSON.parseObject(jsonString);
+			//String employeeId = jsonObj.getString("employeeId");
+			Employee emp = employeeService.selectByEmployee(userId, companyId);
 			if (emp != null) {
-				List<Post> postList = postService.selectVicePositionByEmployeeId(companyId, employeeId);
+				List<Post> postList = postService.selectVicePositionByEmployeeId(companyId, userId);
 				if (postList.size() > 0) {
 					emp.setPostList(postList);
 				}
@@ -525,7 +525,7 @@ public class EmployeeController {
 		Map<String,String> params = new HashMap<String,String>();
 		try{
 			String companyId = request.getHeader("companyId");//公司id
-			String userId = request.getHeader("userId");//操作人id
+			String userId = request.getHeader("accessUserId");//操作人id
 			JSONObject obj = JSON.parseObject(jsonString);
 			String employeeId = obj.getString("employeeId");
 			String employeeName = obj.getString("employeeName");
