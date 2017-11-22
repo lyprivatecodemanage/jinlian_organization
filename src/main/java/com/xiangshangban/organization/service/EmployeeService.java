@@ -3,12 +3,13 @@ package com.xiangshangban.organization.service;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Param;
 
 import com.xiangshangban.organization.bean.Employee;
 import com.xiangshangban.organization.bean.ReturnData;
 
 public interface EmployeeService {
-	int deleteByEmployee(String employeeId);
+	int deleteByEmployee(String employeeId,String companyId);
 	/**
 	 * 添加员工。用户未注册时，加入注册操作；用户已注册，则做绑定操作。
 	 * @param employee
@@ -82,4 +83,11 @@ public interface EmployeeService {
 	 * @return
 	 */
 	List<Employee> findEmployeeByDepartmentId(String companyId, String departmentId);
+	/**
+	 * 删除user_company表关系
+	 * @param companyId
+	 * @param employeeId
+	 * @return
+	 */
+	int deleteUserFromCompany(String companyId,String employeeId);
 }

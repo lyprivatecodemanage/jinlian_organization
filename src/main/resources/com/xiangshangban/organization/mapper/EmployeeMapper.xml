@@ -346,15 +346,15 @@
 		<result column="employee_no" property="employeeNo"/>
 		<result column="derect_person_name" property="directPersonName"/>
 		<result column="entry_time" property="entrytime"/>
-		<result column="contract_period" property="contractPeriod"/>
+		<result column="probationary_expired" property="probationaryExpired"/>
 	</resultMap>
 	<!-- 李业:查询单条人员信息 -->
 	<select id="selectByEmployee" parameterType="java.lang.String"
 		resultMap="EmployeeResultMap">
 		select  e.employee_id, e.employee_name,e.employee_sex,e.login_name,e.employee_phone,
 		e.employee_twophone,p.post_name,d.department_name,e.employee_no,
-		(select employee_name as derect_person_name from employee_ where employee_id = p.post_principal_id ),
-		e.entry_time,e.contract_period
+		(select employee_name as derect_person_name from employee_ where employee_id = e.direct_person_id ),
+		e.entry_time,e.probationary_expired
 		from employee_ as e,connect_emp_post_ as cep,post_ p,department_ d
 		where e.company_id = #{companyId} and e.employee_id = #{employeeId}
 		and e.employee_id = cep.employee_id and cep.post_grades = '1' and cep.post_id = p.post_id and cep.department_id = d.department_id
@@ -385,16 +385,13 @@
 			and employee_status = '0'
 		</if>
 	</select>
-	
-	<!-- 查询部门员工总记录数 
-	<select id="selectCountEmployeeFromDepartment" parameterType="java.lang.String">
-		select count(employee_id)
-		from employee_
-		where company_id = #{companyId} and department_id = #{departmentId} and employee_status = '0'
-	</select> -->
-	
-	
-
+	<!-- 李业:编辑人员信息 -->
+	<update id="">
+			update employee_
+			set employee_name = #{employeeName} and employee_sex = #{employeeSex} and login_name = #{loginName}
+			and entry_time = #{entryTime} and probationary_expired = #{probationaryExpired}
+			where company_id = #{companyId} and employee_id = #{employeeId}
+	</update>
 	<!-- 所有在职员工的信息 -->
 	<select id="findByAllEmployee" parameterType="java.lang.String"
 		resultMap="Employee">
@@ -517,7 +514,7 @@
 		update
 		organization.employee_ e
 		set e.employee_status = '1'
-		where
+		where company_id = #{companyId}
 		employee_id =
 		#{employeeId}
 	</update>

@@ -20,7 +20,6 @@ public class Employee {
     private String probationaryExpired;//试用到期日
     private String employeeImgUrl;//头像 
     private String workAddress;//工作地
-    private String regularWorkTime;//转正时间
     //---连表查询的---
     private List<Post> postList;//岗位   
     private String companyName;//
@@ -52,12 +51,6 @@ public class Employee {
     @ExcelResources(title="岗位",order=5)
 	public String getPostName() {
 		return postName;
-	}
-	public String getRegularWorkTime() {
-		return regularWorkTime;
-	}
-	public void setRegularWorkTime(String regularWorkTime) {
-		this.regularWorkTime = regularWorkTime;
 	}
 	public String getContractPeriod() {
 		return contractPeriod;

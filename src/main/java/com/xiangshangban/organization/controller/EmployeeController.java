@@ -6,8 +6,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.lang.StringUtils;
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -389,7 +392,11 @@ public class EmployeeController {
 			int intCount=employeeService.selectCountEmployeeFromCompany(companyId, pageNum, pageRecordNum, employeeName, employeeSex,
 					departmentName, postName, employeeStatus);
 			String count = String.valueOf(intCount);
-			result.put("count", count);
+			//总页数
+			int intpagecountNum = (int)Math.ceil((double)intCount/(Double.valueOf(pageRecordNum)));
+			String pagecountNum =String.valueOf(intpagecountNum);
+			result.put("totalPages", count);
+			result.put("pagecountNum", pagecountNum);
 			result.put("data", employeeList);
 			result.put("message", "成功");
 			result.put("returnCode", "3000");
@@ -419,13 +426,6 @@ public class EmployeeController {
 			String employeeId = jsonObj.getString("employeeId");
 			Employee emp = employeeService.selectByEmployee(employeeId, companyId);
 			if (emp != null) {
-				if (emp.getEntryTime() != null && emp.getContractPeriod() != null) {
-					String entryTime = emp.getEntryTime();
-					String contractPeriod = emp.getContractPeriod();
-					// 转正时间
-					String regularWorkTime = TimeUtil.getDateAfterString(entryTime, contractPeriod);
-					emp.setRegularWorkTime(regularWorkTime);
-				}
 				List<Post> postList = postService.selectVicePositionByEmployeeId(companyId, employeeId);
 				if (postList.size() > 0) {
 					emp.setPostList(postList);
@@ -443,6 +443,41 @@ public class EmployeeController {
 		}
 
 	}
+	/**
+	 * @author 李业/app查询人员信息
+	 * 
+	 * @param jsonString
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping("/appSearch")
+	public Map<String, Object> appSearch(@RequestBody String jsonString, HttpServletRequest request) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
+			String companyId = request.getHeader("companyId");// 公司id
+			String userId = request.getHeader("userId");// 操作人id
+			JSONObject jsonObj = JSON.parseObject(jsonString);
+			String employeeId = jsonObj.getString("employeeId");
+			Employee emp = employeeService.selectByEmployee(employeeId, companyId);
+			if (emp != null) {
+				List<Post> postList = postService.selectVicePositionByEmployeeId(companyId, employeeId);
+				if (postList.size() > 0) {
+					emp.setPostList(postList);
+				}
+			}
+			result.put("result", emp);
+			result.put("message", "成功");
+			result.put("returnCode", "3000");
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+			result.put("message", "服务器错误");
+			result.put("returnCode", "3001");
+			return result;
+		}
+
+	}
+	
 
 	/**
 	 * @author 李业:人员信息删除
@@ -459,7 +494,7 @@ public class EmployeeController {
 			JSONArray jsonArray = JSON.parseArray(jsonStrng);
 			for (int i = 0; i < jsonArray.size(); i++) {
 				String employeeId = jsonArray.get(i).toString();
-				int num = employeeService.deleteByEmployee(employeeId);
+				int num = employeeService.deleteByEmployee(companyId,employeeId);
 				if (num < 2) {
 					result.put("message", "删除失败");
 					result.put("returnCode", "");
@@ -470,6 +505,53 @@ public class EmployeeController {
 			result.put("returnCode", "3000");
 			return result;
 		} catch (Exception e) {
+			e.printStackTrace();
+			logger.info(e);
+			result.put("message", "服务器错误");
+			result.put("returnCode", "3001");
+			return result;
+		}
+	}
+	/**
+	 * @author 李业:人员信息编辑
+	 * @param jsonString
+	 * @param request
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	@RequestMapping("/updateEmployeeInformation")
+	public Map<String,Object> updateEmployeeInformation(@RequestBody String jsonString,HttpServletRequest request){
+		Map<String,Object> result = new HashMap<String,Object>();
+		Map<String,String> params = new HashMap<String,String>();
+		try{
+			String companyId = request.getHeader("companyId");//公司id
+			String userId = request.getHeader("userId");//操作人id
+			JSONObject obj = JSON.parseObject(jsonString);
+			String employeeId = obj.getString("employeeId");
+			String employeeName = obj.getString("employeeName");
+			String employeeSex = obj.getString("employeeSex");
+			String loginName = obj.getString("loginName");
+			String employeePhone = obj.getString("employeePhone");
+			String employeeTwophone = obj.getString("employeeTwophone");
+			String postName = obj.getString("postName");
+			String departmentName = obj.getString("departmentName");
+			String employeeNo = obj.getString("employeeNo");
+			String derectPersonName = obj.getString("derectPersonName");
+			String entryTime = obj.getString("entryTime");
+			String probationaryExpired = obj.getString("probationaryExpired");
+			if(StringUtils.isEmpty(employeeName) || StringUtils.isEmpty(employeeSex) || StringUtils.isEmpty(loginName)
+				|| StringUtils.isEmpty(departmentName) || StringUtils.isEmpty(entryTime) || StringUtils.isEmpty(probationaryExpired)
+				|| StringUtils.isEmpty(postName)){
+				result.put("message", "必传参数为空");
+				result.put("returnCode", "3006");
+				return result;
+			}
+			params = JSON.parseObject(jsonString,Map.class);
+			
+			result.put("message","成功");
+			result.put("returnCode","3000");
+			return result;
+		}catch(Exception e){
 			e.printStackTrace();
 			logger.info(e);
 			result.put("message", "服务器错误");
@@ -697,7 +779,7 @@ public class EmployeeController {
 	 * @param request
 	 * @param response
 	 * @return
-	 */
+	 *//*
 	@RequestMapping(value = "/selectByEmployee", produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
 	public ReturnData selectByEmployee(@RequestBody String jsonString, HttpServletRequest request,
 			HttpServletResponse response) {
@@ -721,7 +803,7 @@ public class EmployeeController {
 			returnData.setReturnCode("3006");
 		}
 		return returnData;
-	}
+	}*/
 
 	/**
 	 * 删除员工信息
