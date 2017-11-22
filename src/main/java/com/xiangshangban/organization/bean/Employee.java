@@ -12,6 +12,7 @@ public class Employee {
     private String employeeSex;//员工性别(0：男，1：女)
     private String departmentId;//部门ID
     private String companyId;//公司ID
+    private String companyNo;//公司编号
     private String employeeNo;//员工工号
     private String directPersonId;//直接汇报人id
     private String employeePhone;//联系方式1   
@@ -225,6 +226,12 @@ public class Employee {
 	}
 	public void setInfoStatus(String infoStatus) {
 		this.infoStatus = infoStatus;
+	}
+	public String getCompanyNo() {
+		return companyNo;
+	}
+	public void setCompanyNo(String companyNo) {
+		this.companyNo = companyNo;
 	}
 	
 	

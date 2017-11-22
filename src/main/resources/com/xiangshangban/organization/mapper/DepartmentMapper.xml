@@ -148,7 +148,7 @@
     where d.department_id=#{deptId} AND d.company_id=#{companyId}
   </select>  
   <update id="deleteByDepartment" parameterType="java.lang.String">
-    update organization.department_ SET status='0' 
+    update organization.department_ SET status='0' where department_id=#{departmentId}
   </update>
   
   
