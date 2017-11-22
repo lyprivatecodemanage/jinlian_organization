@@ -376,15 +376,7 @@ public class EmployeeController {
 		try {
 			String companyId = request.getHeader("companyId");// 公司id
 			String userId = request.getHeader("accessUserId");// 操作人id
-			//JSONObject jsonObj = JSON.parseObject(jsonString);
-			//String employeeId = jsonObj.getString("employeeId");
-			Employee emp = employeeService.selectByEmployee(userId, companyId);
-			if (emp != null) {
-				List<Post> postList = postService.selectVicePositionByEmployeeId(companyId, userId);
-				if (postList.size() > 0) {
-					emp.setPostList(postList);
-				}
-			}
+			Employee emp = employeeService.selectByEmployeeFromApp(companyId, userId);
 			result.put("result", emp);
 			result.put("message", "成功");
 			result.put("returnCode", "3000");
