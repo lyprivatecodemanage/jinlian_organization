@@ -24,6 +24,8 @@
 		<result column="post_id" jdbcType="VARCHAR" property="postId" />
 		<result column="employee_img_url" jdbcType="VARCHAR" property="employeeImgUrl" />
 		<result column="work_address" jdbcType="VARCHAR" property="workAddress" />
+		<result column="marriage_status" jdbcType="VARCHAR" property="marriageStatus" />
+		<result column="seniority" jdbcType="VARCHAR" property="seniority" />
 		<!-- <result column="employee_birthday" jdbcType="VARCHAR" property="employeeBirthday" 
 			/> <result column="employee_tell" jdbcType="VARCHAR" property="employeeTell" 
 			/> <result column="employee_email" jdbcType="VARCHAR" property="employeeEmail" 
@@ -535,7 +537,9 @@
 		department_id,
 		company_id,
 		employee_status,
-		work_address
+		work_address,
+		marriage_status,
+		seniority
 		)
 		values (
 		#{employeeId,jdbcType=VARCHAR},
@@ -551,7 +555,9 @@
 		#{departmentId,jdbcType=VARCHAR},
 		#{companyId,jdbcType=VARCHAR},
 		#{employeeStatus,jdbcType=VARCHAR},
-		#{workAddress}
+		#{workAddress},
+		#{marriageStatus},
+		#{seniority}
 		)
 	</insert>
 
@@ -576,7 +582,9 @@
 		probationary_expired =
 		#{probationaryExpired,jdbcType=VARCHAR},
 		department_id=#{departmentId,jdbcType=VARCHAR},
-		work_address=#{workAddress}
+		work_address=#{workAddress},
+		marriage_status=#{marriageStatus},
+		seniority=#{seniority}
 		where
 		employee_id =
 		#{employeeId,jdbcType=VARCHAR}
@@ -604,7 +612,9 @@
 		#{probationaryExpired,jdbcType=VARCHAR},
 		department_id=#{departmentId,jdbcType=VARCHAR},
 		employee_status=#{employeeStatus,jdbcType=VARCHAR},
-		work_address=#{workAddress}
+		work_address=#{workAddress},
+		marriage_status=#{marriageStatus},
+		seniority=#{seniority}
 		where
 		employee_id =
 		#{employeeId,jdbcType=VARCHAR}
