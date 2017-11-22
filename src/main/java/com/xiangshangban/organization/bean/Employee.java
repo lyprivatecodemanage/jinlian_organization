@@ -24,6 +24,7 @@ public class Employee {
     //---连表查询的---
     private List<Post> postList;//岗位   
     private String companyName;//
+    private String companyNo;
     private String postId;//岗位ID
     private String departmentName;//部门名称
     private String postName;//岗位名称
@@ -54,6 +55,12 @@ public class Employee {
     @ExcelResources(title="岗位",order=5)
 	public String getPostName() {
 		return postName;
+	}
+	public String getCompanyNo() {
+		return companyNo;
+	}
+	public void setCompanyNo(String companyNo) {
+		this.companyNo = companyNo;
 	}
 	public String getIsActive() {
 		return isActive;
