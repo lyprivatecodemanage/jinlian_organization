@@ -374,7 +374,7 @@ public class EmployeeController {
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping("/appSearch")
+	@RequestMapping(value="/appSearch",method=RequestMethod.POST)
 	public Map<String, Object> appSearch(@RequestBody String jsonString, HttpServletRequest request) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
@@ -406,7 +406,7 @@ public class EmployeeController {
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping("/deleteActivity")
+	@RequestMapping(value="/deleteActivity",method=RequestMethod.POST)
 	public Map<String, Object> deleteActivity(@RequestBody String jsonStrng, HttpServletRequest request) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
