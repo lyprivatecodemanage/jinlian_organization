@@ -32,6 +32,7 @@ import com.xiangshangban.organization.service.EmployeeService;
 import com.xiangshangban.organization.service.OSSFileService;
 import com.xiangshangban.organization.service.PostService;
 import com.xiangshangban.organization.service.TransferjobService;
+import com.xiangshangban.organization.util.FormatUtil;
 import com.xiangshangban.organization.util.HttpRequestFactory;
 import com.xiangshangban.organization.util.PropertiesUtils;
 import com.xiangshangban.organization.util.RegexUtil;
@@ -465,9 +466,10 @@ public class EmployeeController {
 			String seniority = obj.getString("seniority");//工龄
 			String departmentId = obj.getString("departmentId");//部门id
 			String employeeNo = obj.getString("employeeNo");//员工编号
-			String derectPersonId = obj.getString("derectPersonId");//
-			String entryTime = obj.getString("entryTime");//直接汇报人id
+			String directPersonId = obj.getString("directPersonId");//直接汇报人id
+			String entryTime = obj.getString("entryTime");//入职时间
 			String probationaryExpired = obj.getString("probationaryExpired");//试用到期日
+			String transferJobCause = obj.getString("transferJobCause");//调动原因
 			if(StringUtils.isEmpty(employeeName) || StringUtils.isEmpty(employeeSex) || StringUtils.isEmpty(loginName)
 				|| StringUtils.isEmpty(departmentId) || StringUtils.isEmpty(entryTime) || StringUtils.isEmpty(probationaryExpired)
 				|| StringUtils.isEmpty(postId) || StringUtils.isEmpty(workAddress)){
@@ -483,7 +485,7 @@ public class EmployeeController {
 				//添加更换之前主岗位的换岗时间(transferEndTime)
 				transferjobService.updateTransferEndTimeWhereDeleteEmployee(companyId, employeeId, departmentId,formerConnectEmpPost.getPostId());
 				//添加新岗位的记录
-				Transferjob transferjob = new Transferjob();
+				Transferjob transferjob = new Transferjob(FormatUtil.createUuid(), employeeId, null, departmentId, transferJobCause, null, userId, null, companyId, directPersonId, postId);
 				
 				transferjobService.insertTransferjob(transferjob);
 			}
@@ -496,7 +498,7 @@ public class EmployeeController {
 			connectEmpPost.setPostGrades("0");
 			connectEmpPost.setIsDelete("0");
 			for(int i =0 ;i<array.size();i++){
-				connectEmpPost.setPostId(array.getString(i));
+				connectEmpPost.setPostId(JSON.parseObject(array.getString(i)).getString("postId"));
 				list.add(connectEmpPost);
 			}
 			connectEmpPostService.insertEmployeeWithPost(list);

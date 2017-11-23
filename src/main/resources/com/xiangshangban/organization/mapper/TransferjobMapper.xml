@@ -172,7 +172,7 @@
 		#{transferBeginTime},
 		#{departmentId},#{transferJobCause},
 		#{transferEndTime},
-		#{to_char(now(),'yyyy-MM-dd hh24:mi:ss')},
+		${to_char(now(),'yyyy-MM-dd hh24:mi:ss')},
 		#{userId},
 		#{companyId},#{directPersonId},
 		#{postId}

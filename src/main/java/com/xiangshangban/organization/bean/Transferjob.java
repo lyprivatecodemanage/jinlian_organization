@@ -33,6 +33,24 @@ public class Transferjob {
 	private String directPersonName;//调动直接汇报人名称
 	private String postId;//岗位ID
   
+	
+	
+	public Transferjob(String transferJobId, String employeeId, String transferBeginTime, String departmentId,
+			String transferJobCause, String transferEndTime, String userId, String operatingTime, String companyId,
+			String directPersonId, String postId) {
+		this.transferJobId = transferJobId;
+		this.employeeId = employeeId;
+		this.transferBeginTime = transferBeginTime;
+		this.departmentId = departmentId;
+		this.transferJobCause = transferJobCause;
+		this.transferEndTime = transferEndTime;
+		this.userId = userId;
+		this.operatingTime = operatingTime;
+		this.companyId = companyId;
+		this.directPersonId = directPersonId;
+		this.postId = postId;
+	}
+
 	public String getDirectPersonId() {
 		return directPersonId;
 	}
