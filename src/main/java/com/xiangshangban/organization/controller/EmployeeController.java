@@ -61,12 +61,19 @@ public class EmployeeController {
 	 */
 	
 	@RequestMapping(value = "/activeEmployee", produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
-	public ReturnData activeEmp(@RequestBody String employeeId, HttpServletRequest request,
+	public ReturnData activeEmp(@RequestBody String jsonString, HttpServletRequest request,
 			HttpServletResponse response){
 		ReturnData returnData = new ReturnData();
 		// 获取请求头信息
 		String companyId = request.getHeader("companyId");
 		//String operateUserId = request.getHeader("accessUserId");
+		JSONObject obj = JSON.parseObject(jsonString);
+		String employeeId = obj.getString("employeeId");
+		if (StringUtils.isEmpty(employeeId)) {
+			returnData.setMessage("必传参数为空");
+			returnData.setReturnCode("3006");
+			return returnData;
+		}
 		employeeService.activeEmp(companyId, employeeId);
 		returnData.setMessage("数据请求成功");
 		returnData.setReturnCode("3000");
