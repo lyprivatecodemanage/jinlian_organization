@@ -492,12 +492,12 @@ public class EmployeeController {
 			connectEmpPostService.deleteEmployeeWithPost(employeeId, departmentId);
 			JSONArray array = obj.getJSONArray("postList");
 			List<ConnectEmpPost> list = new ArrayList<ConnectEmpPost>();
-			ConnectEmpPost connectEmpPost = new ConnectEmpPost();
-			connectEmpPost.setEmployeeId(employeeId);
-			connectEmpPost.setDepartmentId(departmentId);
-			connectEmpPost.setPostGrades("0");
-			connectEmpPost.setIsDelete("0");
 			for(int i =0 ;i<array.size();i++){
+				ConnectEmpPost connectEmpPost = new ConnectEmpPost();
+				connectEmpPost.setEmployeeId(employeeId);
+				connectEmpPost.setDepartmentId(departmentId);
+				connectEmpPost.setPostGrades("0");
+				connectEmpPost.setIsDelete("0");
 				connectEmpPost.setPostId(JSON.parseObject(array.getString(i)).getString("postId"));
 				list.add(connectEmpPost);
 			}
