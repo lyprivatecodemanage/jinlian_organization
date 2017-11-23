@@ -366,7 +366,7 @@ public class EmployeeController {
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping("/appSearch")
+	@RequestMapping(value="/appSearch",method=RequestMethod.POST)
 	public Map<String, Object> appSearch(@RequestBody String jsonString, HttpServletRequest request) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
@@ -398,7 +398,7 @@ public class EmployeeController {
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping("/deleteActivity")
+	@RequestMapping(value="/deleteActivity",method=RequestMethod.POST)
 	public Map<String, Object> deleteActivity(@RequestBody String jsonStrng, HttpServletRequest request) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
@@ -484,12 +484,12 @@ public class EmployeeController {
 			connectEmpPostService.deleteEmployeeWithPost(employeeId, departmentId);
 			JSONArray array = obj.getJSONArray("postList");
 			List<ConnectEmpPost> list = new ArrayList<ConnectEmpPost>();
-			ConnectEmpPost connectEmpPost = new ConnectEmpPost();
-			connectEmpPost.setEmployeeId(employeeId);
-			connectEmpPost.setDepartmentId(departmentId);
-			connectEmpPost.setPostGrades("0");
-			connectEmpPost.setIsDelete("0");
 			for(int i =0 ;i<array.size();i++){
+				ConnectEmpPost connectEmpPost = new ConnectEmpPost();
+				connectEmpPost.setEmployeeId(employeeId);
+				connectEmpPost.setDepartmentId(departmentId);
+				connectEmpPost.setPostGrades("0");
+				connectEmpPost.setIsDelete("0");
 				connectEmpPost.setPostId(JSON.parseObject(array.getString(i)).getString("postId"));
 				list.add(connectEmpPost);
 			}
