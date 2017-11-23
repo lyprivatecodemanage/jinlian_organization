@@ -211,5 +211,10 @@ public class DepartmentServiceImpl implements DepartmentService {
 		return departmentDao.findDepartmentPageAllLength(params);
 	}
 
+	@Override
+	public int getDepartmentByName(String companyId, String departmentName) {
+		return departmentDao.getDepartmentByName(companyId, departmentName);
+	}
+
 	
 }

@@ -51,4 +51,6 @@ public interface DepartmentService {
 	     */
 	    public List<Department> getDepartmentChild(String departmentParentId,String companyId);
 
+		int getDepartmentByName(String companyId, String departmentName);
+
 }

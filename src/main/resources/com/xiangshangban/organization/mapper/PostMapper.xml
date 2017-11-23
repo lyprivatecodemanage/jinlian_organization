@@ -64,7 +64,8 @@
  
   <select id="selectByPost" parameterType="java.lang.String" resultMap="Post">  
    SELECT DISTINCT 
-   p.company_id,y.company_name, p.department_id ,d.department_name,p.post_id,p.post_name,p.post_proficiencies,p.post_work_type,p.educational_requirements,p.post_principal_id,e.employee_name
+   p.company_id,y.company_name, p.department_id ,d.department_name,p.post_id,p.post_name,
+   p.post_proficiencies,p.post_work_type,p.educational_requirements,p.post_principal_id,e.employee_name
   FROM  organization.post_ p       
 	LEFT JOIN organization.employee_ e on e.employee_id=p.post_principal_id	
 	LEFT JOIN organization.company_ y on p.company_id=y.company_id
@@ -158,11 +159,11 @@
 	</if>
   </select>
   
-  <delete id="deleteByPost" parameterType="java.lang.String">   
-    delete from organization.post_
+  <update id="deleteByPost" parameterType="java.lang.String">   
+    update organization.post_ set is_delete='1'
     where 
     post_id = #{postId,jdbcType=VARCHAR}
-  </delete>
+  </update>
   
   <insert id="insertPost" parameterType="com.xiangshangban.organization.bean.Post">
     insert into organization.post_ (post_id, post_name,post_proficiencies,post_work_type,educational_requirements,post_principal_id,

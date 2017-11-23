@@ -211,13 +211,19 @@ public class DepartmentController {
 		}
 		
 		departmenttemp.setCompanyId(companyId);
-		String DepartmentName = departmenttemp.getDepartmentName();
+		String departmentName = departmenttemp.getDepartmentName();
 		String departmentParentId = departmenttemp.getDepartmentParentId();		
 		if(StringUtils.isEmpty(departmentParentId)){
 			departmenttemp.setDepartmentParentId("0");
 		}		
-		if(StringUtils.isNotEmpty(companyId) && StringUtils.isNotEmpty(DepartmentName)
-				&& StringUtils.isNotEmpty(departmentParentId)){			
+		if(StringUtils.isNotEmpty(companyId) && StringUtils.isNotEmpty(departmentName)
+				&& StringUtils.isNotEmpty(departmentParentId)){
+			int size = departmentService.getDepartmentByName(departmentName, companyId);
+			if(size>0){
+				returnData.setMessage("添加部门失败：部门名称已存在");
+				returnData.setReturnCode("3006");
+				return returnData;
+			}
 			departmentService.insertDepartment(departmenttemp);
 			returnData.setMessage("数据请求成功");
 			returnData.setReturnCode("3000");			

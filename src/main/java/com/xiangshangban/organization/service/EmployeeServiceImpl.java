@@ -130,28 +130,30 @@ public class EmployeeServiceImpl implements EmployeeService {
 		//把员工关联的岗位添加到connect_emp_post_中间表里面
 		for(Post post:employee.getPostList()){
 			String postId = post.getPostId();
-			ConnectEmpPost empPost = connectEmpPostDao.findByConnect(employee.getEmployeeId(), 
-					employee.getDepartmentId(), post.getPostGrades());
-			if(empPost==null || StringUtils.isEmpty(empPost.getPostId())){//不存在，则添加
-				empPost =new ConnectEmpPost();
-				empPost.setEmployeeId(employee.getEmployeeId());
-				empPost.setDepartmentId(employee.getDepartmentId());
-				empPost.setPostGrades(post.getPostGrades());
-				empPost.setPostId(postId);
-				empPost.setIsDelete("0");
-				empPost.setEmployeeId(employee.getEmployeeId());
-				connectEmpPostDao.saveConnect(empPost);	
-				if("1".equals(post.getPostGrades())){//主岗位添加调动记录
-					Transferjob transferjob = new Transferjob();
-				    transferjob.setTransferJobId(FormatUtil.createUuid());
-				    transferjob.setEmployeeId(employee.getEmployeeId());
-				    transferjob.setDepartmentId(employee.getDepartmentId());
-				    transferjob.setTransferBeginTime(employee.getEntryTime());
-				    transferjob.setTransferJobCause("入职");		
-				    transferjob.setUserId(employee.getOperateUserId());//操作人ID	
-				    transferjob.setCompanyId(employee.getCompanyId());
-				    transferjob.setPostId(postId);
-				    transferjobDao.insertTransferjob(transferjob);
+			if(StringUtils.isNotEmpty(postId)){
+				ConnectEmpPost empPost = connectEmpPostDao.findByConnect(employee.getEmployeeId(), 
+						employee.getDepartmentId(), post.getPostGrades());
+				if(empPost==null || StringUtils.isEmpty(empPost.getPostId())){//不存在，则添加
+					empPost =new ConnectEmpPost();
+					empPost.setEmployeeId(employee.getEmployeeId());
+					empPost.setDepartmentId(employee.getDepartmentId());
+					empPost.setPostGrades(post.getPostGrades());
+					empPost.setPostId(postId);
+					empPost.setIsDelete("0");
+					empPost.setEmployeeId(employee.getEmployeeId());
+					connectEmpPostDao.saveConnect(empPost);	
+					if("1".equals(post.getPostGrades())){//主岗位添加调动记录
+						Transferjob transferjob = new Transferjob();
+					    transferjob.setTransferJobId(FormatUtil.createUuid());
+					    transferjob.setEmployeeId(employee.getEmployeeId());
+					    transferjob.setDepartmentId(employee.getDepartmentId());
+					    transferjob.setTransferBeginTime(employee.getEntryTime());
+					    transferjob.setTransferJobCause("入职");		
+					    transferjob.setUserId(employee.getOperateUserId());//操作人ID	
+					    transferjob.setCompanyId(employee.getCompanyId());
+					    transferjob.setPostId(postId);
+					    transferjobDao.insertTransferjob(transferjob);
+					}
 				}
 			}
 			
