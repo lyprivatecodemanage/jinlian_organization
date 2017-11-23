@@ -142,14 +142,15 @@
 		e.employee_id,e.employee_name,e.employee_sex,e.login_name,e.employee_phone,
 		p.post_id,p.post_name,e.department_id,d.department_name,
 		e.entry_time,e.employee_status,uc.is_active
-		from organization.employee_
-		e,department_ d,post_ p,user_company uc
+		from organization.employee_ e
+		left join
+		department_ d on e.department_id = d.department_id
+		left join
+		post_ p on d.department_id = p.department_id
+		left join 
+		user_company uc on e.company_id = uc.company_id and uc.is_active = '1'
 		where
-		e.company_id =
-		#{companyId} and e.department_id = d.department_id and
-		d.department_id
-		= p.department_id and e.company_id = uc.company_id and uc.is_active =
-		'1'
+		e.company_id = #{companyId} 
 		<if test="employeeName != null">
 			and employee_name like #{employeeName}
 		</if>
@@ -341,12 +342,13 @@
 		userid,employee_img_url,username,employee_sex,company_no,company_name,e.department_id,department_name,post_name,employee_no,phone
 		from (select u.userid,
 		u.username,c.company_no,c.company_name,u.phone
-		from u_users
-		u,user_company uc,company_ c
-		where u.userid =#{userId} and u.userid =
-		uc.user_id and uc.company_id =
-		#{companyId} and c.company_id =
-		uc.company_id
+		from u_users u 
+		left join 
+		user_company uc on u.userid = uc.user_id 
+		left join
+		company_ c on c.company_id = uc.company_id
+		where u.userid =#{userId} and uc.company_id =
+		#{companyId}  
 		) a
 		left join employee_ e
 		on a.userid = e.employee_id
@@ -365,13 +367,12 @@
 	<select id="selectCountEmployeeFromCompany" parameterType="java.lang.String"
 		resultType="java.lang.Integer">
 		select count(e.employee_id)
-		from organization.employee_ e,department_
-		d,post_ p,user_company uc
+		from organization.employee_ e
+		left join department_ d on e.department_id = d.department_id
+		left join post_ p on d.department_id = p.department_id
+		left join user_company uc on e.company_id = uc.company_id and uc.is_active = '1'
 		where
-		e.company_id = #{companyId} and
-		e.department_id = d.department_id and
-		d.department_id = p.department_id
-		and e.company_id = uc.company_id and uc.is_active = '1'
+		e.company_id = #{companyId}
 		<if test="employeeName != null">
 			and employee_name like #{employeeName}
 		</if>

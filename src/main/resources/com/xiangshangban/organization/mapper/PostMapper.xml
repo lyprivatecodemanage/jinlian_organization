@@ -20,9 +20,12 @@
   <!-- 查询员工的副岗位 -->
   <select id="selectVicePositionByEmployeeId" parameterType="java.lang.String" resultMap="Post">
   	select post_name 
-  	from employee_ e, post_ p, connect_emp_post cep 
-  	where e.company_id = #{companyId} and e.employee_id = #{employeeId} and e.employee_id = cep.employee_id
-  	and cep.post_id = p.post_id
+  	from employee_ e 
+  	left join 
+  	connect_emp_post_ cep on e.employee_id = cep.employee_id
+  	left join 
+  	post_ p on cep.post_id = p.post_id
+  	where e.company_id = #{companyId} and e.employee_id = #{employeeId}
   </select>
   
   
