@@ -71,7 +71,7 @@
       <if test="status != null" >
         #{status,jdbcType=VARCHAR},
       </if>
-      <if test="applyTime != null">
+      <if test="applyTime == null">
       	to_char(now(),'yyyy-MM-dd hh24:mi:ss'),
       </if>
     </trim>
