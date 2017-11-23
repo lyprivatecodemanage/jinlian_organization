@@ -248,11 +248,11 @@ public class DepartmentController {
 		ReturnData returnData = new ReturnData();
 		Department departmenttemp=JSON.parseObject(department,Department.class);
 		String departmentId = departmenttemp.getDepartmentId();
-		if(StringUtils.isNotEmpty(departmentId) && StringUtils.isNotEmpty(departmenttemp.getEmployeeName())){
+		if(StringUtils.isNotEmpty(departmentId) && StringUtils.isNotEmpty(departmenttemp.getDepartmentName())){
 			//获取请求头信息
 			String companyId = request.getHeader("companyId");
 			int size = departmentService.getDepartmentByName(companyId,
-					departmenttemp.getEmployeeName(), departmentId);
+					departmenttemp.getDepartmentName(), departmentId);
 			if(size>0){
 				returnData.setMessage("添加部门失败：部门名称已存在");
 				returnData.setReturnCode("3006");
