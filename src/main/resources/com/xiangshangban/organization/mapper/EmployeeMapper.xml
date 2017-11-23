@@ -399,6 +399,7 @@
 		and entry_time = #{entryTime} 
 		and probationary_expired = #{probationaryExpired}
 		and work_address = #{workAddress}
+		and info_status = '1'
 		<if test="employeePhone != null">
 			and employee_phone =#{employeePhone}
 		</if>

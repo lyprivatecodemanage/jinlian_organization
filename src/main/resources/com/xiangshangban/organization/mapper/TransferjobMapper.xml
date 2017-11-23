@@ -38,7 +38,19 @@
 		transfer_job_cause, transfer_end_time, transfer_type,
 		transfer_job_person, operating_time
 	</sql>
-
+	
+	<!-- 李业,页面功能:删除人员信息 -->
+	<update id="updateTransferEndTimeWhereDeleteEmployee" parameterType="java.lang.String">
+		update transfer_job_ 
+		set transfer_end_time = #{transferEndTime}
+		where company_id =#{companyId} and employee_id = #{employeeId} 
+		and departmentId = {departmentId} and post_id = #{postId}
+		and operating_time = (select max(operating_time) operating_time from transfer_job_
+		where company_id =#{companyId} and employee_id = #{employeeId} 
+		and department_id = {departmentId} and post_id = #{postId}
+		)
+	</update>
+	
 	<!-- 根据员工ID，在职时间查询员工信息 -->
 	<select id="findByempinfo" parameterType="java.lang.String" resultMap="Transferjob">
 		select DISTINCT
@@ -128,7 +140,7 @@
 		select
 		<include refid="Base_Column_List" />
 		from organization.transfer_job_
-		where transfer_job_id = #{transferJobId,jdbcType=VARCHAR}
+		where transfer_job_id = #{transferJobId}
 	</select>
 
 	<select id="selectByTransferjobpost" parameterType="java.lang.String"
@@ -138,7 +150,7 @@
 		from organization.transfer_job_ t
 		where
 		t.transfer_end_time is null
-		and employee_id = #{employeeId,jdbcType=VARCHAR}
+		and employee_id = #{employeeId}
 		and t.company_id=#{companyId}
 	</select>
 
@@ -146,7 +158,7 @@
 	<delete id="deleteByTransferjob" parameterType="java.lang.String">
 		delete from organization.transfer_job_
 		where
-		transfer_job_id = #{transferJobId,jdbcType=VARCHAR}
+		transfer_job_id = #{transferJobId}
 	</delete>
 
 	<insert id="insertTransferjob" parameterType="com.xiangshangban.organization.bean.Transferjob">
@@ -156,12 +168,13 @@
 		operating_time,user_id,company_id,direct_person_id,post_id
 		)
 		values (
-		#{transferJobId,jdbcType=VARCHAR}, #{employeeId,jdbcType=VARCHAR},
-		#{transferBeginTime,jdbcType=VARCHAR},
-		#{departmentId,jdbcType=VARCHAR},#{transferJobCause,jdbcType=VARCHAR},
-		#{transferEndTime,jdbcType=VARCHAR},
-		#{operatingTime,jdbcType=VARCHAR},#{userId,jdbcType=VARCHAR},
-		#{companyId,jdbcType=VARCHAR},#{directPersonId,jdbcType=VARCHAR},
+		#{transferJobId}, #{employeeId},
+		#{transferBeginTime},
+		#{departmentId},#{transferJobCause},
+		#{transferEndTime},
+		#{to_char(now(),'yyyy-MM-dd hh24:mi:ss')},
+		#{userId},
+		#{companyId},#{directPersonId},
 		#{postId}
 		)
 	</insert>
@@ -170,24 +183,24 @@
 	<update id="updateByTransferjob" parameterType="com.xiangshangban.organization.bean.Transferjob">
 		update organization.transfer_job_
 		set
-		employee_id = #{employeeId,jdbcType=VARCHAR},
-		transfer_begin_time = #{transferBeginTime,jdbcType=VARCHAR},
-		department_id = #{departmentId,jdbcType=VARCHAR},
-		transfer_job_cause = #{transferJobCause,jdbcType=VARCHAR},
-		transfer_end_time = #{transferEndTime,jdbcType=VARCHAR},
-		operating_time = #{operatingTime,jdbcType=VARCHAR},
-		direct_person_id = #{directPersonId,jdbcType=VARCHAR}, 
+		employee_id = #{employeeId},
+		transfer_begin_time = #{transferBeginTime},
+		department_id = #{departmentId},
+		transfer_job_cause = #{transferJobCause},
+		transfer_end_time = #{transferEndTime},
+		operating_time = #{operatingTime},
+		direct_person_id = #{directPersonId}, 
 		post_id = #{postId}
 		where
-		transfer_job_id = #{transferJobId,jdbcType=VARCHAR}
+		transfer_job_id = #{transferJobId}
 	</update>
 
 	<update id="updateByTrandepartmentId" parameterType="com.xiangshangban.organization.bean.Transferjob">
 		update organization.transfer_job_
 		set
-		department_id = #{departmentId,jdbcType=VARCHAR}
+		department_id = #{departmentId}
 		where
-		employee_id = #{employeeId,jdbcType=VARCHAR}
+		employee_id = #{employeeId}
 		AND
 		transfer_end_time is null
 	</update>
@@ -196,9 +209,9 @@
 	<update id="updateBytransferendtime" parameterType="com.xiangshangban.organization.bean.Transferjob">
 		update organization.transfer_job_
 		set
-		transfer_end_time = #{transferEndTime,jdbcType=VARCHAR}
+		transfer_end_time = #{transferEndTime}
 		where
-		employee_id = #{employeeId,jdbcType=VARCHAR}
+		employee_id = #{employeeId}
 		AND
 		transfer_end_time is null
 	</update>

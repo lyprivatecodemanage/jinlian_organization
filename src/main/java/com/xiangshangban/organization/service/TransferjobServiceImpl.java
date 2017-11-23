@@ -100,4 +100,10 @@ public class TransferjobServiceImpl implements TransferjobService {
 		return transferjobDao.findByempNullinfo(map);
 	}
 
+	@Override
+	public int updateTransferEndTimeWhereDeleteEmployee(String companyId, String employeeId, String departmentId,String postId) {
+		
+		return transferjobDao.updateTransferEndTimeWhereDeleteEmployee(companyId, employeeId, departmentId,postId);
+	}
+
 }

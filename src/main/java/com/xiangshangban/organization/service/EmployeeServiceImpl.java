@@ -50,6 +50,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	CheckPersonDao checkPersonDao;
 	@Autowired
 	CompanyDao companyDao;
+	
 	@Override
 	public int deleteByEmployee(String employeeId,String companyId) {
 		int i = 0;
