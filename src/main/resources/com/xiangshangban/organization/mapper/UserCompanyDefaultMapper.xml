@@ -104,4 +104,9 @@
 			</if>
 		</set>
 	</update>
+	<update id="updateActive">
+		update user_company is_active='1' 
+		where company_id=#{companyId,jdbcType=VARCHAR} 
+		AND user_id=#{employeeId,jdbcType=VARCHAR}
+	</update>
 </mapper>

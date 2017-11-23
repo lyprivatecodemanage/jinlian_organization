@@ -29,7 +29,6 @@ import com.xiangshangban.organization.dao.UserCompanyDefaultDao;
 import com.xiangshangban.organization.dao.UusersDao;
 import com.xiangshangban.organization.util.FormatUtil;
 import com.xiangshangban.organization.util.HttpClientUtil;
-import com.xiangshangban.organization.util.HttpRequestFactory;
 import com.xiangshangban.organization.util.PropertiesUtils;
 import com.xiangshangban.organization.util.TimeUtil;
 
@@ -335,6 +334,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 	public int updateEmployeeInformation(Map<String, String> params) {
 		
 		return employeeDao.updateEmployeeInformation(params);
+	}
+
+	@Override
+	public int activeEmp(String companyId, String employeeId) {
+		return userCompanyDefaultDao.updateActive(companyId, employeeId);
 	}
 
 	

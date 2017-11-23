@@ -53,33 +53,25 @@ public class EmployeeController {
 	private OSSFileService oSSFileService;
 
 	/**
-	 * 点击激活，管理员把员工登录名注册到用户注册表里
-	 * 
-	 * @param employeeId
+	 * 激活
+	 * @param jsonString
 	 * @param request
 	 * @param response
 	 * @return
-	 * 
 	 */
-	/*
-	 * @RequestMapping(value="/saveUserEmp", produces =
-	 * "application/json;charset=UTF-8", method=RequestMethod.POST) public
-	 * ReturnData saveUserEmp(@RequestBody String employeeId,HttpServletRequest
-	 * request,HttpServletResponse response){ JSONObject obj =
-	 * JSON.parseObject(employeeId); ReturnData returnData = new ReturnData();
-	 * employeeId=obj.getString("employeeId"); //String
-	 * companyId="977ACD3022C24B99AC9586CC50A8F786"; //获取请求头信息 String companyId
-	 * = request.getHeader("companyId"); Employee employee =
-	 * employeeService.selectByEmployee(employeeId, companyId); String LoginName
-	 * = employee.getLoginName(); User useremp =
-	 * userService.getOneUser(LoginName); User user = new User();
-	 * user.setUserId(employeeId); user.setUserName(LoginName);
-	 * if(!employeeId.equals("") || useremp ==null){ //用户操作 //加入注册表
-	 * userService.saveUser(user); returnData.setMessage("数据请求成功");
-	 * returnData.setReturnCode("3000"); }else{ returnData.setMessage("参数格式错误");
-	 * returnData.setReturnCode("3007"); } return returnData; }
-	 */
-
+	
+	@RequestMapping(value = "/insertEmployee", produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
+	public ReturnData activeEmp(@RequestBody String employeeId, HttpServletRequest request,
+			HttpServletResponse response){
+		ReturnData returnData = new ReturnData();
+		// 获取请求头信息
+		String companyId = request.getHeader("companyId");
+		//String operateUserId = request.getHeader("accessUserId");
+		employeeService.activeEmp(companyId, employeeId);
+		returnData.setMessage("数据请求成功");
+		returnData.setReturnCode("3000");
+		return returnData;
+	}
 	/**
 	 * 
 	 * 添加员工信息
