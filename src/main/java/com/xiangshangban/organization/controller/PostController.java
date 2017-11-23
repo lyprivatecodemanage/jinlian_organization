@@ -43,12 +43,18 @@ public class PostController {
 			ReturnData returnData = new ReturnData();
 			//获取请求头信息			
 			String companyId = request.getHeader("companyId");
-			JSONObject obj = JSON.parseObject(post);
 			Post posttemp=JSON.parseObject(post,Post.class);
 			posttemp.setCompanyId(companyId);
 			String departmentId = posttemp.getDepartmentId();
 			String postName = posttemp.getPostName();			
-			if(StringUtils.isNotEmpty(departmentId) && StringUtils.isNotEmpty(postName) && StringUtils.isNotEmpty(companyId)){				
+			if(StringUtils.isNotEmpty(departmentId) && StringUtils.isNotEmpty(postName) && StringUtils.isNotEmpty(companyId)){	
+				int num = postService.getDepPostNumByName(companyId, 
+						departmentId, postName, null);//查询该岗位下是否存在同名岗位
+				if(num>0){
+					returnData.setMessage("添加岗位失败：部门下存在同名岗位");
+					returnData.setReturnCode("4114");
+					return returnData;
+				}
 				postService.insertPost(posttemp);
 				returnData.setMessage("数据请求成功");
 				returnData.setReturnCode("3000");
@@ -77,6 +83,13 @@ public class PostController {
 			String departmentId = posttemp.getDepartmentId();
 			String postName = posttemp.getPostName();						
 			if(StringUtils.isNotEmpty(departmentId) && StringUtils.isNotEmpty(postName) && StringUtils.isNotEmpty(companyId)){
+				int num = postService.getDepPostNumByName(companyId, 
+						departmentId, postName, posttemp.getPostId());//查询该岗位下是否存在同名岗位
+				if(num>0){
+					returnData.setMessage("添加岗位失败：部门下存在同名岗位");
+					returnData.setReturnCode("4114");
+					return returnData;
+				}
 				postService.updateByPost(posttemp);	
 				returnData.setMessage("数据请求成功");
 				returnData.setReturnCode("3000");	

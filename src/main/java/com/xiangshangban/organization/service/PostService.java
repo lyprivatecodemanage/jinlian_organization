@@ -33,4 +33,13 @@ public interface PostService {
 	 * @return
 	 */
 	List<Post> selectVicePositionByEmployeeId(String companyId,String employeeId);
+	/**
+	 * 查询该部门下是否存在同名岗位
+	 * @param companyId
+	 * @param departmentId
+	 * @param postName
+	 * @param postId 
+	 * @return
+	 */
+	int getDepPostNumByName(String companyId, String departmentId, String postName, String postId);
 }

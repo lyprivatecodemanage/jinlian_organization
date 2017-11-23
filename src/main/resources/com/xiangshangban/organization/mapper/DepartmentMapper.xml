@@ -81,7 +81,7 @@
 	department_name=#{departmentName,jdbcType=VARCHAR}
 	AND	d.company_id=#{companyId}
 	<if test="departmentId!=null and departmentId!=''">
-		AND d.department_Id=#{departmentId}
+		AND d.department_Id!=#{departmentId}
 	</if>
   </select>
 	<select id="findDepartmentTree"  resultMap="Department">

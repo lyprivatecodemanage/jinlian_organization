@@ -161,7 +161,14 @@
 		AND d.department_name like '%${departmentName}%'
 	</if>
   </select>
-  
+  <select id="getDepPostNumByName">
+     SELECT count(p.post_id)
+  	FROM  organization.post_ p
+  	WHERE p.company_id=#{companyId} AND p.department_id = #{departmentId} AND p.post_name=#{postName}
+  	<if test="postId!=null postId!=''">
+  		p.post_id!=#{postId}
+  	</if>
+  </select>
   <update id="deleteByPost" parameterType="java.lang.String">   
     update organization.post_ set is_delete='1'
     where 
