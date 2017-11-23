@@ -79,7 +79,7 @@
   	from organization.department_  d 
 	where		
 	department_name=#{departmentName,jdbcType=VARCHAR}
-	AND	d.company_id=#{companyId}
+	AND	d.company_id=#{companyId} AND status='1'
 	<if test="departmentId!=null and departmentId!=''">
 		AND d.department_Id!=#{departmentId}
 	</if>
