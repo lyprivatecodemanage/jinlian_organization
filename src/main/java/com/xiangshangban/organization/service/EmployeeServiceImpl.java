@@ -29,7 +29,6 @@ import com.xiangshangban.organization.dao.UserCompanyDefaultDao;
 import com.xiangshangban.organization.dao.UusersDao;
 import com.xiangshangban.organization.util.FormatUtil;
 import com.xiangshangban.organization.util.HttpClientUtil;
-import com.xiangshangban.organization.util.HttpRequestFactory;
 import com.xiangshangban.organization.util.PropertiesUtils;
 import com.xiangshangban.organization.util.TimeUtil;
 
@@ -54,8 +53,14 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Override
 	public int deleteByEmployee(String employeeId,String companyId) {
 		int i = 0;
+		Employee employee = employeeDao.selectByEmployee(employeeId, companyId);
 		i=i+userCompanyDefaultDao.deleteUserFromCompany(companyId,employeeId);
 		i=i+employeeDao.deleteByEmployee(employeeId,companyId);
+		if(i>1){
+			employee.setEmployeeStatus("1");
+			this.updateDeviceEmp(employee);
+		}
+		
 		return i;
 	}
 
@@ -113,7 +118,15 @@ public class EmployeeServiceImpl implements EmployeeService {
 	    
 	    this.updateTransfer(employee);//岗位信息设置
 	    
-	    Company company = companyDao.selectByCompany(employee.getCompanyId());
+	    updateDeviceEmp(employee);
+		return 1;
+	}
+	/**
+	 * 告知设备模块更新人员信息
+	 * @param employee
+	 */
+	public void updateDeviceEmp(Employee employee) {
+		Company company = companyDao.selectByCompany(employee.getCompanyId());
 	    employee.setCompanyNo(company.getCompanyNo());
 		List<Employee> cmdlist=new ArrayList<Employee>();
 		cmdlist.add(employee);
@@ -124,7 +137,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 			logger.info("将人员信息更新到设备模块时，获取路径出错");
 			e.printStackTrace();
 		}
-		return 1;
 	}
 
 	public void updateTransfer(Employee employee) {
@@ -335,6 +347,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 	public int updateEmployeeInformation(Map<String, String> params) {
 		
 		return employeeDao.updateEmployeeInformation(params);
+	}
+
+	@Override
+	public int activeEmp(String companyId, String employeeId) {
+		return userCompanyDefaultDao.updateActive(companyId, employeeId);
 	}
 
 	

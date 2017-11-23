@@ -25,4 +25,6 @@ public interface UserCompanyDefaultDao {
 	int updateSelective(UserCompanyDefault usercompany);
 	
 	int deleteUserFromCompany(@Param("companyId")String companyId,@Param("employeeId")String employeeId);
+
+	int updateActive(@Param("companyId")String companyId,@Param("employeeId")String employeeId);
 }
