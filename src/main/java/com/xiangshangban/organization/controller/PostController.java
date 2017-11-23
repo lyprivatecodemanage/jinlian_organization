@@ -212,14 +212,17 @@ public class PostController {
 		 * @return
 		 */
 		@RequestMapping(value="/findByPostId", produces = "application/json;charset=UTF-8", method=RequestMethod.POST)
-		public ReturnData findByMorePostIfon(@RequestBody String postId,HttpServletRequest request,HttpServletResponse response){			
+		public ReturnData findByMorePostIfon(@RequestBody String jsonString,HttpServletRequest request,HttpServletResponse response){			
 			ReturnData returnData = new ReturnData();
 			String companyId = request.getHeader("companyId");
+			JSONObject obj = JSON.parseObject(jsonString);
+			String postId = obj.getString("postId");
 			if(StringUtils.isEmpty(postId)){
 				returnData.setMessage("必传参数为空");
 				returnData.setReturnCode("3006");
 				return returnData;
 			}
+			
 			returnData.setData(postService.selectByPost(postId, companyId));
 			returnData.setMessage("数据请求成功");
 			returnData.setReturnCode("3000");

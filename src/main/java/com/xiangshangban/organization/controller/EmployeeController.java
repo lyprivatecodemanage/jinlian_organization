@@ -60,7 +60,7 @@ public class EmployeeController {
 	 * @return
 	 */
 	
-	@RequestMapping(value = "/insertEmployee", produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
+	@RequestMapping(value = "/activeEmployee", produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
 	public ReturnData activeEmp(@RequestBody String employeeId, HttpServletRequest request,
 			HttpServletResponse response){
 		ReturnData returnData = new ReturnData();
