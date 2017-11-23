@@ -35,5 +35,5 @@ public interface TransferjobDao {
      * @param departmentId
      * @return
      */
-    int updateTransferEndTimeWhereDeleteEmployee(@Param("companyId")String companyId,@Param("employeeId")String employeeId,@Param("departmentId")String departmentId,@Param("postId")String postId);
+    int updateTransferEndTimeWhereDeleteEmployee(@Param("companyId")String companyId,@Param("userId")String userId,@Param("employeeId")String employeeId,@Param("departmentId")String departmentId,@Param("postId")String postId);
 }

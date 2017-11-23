@@ -295,7 +295,7 @@
 		<result column="department_name" property="departmentName" />
 		<result column="employee_no" property="employeeNo" />
 		<result column="derect_person_name" property="directPersonName" />
-		<result column="entry_time" property="entrytime" />
+		<result column="entry_time" property="entryTime" />
 		<result column="probationary_expired" property="probationaryExpired" />
 		<result column="work_address" property="workAddress" />
 		<result column="marriage_status" property="marriageStatus" />
@@ -322,7 +322,7 @@
 		id="EmployeeAppResultMap">
 		<result column="userid" property="employeeId" />
 		<result column="employee_img_url" property="employeeImgUrl" />
-		<result column="username" property="employee_name" />
+		<result column="username" property="employeeName" />
 		<result column="employee_sex" property="employeeSex" />
 		<result column="company_no" property="companyNo" />
 		<result column="company_name" property="companyName" />

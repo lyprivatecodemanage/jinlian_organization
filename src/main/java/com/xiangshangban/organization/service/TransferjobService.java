@@ -33,5 +33,5 @@ public interface TransferjobService {
      * @param departmentId
      * @return
      */
-    int updateTransferEndTimeWhereDeleteEmployee(String companyId,String employeeId,String departmentId,String postId);
+    int updateTransferEndTimeWhereDeleteEmployee(String companyId,String userId,String employeeId,String departmentId,String postId);
 }

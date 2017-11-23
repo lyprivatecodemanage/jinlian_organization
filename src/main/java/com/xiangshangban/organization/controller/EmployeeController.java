@@ -419,14 +419,14 @@ public class EmployeeController {
 				String postId = JSON.parseObject(jsonArray.get(i).toString()).getString("postId");
 				int num = employeeService.deleteByEmployee(companyId,employeeId);
 				if (num < 2) {
-					result.put("message", "删除失败");
-					result.put("returnCode", "");
+					result.put("message", "人员删除错误");
+					result.put("returnCode", "4113");
 					return result;
 				}
 				//改变员工部门关联表删除状态
 				connectEmpPostService.deleteEmpConnectPost(employeeId);
 				//岗位移动表添加岗位离职时间
-				transferjobService.updateTransferEndTimeWhereDeleteEmployee(companyId, employeeId, departmentId,postId);
+				transferjobService.updateTransferEndTimeWhereDeleteEmployee(companyId,userId, employeeId, departmentId,postId);
 			}
 			result.put("message", "成功");
 			result.put("returnCode", "3000");
@@ -446,7 +446,7 @@ public class EmployeeController {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	@RequestMapping("/updateEmployeeInformation")
+	@RequestMapping(value="/updateEmployeeInformation",method=RequestMethod.POST)
 	public Map<String,Object> updateEmployeeInformation(@RequestBody String jsonString,HttpServletRequest request){
 		Map<String,Object> result = new HashMap<String,Object>();
 		Map<String,String> params = new HashMap<String,String>();
@@ -483,7 +483,7 @@ public class EmployeeController {
 			if(!postId.equals(formerConnectEmpPost.getPostId())){
 				connectEmpPostService.updateEmployeeWithPost(employeeId, departmentId, postId);
 				//添加更换之前主岗位的换岗时间(transferEndTime)
-				transferjobService.updateTransferEndTimeWhereDeleteEmployee(companyId, employeeId, departmentId,formerConnectEmpPost.getPostId());
+				transferjobService.updateTransferEndTimeWhereDeleteEmployee(companyId,userId, employeeId, departmentId,formerConnectEmpPost.getPostId());
 				//添加新岗位的记录
 				Transferjob transferjob = new Transferjob(FormatUtil.createUuid(), employeeId, null, departmentId, transferJobCause, null, userId, null, companyId, directPersonId, postId);
 				

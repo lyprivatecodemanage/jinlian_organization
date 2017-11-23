@@ -101,9 +101,9 @@ public class TransferjobServiceImpl implements TransferjobService {
 	}
 
 	@Override
-	public int updateTransferEndTimeWhereDeleteEmployee(String companyId, String employeeId, String departmentId,String postId) {
+	public int updateTransferEndTimeWhereDeleteEmployee(String companyId,String userId, String employeeId, String departmentId,String postId) {
 		
-		return transferjobDao.updateTransferEndTimeWhereDeleteEmployee(companyId, employeeId, departmentId,postId);
+		return transferjobDao.updateTransferEndTimeWhereDeleteEmployee(companyId,userId, employeeId, departmentId,postId);
 	}
 
 }
