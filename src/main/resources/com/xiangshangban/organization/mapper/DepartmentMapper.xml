@@ -78,8 +78,11 @@
   	select count(*)
   	from organization.department_  d 
 	where		
-		department_name=#{departmentName,jdbcType=VARCHAR}
-		AND	d.company_id=#{companyId}
+	department_name=#{departmentName,jdbcType=VARCHAR}
+	AND	d.company_id=#{companyId}
+	<if test="departmentId!=null and departmentId!=''">
+		AND d.department_Id=#{departmentId}
+	</if>
   </select>
 	<select id="findDepartmentTree"  resultMap="Department">
 	select d.department_id, d.department_numbe, d.department_name, d.department_describe,

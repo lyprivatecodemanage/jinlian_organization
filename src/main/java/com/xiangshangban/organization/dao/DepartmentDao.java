@@ -36,7 +36,8 @@ public interface DepartmentDao {
 
 	Integer findDepartmentPageAllLength(Map<String, String> map);
 
-	int getDepartmentByName(@Param("companyId")String companyId, @Param("departmentName")String departmentName);
+	int getDepartmentByName(@Param("companyId")String companyId, 
+			@Param("departmentName")String departmentName, @Param("departmentId")String departmentId);
     
            
 }

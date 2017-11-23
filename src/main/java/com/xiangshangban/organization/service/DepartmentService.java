@@ -50,7 +50,13 @@ public interface DepartmentService {
 	     * @return
 	     */
 	    public List<Department> getDepartmentChild(String departmentParentId,String companyId);
-
-		int getDepartmentByName(String companyId, String departmentName);
+	    /**
+	     * 查询重名
+	     * @param companyId
+	     * @param departmentName
+	     * @param departmentId
+	     * @return
+	     */
+		int getDepartmentByName(String companyId, String departmentName, String departmentId);
 
 }

@@ -212,8 +212,8 @@ public class DepartmentServiceImpl implements DepartmentService {
 	}
 
 	@Override
-	public int getDepartmentByName(String companyId, String departmentName) {
-		return departmentDao.getDepartmentByName(companyId, departmentName);
+	public int getDepartmentByName(String companyId, String departmentName, String departmentId) {
+		return departmentDao.getDepartmentByName(companyId, departmentName, departmentId);
 	}
 
 	
