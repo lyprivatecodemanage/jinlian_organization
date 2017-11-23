@@ -1,5 +1,7 @@
 package com.xiangshangban.organization.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -361,7 +363,6 @@ public class EmployeeController {
 	}
 	/**
 	 * @author 李业/app查询人员信息
-	 * 
 	 * @param jsonString
 	 * @param request
 	 * @return
@@ -505,7 +506,37 @@ public class EmployeeController {
 			return result;
 		}
 	}
-
+	/**
+	 * @author 李业:人员信息导入
+	 * @param key
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value="/speedImport",method=RequestMethod.POST)
+	public Map<String,Object> speedImport(String key,HttpServletRequest request){
+		Map<String,Object> result = new HashMap<String,Object>();
+		try{
+			String companyId = request.getHeader("companyId");// 公司id
+			String userId = request.getHeader("accessUserId");// 操作人id
+			Employee emp = employeeService.selectByEmployeeFromApp(companyId, userId);
+			String companyNo = emp.getCompanyNo();
+			String directory = PropertiesUtils.ossProperty("portraitDirectory");
+			String url = oSSFileService.getPathByKey(companyNo, directory, key);
+			File file = new File(url);
+			FileInputStream input = new FileInputStream(file);
+			
+			result.put("message","成功");
+			result.put("returnCode","3000");
+			return result;
+		}catch(Exception e){
+			e.printStackTrace();
+			logger.info(e);
+			result.put("message","服务器错误");
+			result.put("returnCode","3001");
+			return result;
+		}
+	}
+	
 	/**
 	 * 查询一个岗位下的所有员工
 	 */

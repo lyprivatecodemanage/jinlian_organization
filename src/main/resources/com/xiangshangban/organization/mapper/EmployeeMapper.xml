@@ -310,13 +310,15 @@
 		(select employee_name as derect_person_name from employee_ where
 		employee_id = e.direct_person_id ),
 		e.entry_time,e.probationary_expired,e.work_address,e.marriage_status,e.seniority
-		from employee_ as
-		e,connect_emp_post_ as cep,post_ p,department_ d
+		from employee_ as e
+		left join 
+		connect_emp_post_ as cep on e.employee_id = cep.employee_id and cep.post_grades = '1' and cep.is_delete = '0'
+		left join
+		post_ p on cep.post_id = p.post_id
+		left join
+		department_ d on cep.department_id = d.department_id
 		where e.company_id =
 		#{companyId} and e.employee_id = #{employeeId}
-		and e.employee_id =
-		cep.employee_id and cep.post_grades = '1' and cep.is_delete = '0' and cep.post_id = p.post_id
-		and cep.department_id = d.department_id
 	</select>
 	<resultMap type="com.xiangshangban.organization.bean.Employee"
 		id="EmployeeAppResultMap">
