@@ -18,13 +18,15 @@ import com.alibaba.fastjson.JSONObject;
 import com.xiangshangban.organization.bean.Company;
 import com.xiangshangban.organization.bean.ReturnData;
 import com.xiangshangban.organization.service.CompanyService;
+import com.xiangshangban.organization.service.OSSFileService;
 
 @RestController
 @RequestMapping("/CompanyController")
 public class CompanyController {
 	@Autowired
 	CompanyService companyService;
-
+	@Autowired
+	OSSFileService oSSFileService;
 	
 	/**
 	 * 添加公司信息
@@ -83,7 +85,7 @@ public class CompanyController {
 	 * @param response
 	 * @return
 	 */
-	@RequestMapping(value="/fingdByAllCompany", produces = "application/json;charset=UTF-8", method=RequestMethod.GET)
+	@RequestMapping(value="/fingdByAllCompany", produces = "application/json;charset=UTF-8", method=RequestMethod.POST)
 	public ReturnData fingdByAllCompany(HttpServletRequest request,HttpServletResponse response){
 		ReturnData returnData = new ReturnData();		
 		List<Company> list =companyService.fingdByAllCompany();	
@@ -107,6 +109,11 @@ public class CompanyController {
 		String companyid=obj.getString("companyId");
 		if(!companyid.equals("")){
 			Company company =companyService.selectByCompany(companyid);	
+			if(StringUtils.isNotEmpty(company.getCompanyLogo())){
+				String logoPath = oSSFileService.getPathByKey(company.getCompanyNo(),
+						"companyLogo", company.getCompanyLogo());
+				company.setCompanyLogoPath(logoPath);
+			}
 			returnData.setData(company);
 			returnData.setMessage("数据请求成功");
 			returnData.setReturnCode("3000");			

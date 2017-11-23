@@ -87,4 +87,9 @@ public class PostServiceImpl implements PostService {
 		
 		return postDao.selectVicePositionByEmployeeId(companyId, employeeId);
 	}
+
+	@Override
+	public int getDepPostNumByName(String companyId, String departmentId, String postName,  String postId) {
+		return postDao.getDepPostNumByName(companyId, departmentId, postName ,postId);
+	}
 }

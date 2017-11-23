@@ -19,6 +19,7 @@ public class Company {
     private String companyEmail;
     private String companyPostalcode;
     private String companyLogo;//公司LOGO
+    private String companyLogoPath;//公司LOGO存放路径
     private String companyBusinessLicense;
     private String juridicalPerson;
     private String broughtAccoun;
@@ -289,6 +290,12 @@ public class Company {
 		this.companyCreatTime = companyCreatTime;
 		this.companyArea = companyArea;
 		this.companyCode = companyCode;
+	}
+	public String getCompanyLogoPath() {
+		return companyLogoPath;
+	}
+	public void setCompanyLogoPath(String companyLogoPath) {
+		this.companyLogoPath = companyLogoPath;
 	}
     
     

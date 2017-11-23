@@ -130,7 +130,7 @@
 	LEFT JOIN organization.company_ y on p.company_id=y.company_id
     LEFT JOIN organization.department_ d  on d.department_id=p.department_id 
     where 
-    p.company_id=#{companyId}
+    p.company_id=#{companyId} AND p.is_delete='0'
     <if test="departmentId!=null and departmentId!=''">
 		AND (p.department_id = #{departmentId} OR d.department_parent_id = #{departmentId})
 	</if>
@@ -140,6 +140,7 @@
 	<if test="departmentName!=null and departmentName!=''">
 		AND d.department_name like '%${departmentName}%'
 	</if>
+	
     limit #{pageRecordNum}::integer offset #{fromPageNum}::integer 
   </select>
  <!-- 分页+模糊查询岗位信息总数目 -->
@@ -150,7 +151,10 @@
 	LEFT JOIN organization.company_ y on p.company_id=y.company_id
     LEFT JOIN organization.department_ d  on d.department_id=p.department_id 
     WHERE 
-    p.company_id=#{companyId}
+    p.company_id=#{companyId} AND p.is_delete='0'
+    <if test="departmentId!=null and departmentId!=''">
+		AND (p.department_id = #{departmentId} OR d.department_parent_id = #{departmentId})
+	</if>
     <if test="postName!=null and postName!=''">
 		AND p.post_name like '%${postName}%'
 	</if>
@@ -158,7 +162,15 @@
 		AND d.department_name like '%${departmentName}%'
 	</if>
   </select>
-  
+  <select id="getDepPostNumByName" resultType="int">
+     SELECT count(p.post_id)
+  	FROM  organization.post_ p
+  	WHERE p.company_id=#{companyId} AND p.department_id = #{departmentId} 
+  		AND p.post_name=#{postName} AND is_delete='0'
+  	<if test="postId!=null and postId!=''">
+  		AND p.post_id!=#{postId}
+  	</if>
+  </select>
   <update id="deleteByPost" parameterType="java.lang.String">   
     update organization.post_ set is_delete='1'
     where 
