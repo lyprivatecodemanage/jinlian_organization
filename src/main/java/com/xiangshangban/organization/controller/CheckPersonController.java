@@ -39,7 +39,7 @@ public class CheckPersonController {
 		String userId = obj.getString("userId");
 		String status = obj.getString("status");
 		if(StringUtils.isNotEmpty(userId) && StringUtils.isNotEmpty(status)){
-			if(!"1".equals(status)||!"2".equals(status)){
+			if(!"1".equals(status) && !"2".equals(status)){
 				returnData.setMessage("参数格式错误");
 				returnData.setReturnCode("3007");
 				return returnData;
