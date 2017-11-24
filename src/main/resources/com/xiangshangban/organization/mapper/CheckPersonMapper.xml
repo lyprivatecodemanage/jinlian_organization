@@ -76,12 +76,9 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" >
+  <update id="updateByPrimaryKeySelective" parameterType="com.xiangshangban.organization.bean.CheckPerson">
     update check_pending_joincompany
     <set >
-      <if test="applyTime != null" >
-        apply_time = #{applyTime,jdbcType=VARCHAR},
-      </if>
       <if test="status != null" >
         status = #{status,jdbcType=VARCHAR},
       </if>

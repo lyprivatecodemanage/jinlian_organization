@@ -87,22 +87,17 @@
 	<update id="updateSelective" parameterType="com.xiangshangban.organization.bean.UserCompanyDefault" >
 		update user_company
 		<set>
-			<if test="userId != null" >
-				user_id=#{userId,jdbcType=VARCHAR},
-			</if>
-			<if test="companyId != null" >
-				company_id=#{companyId,jdbcType=VARCHAR},
-			</if>
 			<if test="currentOption != null" >
 				current_option=#{currentOption,jdbcType=VARCHAR},
 			</if>
 			<if test="isActive!=null">
-				is_active=#{isActive,jdbcType=VARCHAR}
+				is_active=#{isActive,jdbcType=VARCHAR},
 			</if>
 			<if test="infoStatus!=null">
-				info_status=#{infoStatus},
+				info_status=#{infoStatus}
 			</if>
 		</set>
+		where user_id=#{userId,jdbcType=VARCHAR} AND company_id=#{companyId,jdbcType=VARCHAR}
 	</update>
 	<update id="updateActive">
 		update user_company is_active='1' 
