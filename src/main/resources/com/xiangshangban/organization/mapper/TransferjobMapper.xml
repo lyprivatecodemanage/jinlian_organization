@@ -42,14 +42,14 @@
 	<!-- 李业,页面功能:删除人员信息 -->
 	<update id="updateTransferEndTimeWhereDeleteEmployee" parameterType="java.lang.String">
 		update transfer_job_ 
-		set transfer_end_time = #{transferEndTime}
+		set transfer_end_time = to_char(now(),'yyyy-MM-dd hh24:mi:ss')
 		, user_id = #{userId}
-		, operating_time = 'to_char(now(),'yyyy-MM-dd hh24:mi:ss')'
+		, operating_time = to_char(now(),'yyyy-MM-dd hh24:mi:ss')
 		where company_id =#{companyId} and employee_id = #{employeeId} 
-		and departmentId = {departmentId} and post_id = #{postId}
+		and department_id = #{departmentId} and post_id = #{postId}
 		and operating_time = (select max(operating_time) operating_time from transfer_job_
 		where company_id =#{companyId} and employee_id = #{employeeId} 
-		and department_id = {departmentId} and post_id = #{postId}
+		and department_id = #{departmentId} and post_id = #{postId}
 		)
 	</update>
 	

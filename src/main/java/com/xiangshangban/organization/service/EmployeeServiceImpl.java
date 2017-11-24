@@ -51,12 +51,13 @@ public class EmployeeServiceImpl implements EmployeeService {
 	CompanyDao companyDao;
 	
 	@Override
-	public int deleteByEmployee(String employeeId,String companyId) {
+	public int deleteByEmployee(String companyId,String employeeId) {
 		int i = 0;
 		Employee employee = employeeDao.selectByEmployee(employeeId, companyId);
 		i=i+userCompanyDefaultDao.deleteUserFromCompany(companyId,employeeId);
 		i=i+employeeDao.deleteByEmployee(employeeId,companyId);
 		if(i>1){
+			employee.setCompanyId(companyId);
 			employee.setEmployeeStatus("1");
 			this.updateDeviceEmp(employee);
 		}

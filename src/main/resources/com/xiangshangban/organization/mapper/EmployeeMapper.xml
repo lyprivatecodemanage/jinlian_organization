@@ -576,10 +576,10 @@
 	<!-- 李业:人员信息中删除人员 -->
 	<update id="deleteByEmployee" parameterType="java.lang.String">
 		update
-		organization.employee_ e
-		set e.employee_status = '1'
+		organization.employee_
+		set employee_status = '1'
 		where company_id =
-		#{companyId}
+		#{companyId} and
 		employee_id =
 		#{employeeId}
 	</update>

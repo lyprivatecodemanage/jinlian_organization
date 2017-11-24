@@ -383,6 +383,13 @@ public class EmployeeController {
 				}else if("2".equals(emp.getEmployeeStatus())){
 					emp.setEmployeeStatus("删除");
 				}
+				if("0".equals(emp.getMarriageStatus())){
+					emp.setMarriageStatus("未婚");
+				}else if("1".equals(emp.getMarriageStatus())){
+					emp.setMarriageStatus("已婚");
+				}else if("2".equals(emp.getMarriageStatus())){
+					emp.setMarriageStatus("离异");
+				}
 			}
 			result.put("result", emp);
 			result.put("message", "成功");
@@ -440,7 +447,7 @@ public class EmployeeController {
 		try {
 			String companyId = request.getHeader("companyId");// 公司id
 			String userId = request.getHeader("accessUserId");// 操作人id
-			JSONArray jsonArray = JSON.parseArray(jsonStrng);
+			JSONArray jsonArray = JSON.parseObject(jsonStrng).getJSONArray("deleteData");
 			for (int i = 0; i < jsonArray.size(); i++) {
 				String employeeId = JSON.parseObject(jsonArray.get(i).toString()).getString("employeeId");
 				/*String departmentId = JSON.parseObject(jsonArray.get(i).toString()).getString("departmentId");

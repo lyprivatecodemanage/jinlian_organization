@@ -34,7 +34,7 @@
 	<update id="deleteUserFromCompany" parameterType="java.lang.String">
 		update user_company 
 		set is_active = '2'
-		where company_id = #{companyId} and employee_id = #{employeeId}
+		where company_id = #{companyId} and user_id = #{employeeId}
 	</update>
 	<delete id="deleteByPrimaryKey" parameterType="com.xiangshangban.organization.bean.UserCompanyDefault" >
 		delete from user_company
