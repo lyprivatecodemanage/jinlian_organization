@@ -348,11 +348,17 @@ public class EmployeeServiceImpl implements EmployeeService {
 		
 		return employeeDao.updateEmployeeInformation(params);
 	}
+	@Override
+	public int updateEmployeeInfoStatus(String companyId, String userId) {
+		
+		return employeeDao.updateEmployeeInfoStatus(companyId, userId);
+	}
 
 	@Override
 	public int activeEmp(String companyId, String employeeId) {
 		return userCompanyDefaultDao.updateActive(companyId, employeeId);
 	}
+
 
 	
 }

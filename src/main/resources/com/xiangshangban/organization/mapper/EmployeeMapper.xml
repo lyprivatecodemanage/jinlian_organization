@@ -122,54 +122,51 @@
 
 	<resultMap id="PagingColumnList" type="com.xiangshangban.organization.bean.Employee">
 		<id column="employee_id" property="employeeId" />
-		<id column="employee_name" property="employeeId" />
-		<id column="employee_sex" property="employeeId" />
-		<id column="login_name" property="employeeId" />
-		<id column="employee_phone" property="employeeId" />
-		<id column="post_id" property="employeeId" />
-		<id column="post_name" property="employeeId" />
-		<id column="department_id" property="employeeId" />
-		<id column="department_name" property="employeeId" />
-		<id column="entry_time" property="employeeId" />
-		<id column="employee_status" property="employeeId" />
+		<id column="employee_name" property="employeeName" />
+		<id column="employee_sex" property="employeeSex" />
+		<id column="login_name" property="loginName" />
+		<id column="employee_phone" property="employeePhone" />
+		<id column="post_id" property="postId" />
+		<id column="post_name" property="postName" />
+		<id column="department_id" property="departmentId" />
+		<id column="department_name" property="departmentName" />
+		<id column="entry_time" property="entryTime" />
+		<id column="employee_status" property="employeeStatus" />
 		<id column="is_active" property="isActive" />
 	</resultMap>
 
 	<!-- 李业:分页查询员工信息 -->
 	<select id="selectByAllFnyeEmployee" parameterType="java.lang.String"
 		resultMap="PagingColumnList">
-		select
+		select distinct
 		e.employee_id,e.employee_name,e.employee_sex,e.login_name,e.employee_phone,
-		p.post_id,p.post_name,e.department_id,d.department_name,
+		p.post_id,p.post_name,e.department_id ,d.department_name,
 		e.entry_time,e.employee_status,uc.is_active
-		from organization.employee_ e
-		left join
-		department_ d on e.department_id = d.department_id
-		left join
-		post_ p on d.department_id = p.department_id
-		left join 
-		user_company uc on e.company_id = uc.company_id and uc.is_active = '1'
+		from organization.employee_ e,department_ d,post_ p,user_company uc
 		where
 		e.company_id = #{companyId} 
+		and e.department_id = d.department_id
+		and d.department_id = p.department_id
+		and e.company_id = uc.company_id
 		<if test="employeeName != null">
-			and employee_name like #{employeeName}
+			and e.employee_name like #{employeeName}
 		</if>
 		<if test="employeeSex != null">
-			and employee_sex = #{employeeSex}
+			and e.employee_sex = #{employeeSex}
 		</if>
 		<if test="departmentName != null">
-			and department_name like #{departmentName}
+			and d.department_name like #{departmentName}
 		</if>
 		<if test="postName != null">
 			and post_name like #{postName}
 		</if>
 		<if test="employeeStatus != null">
-			and employee_status = #{employeeStatus}
+			and e.employee_status = #{employeeStatus}
 		</if>
 		<if test="departmentId != null">
-			and department_id = #{departmentId}
+			and e.department_id = #{departmentId}
 		</if>
-		limit #{numRecordCount} :: integer offset #{numPage} :: integer
+		limit #{numRecordCount}::integer offset #{numPage}::integer
 	</select>
 
 	<!-- 查询所有员工信息 -->
@@ -367,12 +364,9 @@
 	<select id="selectCountEmployeeFromCompany" parameterType="java.lang.String"
 		resultType="java.lang.Integer">
 		select count(e.employee_id)
-		from organization.employee_ e
-		left join department_ d on e.department_id = d.department_id
-		left join post_ p on d.department_id = p.department_id
-		left join user_company uc on e.company_id = uc.company_id and uc.is_active = '1'
+		from organization.employee_ e,department_ d,post_ p,user_company uc
 		where
-		e.company_id = #{companyId}
+		e.company_id = #{companyId} and e.department_id = d.department_id and d.department_id = p.department_id and e.company_id = uc.company_id
 		<if test="employeeName != null">
 			and employee_name like #{employeeName}
 		</if>
@@ -396,35 +390,36 @@
 	<update id="updateEmployeeInformation" parameterType="java.util.Map">
 		update employee_
 		set employee_name = #{employeeName}
-		and employee_sex = #{employeeSex} 
-		and employee_status = #{employeeStatus}
-		and login_name = #{loginName}
-		and entry_time = #{entryTime} 
-		and probationary_expired = #{probationaryExpired}
-		and work_address = #{workAddress}
-		and info_status = '1'
+		, employee_sex = #{employeeSex} 
+		, employee_status = #{employeeStatus}
+		, login_name = #{loginName}
+		, entry_time = #{entryTime} 
+		, probationary_expired = #{probationaryExpired}
+		, work_address = #{workAddress}
 		<if test="employeePhone != null">
-			and employee_phone =#{employeePhone}
+			, employee_phone =#{employeePhone}
 		</if>
 		<if test="employeeTwophone != null">
-			and employee_twophone =#{employeeTwophone}
+			, employee_twophone =#{employeeTwophone}
 		</if>
 		<if test="employeeNo != null">
-			and employee_no =#{employeeNo}
+			, employee_no =#{employeeNo}
 		</if>
 		<if test="derectPersonId != null">
-			and derect_person_id =#{derectPersonId}
+			, derect_person_id =#{derectPersonId}
 		</if>
 		<if test="marriageStatus != null">
-			and marriage_status =#{marriageStatus}
+			, marriage_status =#{marriageStatus}
 		</if>
 		<if test="seniority != null">
-			and seniority =#{seniority}
+			, seniority =#{seniority}
 		</if>
 		where company_id = #{companyId} and employee_id
 		= #{employeeId}
 	</update>
-	
+	<update id="updateEmployeeInfoStatus" parameterType="java.lang.String">
+		update user_company set info_status = '1' where user_id = #{userId} and company_id = #{companyId}
+	</update>
 	
 	
 	

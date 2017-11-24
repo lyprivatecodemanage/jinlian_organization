@@ -103,6 +103,8 @@ public interface EmployeeService {
 	 * @return
 	 */
 	int updateEmployeeInformation(Map<String,String> params);
+	
+	int updateEmployeeInfoStatus(String companyId,String userId);
 	/**
 	 * 激活
 	 * @param employeeId

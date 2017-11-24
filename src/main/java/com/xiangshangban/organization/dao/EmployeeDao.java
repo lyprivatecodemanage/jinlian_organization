@@ -94,4 +94,6 @@ public interface EmployeeDao {
 	 * @return
 	 */
 	int updateEmployeeInformation(Map<String,String> params);
+	
+	int updateEmployeeInfoStatus(@Param("companyId")String companyId,@Param("userId")String userId);
 }

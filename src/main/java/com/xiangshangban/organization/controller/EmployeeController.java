@@ -1,7 +1,5 @@
 package com.xiangshangban.organization.controller;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,6 +34,7 @@ import com.xiangshangban.organization.service.PostService;
 import com.xiangshangban.organization.service.TransferjobService;
 import com.xiangshangban.organization.util.FormatUtil;
 import com.xiangshangban.organization.util.HttpRequestFactory;
+import com.xiangshangban.organization.util.ImportExcel;
 import com.xiangshangban.organization.util.PropertiesUtils;
 import com.xiangshangban.organization.util.RegexUtil;
 
@@ -56,19 +55,20 @@ public class EmployeeController {
 
 	/**
 	 * 激活
+	 * 
 	 * @param jsonString
 	 * @param request
 	 * @param response
 	 * @return
 	 */
-	
+
 	@RequestMapping(value = "/activeEmployee", produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
 	public ReturnData activeEmp(@RequestBody String jsonString, HttpServletRequest request,
-			HttpServletResponse response){
+			HttpServletResponse response) {
 		ReturnData returnData = new ReturnData();
 		// 获取请求头信息
 		String companyId = request.getHeader("companyId");
-		//String operateUserId = request.getHeader("accessUserId");
+		// String operateUserId = request.getHeader("accessUserId");
 		JSONObject obj = JSON.parseObject(jsonString);
 		String employeeId = obj.getString("employeeId");
 		if (StringUtils.isEmpty(employeeId)) {
@@ -81,6 +81,7 @@ public class EmployeeController {
 		returnData.setReturnCode("3000");
 		return returnData;
 	}
+
 	/**
 	 * 
 	 * 添加员工信息
@@ -127,7 +128,7 @@ public class EmployeeController {
 		}
 
 		if ((StringUtils.isNotEmpty(employeenew.getEntryTime()) && !RegexUtil.matchDate(employeenew.getEntryTime()))
-				|| (StringUtils.isNotEmpty(employeenew.getProbationaryExpired()) 
+				|| (StringUtils.isNotEmpty(employeenew.getProbationaryExpired())
 						&& !RegexUtil.matchDate(employeenew.getProbationaryExpired()))) {
 			returnData.setMessage("日期格式错误（yyyy-MM-dd）");
 			returnData.setReturnCode("3009");
@@ -138,8 +139,6 @@ public class EmployeeController {
 		returnData.setReturnCode("3000");
 		return returnData;
 	}
-
-	
 
 	/**
 	 * 完善申请入职员工的入职信息
@@ -270,7 +269,7 @@ public class EmployeeController {
 			String departmentName = obj.getString("departmentName");// 部门名称
 			String postName = obj.getString("postName");// 岗位名称
 			String employeeStatus = obj.getString("employeeStatus");// 员工状态，0,在职，1,离职，2,删除
-			String departmentId = obj.getString("departmentId");//部门id
+			String departmentId = obj.getString("departmentId");// 部门id
 			String pageNum = obj.getString("pageNum");// 页码
 			String pageRecordNum = obj.getString("pageRecordNum");// 页记录行数
 			boolean pageNumFlag = Pattern.matches("\\d{1,}", pageNum);
@@ -312,14 +311,14 @@ public class EmployeeController {
 				}
 			}
 			List<Employee> employeeList = employeeService.selectByAllFnyeEmployee(companyId, pageNum, pageRecordNum,
-					employeeName, employeeSex, departmentName, postName, employeeStatus,departmentId);
+					employeeName, employeeSex, departmentName, postName, employeeStatus, departmentId);
 			// 查询总记录数
-			int intCount=employeeService.selectCountEmployeeFromCompany(companyId, pageNum, pageRecordNum, employeeName, employeeSex,
-					departmentName, postName, employeeStatus);
+			int intCount = employeeService.selectCountEmployeeFromCompany(companyId, pageNum, pageRecordNum,
+					employeeName, employeeSex, departmentName, postName, employeeStatus);
 			String count = String.valueOf(intCount);
-			//总页数
-			int intpagecountNum = (int)Math.ceil((double)intCount/(Double.valueOf(pageRecordNum)));
-			String pagecountNum =String.valueOf(intpagecountNum);
+			// 总页数
+			int intpagecountNum = (int) Math.ceil((double) intCount / (Double.valueOf(pageRecordNum)));
+			String pagecountNum = String.valueOf(intpagecountNum);
 			result.put("totalPages", count);
 			result.put("pagecountNum", pagecountNum);
 			result.put("data", employeeList);
@@ -368,13 +367,14 @@ public class EmployeeController {
 		}
 
 	}
+
 	/**
 	 * @author 李业/app查询人员信息
 	 * @param jsonString
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping(value="/appSearch",method=RequestMethod.POST)
+	@RequestMapping(value = "/appSearch", method = RequestMethod.POST)
 	public Map<String, Object> appSearch(@RequestBody String jsonString, HttpServletRequest request) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
@@ -398,7 +398,6 @@ public class EmployeeController {
 		}
 
 	}
-	
 
 	/**
 	 * @author 李业:人员信息删除
@@ -406,7 +405,7 @@ public class EmployeeController {
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping(value="/deleteActivity",method=RequestMethod.POST)
+	@RequestMapping(value = "/deleteActivity", method = RequestMethod.POST)
 	public Map<String, Object> deleteActivity(@RequestBody String jsonStrng, HttpServletRequest request) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
@@ -417,16 +416,17 @@ public class EmployeeController {
 				String employeeId = JSON.parseObject(jsonArray.get(i).toString()).getString("employeeId");
 				String departmentId = JSON.parseObject(jsonArray.get(i).toString()).getString("departmentId");
 				String postId = JSON.parseObject(jsonArray.get(i).toString()).getString("postId");
-				int num = employeeService.deleteByEmployee(companyId,employeeId);
+				int num = employeeService.deleteByEmployee(companyId, employeeId);
 				if (num < 2) {
 					result.put("message", "人员删除错误");
 					result.put("returnCode", "4113");
 					return result;
 				}
-				//改变员工部门关联表删除状态
+				// 改变员工部门关联表删除状态
 				connectEmpPostService.deleteEmpConnectPost(employeeId);
-				//岗位移动表添加岗位离职时间
-				transferjobService.updateTransferEndTimeWhereDeleteEmployee(companyId,userId, employeeId, departmentId,postId);
+				// 岗位移动表添加岗位离职时间
+				transferjobService.updateTransferEndTimeWhereDeleteEmployee(companyId, userId, employeeId, departmentId,
+						postId);
 			}
 			result.put("message", "成功");
 			result.put("returnCode", "3000");
@@ -439,6 +439,7 @@ public class EmployeeController {
 			return result;
 		}
 	}
+
 	/**
 	 * @author 李业:人员信息编辑
 	 * @param jsonString
@@ -446,66 +447,76 @@ public class EmployeeController {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	@RequestMapping(value="/updateEmployeeInformation",method=RequestMethod.POST)
-	public Map<String,Object> updateEmployeeInformation(@RequestBody String jsonString,HttpServletRequest request){
-		Map<String,Object> result = new HashMap<String,Object>();
-		Map<String,String> params = new HashMap<String,String>();
-		try{
-			String companyId = request.getHeader("companyId");//公司id
-			String userId = request.getHeader("accessUserId");//操作人id
+	@RequestMapping(value = "/updateEmployeeInformation", method = RequestMethod.POST)
+	public Map<String, Object> updateEmployeeInformation(@RequestBody String jsonString, HttpServletRequest request) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		Map<String, String> params = new HashMap<String, String>();
+		try {
+			String companyId = request.getHeader("companyId");// 公司id
+			String userId = request.getHeader("accessUserId");// 操作人id
 			JSONObject obj = JSON.parseObject(jsonString);
-			String employeeId = obj.getString("employeeId");//员工id
-			String employeeName = obj.getString("employeeName");//员工姓名
-			String employeeSex = obj.getString("employeeSex");//性别
-			String loginName = obj.getString("loginName");//登录名
-			String employeePhone = obj.getString("employeePhone");//联系方式1
-			String employeeTwophone = obj.getString("employeeTwophone");//联系方式2
-			String postId = obj.getString("postId");//主岗位id
-			String workAddress = obj.getString("workAddress");//工作地
-			String marriageStatus = obj.getString("marriageStatus");//婚姻状况
-			String seniority = obj.getString("seniority");//工龄
-			String departmentId = obj.getString("departmentId");//部门id
-			String employeeNo = obj.getString("employeeNo");//员工编号
-			String directPersonId = obj.getString("directPersonId");//直接汇报人id
-			String entryTime = obj.getString("entryTime");//入职时间
-			String probationaryExpired = obj.getString("probationaryExpired");//试用到期日
-			String transferJobCause = obj.getString("transferJobCause");//调动原因
-			if(StringUtils.isEmpty(employeeName) || StringUtils.isEmpty(employeeSex) || StringUtils.isEmpty(loginName)
-				|| StringUtils.isEmpty(departmentId) || StringUtils.isEmpty(entryTime) || StringUtils.isEmpty(probationaryExpired)
-				|| StringUtils.isEmpty(postId) || StringUtils.isEmpty(workAddress)){
+			String employeeId = obj.getString("employeeId");// 员工id
+			String employeeName = obj.getString("employeeName");// 员工姓名
+			String employeeSex = obj.getString("employeeSex");// 性别
+			String loginName = obj.getString("loginName");// 登录名
+			String employeePhone = obj.getString("employeePhone");// 联系方式1
+			String employeeTwophone = obj.getString("employeeTwophone");// 联系方式2
+			String postId = obj.getString("postId");// 主岗位id
+			String workAddress = obj.getString("workAddress");// 工作地
+			String marriageStatus = obj.getString("marriageStatus");// 婚姻状况
+			String seniority = obj.getString("seniority");// 工龄
+			String departmentId = obj.getString("departmentId");// 部门id
+			String employeeNo = obj.getString("employeeNo");// 员工编号
+			String directPersonId = obj.getString("directPersonId");// 直接汇报人id
+			String entryTime = obj.getString("entryTime");// 入职时间
+			String probationaryExpired = obj.getString("probationaryExpired");// 试用到期日
+			String transferJobCause = obj.getString("transferJobCause");// 调动原因
+			if (StringUtils.isEmpty(employeeName) || StringUtils.isEmpty(employeeSex) || StringUtils.isEmpty(loginName)
+					|| StringUtils.isEmpty(departmentId) || StringUtils.isEmpty(entryTime)
+					|| StringUtils.isEmpty(probationaryExpired) || StringUtils.isEmpty(postId)
+					|| StringUtils.isEmpty(workAddress)) {
 				result.put("message", "必传参数为空");
 				result.put("returnCode", "3006");
 				return result;
 			}
-			params = JSON.parseObject(jsonString,Map.class);
+			params = JSON.parseObject(jsonString, Map.class);
 			employeeService.updateEmployeeInformation(params);
-			ConnectEmpPost formerConnectEmpPost = connectEmpPostService.selectEmployeePostInformation(employeeId, departmentId);
-			if(!postId.equals(formerConnectEmpPost.getPostId())){
+			ConnectEmpPost formerConnectEmpPost = connectEmpPostService.selectEmployeePostInformation(employeeId,
+					departmentId);
+			if (formerConnectEmpPost != null && !postId.equals(formerConnectEmpPost.getPostId())) {
 				connectEmpPostService.updateEmployeeWithPost(employeeId, departmentId, postId);
-				//添加更换之前主岗位的换岗时间(transferEndTime)
-				transferjobService.updateTransferEndTimeWhereDeleteEmployee(companyId,userId, employeeId, departmentId,formerConnectEmpPost.getPostId());
-				//添加新岗位的记录
-				Transferjob transferjob = new Transferjob(FormatUtil.createUuid(), employeeId, null, departmentId, transferJobCause, null, userId, null, companyId, directPersonId, postId);
-				
-				transferjobService.insertTransferjob(transferjob);
+				// 添加更换之前主岗位的换岗时间(transferEndTime)
+				transferjobService.updateTransferEndTimeWhereDeleteEmployee(companyId, userId, employeeId, departmentId,
+						formerConnectEmpPost.getPostId());
 			}
+			// 添加新岗位的记录
+			Transferjob transferjob = new Transferjob(FormatUtil.createUuid(), employeeId, null, departmentId,
+					transferJobCause, null, userId, null, companyId, directPersonId, postId);
+
+			transferjobService.insertTransferjob(transferjob);
 			connectEmpPostService.deleteEmployeeWithPost(employeeId, departmentId);
 			JSONArray array = obj.getJSONArray("postList");
 			List<ConnectEmpPost> list = new ArrayList<ConnectEmpPost>();
-			for(int i =0 ;i<array.size();i++){
+			for (int i = 0; i < array.size(); i++) {
 				ConnectEmpPost connectEmpPost = new ConnectEmpPost();
 				connectEmpPost.setEmployeeId(employeeId);
 				connectEmpPost.setDepartmentId(departmentId);
 				connectEmpPost.setPostGrades("0");
 				connectEmpPost.setIsDelete("0");
-				connectEmpPost.setPostId(JSON.parseObject(array.getString(i)).getString("postId"));
-				list.add(connectEmpPost);
+				String vPostId = JSON.parseObject(array.getString(i)).getString("postId");
+				if (StringUtils.isNotEmpty(vPostId)) {
+					connectEmpPost.setPostId(vPostId);
+					list.add(connectEmpPost);
+				}
 			}
-			connectEmpPostService.insertEmployeeWithPost(list);
-			result.put("message","成功");
-			result.put("returnCode","3000");
+			if (list.size() > 0) {
+				connectEmpPostService.insertEmployeeWithPost(list);
+			}
+			employeeService.updateEmployeeInfoStatus(companyId, employeeId);
+			result.put("message", "成功");
+			result.put("returnCode", "3000");
 			return result;
-		}catch(Exception e){
+		} catch (Exception e) {
 			e.printStackTrace();
 			logger.info(e);
 			result.put("message", "服务器错误");
@@ -513,37 +524,39 @@ public class EmployeeController {
 			return result;
 		}
 	}
+
 	/**
 	 * @author 李业:人员信息导入
 	 * @param key
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping(value="/speedImport",method=RequestMethod.POST)
-	public Map<String,Object> speedImport(String key,HttpServletRequest request){
-		Map<String,Object> result = new HashMap<String,Object>();
-		try{
+	@RequestMapping(value = "/speedImport", method = RequestMethod.POST)
+	public Map<String, Object> speedImport(String key, HttpServletRequest request) {
+		Map<String, Object> result = new HashMap<String, Object>();
+		try {
 			String companyId = request.getHeader("companyId");// 公司id
 			String userId = request.getHeader("accessUserId");// 操作人id
 			Employee emp = employeeService.selectByEmployeeFromApp(companyId, userId);
 			String companyNo = emp.getCompanyNo();
 			String directory = PropertiesUtils.ossProperty("portraitDirectory");
 			String url = oSSFileService.getPathByKey(companyNo, directory, key);
-			File file = new File(url);
-			FileInputStream input = new FileInputStream(file);
-			
-			result.put("message","成功");
-			result.put("returnCode","3000");
+			// File file = new File(url);
+			// FileInputStream input = new FileInputStream(file);
+			ImportExcel.getDataFromExcel(url);
+
+			result.put("message", "成功");
+			result.put("returnCode", "3000");
 			return result;
-		}catch(Exception e){
+		} catch (Exception e) {
 			e.printStackTrace();
 			logger.info(e);
-			result.put("message","服务器错误");
-			result.put("returnCode","3001");
+			result.put("message", "服务器错误");
+			result.put("returnCode", "3001");
 			return result;
 		}
 	}
-	
+
 	/**
 	 * 查询一个岗位下的所有员工
 	 */
@@ -565,8 +578,6 @@ public class EmployeeController {
 		}
 		return returnData;
 	}
-
-	
 
 	/**
 	 * 所有在职员工的信息
@@ -683,39 +694,6 @@ public class EmployeeController {
 		}
 		return returnData;
 	}
-
-	/**
-	 * 查询单条员工信息
-	 * 
-	 * @param employeeId
-	 * @param request
-	 * @param response
-	 * @return
-	 *//*
-	@RequestMapping(value = "/selectByEmployee", produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
-	public ReturnData selectByEmployee(@RequestBody String jsonString, HttpServletRequest request,
-			HttpServletResponse response) {
-		JSONObject obj = JSON.parseObject(jsonString);
-		ReturnData returnData = new ReturnData();
-		String employeeId = obj.getString("employeeId");
-		String companyId = obj.getString("companyId");
-		if (StringUtils.isEmpty(employeeId)) {
-			companyId = request.getHeader("companyId");
-		}
-		if (StringUtils.isNotEmpty(employeeId) && StringUtils.isNotEmpty(employeeId)) {
-			Employee emp = employeeService.selectByEmployee(employeeId, companyId);
-			String departmentId = emp.getDepartmentId();
-			List<Post> PostNamelist = postService.selectByPostName(employeeId, departmentId);
-			emp.setPostList(PostNamelist);
-			returnData.setData(emp);
-			returnData.setMessage("数据请求成功");
-			returnData.setReturnCode("3000");
-		} else {
-			returnData.setMessage("必传参数为空");
-			returnData.setReturnCode("3006");
-		}
-		return returnData;
-	}*/
 
 	/**
 	 * 删除员工信息
