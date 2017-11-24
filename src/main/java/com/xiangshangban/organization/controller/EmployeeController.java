@@ -391,6 +391,7 @@ public class EmployeeController {
 					emp.setMarriageStatus("离异");
 				}
 			}
+			System.out.println(emp.getPostId()+"\t"+emp.getDepartmentId());
 			result.put("result", emp);
 			result.put("message", "成功");
 			result.put("returnCode", "3000");
