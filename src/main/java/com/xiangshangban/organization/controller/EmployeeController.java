@@ -443,8 +443,11 @@ public class EmployeeController {
 			JSONArray jsonArray = JSON.parseArray(jsonStrng);
 			for (int i = 0; i < jsonArray.size(); i++) {
 				String employeeId = JSON.parseObject(jsonArray.get(i).toString()).getString("employeeId");
-				String departmentId = JSON.parseObject(jsonArray.get(i).toString()).getString("departmentId");
-				String postId = JSON.parseObject(jsonArray.get(i).toString()).getString("postId");
+				/*String departmentId = JSON.parseObject(jsonArray.get(i).toString()).getString("departmentId");
+				String postId = JSON.parseObject(jsonArray.get(i).toString()).getString("postId");*/
+				Employee emp = employeeService.selectByEmployee(employeeId, companyId);
+				String departmentId = emp.getDepartmentId();
+				String postId = emp.getPostId();
 				int num = employeeService.deleteByEmployee(companyId, employeeId);
 				if (num < 2) {
 					result.put("message", "人员删除错误");
@@ -481,6 +484,7 @@ public class EmployeeController {
 		Map<String, Object> result = new HashMap<String, Object>();
 		Map<String, String> params = new HashMap<String, String>();
 		try {
+			System.out.println(jsonString);
 			String companyId = request.getHeader("companyId");// 公司id
 			String userId = request.getHeader("accessUserId");// 操作人id
 			JSONObject obj = JSON.parseObject(jsonString);
