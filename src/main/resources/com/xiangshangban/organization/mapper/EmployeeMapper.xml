@@ -28,7 +28,7 @@
 		<result column="seniority" jdbcType="VARCHAR" property="seniority" />
 	</resultMap>
 
-	
+
 	<!-- 部门下在职员工 -->
 	<select id="findEmployeeByDepartmentId" resultMap="Employee">
 		select
@@ -138,16 +138,18 @@
 	<!-- 李业:分页查询员工信息 -->
 	<select id="selectByAllFnyeEmployee" parameterType="java.lang.String"
 		resultMap="PagingColumnList">
-		select distinct
+		select
 		e.employee_id,e.employee_name,e.employee_sex,e.login_name,e.employee_phone,
 		p.post_id,p.post_name,e.department_id ,d.department_name,
 		e.entry_time,e.employee_status,uc.is_active
-		from organization.employee_ e,department_ d,post_ p,user_company uc
+		from organization.employee_
+		e left join
+		user_company uc on e.employee_id = uc.user_id and e.company_id = uc.company_id
+		left join
+		department_ d on e.department_id = d.department_id left JOIN
+		post_ p on d.department_id = p.department_id
 		where
-		e.company_id = #{companyId} 
-		and e.department_id = d.department_id
-		and d.department_id = p.department_id
-		and e.company_id = uc.company_id
+		e.company_id = #{companyId} and uc.info_status = '1'
 		<if test="employeeName != null">
 			and e.employee_name like #{employeeName}
 		</if>
@@ -309,14 +311,19 @@
 		employee_id = e.direct_person_id ),
 		e.entry_time,e.probationary_expired,e.work_address,e.marriage_status,e.seniority
 		from employee_ as e
-		left join 
-		connect_emp_post_ as cep on e.employee_id = cep.employee_id and cep.post_grades = '1' and cep.is_delete = '0'
+		left join
+		connect_emp_post_ as cep on e.employee_id
+		= cep.employee_id and cep.post_grades = '1'
+		and cep.is_delete = '0'
 		left join
 		post_ p on cep.post_id = p.post_id
 		left join
-		department_ d on cep.department_id = d.department_id
-		where e.company_id =
-		#{companyId} and e.employee_id = #{employeeId}
+		department_ d on
+		cep.department_id = d.department_id
+		where
+		e.company_id =
+		#{companyId} and
+		e.employee_id = #{employeeId}
 	</select>
 	<resultMap type="com.xiangshangban.organization.bean.Employee"
 		id="EmployeeAppResultMap">
@@ -339,34 +346,50 @@
 		userid,employee_img_url,username,employee_sex,company_no,company_name,e.department_id,department_name,post_name,employee_no,phone
 		from (select u.userid,
 		u.username,c.company_no,c.company_name,u.phone
-		from u_users u 
-		left join 
-		user_company uc on u.userid = uc.user_id 
+		from u_users u
 		left join
+		user_company uc on u.userid = uc.user_id
+		left
+		join
 		company_ c on c.company_id = uc.company_id
-		where u.userid =#{userId} and uc.company_id =
-		#{companyId}  
+		where u.userid
+		=#{userId} and uc.company_id =
+		#{companyId}
 		) a
 		left join employee_ e
-		on a.userid = e.employee_id
-		left
-		join department_ d
 		on
-		e.department_id = d.department_id
+		a.userid = e.employee_id
+		left
+		join department_
+		d
+		on
+		e.department_id =
+		d.department_id
 		left join
 		connect_emp_post_ cep
-		on a.userid = cep.employee_id and d.department_id
-		= cep.department_id and cep.post_grades = '1' and cep.is_delete = '0'
+		on
+		a.userid =
+		cep.employee_id and d.department_id
+		= cep.department_id and
+		cep.post_grades = '1' and cep.is_delete = '0'
 		left join post_ p
-		on cep.post_id = p.post_id
+		on
+		cep.post_id = p.post_id
 	</select>
 	<!-- 李业:查询员工信息总记录数 -->
 	<select id="selectCountEmployeeFromCompany" parameterType="java.lang.String"
 		resultType="java.lang.Integer">
 		select count(e.employee_id)
-		from organization.employee_ e,department_ d,post_ p,user_company uc
+		from organization.employee_ e left join
+		user_company uc on e.employee_id = uc.user_id and e.company_id =
+		uc.company_id
+		left join
+		department_ d on e.department_id =
+		d.department_id left JOIN
+		post_ p on d.department_id = p.department_id
 		where
-		e.company_id = #{companyId} and e.department_id = d.department_id and d.department_id = p.department_id and e.company_id = uc.company_id
+		e.company_id = #{companyId} and uc.info_status =
+		'1'
 		<if test="employeeName != null">
 			and employee_name like #{employeeName}
 		</if>
@@ -390,12 +413,17 @@
 	<update id="updateEmployeeInformation" parameterType="java.util.Map">
 		update employee_
 		set employee_name = #{employeeName}
-		, employee_sex = #{employeeSex} 
+		, employee_sex =
+		#{employeeSex}
 		, employee_status = #{employeeStatus}
-		, login_name = #{loginName}
-		, entry_time = #{entryTime} 
-		, probationary_expired = #{probationaryExpired}
-		, work_address = #{workAddress}
+		, login_name =
+		#{loginName}
+		,
+		entry_time = #{entryTime}
+		, probationary_expired =
+		#{probationaryExpired}
+		, work_address =
+		#{workAddress}
 		<if test="employeePhone != null">
 			, employee_phone =#{employeePhone}
 		</if>
@@ -418,14 +446,16 @@
 		= #{employeeId}
 	</update>
 	<update id="updateEmployeeInfoStatus" parameterType="java.lang.String">
-		update user_company set info_status = '1' where user_id = #{userId} and company_id = #{companyId}
+		update
+		user_company set info_status = '1' where user_id = #{userId} and
+		company_id = #{companyId}
 	</update>
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
 	<!-- 所有在职员工的信息 -->
 	<select id="findByAllEmployee" parameterType="java.lang.String"
 		resultMap="Employee">
