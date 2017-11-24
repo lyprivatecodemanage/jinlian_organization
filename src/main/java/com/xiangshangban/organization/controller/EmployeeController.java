@@ -501,7 +501,7 @@ public class EmployeeController {
 			String probationaryExpired = obj.getString("probationaryExpired");// 试用到期日
 			String transferJobCause = obj.getString("transferJobCause");// 调动原因
 			if (StringUtils.isEmpty(employeeName) || StringUtils.isEmpty(employeeSex) || StringUtils.isEmpty(loginName)
-					|| StringUtils.isEmpty(departmentId)/* ||StringUtils.isEmpty(employeeStatus)*/ || StringUtils.isEmpty(entryTime)
+					|| StringUtils.isEmpty(departmentId) || StringUtils.isEmpty(entryTime)
 					|| StringUtils.isEmpty(probationaryExpired) || StringUtils.isEmpty(postId)
 					|| StringUtils.isEmpty(workAddress)) {
 				result.put("message", "必传参数为空");
@@ -517,7 +517,8 @@ public class EmployeeController {
 				// 添加更换之前主岗位的换岗时间(transferEndTime)
 				transferjobService.updateTransferEndTimeWhereDeleteEmployee(companyId, userId, employeeId, departmentId,
 						formerConnectEmpPost.getPostId());
-			}else{
+			}
+			if(formerConnectEmpPost==null){
 				formerConnectEmpPost = new ConnectEmpPost();
 				formerConnectEmpPost.setEmployeeId(employeeId);
 				formerConnectEmpPost.setDepartmentId(departmentId);
