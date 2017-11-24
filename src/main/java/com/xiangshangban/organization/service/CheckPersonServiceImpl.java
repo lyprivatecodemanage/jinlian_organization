@@ -79,8 +79,9 @@ public class CheckPersonServiceImpl implements CheckPersonService {
 					returnData.setReturnCode("4110");
 				}else{
 					checkPersonDao.updateByPrimaryKeySelective(companyId, userId, status);
+					returnData.setMessage("审核已驳回");
+					returnData.setReturnCode("4109");
 				}
-				
 			}else{
 				returnData.setMessage("找不到待审核人员的信息");
 				returnData.setReturnCode("4111");
