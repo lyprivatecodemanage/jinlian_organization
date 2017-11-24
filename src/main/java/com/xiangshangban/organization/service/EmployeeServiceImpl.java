@@ -84,6 +84,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 			userCompany.setCompanyId(employee.getCompanyId());
 			userCompany.setCurrentOption("2");
 			userCompany.setUserId(user.getUserid());
+			userCompany.setInfoStatus("1");
 			userCompanyDefaultDao.insertSelective(userCompany);//添加用户公司的绑定关系
 			
 			CheckPerson checkPerson = new CheckPerson();
@@ -104,10 +105,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 				userCompany.setCompanyId(employee.getCompanyId());
 				userCompany.setCurrentOption("2");
 				userCompany.setUserId(user.getUserid());
+				userCompany.setInfoStatus("1");
 				userCompanyDefaultDao.insertSelective(userCompany);//添加用户公司的绑定关系
 			}else if(userCompany!=null && userCompany.getCompanyId().equals(employee.getCompanyId())){//已存在绑定关系，则直接返回
 				if("2".equals(userCompany.getIsActive())){
 					userCompany.setIsActive("0");
+					userCompany.setInfoStatus("1");
 					userCompanyDefaultDao.updateSelective(userCompany);
 				}
 				this.updateTransfer(employee);//岗位信息设置

@@ -54,32 +54,34 @@ public class ImportExcel {
                 e.printStackTrace();
             }
         }
-        
+        int lastSheetNum = wookbook.getNumberOfSheets();
+        for(int i=0;i<lastSheetNum;i++){
         //得到一个工作表
-        Sheet sheet = wookbook.getSheetAt(0);
-        
+        Sheet sheet = wookbook.getSheetAt(i);
         //获得表头
         Row rowHead = sheet.getRow(0);
-        
         //判断表头是否正确
-        if(rowHead.getPhysicalNumberOfCells() != 3)
+        if(rowHead.getPhysicalNumberOfCells() != 17)
         {
             System.out.println("表头的数量不对!");
         }
-        
         //获得数据的总行数
         int totalRowNum = sheet.getLastRowNum();
-        
         //要获得属性
         String name = "";
         int latitude = 0;
-        
        //获得所有数据
-        for(int i = 1 ; i <= totalRowNum ; i++)
+        for(int j = 1 ; j <= totalRowNum ; j++)
         {
             //获得第i行对象
-            Row row = sheet.getRow(i);
-            
+            Row row = sheet.getRow(j);
+            int lastRowNum = row.getLastCellNum();
+            	for(int k=0;k<lastRowNum;k++){
+            		Cell cell = row.getCell(k);
+            		if(k==2 || k==3 || k==4 || k==6 || k==7 ||k==9||k==10||k==11||k==12){
+            			String value = cell.getStringCellValue();
+            		}
+            	}
             //获得获得第i行第0列的 String类型对象
             Cell cell = row.getCell((short)0);
             name = cell.getStringCellValue().toString();
@@ -90,6 +92,7 @@ public class ImportExcel {
             
             System.out.println("名字："+name+",经纬度："+latitude);
             
+        }
         }
     }
 }

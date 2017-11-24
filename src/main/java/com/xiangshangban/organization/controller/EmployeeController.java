@@ -313,6 +313,22 @@ public class EmployeeController {
 			
 			List<Employee> employeeList = employeeService.selectByAllFnyeEmployee(companyId, pageNum, pageRecordNum,
 					employeeName, employeeSex, departmentName, postName, employeeStatus, departmentId);
+			for(Employee emp:employeeList){
+				if(emp!=null){
+					if("0".equals(emp.getEmployeeSex())){
+						emp.setEmployeeSex("男");
+					}else if("1".equals(emp.getEmployeeSex())){
+						emp.setEmployeeSex("女");
+					}
+					if("0".equals(emp.getEmployeeStatus())){
+						emp.setEmployeeStatus("在职");
+					}else if("1".equals(emp.getEmployeeStatus())){
+						emp.setEmployeeStatus("离职");
+					}else if("2".equals(emp.getEmployeeStatus())){
+						emp.setEmployeeStatus("删除");
+					}
+				}
+			}
 			// 查询总记录数
 			int intCount = employeeService.selectCountEmployeeFromCompany(companyId, pageNum, pageRecordNum,
 					employeeName, employeeSex, departmentName, postName, employeeStatus, departmentId);
@@ -354,6 +370,18 @@ public class EmployeeController {
 				List<Post> postList = postService.selectVicePositionByEmployeeId(companyId, employeeId);
 				if (postList.size() > 0) {
 					emp.setPostList(postList);
+				}
+				if("0".equals(emp.getEmployeeSex())){
+					emp.setEmployeeSex("男");
+				}else if("1".equals(emp.getEmployeeSex())){
+					emp.setEmployeeSex("女");
+				}
+				if("0".equals(emp.getEmployeeStatus())){
+					emp.setEmployeeStatus("在职");
+				}else if("1".equals(emp.getEmployeeStatus())){
+					emp.setEmployeeStatus("离职");
+				}else if("2".equals(emp.getEmployeeStatus())){
+					emp.setEmployeeStatus("删除");
 				}
 			}
 			result.put("result", emp);
@@ -473,7 +501,7 @@ public class EmployeeController {
 			String probationaryExpired = obj.getString("probationaryExpired");// 试用到期日
 			String transferJobCause = obj.getString("transferJobCause");// 调动原因
 			if (StringUtils.isEmpty(employeeName) || StringUtils.isEmpty(employeeSex) || StringUtils.isEmpty(loginName)
-					|| StringUtils.isEmpty(departmentId) || StringUtils.isEmpty(entryTime)
+					|| StringUtils.isEmpty(departmentId)/* ||StringUtils.isEmpty(employeeStatus)*/ || StringUtils.isEmpty(entryTime)
 					|| StringUtils.isEmpty(probationaryExpired) || StringUtils.isEmpty(postId)
 					|| StringUtils.isEmpty(workAddress)) {
 				result.put("message", "必传参数为空");
