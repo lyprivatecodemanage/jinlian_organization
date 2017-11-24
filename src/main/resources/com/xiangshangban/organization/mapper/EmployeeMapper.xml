@@ -415,7 +415,7 @@
 		</if>
 	</select>
 	<!-- 李业:编辑人员信息 -->
-	<update id="updateEmployeeInformation" parameterType="java.util.Map">
+	<update id="updateEmployeeInformation" parameterType="com.xiangshangban.organization.bean.Employee">
 		update employee_
 		set employee_name = #{employeeName}, 
 		employee_sex =#{employeeSex}, 

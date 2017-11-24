@@ -102,7 +102,7 @@ public interface EmployeeService {
 	 * @param params
 	 * @return
 	 */
-	int updateEmployeeInformation(Map<String,String> params);
+	int updateEmployeeInformation(Employee emp);
 	
 	int updateEmployeeInfoStatus(String companyId,String userId);
 	/**

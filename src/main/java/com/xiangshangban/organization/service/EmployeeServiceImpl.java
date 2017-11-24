@@ -348,9 +348,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	@Override
-	public int updateEmployeeInformation(Map<String, String> params) {
+	public int updateEmployeeInformation(Employee emp) {
 		
-		return employeeDao.updateEmployeeInformation(params);
+		return employeeDao.updateEmployeeInformation(emp);
 	}
 	@Override
 	public int updateEmployeeInfoStatus(String companyId, String userId) {

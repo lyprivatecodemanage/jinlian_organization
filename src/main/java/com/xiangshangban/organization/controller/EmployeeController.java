@@ -490,13 +490,15 @@ public class EmployeeController {
 	@RequestMapping(value = "/updateEmployeeInformation", method = RequestMethod.POST)
 	public Map<String, Object> updateEmployeeInformation(@RequestBody String jsonString, HttpServletRequest request) {
 		Map<String, Object> result = new HashMap<String, Object>();
-		Map<String, String> params = new HashMap<String, String>();
+		//Map<String, String> params = new HashMap<String, String>();
+		Employee emp = new Employee();
 		try {
 			System.out.println(jsonString);
 			String companyId = request.getHeader("companyId");// 公司id
 			String userId = request.getHeader("accessUserId");// 操作人id
 			JSONObject obj = JSON.parseObject(jsonString);
-			String employeeId = obj.getString("employeeId");// 员工id
+			emp = JSON.parseObject(jsonString, Employee.class);
+			/*String employeeId = obj.getString("employeeId");// 员工id
 			String employeeName = obj.getString("employeeName");// 员工姓名
 			String employeeSex = obj.getString("employeeSex");// 性别
 			String loginName = obj.getString("loginName");// 登录名
@@ -512,29 +514,30 @@ public class EmployeeController {
 			String entryTime = obj.getString("entryTime");// 入职时间
 			String probationaryExpired = obj.getString("probationaryExpired");// 试用到期日
 			String transferJobCause = obj.getString("transferJobCause");// 调动原因
-			if (StringUtils.isEmpty(employeeName) || StringUtils.isEmpty(employeeSex) || StringUtils.isEmpty(loginName)
-					|| StringUtils.isEmpty(departmentId) || StringUtils.isEmpty(entryTime)
-					|| StringUtils.isEmpty(probationaryExpired) || StringUtils.isEmpty(postId)
-					|| StringUtils.isEmpty(workAddress)) {
+*/			if (StringUtils.isEmpty(emp.getEmployeeName()) || StringUtils.isEmpty(emp.getEmployeeSex()) || StringUtils.isEmpty(emp.getLoginName())
+					|| StringUtils.isEmpty(emp.getDepartmentId()) || StringUtils.isEmpty(emp.getEntryTime())
+					|| StringUtils.isEmpty(emp.getProbationaryExpired()) || StringUtils.isEmpty(emp.getPostId())
+					|| StringUtils.isEmpty(emp.getWorkAddress())) {
 				result.put("message", "必传参数为空");
 				result.put("returnCode", "3006");
 				return result;
 			}
-			params = JSON.parseObject(jsonString, Map.class);
-			employeeService.updateEmployeeInformation(params);
-			ConnectEmpPost formerConnectEmpPost = connectEmpPostService.selectEmployeePostInformation(employeeId,
-					departmentId);
-			if (formerConnectEmpPost != null && !postId.equals(formerConnectEmpPost.getPostId())) {
-				connectEmpPostService.updateEmployeeWithPost(employeeId, departmentId, postId);
+			Employee oldEmp = employeeService.selectByEmployee(emp.getEmployeeId(), companyId);
+			employeeService.updateEmployeeInformation(emp);
+			//查询员工岗位部门关联表
+			ConnectEmpPost formerConnectEmpPost = connectEmpPostService.selectEmployeePostInformation(emp.getEmployeeId(),
+					emp.getDepartmentId());
+			if (formerConnectEmpPost != null && !emp.getPostId().equals(formerConnectEmpPost.getPostId())) {
+				connectEmpPostService.updateEmployeeWithPost(emp.getEmployeeId(), emp.getDepartmentId(), emp.getPostId());
 				// 添加更换之前主岗位的换岗时间(transferEndTime)
-				transferjobService.updateTransferEndTimeWhereDeleteEmployee(companyId, userId, employeeId, departmentId,
+				transferjobService.updateTransferEndTimeWhereDeleteEmployee(companyId, userId, emp.getEmployeeId(), emp.getDepartmentId(),
 						formerConnectEmpPost.getPostId());
 			}
 			if(formerConnectEmpPost==null){
 				formerConnectEmpPost = new ConnectEmpPost();
-				formerConnectEmpPost.setEmployeeId(employeeId);
-				formerConnectEmpPost.setDepartmentId(departmentId);
-				formerConnectEmpPost.setPostId(postId);
+				formerConnectEmpPost.setEmployeeId(emp.getEmployeeId());
+				formerConnectEmpPost.setDepartmentId(emp.getDepartmentId());
+				formerConnectEmpPost.setPostId(emp.getPostId());
 				formerConnectEmpPost.setPostGrades("1");
 				formerConnectEmpPost.setIsDelete("0");
 				List<ConnectEmpPost> newConnectEmpPost = new ArrayList<ConnectEmpPost>();
@@ -542,17 +545,17 @@ public class EmployeeController {
 				connectEmpPostService.insertEmployeeWithPost(newConnectEmpPost);
 			}
 			// 添加新岗位的记录
-			Transferjob transferjob = new Transferjob(FormatUtil.createUuid(), employeeId, null, departmentId,
-					transferJobCause, null, userId, null, companyId, directPersonId, postId);
+			Transferjob transferjob = new Transferjob(FormatUtil.createUuid(), emp.getEmployeeId(), null, emp.getDepartmentId(),
+					emp.getTransferJobCause(), null, userId, null, companyId, emp.getDirectPersonId(), emp.getPostId());
 
 			transferjobService.insertTransferjob(transferjob);
-			connectEmpPostService.deleteEmployeeWithPost(employeeId, departmentId);
+			connectEmpPostService.deleteEmployeeWithPost(emp.getEmployeeId(), emp.getDepartmentId());
 			JSONArray array = obj.getJSONArray("postList");
 			List<ConnectEmpPost> list = new ArrayList<ConnectEmpPost>();
 			for (int i = 0; i < array.size(); i++) {
 				ConnectEmpPost connectEmpPost = new ConnectEmpPost();
-				connectEmpPost.setEmployeeId(employeeId);
-				connectEmpPost.setDepartmentId(departmentId);
+				connectEmpPost.setEmployeeId(emp.getEmployeeId());
+				connectEmpPost.setDepartmentId(emp.getDepartmentId());
 				connectEmpPost.setPostGrades("0");
 				connectEmpPost.setIsDelete("0");
 				String vPostId = JSON.parseObject(array.getString(i)).getString("postId");
@@ -564,7 +567,7 @@ public class EmployeeController {
 			if (list.size() > 0) {
 				connectEmpPostService.insertEmployeeWithPost(list);
 			}
-			employeeService.updateEmployeeInfoStatus(companyId, employeeId);
+			employeeService.updateEmployeeInfoStatus(companyId, emp.getEmployeeId());
 			result.put("message", "成功");
 			result.put("returnCode", "3000");
 			return result;
