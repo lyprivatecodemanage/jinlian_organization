@@ -310,11 +310,12 @@ public class EmployeeController {
 					return result;
 				}
 			}
+			
 			List<Employee> employeeList = employeeService.selectByAllFnyeEmployee(companyId, pageNum, pageRecordNum,
 					employeeName, employeeSex, departmentName, postName, employeeStatus, departmentId);
 			// 查询总记录数
 			int intCount = employeeService.selectCountEmployeeFromCompany(companyId, pageNum, pageRecordNum,
-					employeeName, employeeSex, departmentName, postName, employeeStatus);
+					employeeName, employeeSex, departmentName, postName, employeeStatus, departmentId);
 			String count = String.valueOf(intCount);
 			// 总页数
 			int intpagecountNum = (int) Math.ceil((double) intCount / (Double.valueOf(pageRecordNum)));

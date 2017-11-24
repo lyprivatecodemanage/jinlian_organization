@@ -326,9 +326,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public int selectCountEmployeeFromCompany(String companyId, String numPage, String numRecordCount,
-			String employeeName, String employeeSex, String departmentName, String postName, String employeeStatus) {
+			String employeeName, String employeeSex, String departmentName, String postName, String employeeStatus,String  departmentId) {
 		
-		return employeeDao.selectCountEmployeeFromCompany(companyId, numPage, numRecordCount, employeeName, employeeSex, departmentName, postName, employeeStatus);
+		return employeeDao.selectCountEmployeeFromCompany(companyId, numPage, numRecordCount, employeeName, employeeSex, departmentName, postName, employeeStatus,departmentId);
 	}
 
 	@Override

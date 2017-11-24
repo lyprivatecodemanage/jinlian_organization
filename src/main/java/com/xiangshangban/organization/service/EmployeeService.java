@@ -55,7 +55,7 @@ public interface EmployeeService {
      * @param employeeStatus
      * @return
      */
-    int selectCountEmployeeFromCompany(String companyId,String numPage,String numRecordCount, String employeeName, String employeeSex, String departmentName,String postName,String employeeStatus);
+    int selectCountEmployeeFromCompany(String companyId,String numPage,String numRecordCount, String employeeName, String employeeSex, String departmentName,String postName,String employeeStatus,String departmentId);
     
     String updateByEmployeedept(Employee employee);
     Employee findByemploginName(String loginName);

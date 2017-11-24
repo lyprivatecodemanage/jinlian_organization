@@ -150,22 +150,22 @@
 		post_ p on d.department_id = p.department_id
 		where
 		e.company_id = #{companyId} and uc.info_status = '1'
-		<if test="employeeName != null">
+		<if test="employeeName != null and employeeName != '' ">
 			and e.employee_name like #{employeeName}
 		</if>
-		<if test="employeeSex != null">
+		<if test="employeeSex != null and employeeSex != '' ">
 			and e.employee_sex = #{employeeSex}
 		</if>
-		<if test="departmentName != null">
+		<if test="departmentName != null and departmentName != '' ">
 			and d.department_name like #{departmentName}
 		</if>
-		<if test="postName != null">
+		<if test="postName != null and postName != '' ">
 			and post_name like #{postName}
 		</if>
-		<if test="employeeStatus != null">
+		<if test="employeeStatus != null and employeeStatus != '' ">
 			and e.employee_status = #{employeeStatus}
 		</if>
-		<if test="departmentId != null">
+		<if test="departmentId != null and departmentId != '' ">
 			and e.department_id = #{departmentId}
 		</if>
 		limit #{numRecordCount}::integer offset #{numPage}::integer
@@ -289,6 +289,7 @@
 		<result column="employee_id" property="employeeId" />
 		<result column="employee_name" property="employeeName" />
 		<result column="employee_sex" property="employeeSex" />
+		<result column="phone" property="phone" />
 		<result column="employee_phone" property="employeePhone" />
 		<result column="employee_twophone" property="employeeTwophone" />
 		<result column="post_name" property="postName" />
@@ -305,7 +306,7 @@
 	<select id="selectByEmployee" parameterType="java.lang.String"
 		resultMap="EmployeeResultMap">
 		select e.employee_id,
-		e.employee_name,e.employee_sex,e.login_name,e.employee_phone,
+		e.employee_name,e.employee_sex,u.phone,e.employee_phone,
 		e.employee_twophone,p.post_name,d.department_name,e.employee_no,
 		(select employee_name as derect_person_name from employee_ where
 		employee_id = e.direct_person_id ),
@@ -320,6 +321,8 @@
 		left join
 		department_ d on
 		cep.department_id = d.department_id
+		left join 
+		u_users u on e.employee_id = u.userid 
 		where
 		e.company_id =
 		#{companyId} and
@@ -390,23 +393,26 @@
 		where
 		e.company_id = #{companyId} and uc.info_status =
 		'1'
-		<if test="employeeName != null">
+		<if test="employeeName != null and employeeName != '' ">
 			and employee_name like #{employeeName}
 		</if>
-		<if test="employeeSex != null">
+		<if test="employeeSex != null and employeeSex != '' ">
 			and employee_sex = #{employeeSex}
 		</if>
-		<if test="departmentName != null">
+		<if test="departmentName != null and departmentName != '' ">
 			and department_name like #{departmentName}
 		</if>
-		<if test="postName != null">
+		<if test="postName != null and postName != '' ">
 			and post_name like #{postName}
 		</if>
-		<if test="employeeStatus != null">
+		<if test="employeeStatus != null and employeeStatus != '' ">
 			and employee_status = #{employeeStatus}
 		</if>
-		<if test="employeeStatus == null">
+		<if test="employeeStatus == null or employeeStatus == '' ">
 			and employee_status = '0'
+		</if>
+		<if test="departmentId != null and departmentId != '' ">
+			and e.department_id = #{departmentId}
 		</if>
 	</select>
 	<!-- 李业:编辑人员信息 -->

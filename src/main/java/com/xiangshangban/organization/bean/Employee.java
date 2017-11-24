@@ -34,6 +34,7 @@ public class Employee {
     private String infoStatus;//信息完整状态 0：不完整，1：完整
     private String marriageStatus;// 婚姻状况 0：未婚，1：已婚 ，2：离异
     private String seniority;// 工龄
+    private String phone;//登录手机号
     //----现在没用到的----
 //    private String employeeBirthday;// 出生年月日    
 //    private String employeeTell;//电话号码  
@@ -55,6 +56,12 @@ public class Employee {
     @ExcelResources(title="岗位",order=5)
 	public String getPostName() {
 		return postName;
+	}
+	public String getPhone() {
+		return phone;
+	}
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
 	public String getIsActive() {
 		return isActive;

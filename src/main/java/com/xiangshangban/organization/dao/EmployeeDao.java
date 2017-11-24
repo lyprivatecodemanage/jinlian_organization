@@ -39,7 +39,8 @@ public interface EmployeeDao {
 	int selectCountEmployeeFromCompany(@Param("companyId")String companyId,@Param("numPage") String numPage,
 			@Param("numRecordCount") String numRecordCount, @Param("employeeName") String employeeName,
 			@Param("employeeSex") String employeeSex, @Param("departmentName") String departmentName,
-			@Param("postName") String postName, @Param("employeeStatus") String employeeStatus);
+			@Param("postName") String postName, @Param("employeeStatus") String employeeStatus,
+			@Param("departmentId")String departmentId);
 
 	int batchUpdateTest(String employeeId);
 
