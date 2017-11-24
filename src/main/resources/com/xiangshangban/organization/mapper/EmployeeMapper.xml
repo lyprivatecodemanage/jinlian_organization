@@ -124,7 +124,7 @@
 		<id column="employee_id" property="employeeId" />
 		<id column="employee_name" property="employeeName" />
 		<id column="employee_sex" property="employeeSex" />
-		<id column="login_name" property="loginName" />
+		<id column="phone" property="phone" />
 		<id column="employee_phone" property="employeePhone" />
 		<id column="post_id" property="postId" />
 		<id column="post_name" property="postName" />
@@ -139,7 +139,7 @@
 	<select id="selectByAllFnyeEmployee" parameterType="java.lang.String"
 		resultMap="PagingColumnList">
 		select
-		e.employee_id,e.employee_name,e.employee_sex,e.login_name,e.employee_phone,
+		e.employee_id,e.employee_name,e.employee_sex,u.phone,e.employee_phone,
 		p.post_id,p.post_name,e.department_id ,d.department_name,
 		e.entry_time,e.employee_status,uc.is_active
 		from organization.employee_
@@ -147,7 +147,8 @@
 		user_company uc on e.employee_id = uc.user_id and e.company_id = uc.company_id
 		left join
 		department_ d on e.department_id = d.department_id left JOIN
-		post_ p on d.department_id = p.department_id
+		post_ p on d.department_id = p.department_id 
+		left join u_users u on u.userid = e.employee_id  
 		where
 		e.company_id = #{companyId} and uc.info_status = '1'
 		<if test="employeeName != null and employeeName != '' ">
