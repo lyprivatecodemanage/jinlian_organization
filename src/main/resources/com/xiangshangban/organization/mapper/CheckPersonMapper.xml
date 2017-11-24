@@ -57,9 +57,7 @@
       <if test="status != null" >
         status,
       </if>
-      <if test="applyTime != null">
-      	apply_time,
-      </if>
+      apply_time
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="userid != null" >
@@ -71,9 +69,7 @@
       <if test="status != null" >
         #{status,jdbcType=VARCHAR},
       </if>
-      <if test="applyTime == null">
-      	to_char(now(),'yyyy-MM-dd hh24:mi:ss'),
-      </if>
+      to_char(now(),'yyyy-MM-dd hh24:mi:ss')
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.xiangshangban.organization.bean.CheckPerson">

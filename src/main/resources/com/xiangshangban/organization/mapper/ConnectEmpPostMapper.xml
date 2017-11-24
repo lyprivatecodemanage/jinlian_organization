@@ -59,7 +59,7 @@
 		where is_delete = '0' and post_grades = '1' and employee_id = #{employeeId} and department_id = #{departmentId}
 	</select>
 	<update id="updateEmployeeWithPost" parameterType="java.lang.String">
-		update connect_emp_post
+		update connect_emp_post_
 		set post_id = #{postId}
 		where employee_id = #{employeeId} and department_id = #{departmentId} and post_grades = '1'
 	</update>

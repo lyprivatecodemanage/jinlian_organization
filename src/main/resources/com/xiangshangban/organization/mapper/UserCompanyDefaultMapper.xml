@@ -85,7 +85,7 @@
 		</trim>
 	</insert>
 	<update id="updateSelective" parameterType="com.xiangshangban.organization.bean.UserCompanyDefault" >
-		update user_company
+		update user_company 
 		<set>
 			<if test="currentOption != null" >
 				current_option=#{currentOption,jdbcType=VARCHAR},
@@ -100,7 +100,7 @@
 		where user_id=#{userId,jdbcType=VARCHAR} AND company_id=#{companyId,jdbcType=VARCHAR}
 	</update>
 	<update id="updateActive">
-		update user_company is_active='1' 
+		update user_company set is_active='1' 
 		where company_id=#{companyId,jdbcType=VARCHAR} 
 		AND user_id=#{employeeId,jdbcType=VARCHAR}
 	</update>
