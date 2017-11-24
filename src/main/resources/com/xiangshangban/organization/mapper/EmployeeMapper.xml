@@ -419,18 +419,13 @@
 	<!-- 李业:编辑人员信息 -->
 	<update id="updateEmployeeInformation" parameterType="java.util.Map">
 		update employee_
-		set employee_name = #{employeeName}
-		, employee_sex =
-		#{employeeSex}
-		, employee_status = #{employeeStatus}
-		, login_name =
-		#{loginName}
-		,
-		entry_time = #{entryTime}
-		, probationary_expired =
-		#{probationaryExpired}
-		, work_address =
-		#{workAddress}
+		set employee_name = #{employeeName}, 
+		employee_sex =#{employeeSex}, 
+		employee_status = #{employeeStatus}, 
+		login_name =#{loginName},
+		entry_time = #{entryTime}, 
+		probationary_expired =#{probationaryExpired},
+		 work_address =#{workAddress}
 		<if test="employeePhone != null">
 			, employee_phone =#{employeePhone}
 		</if>

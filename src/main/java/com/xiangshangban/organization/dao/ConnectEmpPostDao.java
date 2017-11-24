@@ -25,7 +25,7 @@ public interface ConnectEmpPostDao {
 	
 	int deleteEmployeeWithPost(@Param("employeeId")String employeeId,@Param("departmentId")String departmentId);
 	
-	int insertEmployeeWithPost(List<ConnectEmpPost> list);
+	int insertEmployeeWithPost(@Param("list")List<ConnectEmpPost> list);
 	
 	int updateEmployeeWithPost(@Param("employeeId")String employeeId,@Param("departmentId")String departmentId,@Param("postId")String postId);
 	

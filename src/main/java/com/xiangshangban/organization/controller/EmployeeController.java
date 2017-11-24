@@ -517,6 +517,16 @@ public class EmployeeController {
 				// 添加更换之前主岗位的换岗时间(transferEndTime)
 				transferjobService.updateTransferEndTimeWhereDeleteEmployee(companyId, userId, employeeId, departmentId,
 						formerConnectEmpPost.getPostId());
+			}else{
+				formerConnectEmpPost = new ConnectEmpPost();
+				formerConnectEmpPost.setEmployeeId(employeeId);
+				formerConnectEmpPost.setDepartmentId(departmentId);
+				formerConnectEmpPost.setPostId(postId);
+				formerConnectEmpPost.setPostGrades("1");
+				formerConnectEmpPost.setIsDelete("0");
+				List<ConnectEmpPost> newConnectEmpPost = new ArrayList<ConnectEmpPost>();
+				newConnectEmpPost.add(formerConnectEmpPost);
+				connectEmpPostService.insertEmployeeWithPost(newConnectEmpPost);
 			}
 			// 添加新岗位的记录
 			Transferjob transferjob = new Transferjob(FormatUtil.createUuid(), employeeId, null, departmentId,
