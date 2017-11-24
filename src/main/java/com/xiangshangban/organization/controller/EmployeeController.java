@@ -523,7 +523,7 @@ public class EmployeeController {
 				return result;
 			}
 			Employee oldEmp = employeeService.selectByEmployee(emp.getEmployeeId(), companyId);
-			employeeService.updateEmployeeInformation(emp);
+			int num = employeeService.updateEmployeeInformation(emp);
 			//查询员工岗位部门关联表
 			ConnectEmpPost formerConnectEmpPost = connectEmpPostService.selectEmployeePostInformation(emp.getEmployeeId(),
 					emp.getDepartmentId());

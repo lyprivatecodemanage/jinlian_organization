@@ -416,8 +416,8 @@
 	</select>
 	<!-- 李业:编辑人员信息 -->
 	<update id="updateEmployeeInformation" parameterType="com.xiangshangban.organization.bean.Employee">
-		update employee_
-		set employee_name = #{employeeName}, 
+		update organization.employee_
+		set employee_name = #{employeeName} ,  
 		employee_sex =#{employeeSex}, 
 		employee_status = #{employeeStatus}, 
 		login_name =#{loginName},
@@ -433,8 +433,8 @@
 		<if test="employeeNo != null">
 			, employee_no =#{employeeNo}
 		</if>
-		<if test="derectPersonId != null">
-			, derect_person_id =#{derectPersonId}
+		<if test="directPersonId != null">
+			, direct_person_id =#{directPersonId}
 		</if>
 		<if test="marriageStatus != null">
 			, marriage_status =#{marriageStatus}
