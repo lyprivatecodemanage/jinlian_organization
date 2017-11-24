@@ -462,7 +462,7 @@ public class EmployeeController {
 					return result;
 				}
 				// 改变员工部门关联表删除状态
-				connectEmpPostService.deleteEmpConnectPost(employeeId);
+				//connectEmpPostService.deleteEmpConnectPost(employeeId);
 				// 岗位移动表添加岗位离职时间
 				transferjobService.updateTransferEndTimeWhereDeleteEmployee(companyId, userId, employeeId, departmentId,
 						postId);
