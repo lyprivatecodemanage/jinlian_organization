@@ -1,5 +1,6 @@
 package com.xiangshangban.organization.controller;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,6 +12,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -504,17 +511,15 @@ public class EmployeeController {
 				return result;
 			}
 			emp.setCompanyId(companyId);
-			//Employee oldEmp = employeeService.selectByEmployee(emp.getEmployeeId(), companyId);
-		/*	if(oldEmp!=null && StringUtils.isNotEmpty(oldEmp.getDepartmentId())){
-				//部门是否更换
-				if(!oldEmp.getDepartmentId().equals(emp.getDepartmentId())){
-					//更换部门
-					connectEmpPostService.updateEmployeeWithPost(emp.getEmployeeId(), emp.getDepartmentId(), emp.getPostId());
-				}else{
-					//不更换部门
-					
+			String employeeNo = emp.getEmployeeNo();
+			if (StringUtils.isNotEmpty(employeeNo)) {
+				Employee employeeNotemp = employeeService.findByemployeeNo(employeeNo, companyId);
+				if (employeeNotemp != null) {
+					result.put("message", "工号已存在");
+					result.put("returnCode", "4101");
+					return result;
 				}
-			}*/
+			}
 			//新完善信息
 			int num = employeeService.updateEmployeeInformation(emp);
 			//查询员工岗位部门关联表
@@ -593,10 +598,27 @@ public class EmployeeController {
 			Employee emp = employeeService.selectByEmployeeFromApp(companyId, userId);
 			String companyNo = emp.getCompanyNo();
 			String directory = PropertiesUtils.ossProperty("portraitDirectory");
-			String url = oSSFileService.getPathByKey(companyNo, directory, key);
-			// File file = new File(url);
-			// FileInputStream input = new FileInputStream(file);
-			ImportExcel.getDataFromExcel(url);
+			String filePath = oSSFileService.getPathByKey(companyNo, directory, key);
+			
+			
+
+				
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+
+			
+
 
 			result.put("message", "成功");
 			result.put("returnCode", "3000");

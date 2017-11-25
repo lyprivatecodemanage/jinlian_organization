@@ -12,5 +12,18 @@ public class OrganizationApplicationTests {
 	@Test
 	public void contextLoads() {
 	}
-
+	public static void main(String[] args) {
+		for(int i =0 ;i<5;i++){
+			System.out.print("="+i);
+			System.out.println();
+			for(int j=0;j<4;j++){
+				if(j==1){
+					break;
+				}
+				System.out.print(j);
+			}
+			System.out.println();
+			
+		}
+	}
 }

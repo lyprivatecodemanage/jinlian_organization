@@ -61,10 +61,10 @@ public class Employee {
 		return postName;
 	}
     public Employee(){}
-	public Employee(String employeeName, String loginName, String employeeSex, String employeeNo, String employeePhone,
-			String employeeTwophone, String entryTime, String employeeStatus, String probationaryExpired,
-			String workAddress, List<Post> postList, String departmentName, String directPersonName,
-			String operateUserId, String marriageStatus, String seniority) {
+	public Employee(String employeeNo,String employeeName,String employeeSex, String workAddress,String marriageStatus,
+			String loginName,String departmentName,
+			String directPersonName,String employeeStatus,String entryTime,String probationaryExpired,String postName,
+			List<Post> postList,String employeePhone,String employeeTwophone,   String seniority) {
 		this.employeeName = employeeName;
 		this.loginName = loginName;
 		this.employeeSex = employeeSex;
@@ -83,6 +83,13 @@ public class Employee {
 		this.seniority = seniority;
 	}
 	
+	
+	public String getDirectPersonDepartmentName() {
+		return directPersonDepartmentName;
+	}
+	public void setDirectPersonDepartmentName(String directPersonDepartmentName) {
+		this.directPersonDepartmentName = directPersonDepartmentName;
+	}
 	public String getDirectPersonDepartmentId() {
 		return directPersonDepartmentId;
 	}

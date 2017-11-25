@@ -463,11 +463,22 @@
 		company_id = #{companyId}
 	</update>
 
+	<!-- 李业:(功能)导入完善的员工信息 -->
+		<!-- 根据传入的员工信息查询是否有重复的员工数据 -->
+		<select id="selectByImportEmployee" parameterType="com.xiangshangban.organization.bean.Employee" resultMap="">
+			select
+			postId=(case)
+			from user_company uc left join
+			employee_ e on e.company_id = uc.company_id left join
+			department_ d on d.department_id = e.department_id left join
+			connect_emp_post_ cep on cep.department_id = d.department_id
+			where uc.user_id = #{userId} and uc.company_id = #{companyId}
+		
+		</select>
 
 
 
-
-
+	<!-- ===================== -->
 	<!-- 所有在职员工的信息 -->
 	<select id="findByAllEmployee" parameterType="java.lang.String"
 		resultMap="Employee">
