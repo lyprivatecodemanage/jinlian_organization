@@ -91,7 +91,7 @@
 			#{cnctEmpPost.postId},
 			#{cnctEmpPost.departmentId},
 			#{cnctEmpPost.postGrades},
-			#{companyId}
+			#{cnctEmpPost.companyId}
 			)
 		</foreach>
 	</insert>
