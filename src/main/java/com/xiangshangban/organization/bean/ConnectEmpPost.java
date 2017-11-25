@@ -8,6 +8,7 @@ public class ConnectEmpPost {
 	private String postGrades;//岗位等级（0.副岗位  1.主岗位）
 	private String companyId;//公司ID
 
+
 	public String getPostGrades() {
 		return postGrades;
 	}

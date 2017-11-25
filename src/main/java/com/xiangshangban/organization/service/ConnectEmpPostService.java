@@ -53,7 +53,9 @@ public interface ConnectEmpPostService {
 	 * @param companyId
 	 * @return
 	 */
+
 	ConnectEmpPost selectEmployeePostInformation(String employeeId, String companyId);
+
 	/**
 	 * 删除主岗位记录
 	 * @param employeeId

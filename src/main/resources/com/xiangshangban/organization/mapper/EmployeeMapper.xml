@@ -292,7 +292,9 @@
 		<result column="phone" property="phone" />
 		<result column="employee_phone" property="employeePhone" />
 		<result column="employee_twophone" property="employeeTwophone" />
+		<result column="post_id" property="postId" />
 		<result column="post_name" property="postName" />
+		<result column="department_id" property="departmentId" />
 		<result column="department_name" property="departmentName" />
 		<result column="employee_no" property="employeeNo" />
 		<result column="derect_person_name" property="directPersonName" />
@@ -301,16 +303,22 @@
 		<result column="work_address" property="workAddress" />
 		<result column="marriage_status" property="marriageStatus" />
 		<result column="seniority" property="seniority" />
+		<result column="company_id" property="companyId" />
 	</resultMap>
 	<!-- 李业:查询单条人员信息 -->
 	<select id="selectByEmployee" parameterType="java.lang.String"
 		resultMap="EmployeeResultMap">
 		select e.employee_id,
+<<<<<<< HEAD
 		e.employee_name,e.employee_sex,u.phone AS login_name,e.employee_phone,
 		e.employee_twophone,p.post_name,d.department_name,e.employee_no,
+=======
+		e.employee_name,e.employee_sex,u.phone,e.employee_phone,
+		e.employee_twophone,p.post_id,p.post_name,d.department_id,d.department_name,e.employee_no,
+>>>>>>> 72f7f9b1e1988fa96e2f6877ecc3ce2fd73f0e9f
 		(select employee_name as derect_person_name from employee_ where
 		employee_id = e.direct_person_id ),
-		e.entry_time,e.probationary_expired,e.work_address,e.marriage_status,e.seniority
+		e.entry_time,e.probationary_expired,e.work_address,e.marriage_status,e.seniority,e.company_id
 		from employee_ as e
 		left join
 		connect_emp_post_ as cep on e.employee_id
@@ -422,6 +430,7 @@
 		<if test="employeeStatus != null and employeeStatus!=''">
 			employee_status = #{employeeStatus},
 		</if>
+		department_id = #{departmentId},
 		login_name =#{loginName},
 		entry_time = #{entryTime}, 
 		probationary_expired =#{probationaryExpired},

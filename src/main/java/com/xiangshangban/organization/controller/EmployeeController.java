@@ -391,7 +391,7 @@ public class EmployeeController {
 					emp.setMarriageStatus("离异");
 				}
 			}
-			System.out.println(emp.getPostId()+"\t"+emp.getDepartmentId());
+			//System.out.println(emp.getPostId()+"\t"+emp.getDepartmentId());
 			result.put("result", emp);
 			result.put("message", "成功");
 			result.put("returnCode", "3000");
@@ -503,14 +503,27 @@ public class EmployeeController {
 				result.put("returnCode", "3006");
 				return result;
 			}
-			//Employee oldEmp = employeeService.selectByEmployee(emp.getEmployeeId(), companyId);
 			emp.setCompanyId(companyId);
+			//Employee oldEmp = employeeService.selectByEmployee(emp.getEmployeeId(), companyId);
+		/*	if(oldEmp!=null && StringUtils.isNotEmpty(oldEmp.getDepartmentId())){
+				//部门是否更换
+				if(!oldEmp.getDepartmentId().equals(emp.getDepartmentId())){
+					//更换部门
+					connectEmpPostService.updateEmployeeWithPost(emp.getEmployeeId(), emp.getDepartmentId(), emp.getPostId());
+				}else{
+					//不更换部门
+					
+				}
+			}*/
+			//新完善信息
 			int num = employeeService.updateEmployeeInformation(emp);
 			//查询员工岗位部门关联表
+
 			ConnectEmpPost connect =  connectEmpPostService.selectEmployeePostInformation(emp.getEmployeeId(), companyId);
 			if (connect != null && !emp.getPostId().equals(connect.getPostId())) {
 				connectEmpPostService.updateEmployeeWithPost(emp.getEmployeeId(), 
 						emp.getDepartmentId(), emp.getPostId());
+
 				// 添加更换之前主岗位的换岗时间(transferEndTime)
 				transferjobService.updateTransferEndTimeWhereDeleteEmployee(
 						companyId, userId, emp.getEmployeeId(), emp.getDepartmentId(), connect.getPostId());
@@ -523,6 +536,7 @@ public class EmployeeController {
 				connect.setPostId(emp.getPostId());
 				connect.setPostGrades("1");
 				connect.setIsDelete("0");
+				connect.setCompanyId(companyId);
 				List<ConnectEmpPost> newConnectEmpPost = new ArrayList<ConnectEmpPost>();
 				newConnectEmpPost.add(connect);
 				connectEmpPostService.insertEmployeeWithPost(newConnectEmpPost);

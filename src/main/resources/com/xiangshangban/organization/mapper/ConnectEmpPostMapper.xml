@@ -59,7 +59,13 @@
 		Left join department_ b ON a.department_id = b.department_id
 		where a.post_grades = '1'  
 			and a.employee_id = #{employeeId} and b.company_id = #{companyId}
+
 	</select>
+	<delete id="deleteEmployeeWithDepartment" parameterType="java.lang.String">
+		update connect_emp_post_
+		set department_id = #{departmentId},post_id = #{postId}
+		where employee_id = #{employeeId}  
+	</delete>
 	<update id="updateEmployeeWithPost" parameterType="java.lang.String">
 		update connect_emp_post_
 		set post_id = #{postId}, department_id = #{departmentId}
