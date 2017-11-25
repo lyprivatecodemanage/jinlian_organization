@@ -30,7 +30,7 @@
 	    d.department_id, d.department_numbe, d.department_name, d.department_describe,
 	    d.department_parent_id,d.company_id, d.employee_id, 
 		CASE d.department_parent_id WHEN '0' THEN c.company_name ELSE dp.department_name END AS department_parent_name,
-		c.company_name,e.employee_name
+		c.company_name, COALESCE(e.employee_name,'') AS employee_name
     from organization.department_  d  
 		LEFT JOIN organization.department_  dp ON d.department_parent_id=dp.department_id
 		LEFT JOIN organization.company_  c ON c.company_id=d.company_id
@@ -144,15 +144,19 @@
     select d.department_id, d.department_numbe, d.department_name, d.department_describe,
     d.department_parent_id,d.company_id, d.employee_id,
     (select c.company_name from organization.company_ c  where c.company_id=d.company_id),
-    (select e.employee_name from organization.employee_ e where e.employee_id=d.employee_id)
+    COALESCE(e.employee_name,'') AS employee_name
     from organization.department_  d  
+    left join organization.employee_ e ON e.employee_id=d.employee_id
     where department_id = #{departmentId,jdbcType=VARCHAR}
     AND	company_id=#{companyId}	
   </select>
   
   <select id="findByDepartmentNumber" parameterType="java.lang.String" resultMap="Department">
-    select d.department_id, d.department_numbe, d.department_name, d.department_describe,d.department_parent_id,d.company_id, d.employee_id,(select c.company_name from company_ c  where c.company_id=d.company_id),(select e.employee_name from employee_ e where e.employee_id=d.employee_id)
+    select d.department_id, d.department_numbe, d.department_name, d.department_describe,d.department_parent_id,d.company_id,
+     d.employee_id,(select c.company_name from company_ c  where c.company_id=d.company_id),
+     COALESCE(e.employee_name,'') AS employee_name
     from organization.department_  d  
+    left join organization.employee_ e ON e.employee_id=d.employee_id
     where 
     department_numbe = #{departmentNumbe,jdbcType=VARCHAR}
   </select>
