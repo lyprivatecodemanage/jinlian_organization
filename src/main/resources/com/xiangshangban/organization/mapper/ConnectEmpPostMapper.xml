@@ -5,14 +5,8 @@
    		<result property="employeeId" column="employee_id" />
         <result property="postId" column="post_id" />       
         <result property="departmentId" column="department_id" /> 
-<<<<<<< HEAD
-        <result property="isDelete" column="is_delete" /> 
-        <result property="postGrades" column="post_grades" />        
-        <result property="companyId" column="company_id" />        
-=======
         <result property="postGrades" column="post_grades" />    
         <result property="companyId" column="company_id"/>    
->>>>>>> cf97c78d645547a746f4db7c941f2336ca284f7a
    </resultMap>
 
 

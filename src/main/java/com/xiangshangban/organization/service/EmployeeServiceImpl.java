@@ -50,6 +50,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Autowired
 	CompanyDao companyDao;
 	
+	
 	@Override
 	public int deleteByEmployee(String companyId,String employeeId) {
 		int i = 0;
@@ -158,6 +159,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 					empPost.setPostId(postId);
 					empPost.setIsDelete("0");
 					empPost.setEmployeeId(employee.getEmployeeId());
+					empPost.setCompanyId(employee.getCompanyId());
 					connectEmpPostDao.saveConnect(empPost);	
 					if("1".equals(post.getPostGrades())){//主岗位添加调动记录
 						Transferjob transferjob = new Transferjob();

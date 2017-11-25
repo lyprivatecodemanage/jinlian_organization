@@ -391,7 +391,7 @@ public class EmployeeController {
 					emp.setMarriageStatus("离异");
 				}
 			}
-			System.out.println(emp.getPostId()+"\t"+emp.getDepartmentId());
+			//System.out.println(emp.getPostId()+"\t"+emp.getDepartmentId());
 			result.put("result", emp);
 			result.put("message", "成功");
 			result.put("returnCode", "3000");
@@ -536,6 +536,7 @@ public class EmployeeController {
 				connect.setPostId(emp.getPostId());
 				connect.setPostGrades("1");
 				connect.setIsDelete("0");
+				connect.setCompanyId(companyId);
 				List<ConnectEmpPost> newConnectEmpPost = new ArrayList<ConnectEmpPost>();
 				newConnectEmpPost.add(connect);
 				connectEmpPostService.insertEmployeeWithPost(newConnectEmpPost);

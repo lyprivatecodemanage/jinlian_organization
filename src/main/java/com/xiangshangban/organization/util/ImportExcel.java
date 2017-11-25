@@ -2,7 +2,10 @@ package com.xiangshangban.organization.util;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -11,8 +14,9 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class ImportExcel {
-    public static void getDataFromExcel(String filePath)
+    public static Map<String,String> getDataFromExcel(String filePath)
     {
+    	Map<String,String> result = new HashMap<String,String>();
         //String filePath = "E:\\123.xlsx";
         
         //判断是否为excel类型文件
@@ -80,6 +84,10 @@ public class ImportExcel {
             		Cell cell = row.getCell(k);
             		if(k==2 || k==3 || k==4 || k==6 || k==7 ||k==9||k==10||k==11||k==12){
             			String value = cell.getStringCellValue();
+            			if(StringUtils.isEmpty(value)){
+            				
+            				result.put("message", "");
+            			}
             		}
             	}
             //获得获得第i行第0列的 String类型对象
@@ -94,5 +102,6 @@ public class ImportExcel {
             
         }
         }
+        return result;
     }
 }
