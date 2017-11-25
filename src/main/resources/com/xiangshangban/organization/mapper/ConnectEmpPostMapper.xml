@@ -5,9 +5,14 @@
    		<result property="employeeId" column="employee_id" />
         <result property="postId" column="post_id" />       
         <result property="departmentId" column="department_id" /> 
+<<<<<<< HEAD
         <result property="isDelete" column="is_delete" /> 
         <result property="postGrades" column="post_grades" />        
         <result property="companyId" column="company_id" />        
+=======
+        <result property="postGrades" column="post_grades" />    
+        <result property="companyId" column="company_id"/>    
+>>>>>>> cf97c78d645547a746f4db7c941f2336ca284f7a
    </resultMap>
 
 
@@ -43,21 +48,24 @@
 	<insert id="saveConnect" parameterType="com.xiangshangban.organization.bean.ConnectEmpPost">
 		insert into 
 		organization.connect_emp_post_ 
-		(employee_id,post_id,department_id,post_grades)
+		(employee_id,post_id,department_id,post_grades, company_id)
 		values
 		(				 
 		#{employeeId,jdbcType=VARCHAR}, 
         #{postId,jdbcType=VARCHAR},
         #{departmentId,jdbcType=VARCHAR},
-        #{postGrades,jdbcType=VARCHAR}  
-            
+        #{postGrades,jdbcType=VARCHAR},  
+        #{companyId} 
         )
 	</insert>
 	<!-- 李业:编辑个人信息(主岗位) -->
 	<select id="selectEmployeePostInformation" parameterType="java.lang.String" resultMap="ConnectEmpPost">
-		select employee_id,post_id,department_id
-		from connect_emp_post_
-		where post_grades = '1' and employee_id = #{employeeId} and company_id = #{companyId}
+		select a.employee_id,a.post_id, a.department_id, b.company_id, a.post_grades
+		from connect_emp_post_ a
+		Left join department_ b ON a.department_id = b.department_id
+		where a.post_grades = '1'  
+			and a.employee_id = #{employeeId} and b.company_id = #{companyId}
+
 	</select>
 	<delete id="deleteEmployeeWithDepartment" parameterType="java.lang.String">
 		update connect_emp_post_
@@ -66,8 +74,8 @@
 	</delete>
 	<update id="updateEmployeeWithPost" parameterType="java.lang.String">
 		update connect_emp_post_
-		set post_id = #{postId}
-		where employee_id = #{employeeId} and department_id = #{departmentId} and post_grades = '1'
+		set post_id = #{postId}, department_id = #{departmentId}
+		where employee_id = #{employeeId} and post_grades = '1'
 	</update>
 	<delete id="deleteEmployeeFromPost" parameterType="java.lang.String">
 		delete from connect_emp_post_
@@ -81,7 +89,7 @@
 		where employee_id = #{employeeId} and department_id = #{departmentId} and post_grades = '0'
 	</delete>
 	<insert id="insertEmployeeWithPost" parameterType="java.util.List">
-		insert into connect_emp_post_ (employee_id, post_id, department_id, post_grades, is_delete) 
+		insert into connect_emp_post_ (employee_id, post_id, department_id, post_grades, company_id) 
 		values
 		<foreach collection="list" item="cnctEmpPost" separator="," index='index'>
 			(
@@ -89,17 +97,11 @@
 			#{cnctEmpPost.postId},
 			#{cnctEmpPost.departmentId},
 			#{cnctEmpPost.postGrades},
-			#{cnctEmpPost.isDelete}
+			#{companyId}
 			)
 		</foreach>
 	</insert>
 	
-	<!-- 李业:删除员工信息 -->
-	<update id="deleteEmpConnectPost" parameterType="java.lang.String">
-		update connect_emp_post_
-		set is_delete = '1'
-		where employee_id = #{employeeId}
-	</update>
 	
 	<delete id="deleteConnect" parameterType="java.lang.String">
 		delete 

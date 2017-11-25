@@ -102,11 +102,6 @@ public class ConnectEmpPostServiceImpl implements ConnectEmpPostService {
 		return connectEmpPostDao.findEmpByPostId(companyId, postId);
 	}
 
-	@Override
-	public int deleteEmpConnectPost(String employeeId) {
-		
-		return connectEmpPostDao.deleteEmpConnectPost(employeeId);
-	}
 
 	@Override
 	public int insertEmployeeWithPost(List<ConnectEmpPost> list) {
@@ -127,9 +122,11 @@ public class ConnectEmpPostServiceImpl implements ConnectEmpPostService {
 	}
 
 	@Override
-	public ConnectEmpPost selectEmployeePostInformation(String employeeId) {
+
+	public ConnectEmpPost selectEmployeePostInformation(String employeeId, String companyId) {
 		
-		return connectEmpPostDao.selectEmployeePostInformation(employeeId);
+		return connectEmpPostDao.selectEmployeePostInformation(employeeId, companyId);
+
 	}
 
 	@Override

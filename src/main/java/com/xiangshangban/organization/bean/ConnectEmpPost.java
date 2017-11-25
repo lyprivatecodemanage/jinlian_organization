@@ -6,16 +6,7 @@ public class ConnectEmpPost {
 	private String departmentId;//部门ID
 	private String isDelete;//岗位是否删除
 	private String postGrades;//岗位等级（0.副岗位  1.主岗位）
-	private String companyId;
-	
-	public String getCompanyId() {
-		return companyId;
-	}
-
-
-	public void setCompanyId(String companyId) {
-		this.companyId = companyId;
-	}
+	private String companyId;//公司ID
 
 
 	public String getPostGrades() {
@@ -60,6 +51,16 @@ public class ConnectEmpPost {
 	}
 	public void setPostId(String postId) {
 		this.postId = postId;
+	}
+
+
+	public String getCompanyId() {
+		return companyId;
+	}
+
+
+	public void setCompanyId(String companyId) {
+		this.companyId = companyId;
 	}
 
 }

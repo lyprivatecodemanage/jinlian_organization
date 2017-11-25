@@ -44,8 +44,7 @@
     c.employee_id =#{employeeId}
     and
     c.department_id=#{departmentId}
-    and c.post_staus='0'
-	and c.is_delete='0'   
+    and c.post_staus='0'  
   </select>
   <!-- 查询所有员工岗位信息 -->
   <select id="selectByPostemp" parameterType="java.lang.String" resultMap="Post">  
@@ -60,7 +59,6 @@
     and
     c.department_id=#{departmentId}
     and e.employee_status in('0','1')
-	and c.is_delete='0' 
     and
     c.post_staus='0' 
   </select>

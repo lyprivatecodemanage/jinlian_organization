@@ -354,8 +354,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 	@Override
 	public int updateEmployeeInfoStatus(String companyId, String userId) {
-		
-		return employeeDao.updateEmployeeInfoStatus(companyId, userId);
+		int result = employeeDao.updateEmployeeInfoStatus(companyId, userId);
+		Employee employee = employeeDao.selectByEmployee(userId, companyId);
+		this.updateDeviceEmp(employee);
+		return result;
 	}
 
 	@Override

@@ -96,7 +96,6 @@
 		organization.employee_ e
 		LEFT JOIN organization.connect_emp_post_ c on
 		c.employee_id=e.employee_id
-		and c.is_delete='0'
 		LEFT JOIN
 		organization.post_ p on c.post_id = p.post_id
 		where
@@ -376,7 +375,7 @@
 		a.userid =
 		cep.employee_id and d.department_id
 		= cep.department_id and
-		cep.post_grades = '1' and cep.is_delete = '0'
+		cep.post_grades = '1'
 		left join post_ p
 		on
 		cep.post_id = p.post_id
