@@ -522,13 +522,23 @@ public class EmployeeController {
 				result.put("returnCode", "3006");
 				return result;
 			}
-			//Employee oldEmp = employeeService.selectByEmployee(emp.getEmployeeId(), companyId);
-			Employee oldEmp = employeeService.selectByEmployee(emp.getEmployeeId(), companyId);
 			emp.setCompanyId(companyId);
+			//Employee oldEmp = employeeService.selectByEmployee(emp.getEmployeeId(), companyId);
+		/*	if(oldEmp!=null && StringUtils.isNotEmpty(oldEmp.getDepartmentId())){
+				//部门是否更换
+				if(!oldEmp.getDepartmentId().equals(emp.getDepartmentId())){
+					//更换部门
+					connectEmpPostService.updateEmployeeWithPost(emp.getEmployeeId(), emp.getDepartmentId(), emp.getPostId());
+				}else{
+					//不更换部门
+					
+				}
+			}*/
+			//新完善信息
 			int num = employeeService.updateEmployeeInformation(emp);
 			//查询员工岗位部门关联表
-			ConnectEmpPost formerConnectEmpPost = connectEmpPostService.selectEmployeePostInformation(emp.getEmployeeId(),
-					emp.getDepartmentId());
+			ConnectEmpPost formerConnectEmpPost = connectEmpPostService.selectEmployeePostInformation(emp.getEmployeeId()
+					);
 			if (formerConnectEmpPost != null && !emp.getPostId().equals(formerConnectEmpPost.getPostId())) {
 				connectEmpPostService.updateEmployeeWithPost(emp.getEmployeeId(), emp.getDepartmentId(), emp.getPostId());
 				// 添加更换之前主岗位的换岗时间(transferEndTime)

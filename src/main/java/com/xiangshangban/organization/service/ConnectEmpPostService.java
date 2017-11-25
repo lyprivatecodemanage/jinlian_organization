@@ -59,7 +59,7 @@ public interface ConnectEmpPostService {
 	 * @param departmentId
 	 * @return
 	 */
-	ConnectEmpPost selectEmployeePostInformation(String employeeId,String departmentId);
+	ConnectEmpPost selectEmployeePostInformation(String employeeId);
 	/**
 	 * 删除主岗位记录
 	 * @param employeeId

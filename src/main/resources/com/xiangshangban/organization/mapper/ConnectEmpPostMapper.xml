@@ -7,6 +7,7 @@
         <result property="departmentId" column="department_id" /> 
         <result property="isDelete" column="is_delete" /> 
         <result property="postGrades" column="post_grades" />        
+        <result property="companyId" column="company_id" />        
    </resultMap>
 
 
@@ -56,8 +57,13 @@
 	<select id="selectEmployeePostInformation" parameterType="java.lang.String" resultMap="ConnectEmpPost">
 		select employee_id,post_id,department_id
 		from connect_emp_post_
-		where is_delete = '0' and post_grades = '1' and employee_id = #{employeeId} and department_id = #{departmentId}
+		where post_grades = '1' and employee_id = #{employeeId} and company_id = #{companyId}
 	</select>
+	<delete id="deleteEmployeeWithDepartment" parameterType="java.lang.String">
+		update connect_emp_post_
+		set department_id = #{departmentId},post_id = #{postId}
+		where employee_id = #{employeeId}  
+	</delete>
 	<update id="updateEmployeeWithPost" parameterType="java.lang.String">
 		update connect_emp_post_
 		set post_id = #{postId}

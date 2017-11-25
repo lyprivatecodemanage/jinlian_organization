@@ -292,7 +292,9 @@
 		<result column="phone" property="phone" />
 		<result column="employee_phone" property="employeePhone" />
 		<result column="employee_twophone" property="employeeTwophone" />
+		<result column="post_id" property="postId" />
 		<result column="post_name" property="postName" />
+		<result column="department_id" property="departmentId" />
 		<result column="department_name" property="departmentName" />
 		<result column="employee_no" property="employeeNo" />
 		<result column="derect_person_name" property="directPersonName" />
@@ -307,7 +309,7 @@
 		resultMap="EmployeeResultMap">
 		select e.employee_id,
 		e.employee_name,e.employee_sex,u.phone,e.employee_phone,
-		e.employee_twophone,p.post_name,d.department_name,e.employee_no,
+		e.employee_twophone,p.post_id,p.post_name,d.department_id,d.department_name,e.employee_no,
 		(select employee_name as derect_person_name from employee_ where
 		employee_id = e.direct_person_id ),
 		e.entry_time,e.probationary_expired,e.work_address,e.marriage_status,e.seniority
@@ -422,6 +424,7 @@
 		<if test="employeeStatus != null and employeeStatus!=''">
 			employee_status = #{employeeStatus},
 		</if>
+		department_id = #{departmentId},
 		login_name =#{loginName},
 		entry_time = #{entryTime}, 
 		probationary_expired =#{probationaryExpired},
