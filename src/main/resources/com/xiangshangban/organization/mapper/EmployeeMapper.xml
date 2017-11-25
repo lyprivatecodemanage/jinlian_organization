@@ -311,13 +311,8 @@
 	<select id="selectByEmployee" parameterType="java.lang.String"
 		resultMap="EmployeeResultMap">
 		select e.employee_id,
-<<<<<<< HEAD
 		e.employee_name,e.employee_sex,u.phone AS login_name,e.employee_phone,
-		e.employee_twophone,p.post_name,d.department_name,e.employee_no,
-=======
-		e.employee_name,e.employee_sex,u.phone,e.employee_phone,
 		e.employee_twophone,p.post_id,p.post_name,d.department_id,d.department_name,e.employee_no,
->>>>>>> 72f7f9b1e1988fa96e2f6877ecc3ce2fd73f0e9f
 		(select employee_name as derect_person_name from employee_ where
 		employee_id = e.direct_person_id ),
 		(select department_id as direct_person_department_id from employee_ where
