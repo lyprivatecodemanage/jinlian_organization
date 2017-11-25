@@ -23,9 +23,9 @@ public class Employee {
     private String employeeImgUrl;//头像 
     private String workAddress;//工作地
     //---连表查询的---
-    private List<Post> postList;//岗位   
+    private List<Post> postList;//父岗位   
     private String companyName;//
-    private String postId;//岗位ID
+    private String postId;//主岗位ID
     private String departmentName;//部门名称
     private String postName;//岗位名称
     private String directPersonName;//直接汇报人名称    
@@ -35,6 +35,8 @@ public class Employee {
     private String marriageStatus;// 婚姻状况 0：未婚，1：已婚 ，2：离异
     private String seniority;// 工龄
     private String phone;//登录手机号
+    private String directPersonDepartmentId;//汇报人的部门id
+    private String directPersonDepartmentName;//汇报人的部门name
     //----现在没用到的----
 //    private String employeeBirthday;// 出生年月日    
 //    private String employeeTell;//电话号码  
@@ -57,6 +59,35 @@ public class Employee {
     @ExcelResources(title="岗位",order=5)
 	public String getPostName() {
 		return postName;
+	}
+    public Employee(){}
+	public Employee(String employeeName, String loginName, String employeeSex, String employeeNo, String employeePhone,
+			String employeeTwophone, String entryTime, String employeeStatus, String probationaryExpired,
+			String workAddress, List<Post> postList, String departmentName, String directPersonName,
+			String operateUserId, String marriageStatus, String seniority) {
+		this.employeeName = employeeName;
+		this.loginName = loginName;
+		this.employeeSex = employeeSex;
+		this.employeeNo = employeeNo;
+		this.employeePhone = employeePhone;
+		this.employeeTwophone = employeeTwophone;
+		this.entryTime = entryTime;
+		this.employeeStatus = employeeStatus;
+		this.probationaryExpired = probationaryExpired;
+		this.workAddress = workAddress;
+		this.postList = postList;
+		this.departmentName = departmentName;
+		this.directPersonName = directPersonName;
+		this.operateUserId = operateUserId;
+		this.marriageStatus = marriageStatus;
+		this.seniority = seniority;
+	}
+	
+	public String getDirectPersonDepartmentId() {
+		return directPersonDepartmentId;
+	}
+	public void setDirectPersonDepartmentId(String directPersonDepartmentId) {
+		this.directPersonDepartmentId = directPersonDepartmentId;
 	}
 	public String getTransferJobCause() {
 		return transferJobCause;

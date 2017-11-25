@@ -303,6 +303,8 @@
 		<result column="marriage_status" property="marriageStatus" />
 		<result column="seniority" property="seniority" />
 		<result column="company_id" property="companyId" />
+		<result column="direct_person_department_id" property="directPersonDepartmentId" />
+		<result column="direct_person_department_name" property="directPersonDepartmentName" />
 	</resultMap>
 	<!-- 李业:查询单条人员信息 -->
 	<select id="selectByEmployee" parameterType="java.lang.String"
@@ -311,6 +313,10 @@
 		e.employee_name,e.employee_sex,u.phone,e.employee_phone,
 		e.employee_twophone,p.post_id,p.post_name,d.department_id,d.department_name,e.employee_no,
 		(select employee_name as derect_person_name from employee_ where
+		employee_id = e.direct_person_id ),
+		(select department_id as direct_person_department_id from employee_ where
+		employee_id = e.direct_person_id ),
+		(select department_name as direct_person_department_name from employee_ where
 		employee_id = e.direct_person_id ),
 		e.entry_time,e.probationary_expired,e.work_address,e.marriage_status,e.seniority,e.company_id
 		from employee_ as e
