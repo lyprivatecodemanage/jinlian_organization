@@ -15,7 +15,7 @@ public interface EmployeeService {
 	 * @param employee
 	 * @return
 	 */
-	int insertEmployee(Employee employee);
+	ReturnData insertEmployee(Employee employee);
    //查询单条员信息
     Employee selectByEmployee(String employeeId,String companyId);  
     String updateByEmployee(Employee employee);

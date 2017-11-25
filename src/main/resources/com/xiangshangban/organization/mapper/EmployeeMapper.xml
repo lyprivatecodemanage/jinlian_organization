@@ -622,7 +622,6 @@
 		probationary_expired,
 		department_id,
 		company_id,
-		employee_status,
 		work_address,
 		marriage_status,
 		seniority
@@ -640,7 +639,6 @@
 		#{probationaryExpired,jdbcType=VARCHAR},
 		#{departmentId,jdbcType=VARCHAR},
 		#{companyId,jdbcType=VARCHAR},
-		#{employeeStatus,jdbcType=VARCHAR},
 		#{workAddress},
 		#{marriageStatus},
 		#{seniority}

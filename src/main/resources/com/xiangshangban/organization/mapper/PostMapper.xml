@@ -33,8 +33,9 @@
   <!-- 查询所有在职员工信息 -->
  <select id="selectByPostName" parameterType="java.lang.String" resultMap="Post">  
     select 
-	  p.company_id,y.company_name, c.department_id ,d.department_name,p.post_id,p.post_name,p.post_proficiencies,p.post_work_type,
-	  p.educational_requirements,p.post_principal_id,e.employee_name  
+	  p.company_id,y.company_name, c.department_id ,d.department_name,p.post_id,p.post_name,
+	  COALESCE(p.post_proficiencies, '') AS post_proficiencies,p.post_work_type,
+	  COALESCE(p.educational_requirements, '') AS educational_requirements,p.post_principal_id,e.employee_name  
     from  organization.post_ p    
     LEFT JOIN organization.connect_emp_post_ c  on  c.post_id=p.post_id
     LEFT JOIN organization.department_ d on d.department_id=c.department_id
@@ -66,7 +67,8 @@
   <select id="selectByPost" parameterType="java.lang.String" resultMap="Post">  
    SELECT DISTINCT 
    p.company_id,y.company_name, p.department_id ,d.department_name,p.post_id,p.post_name,
-   p.post_proficiencies,p.post_work_type,p.educational_requirements,p.post_principal_id,e.employee_name
+   p.post_proficiencies,p.post_work_type,COALESCE(p.educational_requirements, '') AS educational_requirements,
+   p.post_principal_id,e.employee_name
   FROM  organization.post_ p       
 	LEFT JOIN organization.employee_ e on e.employee_id=p.post_principal_id	
 	LEFT JOIN organization.company_ y on p.company_id=y.company_id
@@ -91,7 +93,10 @@
   <!-- 根据岗位名称、所属部门查询岗位信息 -->
   <select id="findByMorePostIfon"   parameterType="java.util.Map" resultMap="Post">  
     SELECT DISTINCT 
-    p.company_id,y.company_name, p.department_id ,d.department_name,p.post_id,p.post_name,p.post_proficiencies,p.post_work_type,p.educational_requirements,p.post_principal_id,e.employee_name
+    p.company_id,y.company_name, p.department_id ,d.department_name,
+    p.post_id,p.post_name,p.post_proficiencies,
+    p.post_work_type,COALESCE(p.educational_requirements, '') AS educational_requirements,
+    p.post_principal_id,e.employee_name
   FROM  organization.post_ p       
 	LEFT JOIN organization.employee_ e on e.employee_id=p.post_principal_id	
 	LEFT JOIN organization.company_ y on p.company_id=y.company_id
@@ -113,7 +118,10 @@
   <!-- 查询所有岗位信息 -->
   <select id="selectByAllPostInfo" parameterType="java.lang.String" resultMap="Post">  
     SELECT DISTINCT 
-    p.company_id,y.company_name, p.department_id ,d.department_name,p.post_id,p.post_name,p.post_proficiencies,p.post_work_type,p.educational_requirements,p.post_principal_id,e.employee_name
+    p.company_id,y.company_name, p.department_id ,d.department_name,p.post_id,p.post_name, 
+    COALESCE(p.post_proficiencies, '') AS post_proficiencies,
+    p.post_work_type,COALESCE(p.educational_requirements, '') AS educational_requirements,
+    p.post_principal_id,e.employee_name
   FROM  organization.post_ p       
 	LEFT JOIN organization.employee_ e on e.employee_id=p.post_principal_id	
 	LEFT JOIN organization.company_ y on p.company_id=y.company_id
@@ -125,7 +133,9 @@
   <!-- 分页+模糊查询岗位信息 -->
   <select id="selectByAllFenyePost" parameterType="java.util.Map" resultMap="Post">  
     SELECT DISTINCT p.company_id, y.company_name, p.department_id , d.department_name, p.post_id, p.post_name,
-    	p.post_proficiencies, p.post_work_type, p.educational_requirements, p.post_principal_id, e.employee_name
+    	COALESCE(p.post_proficiencies, '') AS post_proficiencies, p.post_work_type, 
+		COALESCE(p.educational_requirements, '') AS educational_requirements,
+		p.post_principal_id, COALESCE(e.employee_name, '') AS employee_name
   	FROM  organization.post_ p       
 	LEFT JOIN organization.employee_ e on e.employee_id=p.post_principal_id	
 	LEFT JOIN organization.company_ y on p.company_id=y.company_id
@@ -179,7 +189,8 @@
   </update>
   
   <insert id="insertPost" parameterType="com.xiangshangban.organization.bean.Post">
-    insert into organization.post_ (post_id, post_name,post_proficiencies,post_work_type,educational_requirements,post_principal_id,
+    insert into organization.post_ (post_id, post_name,post_proficiencies,post_work_type,
+    COALESCE(p.educational_requirements, '') AS educational_requirements, post_principal_id,
      company_id,department_id
       )
     values (
