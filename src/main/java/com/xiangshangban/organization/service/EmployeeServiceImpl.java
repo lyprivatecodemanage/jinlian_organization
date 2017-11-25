@@ -109,6 +109,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 				userCompany.setUserId(user.getUserid());
 				userCompany.setInfoStatus("1");
 				userCompanyDefaultDao.insertSelective(userCompany);//添加用户公司的绑定关系
+				employeeDao.insertEmployee(employee);//插入人员表
 			}else if(userCompany!=null && userCompany.getCompanyId().equals(employee.getCompanyId())){//已存在绑定关系，则直接返回
 				if("2".equals(userCompany.getIsActive())){
 					userCompany.setIsActive("0");
@@ -118,7 +119,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 				this.updateTransfer(employee);//岗位信息设置
 				return 1;
 			}
-			employeeDao.insertEmployee(employee);//插入人员表
 		}
 	    
 	    this.updateTransfer(employee);//岗位信息设置
