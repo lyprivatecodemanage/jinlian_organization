@@ -13,6 +13,8 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import com.xiangshangban.organization.bean.Employee;
+
 public class ImportExcel {
     public static Map<String,String> getDataFromExcel(String filePath)
     {
@@ -80,25 +82,29 @@ public class ImportExcel {
             //获得第i行对象
             Row row = sheet.getRow(j);
             int lastRowNum = row.getLastCellNum();
+            //循环每一列
             	for(int k=0;k<lastRowNum;k++){
             		Cell cell = row.getCell(k);
+            		String value = cell.getStringCellValue();
             		if(k==2 || k==3 || k==4 || k==6 || k==7 ||k==9||k==10||k==11||k==12){
-            			String value = cell.getStringCellValue();
             			if(StringUtils.isEmpty(value)){
-            				
-            				result.put("message", "");
+            				result.put("message"+i+k, "第"+i+"行,第"+k+"列,必须填写!");
             			}
             		}
+            		if(StringUtils.isNotEmpty(value)){
+            			
+            		}
             	}
+            	Employee emp = new Employee();
             //获得获得第i行第0列的 String类型对象
-            Cell cell = row.getCell((short)0);
+           /* Cell cell = row.getCell((short)0);
             name = cell.getStringCellValue().toString();
             
             //获得一个数字类型的数据
             cell = row.getCell((short)1);
             latitude = (int) cell.getNumericCellValue();
             
-            System.out.println("名字："+name+",经纬度："+latitude);
+            System.out.println("名字："+name+",经纬度："+latitude);*/
             
         }
         }
