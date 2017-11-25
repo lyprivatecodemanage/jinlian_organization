@@ -60,4 +60,11 @@ public interface ConnectEmpPostService {
 	 * @return
 	 */
 	ConnectEmpPost selectEmployeePostInformation(String employeeId,String departmentId);
+	/**
+	 * 删除主岗位记录
+	 * @param employeeId
+	 * @param departmentId
+	 * @return
+	 */
+	int deleteEmployeeFromPost(String employeeId,String departmentId);
 }

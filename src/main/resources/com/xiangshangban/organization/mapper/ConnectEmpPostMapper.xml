@@ -63,6 +63,10 @@
 		set post_id = #{postId}
 		where employee_id = #{employeeId} and department_id = #{departmentId} and post_grades = '1'
 	</update>
+	<delete id="deleteEmployeeFromPost" parameterType="java.lang.String">
+		delete from connect_emp_post_
+		where employee_id = #{employeeId} and department_id = #{departmentId} and post_grades = '1'
+	</delete>
 	
 	
 	<!-- 李业:编辑个人信息(副岗位) -->

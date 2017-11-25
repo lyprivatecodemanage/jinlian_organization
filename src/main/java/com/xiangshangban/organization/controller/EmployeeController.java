@@ -522,7 +522,8 @@ public class EmployeeController {
 				result.put("returnCode", "3006");
 				return result;
 			}
-			Employee oldEmp = employeeService.selectByEmployee(emp.getEmployeeId(), companyId);
+			//Employee oldEmp = employeeService.selectByEmployee(emp.getEmployeeId(), companyId);
+			emp.setCompanyId(companyId);
 			int num = employeeService.updateEmployeeInformation(emp);
 			//查询员工岗位部门关联表
 			ConnectEmpPost formerConnectEmpPost = connectEmpPostService.selectEmployeePostInformation(emp.getEmployeeId(),
@@ -534,6 +535,7 @@ public class EmployeeController {
 						formerConnectEmpPost.getPostId());
 			}
 			if(formerConnectEmpPost==null){
+				connectEmpPostService.deleteEmployeeFromPost(emp.getEmployeeId(), emp.getDepartmentId());
 				formerConnectEmpPost = new ConnectEmpPost();
 				formerConnectEmpPost.setEmployeeId(emp.getEmployeeId());
 				formerConnectEmpPost.setDepartmentId(emp.getDepartmentId());

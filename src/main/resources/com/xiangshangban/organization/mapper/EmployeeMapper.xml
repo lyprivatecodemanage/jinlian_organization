@@ -419,7 +419,9 @@
 		update organization.employee_
 		set employee_name = #{employeeName} ,  
 		employee_sex =#{employeeSex}, 
-		employee_status = #{employeeStatus}, 
+		<if test="employeeStatus != null and employeeStatus!=''">
+			employee_status = #{employeeStatus},
+		</if>
 		login_name =#{loginName},
 		entry_time = #{entryTime}, 
 		probationary_expired =#{probationaryExpired},

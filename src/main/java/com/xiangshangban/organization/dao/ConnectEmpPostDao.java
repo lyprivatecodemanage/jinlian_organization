@@ -30,4 +30,6 @@ public interface ConnectEmpPostDao {
 	int updateEmployeeWithPost(@Param("employeeId")String employeeId,@Param("departmentId")String departmentId,@Param("postId")String postId);
 	
 	ConnectEmpPost selectEmployeePostInformation(@Param("employeeId")String employeeId,@Param("departmentId")String departmentId);
+	
+	int deleteEmployeeFromPost(@Param("employeeId")String employeeId,@Param("departmentId")String departmentId);
 }
