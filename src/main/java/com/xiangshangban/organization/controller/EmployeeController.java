@@ -134,9 +134,7 @@ public class EmployeeController {
 			returnData.setReturnCode("3009");
 			return returnData;
 		}
-		int result = employeeService.insertEmployee(employeenew);
-		returnData.setMessage("数据请求成功");
-		returnData.setReturnCode("3000");
+		returnData = employeeService.insertEmployee(employeenew);
 		return returnData;
 	}
 
