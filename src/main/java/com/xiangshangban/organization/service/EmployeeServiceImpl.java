@@ -17,6 +17,7 @@ import com.xiangshangban.organization.bean.Company;
 import com.xiangshangban.organization.bean.ConnectEmpPost;
 import com.xiangshangban.organization.bean.Employee;
 import com.xiangshangban.organization.bean.Post;
+import com.xiangshangban.organization.bean.ReturnData;
 import com.xiangshangban.organization.bean.Transferjob;
 import com.xiangshangban.organization.bean.UserCompanyDefault;
 import com.xiangshangban.organization.bean.Uusers;
@@ -67,7 +68,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	@Override
-	public int insertEmployee(Employee employee) {
+	public ReturnData insertEmployee(Employee employee) {
+		ReturnData returnData = new ReturnData();
 		Uusers user = usersDao.selectByPhone(employee.getLoginName());
 		if(user==null || StringUtils.isEmpty(user.getUserid())){//未注册，写入注册表	
 			user = new Uusers();
@@ -98,7 +100,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 		}else{
 			employee.setEmployeeId(user.getUserid());
 			if(!user.getUsername().equals(employee.getEmployeeName())){//姓名不匹配，添加失败
-				return 0;
+				returnData.setMessage("登录名已被【"+user.getUsername()+"】使用");
+				returnData.setReturnCode("4115");
 			}
 			//添加绑定关系
 			UserCompanyDefault userCompany = userCompanyDefaultDao.selectByUserIdAndCompanyId(user.getUserid(), employee.getCompanyId());
@@ -117,14 +120,18 @@ public class EmployeeServiceImpl implements EmployeeService {
 					userCompanyDefaultDao.updateSelective(userCompany);
 				}
 				this.updateTransfer(employee);//岗位信息设置
-				return 1;
+				returnData.setMessage("数据请求成功");
+				returnData.setReturnCode("3000");
+				return returnData;
 			}
 		}
 	    
 	    this.updateTransfer(employee);//岗位信息设置
 	    
 	    updateDeviceEmp(employee);
-		return 1;
+	    returnData.setMessage("数据请求成功");
+		returnData.setReturnCode("3000");
+		return returnData;
 	}
 	/**
 	 * 告知设备模块更新人员信息
