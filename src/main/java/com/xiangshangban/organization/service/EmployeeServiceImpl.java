@@ -97,7 +97,14 @@ public class EmployeeServiceImpl implements EmployeeService {
 			
 			UserCompanyDefault userCompany = new UserCompanyDefault();
 			userCompany.setCompanyId(employee.getCompanyId());
-			userCompany.setCurrentOption("2");
+			//查询已激活并且为默认的公司
+			UserCompanyDefault companyDefalt = userCompanyDefaultDao.getActiveDefault(user.getUserid());
+			if(companyDefalt==null || StringUtils.isEmpty(companyDefalt.getCompanyId())){
+				//抽取排序中已激活但非默认的第一个公司作为默认公司
+				userCompany.setCurrentOption("1");
+			}else{
+				userCompany.setCurrentOption("2");
+			}
 			userCompany.setUserId(user.getUserid());
 			userCompany.setInfoStatus("1");
 			userCompanyDefaultDao.insertSelective(userCompany);//添加用户公司的绑定关系
@@ -113,13 +120,25 @@ public class EmployeeServiceImpl implements EmployeeService {
 			if(!user.getUsername().equals(employee.getEmployeeName())){//姓名不匹配，添加失败
 				returnData.setMessage("登录名已被【"+user.getUsername()+"】使用");
 				returnData.setReturnCode("4115");
+				return returnData;
+			}
+			if("0".equals(user.getStatus())){//将不可用状态改为可用
+				usersDao.updateStatus(user.getUserid(), "1");
 			}
 			//添加绑定关系
 			UserCompanyDefault userCompany = userCompanyDefaultDao.selectByUserIdAndCompanyId(user.getUserid(), employee.getCompanyId());
 			if(userCompany==null || StringUtils.isEmpty(userCompany.getCompanyId())){//不存在绑定关系
+				//查询已激活并且为默认的公司
+				UserCompanyDefault companyDefalt = userCompanyDefaultDao.getActiveDefault(user.getUserid());
+				if(companyDefalt==null || StringUtils.isEmpty(companyDefalt.getCompanyId())){
+					//抽取排序中已激活但非默认的第一个公司作为默认公司
+					userCompany.setCurrentOption("1");
+				}else{
+					userCompany.setCurrentOption("2");
+				}
 				userCompany = new UserCompanyDefault();
 				userCompany.setCompanyId(employee.getCompanyId());
-				userCompany.setCurrentOption("2");
+				
 				userCompany.setUserId(user.getUserid());
 				userCompany.setInfoStatus("1");
 				userCompanyDefaultDao.insertSelective(userCompany);//添加用户公司的绑定关系
@@ -128,6 +147,14 @@ public class EmployeeServiceImpl implements EmployeeService {
 				if("2".equals(userCompany.getIsActive())){
 					userCompany.setIsActive("0");
 					userCompany.setInfoStatus("1");
+					//查询已激活并且为默认的公司
+					UserCompanyDefault companyDefalt = userCompanyDefaultDao.getActiveDefault(user.getUserid());
+					if(companyDefalt==null || StringUtils.isEmpty(companyDefalt.getCompanyId())){
+						//抽取排序中已激活但非默认的第一个公司作为默认公司
+						userCompany.setCurrentOption("1");
+					}else{
+						userCompany.setCurrentOption("2");
+					}
 					userCompanyDefaultDao.updateSelective(userCompany);
 				}
 				this.updateTransfer(employee);//岗位信息设置
