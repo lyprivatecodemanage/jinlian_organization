@@ -1,9 +1,14 @@
 package com.xiangshangban.organization;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import com.xiangshangban.organization.bean.Post;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -13,17 +18,14 @@ public class OrganizationApplicationTests {
 	public void contextLoads() {
 	}
 	public static void main(String[] args) {
-		for(int i =0 ;i<5;i++){
-			System.out.print("="+i);
-			System.out.println();
-			for(int j=0;j<4;j++){
-				if(j==1){
-					break;
-				}
-				System.out.print(j);
-			}
-			System.out.println();
-			
-		}
+		List<Post> list = new ArrayList<Post>();
+		list.add(null);
+		list.add(null);
+		System.out.println(list.size());
+		Post one = list.get(0);
+		Post tow = list.get(1);
+		System.out.println(one);
+		System.out.println(tow);
+		
 	}
 }

@@ -411,6 +411,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 		return employeeDao.resetEmployeeStatus(companyId, employeeId);
 	}
 
+	@Override
+	public Employee selectEmployeeByLoginNameAndCompanyId(String loginName, String companyId) {
+		
+		return employeeDao.selectEmployeeByLoginNameAndCompanyId(loginName, companyId);
+	}
+
 
 	
 }

@@ -723,5 +723,12 @@
 		employee_id =
 		#{employeeId,jdbcType=VARCHAR}
 	</update>
+	<!-- 李业:(功能:人员导入)根据登录名和公司id查询公司员工 -->
+	<select id="selectEmployeeByLoginNameAndCompanyId" parameterType="java.lang.String">
+		select e.employee_id,e.employee_name
+		from employee_ e
+		where e.login_name = #{loginName} and e.company_id = #{companyId}
+	</select>
+	
 
 </mapper>

@@ -125,4 +125,11 @@ public interface EmployeeService {
 	 * @return
 	 */
 	int resetEmployeeStatus(String companyId, String employeeId);
+	/**
+	 * 根据登录名和公司id查询员工
+	 * @param loginName
+	 * @param companyId
+	 * @return
+	 */
+	Employee selectEmployeeByLoginNameAndCompanyId(String loginName,String companyId);
 }

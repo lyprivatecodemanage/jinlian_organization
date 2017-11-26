@@ -92,4 +92,10 @@ public class PostServiceImpl implements PostService {
 	public int getDepPostNumByName(String companyId, String departmentId, String postName,  String postId) {
 		return postDao.getDepPostNumByName(companyId, departmentId, postName ,postId);
 	}
+
+	@Override
+	public List<Post> findBydepartmentPost(String companyId, String departmentId) {
+		
+		return postDao.findBydepartmentPost(departmentId, companyId);
+	}
 }

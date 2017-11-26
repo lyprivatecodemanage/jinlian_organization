@@ -3,6 +3,7 @@ package com.xiangshangban.organization.service;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Param;
 
 import com.xiangshangban.organization.bean.Post;
 
@@ -42,4 +43,12 @@ public interface PostService {
 	 * @return
 	 */
 	int getDepPostNumByName(String companyId, String departmentId, String postName, String postId);
+	
+	/**
+	 * 查询该部门下的所有岗位
+	 * @param companyId
+	 * @param departmentId
+	 * @return
+	 */
+	List<Post> findBydepartmentPost(@Param("companyId")String companyId,@Param("departmentId")String departmentId);
 }

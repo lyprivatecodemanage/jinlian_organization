@@ -101,4 +101,6 @@ public interface EmployeeDao {
 	int isAdmin(@Param("companyId")String companyId,@Param("userId")String userId);
 
 	int resetEmployeeStatus(@Param("companyId")String companyId, @Param("employeeId")String employeeId);
+	
+	Employee selectEmployeeByLoginNameAndCompanyId(@Param("loginName")String loginName,@Param("companyId")String companyId);
 }

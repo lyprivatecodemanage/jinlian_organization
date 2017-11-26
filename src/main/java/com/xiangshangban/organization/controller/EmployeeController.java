@@ -115,7 +115,6 @@ public class EmployeeController {
 				return returnData;
 			}
 		}
-
 		String loginName = employeenew.getLoginName();
 		boolean loginNameMatch = RegexUtil.matchPhone(loginName);
 		if (!loginNameMatch) {
@@ -137,6 +136,9 @@ public class EmployeeController {
 			returnData.setReturnCode("3009");
 			return returnData;
 		}
+		//判断三个岗位是否重复
+		
+		
 		returnData = employeeService.insertEmployee(employeenew);
 		return returnData;
 	}
