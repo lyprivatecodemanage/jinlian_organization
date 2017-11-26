@@ -50,7 +50,7 @@
 		select
 		<include refid="Base_Column_List" />
 		from u_users
-		where status = '1' and phone = #{phone}
+		where phone = #{phone}
 	</select>
 	<insert id="insert" parameterType="com.xiangshangban.organization.bean.Uusers">
 		insert into
