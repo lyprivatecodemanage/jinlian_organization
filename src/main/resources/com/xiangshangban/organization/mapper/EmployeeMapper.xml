@@ -237,7 +237,11 @@
 		employee_id=
 		#{employeeId}
 	</update>
-
+	<update id="resetEmployeeStatus">
+		update organization.employee_
+		set employee_status='0'
+		where employee_id= #{employeeId} and company_id=#{companyId}
+	</update>
 	<select id="findByLiZhiemployee" parameterType="java.lang.String"
 		resultMap="Employee">
 		select DISTINCT e.employee_id, e.employee_name,e.login_name,

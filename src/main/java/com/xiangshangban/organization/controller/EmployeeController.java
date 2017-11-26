@@ -77,6 +77,7 @@ public class EmployeeController {
 			return returnData;
 		}
 		employeeService.activeEmp(companyId, employeeId);
+		employeeService.resetEmployeeStatus(companyId, employeeId);
 		returnData.setMessage("数据请求成功");
 		returnData.setReturnCode("3000");
 		return returnData;
@@ -785,93 +786,6 @@ public class EmployeeController {
 		}
 		if (!employeeId.equals("")) {
 			connectEmpPostService.deleteConnect(employeeId, postId);
-			returnData.setMessage("数据请求成功");
-			returnData.setReturnCode("3000");
-		} else {
-			returnData.setMessage("数据请求失败");
-			returnData.setReturnCode("3001");
-		}
-		return returnData;
-	}
-
-	/**
-	 * 逻辑删除，把员工在职状态更新为（2：删除）
-	 * 
-	 * @param jsonString
-	 * @param request
-	 * @param response
-	 * @return
-	 */
-	@RequestMapping(value = "/batchUpdateTest", produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
-	public ReturnData batchUpdateTest(@RequestBody String jsonString, HttpServletRequest request,
-			HttpServletResponse response) {
-		JSONObject jobj = JSON.parseObject(jsonString);
-		ReturnData returnData = new ReturnData();
-		JSONArray array = jobj.getJSONArray("listEmployee");
-		for (int i = 0; i < array.size(); i++) {
-			String empId = JSON.parseObject(array.get(i).toString()).getString("EmployeeId");
-			if (!empId.equals("")) {
-				// 把员工在职状态改为2
-				employeeService.batchUpdateTest(empId);
-				// 删除后，把connect_emp_post_表对应的岗位ID状态改为1
-				connectEmpPostService.updateConnectDelehipostStaus(empId);
-				returnData.setMessage("数据请求成功");
-				returnData.setReturnCode("3000");
-			} else {
-				returnData.setMessage("数据请求失败");
-				returnData.setReturnCode("3001");
-			}
-			Map<String, Object> cmdmap = new HashMap<String, Object>();
-			List<String> cmdlist = new ArrayList<String>();
-			cmdmap.put("action", "UPDATE_USER_INFO");
-			cmdlist.add(empId);
-			cmdmap.put("employeeIdCollection", cmdlist);
-			try {
-				HttpRequestFactory.sendRequet(PropertiesUtils.pathUrl("commandGenerate"), cmdmap);
-			} catch (IOException e) {
-				logger.info("将人员信息更新到设备模块时，获取路径出错");
-				e.printStackTrace();
-			}
-		}
-		if (array.size() == 0) {
-			returnData.setMessage("数据请求失败");
-			returnData.setReturnCode("3001");
-		}
-		return returnData;
-	}
-
-	/**
-	 * 把员工在职状态更新为（1：离职）
-	 * 
-	 * @param employeeid
-	 * @param request
-	 * @param response
-	 * @return
-	 */
-	@RequestMapping(value = "/batchUpdateStatus", produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
-	public ReturnData batchUpdateStatus(@RequestBody String employeeId, HttpServletRequest request,
-			HttpServletResponse response) {
-		ReturnData returnData = new ReturnData();
-		JSONObject obj = JSON.parseObject(employeeId);
-		Map<String, Object> cmdmap = new HashMap<String, Object>();
-		try {
-			List<String> cmdlist = new ArrayList<String>();
-			cmdmap.put("action", "UPDATE_USER_INFO");
-			employeeId = obj.getString("employeeId");
-			System.err.println(employeeId);
-			cmdlist.add(employeeId);
-			cmdmap.put("employeeIdCollection", cmdlist);
-			try {
-				HttpRequestFactory.sendRequet(PropertiesUtils.pathUrl("commandGenerate"), cmdmap);
-			} catch (IOException e) {
-				logger.info("将人员信息更新到设备模块时，获取路径出错");
-				e.printStackTrace();
-			}
-		} catch (Exception e) {
-			System.err.println("设备模块不在线");
-		}
-		if (!employeeId.equals("")) {
-			employeeService.batchUpdateStatus(employeeId);
 			returnData.setMessage("数据请求成功");
 			returnData.setReturnCode("3000");
 		} else {

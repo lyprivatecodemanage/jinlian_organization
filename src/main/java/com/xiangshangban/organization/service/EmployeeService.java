@@ -118,4 +118,11 @@ public interface EmployeeService {
 	 * @return
 	 */
 	int isAdmin(String companyId, String employeeId);
+	/**
+	 * 恢复在职状态
+	 * @param companyId
+	 * @param employeeId
+	 * @return
+	 */
+	int resetEmployeeStatus(String companyId, String employeeId);
 }

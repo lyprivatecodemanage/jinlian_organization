@@ -406,6 +406,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 		return employeeDao.isAdmin(companyId, employeeId);
 	}
 
+	@Override
+	public int resetEmployeeStatus(String companyId, String employeeId) {
+		return employeeDao.resetEmployeeStatus(companyId, employeeId);
+	}
+
 
 	
 }
