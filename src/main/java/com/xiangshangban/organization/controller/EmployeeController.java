@@ -1,6 +1,5 @@
 package com.xiangshangban.organization.controller;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,12 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -36,12 +29,12 @@ import com.xiangshangban.organization.bean.ReturnData;
 import com.xiangshangban.organization.bean.Transferjob;
 import com.xiangshangban.organization.service.ConnectEmpPostService;
 import com.xiangshangban.organization.service.EmployeeService;
+import com.xiangshangban.organization.service.EmployeeSpeedImportService;
 import com.xiangshangban.organization.service.OSSFileService;
 import com.xiangshangban.organization.service.PostService;
 import com.xiangshangban.organization.service.TransferjobService;
 import com.xiangshangban.organization.util.FormatUtil;
 import com.xiangshangban.organization.util.HttpRequestFactory;
-import com.xiangshangban.organization.util.ImportExcel;
 import com.xiangshangban.organization.util.PropertiesUtils;
 import com.xiangshangban.organization.util.RegexUtil;
 
@@ -59,6 +52,8 @@ public class EmployeeController {
 	private TransferjobService transferjobService;
 	@Autowired
 	private OSSFileService oSSFileService;
+	@Autowired
+	private EmployeeSpeedImportService employeeSpeedImportService;
 
 	/**
 	 * 激活
@@ -588,8 +583,8 @@ public class EmployeeController {
 	 * @return
 	 */
 	@RequestMapping(value = "/speedImport", method = RequestMethod.POST)
-	public Map<String, Object> speedImport(String key, HttpServletRequest request) {
-		Map<String, Object> result = new HashMap<String, Object>();
+	public ReturnData speedImport(String key, HttpServletRequest request) {
+		ReturnData returnData = new ReturnData();
 		try {
 			String companyId = request.getHeader("companyId");// 公司id
 			String userId = request.getHeader("accessUserId");// 操作人id
@@ -597,36 +592,14 @@ public class EmployeeController {
 			String companyNo = emp.getCompanyNo();
 			String directory = PropertiesUtils.ossProperty("portraitDirectory");
 			String filePath = oSSFileService.getPathByKey(companyNo, directory, key);
-			
-			
-
-				
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-
-			
-
-
-			result.put("message", "成功");
-			result.put("returnCode", "3000");
-			return result;
+			returnData = employeeSpeedImportService.speedImport(userId, companyId, filePath);
+			return returnData;
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.info(e);
-			result.put("message", "服务器错误");
-			result.put("returnCode", "3001");
-			return result;
+			returnData.setMessage("服务器错误");
+			returnData.setReturnCode("3001");
+			return returnData;
 		}
 	}
 

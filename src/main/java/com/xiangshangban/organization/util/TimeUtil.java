@@ -8,6 +8,8 @@ import java.util.Date;
 
 import org.springframework.util.StringUtils;
 
+import com.xiangshangban.organization.exception.CustomException;
+
 public class TimeUtil {
 
 	/**
@@ -530,9 +532,6 @@ public class TimeUtil {
        return false;
 	}
 	
-	public static void main(String[] args) {
-		System.out.println(getLongAfterDate("2017-10-16", -2, Calendar.DATE));
-	}
 	public static String getDateAfterString(String time,String period){
 		try{
 		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
@@ -544,6 +543,52 @@ public class TimeUtil {
 		}catch(Exception e){
 			e.printStackTrace();
 			return null;
+		}
+	}
+	
+	public static String timeFormatTransfer(String time)throws Exception{
+		SimpleDateFormat format1 = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat format2 = new SimpleDateFormat("yyyy/MM/dd");
+		SimpleDateFormat format3 = new SimpleDateFormat("yyyy年MM月dd日");
+		Date date =null;
+		try {
+			date =format1.parse(time);
+		} catch (ParseException e) {
+			try {
+				date =format2.parse(time);
+			} catch (ParseException e1) {
+				try {
+					date =format3.parse(time);
+				} catch (ParseException e2) {
+					throw new CustomException("日期格式不正确");
+				}
+			}
+		}
+		time = format1.format(date);
+		return time;
+	}
+	
+	/*public static boolean compareTime(String time1,String time2){
+		boolean flag = true;
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		Date date1 = format.parse(time1);
+		Date date2 = format.parse(time2);
+		return flag;
+	}*/
+	
+	public static void main(String[] args){
+			
+			for(int i=0;i<4;i++){
+				try {
+					String time = timeFormatTransfer("2014大是大非吧");
+			System.out.println(time);
+		}catch(Exception e){
+			e.printStackTrace();
+			System.out.println(((CustomException)e).getExceptionMessage());
+			continue;
+		}
+				System.out.println("123");
+				
 		}
 	}
 }

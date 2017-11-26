@@ -83,7 +83,6 @@
     SELECT DISTINCT 
     p.post_id,p.post_name
     FROM  organization.post_ p       	
-    LEFT JOIN organization.department_ d  on d.department_id=p.department_id 
 	where  	
 	p.department_id=#{departmentId} 
     AND	

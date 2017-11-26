@@ -16,17 +16,24 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.xiangshangban.organization.bean.Department;
 import com.xiangshangban.organization.bean.Employee;
 import com.xiangshangban.organization.bean.ImportReturnData;
 import com.xiangshangban.organization.bean.Post;
 import com.xiangshangban.organization.bean.ReturnData;
+import com.xiangshangban.organization.exception.CustomException;
 import com.xiangshangban.organization.util.RegexUtil;
+import com.xiangshangban.organization.util.TimeUtil;
 @Service("employeeSpeedService")
 public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 	private static final Logger logger = Logger.getLogger(EmployeeSpeedServiceImpl.class);
 	
 	@Autowired
 	private EmployeeService employeeService;
+	@Autowired
+	private DepartmentService departmentService;
+	@Autowired
+	private PostService postService;
 	@Override
 	public ReturnData speedImport(String operateUserId,String companyId,String filePath) {
 		ReturnData returnData = new ReturnData();
@@ -115,6 +122,47 @@ public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 						paramList.get(9), paramList.get(10), paramList.get(11), postList, paramList.get(14),
 						paramList.get(15), paramList.get(16));
 				newEmp.setOperateUserId(operateUserId);
+				if("女".equals(newEmp.getEmployeeSex())){
+					newEmp.setEmployeeSex("1");
+				}else{
+					newEmp.setEmployeeSex("0");
+				}
+				if(StringUtils.isNotEmpty(newEmp.getMarriageStatus())){
+					if("离异".equals(newEmp.getMarriageStatus())){
+						newEmp.setMarriageStatus("2");
+					}else if("已婚".equals(newEmp.getMarriageStatus())){
+						newEmp.setMarriageStatus("1");
+					}else{
+						newEmp.setMarriageStatus("0");
+					}
+				}
+				if("离职".equals(newEmp.getEmployeeStatus())){
+					newEmp.setEmployeeStatus("1");
+				}else if("删除".equals(newEmp.getEmployeeStatus())){
+					newEmp.setEmployeeStatus("2");
+				}else{
+					newEmp.setEmployeeStatus("0");
+				}
+				String entryTime = "";
+				String probationaryExpired = "";
+				try {
+					 entryTime = TimeUtil.timeFormatTransfer(newEmp.getEntryTime());
+					 probationaryExpired = TimeUtil.timeFormatTransfer(newEmp.getProbationaryExpired());
+					
+				}catch(Exception e){
+					String importMessage = "第" + i + "行,"+((CustomException)e).getExceptionMessage();
+					ImportReturnData importReturnData = new ImportReturnData();
+					importReturnData.setImportMessage(importMessage);
+					importReturnDataList.add(importReturnData);
+					continue;
+				}
+				if(TimeUtil.compareTime(entryTime, probationaryExpired)){
+					String importMessage = "第" + i + "行,转正时间必须大于入职时间";
+					ImportReturnData importReturnData = new ImportReturnData();
+					importReturnData.setImportMessage(importMessage);
+					importReturnDataList.add(importReturnData);
+					continue;
+				}
 				newEmp.setCompanyId(companyId);
 				String employeeNo = newEmp.getEmployeeNo();
 				if (StringUtils.isNotEmpty(employeeNo)) {
@@ -124,9 +172,9 @@ public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 						ImportReturnData importReturnData = new ImportReturnData();
 						importReturnData.setImportMessage(importMessage);
 						importReturnDataList.add(importReturnData);
+						continue;
 					}
 				}
-
 				String loginName = newEmp.getLoginName();
 				boolean loginNameMatch = RegexUtil.matchPhone(loginName);
 				if (!loginNameMatch) {
@@ -134,48 +182,65 @@ public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 					ImportReturnData importReturnData = new ImportReturnData();
 					importReturnData.setImportMessage(importMessage);
 					importReturnDataList.add(importReturnData);
+					continue;
 				}
-				String employeeName = newEmp.getEmployeeName();
+				/*String employeeName = newEmp.getEmployeeName();
 				if (StringUtils.isEmpty(employeeName)) {
 					String importMessage = "第" + i + "行,姓名必需填写!";
 					ImportReturnData importReturnData = new ImportReturnData();
 					importReturnData.setImportMessage(importMessage);
 					importReturnDataList.add(importReturnData);
-				}
+				}*/
 
-				if ((StringUtils.isNotEmpty(newEmp.getEntryTime()) && !RegexUtil.matchDate(newEmp.getEntryTime()))
+				/*if ((StringUtils.isNotEmpty(newEmp.getEntryTime()) && !RegexUtil.matchDate(newEmp.getEntryTime()))
 						|| (StringUtils.isNotEmpty(newEmp.getProbationaryExpired())
 								&& !RegexUtil.matchDate(newEmp.getProbationaryExpired()))) {
 					String importMessage = "第" + i + "行,日期格式错误（yyyy-MM-dd）!";
 					ImportReturnData importReturnData = new ImportReturnData();
 					importReturnData.setImportMessage(importMessage);
 					importReturnDataList.add(importReturnData);
-				}
-				int result = employeeService.insertEmployee(newEmp);
-				if(result == 0){
-					String importMessage = "第" + i + "行,日期格式错误（yyyy-MM-dd）!";
-					ImportReturnData importReturnData = new ImportReturnData();
-					importReturnData.setImportMessage(importMessage);
-					importReturnDataList.add(importReturnData);
-				}
-				returnData.setMessage("数据请求成功");
-				returnData.setReturnCode("3000");
-				return returnData;
-				//按人员的loginName登录名(phone)以及姓名(username|employeeName)查询添加的人员是否已存在
+				}*/
 				
-					//已存在(提示用户已存在)
-						
-						
+				//查询添加信息中的部门是否存在
+				boolean departmentFlag = true;
+				 List<Department> departmentList = departmentService.findByAllDepartment(companyId); 
+				 for(Department department : departmentList){
+					 if(newEmp.getDepartmentName().equals(department.getDepartmentName())){
+						 departmentFlag = false;
+					 }
+				 }
+				 if(departmentFlag){
+					 	String importMessage = "第" + i + "行,填写的部门不存在";
+						ImportReturnData importReturnData = new ImportReturnData();
+						importReturnData.setImportMessage(importMessage);
+						importReturnDataList.add(importReturnData);
+						continue;
+				 }
+				 
+				//查询添加信息中的岗位是否存在于对应的部门之中
 				
-				//不存在
+				//查询直接汇报人是否存在
 				
-				
-				
-				
+				ReturnData serviceReturnData = employeeService.insertEmployee(newEmp);
+				ImportReturnData importReturnData = new ImportReturnData();
+				importReturnData.setImportMessage(serviceReturnData.getMessage());
+				importReturnDataList.add(importReturnData);
 			}
 		}
-		returnData.setMessage("部分导入失败,请检查表格数据是否填写正确");
-		returnData.setReturnCode("4117");
-		return null;
+		boolean flag = false;
+		for(ImportReturnData importReturnDataObj:importReturnDataList){
+			if(StringUtils.isNotEmpty(importReturnDataObj.getImportMessage())){
+				flag=true;
+			}
+		}
+		if(flag){
+			returnData.setData(importReturnDataList);
+			returnData.setMessage("部分导入失败,请检查表格数据是否填写正确");
+			returnData.setReturnCode("4117");
+			return returnData;
+		}
+		returnData.setMessage("成功");
+		returnData.setReturnCode("3000");
+		return returnData;
 	}
 }
