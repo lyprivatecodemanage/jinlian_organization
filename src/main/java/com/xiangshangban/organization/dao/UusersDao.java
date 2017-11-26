@@ -34,4 +34,10 @@ public interface UusersDao {
     int insertSelective(Uusers record);
     
     Uusers selectById(String userId);
+    /**
+     * 将用户状态修改为可用
+     * @param status
+     * @return
+     */
+	int updateStatus(@Param("userid")String userId, @Param("status")String status);
 }

@@ -191,6 +191,12 @@
 		</set>
 		where userid = #{userid}
 	</update>
+	<update id="updateStatus" parameterType="String">
+		update
+		organization.u_users
+		set status=#{status} 
+		where userid=#{userid}
+	</update>
 	<update id="updateByPrimaryKey" parameterType="com.xiangshangban.organization.bean.Uusers">
 		update
 		organization.u_users

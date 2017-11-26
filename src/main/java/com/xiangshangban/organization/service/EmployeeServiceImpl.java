@@ -115,6 +115,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 				returnData.setReturnCode("4115");
 				return returnData;
 			}
+			if("0".equals(user.getStatus())){//将不可用状态改为可用
+				usersDao.updateStatus(user.getUserid(), "1");
+			}
 			//添加绑定关系
 			UserCompanyDefault userCompany = userCompanyDefaultDao.selectByUserIdAndCompanyId(user.getUserid(), employee.getCompanyId());
 			if(userCompany==null || StringUtils.isEmpty(userCompany.getCompanyId())){//不存在绑定关系
