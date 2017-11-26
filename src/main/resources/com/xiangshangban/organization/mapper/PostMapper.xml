@@ -189,7 +189,7 @@
   
   <insert id="insertPost" parameterType="com.xiangshangban.organization.bean.Post">
     insert into organization.post_ (post_id, post_name,post_proficiencies,post_work_type,
-    COALESCE(p.educational_requirements, '') AS educational_requirements, post_principal_id,
+    educational_requirements, post_principal_id,
      company_id,department_id
       )
     values (

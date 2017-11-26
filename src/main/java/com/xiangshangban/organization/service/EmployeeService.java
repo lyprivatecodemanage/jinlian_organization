@@ -111,4 +111,18 @@ public interface EmployeeService {
 	 * @return
 	 */
 	int activeEmp(String companyId, String employeeId);
+	/**
+	 * 查询员工是否为该公司的管理员
+	 * @param companyId
+	 * @param employeeId
+	 * @return
+	 */
+	int isAdmin(String companyId, String employeeId);
+	/**
+	 * 恢复在职状态
+	 * @param companyId
+	 * @param employeeId
+	 * @return
+	 */
+	int resetEmployeeStatus(String companyId, String employeeId);
 }
