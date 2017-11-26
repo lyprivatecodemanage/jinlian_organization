@@ -27,4 +27,23 @@ public interface UserCompanyDefaultDao {
 	int deleteUserFromCompany(@Param("companyId")String companyId,@Param("employeeId")String employeeId);
 
 	int updateActive(@Param("companyId")String companyId,@Param("employeeId")String employeeId);
+	/**
+	 * 查询已激活并且为默认的公司
+	 * @param userId 用户ID
+	 * @return
+	 */
+	UserCompanyDefault getActiveDefault(@Param("userId")String userId);
+	/**
+	 * 查询已激活的备选公司中的第一个公司
+	 * @param userId 用户ID
+	 * @return
+	 */
+	UserCompanyDefault getActiveNoDefaultFirst(@Param("userId")String userId);
+	/**
+	 * 设置当前默认打开的公司
+	 * @param companyId
+	 * @param employeeId
+	 * @return
+	 */
+	int updateCurrentCompany(@Param("companyId")String companyId,@Param("employeeId")String employeeId);
 }

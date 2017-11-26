@@ -97,4 +97,6 @@ public interface EmployeeDao {
 	int updateEmployeeInformation(Employee emp);
 	
 	int updateEmployeeInfoStatus(@Param("companyId")String companyId,@Param("userId")String userId);
+
+	int isAdmin(@Param("companyId")String companyId,@Param("userId")String userId);
 }

@@ -56,12 +56,23 @@ public class EmployeeServiceImpl implements EmployeeService {
 	public int deleteByEmployee(String companyId,String employeeId) {
 		int i = 0;
 		Employee employee = employeeDao.selectByEmployee(employeeId, companyId);
-		i=i+userCompanyDefaultDao.deleteUserFromCompany(companyId,employeeId);
+		i=i+userCompanyDefaultDao.deleteUserFromCompany(companyId,employeeId);//更改is_active='2', current_option='2'
 		i=i+employeeDao.deleteByEmployee(employeeId,companyId);
+		//更改默认公司设置
+		//查询已激活并且为默认的公司
+		UserCompanyDefault companyDefalt = userCompanyDefaultDao.getActiveDefault(employeeId);
+		if(companyDefalt==null || StringUtils.isEmpty(companyDefalt.getCompanyId())){
+			//抽取排序中已激活但非默认的第一个公司作为默认公司
+			UserCompanyDefault newDefalt = userCompanyDefaultDao.getActiveNoDefaultFirst(employeeId);
+			if(companyDefalt!=null && StringUtils.isNotEmpty(companyDefalt.getCompanyId())){
+				//设置默认公司
+				userCompanyDefaultDao.updateCurrentCompany(newDefalt.getCompanyId(), employeeId);
+			}
+		}
 		if(i>1){
 			employee.setCompanyId(companyId);
 			employee.setEmployeeStatus("1");
-			this.updateDeviceEmp(employee);
+			this.deleteDeviceEmp(employee);
 		}
 		
 		return i;
@@ -150,7 +161,23 @@ public class EmployeeServiceImpl implements EmployeeService {
 			e.printStackTrace();
 		}
 	}
-
+	/**
+	 * 告知设备模块更新人员信息
+	 * @param employee
+	 */
+	public void deleteDeviceEmp(Employee employee) {
+		Company company = companyDao.selectByCompany(employee.getCompanyId());
+	    employee.setCompanyNo(company.getCompanyNo());
+		List<Employee> cmdlist=new ArrayList<Employee>();
+		cmdlist.add(employee);
+		try {
+			String result = HttpClientUtil.sendRequet(PropertiesUtils.pathUrl("deleteEmployeeInformationEmp"), cmdlist);
+			logger.info("设备访问成功"+result);
+		} catch (IOException e) {
+			logger.info("将人员信息更新到设备模块时，获取路径出错");
+			e.printStackTrace();
+		}
+	}
 	public void updateTransfer(Employee employee) {
 		//把员工关联的岗位添加到connect_emp_post_中间表里面
 		for(Post post:employee.getPostList()){
@@ -372,6 +399,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Override
 	public int activeEmp(String companyId, String employeeId) {
 		return userCompanyDefaultDao.updateActive(companyId, employeeId);
+	}
+
+	@Override
+	public int isAdmin(String companyId, String employeeId) {
+		return employeeDao.isAdmin(companyId, employeeId);
 	}
 
 

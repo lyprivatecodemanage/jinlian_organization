@@ -31,9 +31,29 @@
 		from user_company
 		where user_id = #{userId} AND company_id=#{companyId}
 	</select>
+	<select id="getActiveDefault" resultMap="BaseResultMap">
+		select 
+		<include refid="Base_Column_List"/>
+		from user_company
+		where user_id = #{userId} AND current_option='1' AND is_active='1'
+	</select>
+	
+	<select id="getActiveNoDefaultFirst" resultMap="BaseResultMap">
+		select 
+		<include refid="Base_Column_List"/>
+		from user_company
+		where user_id = #{userId} AND current_option='2' AND is_active='1'
+		limit 1 offset 0
+	</select>
+	<!-- 将某个已激活的公司设置为默认公司 -->
+	<update id="updateCurrentCompany">
+		update user_company 
+		set current_option='1'
+		where company_id = #{companyId} and user_id = #{employeeId} AND is_active = '1'
+	</update>
 	<update id="deleteUserFromCompany" parameterType="java.lang.String">
 		update user_company 
-		set is_active = '2'
+		set is_active = '2',current_option='2'
 		where company_id = #{companyId} and user_id = #{employeeId}
 	</update>
 	<delete id="deleteByPrimaryKey" parameterType="com.xiangshangban.organization.bean.UserCompanyDefault" >

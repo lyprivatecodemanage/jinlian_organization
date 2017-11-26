@@ -169,7 +169,12 @@
 		</if>
 		limit #{numRecordCount}::integer offset #{numPage}::integer
 	</select>
-
+	<select id="isAdmin" resultType="int">
+	   SELECT count(a.userid) 
+		FROM u_users_roles AS a
+		LEFT JOIN u_roles AS b ON a.roleid=b.roleid
+		WHERE a.company_id=#{companyId} AND a.userid=#{userId} AND b.rolename='admin'
+	</select>
 	<!-- 查询所有员工信息 -->
 	<select id="selectByAllEmployee" parameterType="java.lang.String"
 		resultMap="Employee">

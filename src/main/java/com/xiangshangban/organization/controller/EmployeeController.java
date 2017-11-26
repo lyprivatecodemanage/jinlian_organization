@@ -449,8 +449,17 @@ public class EmployeeController {
 			JSONArray jsonArray = JSON.parseObject(jsonStrng).getJSONArray("deleteData");
 			for (int i = 0; i < jsonArray.size(); i++) {
 				String employeeId = JSON.parseObject(jsonArray.get(i).toString()).getString("employeeId");
-				/*String departmentId = JSON.parseObject(jsonArray.get(i).toString()).getString("departmentId");
-				String postId = JSON.parseObject(jsonArray.get(i).toString()).getString("postId");*/
+				//检查人员是否为管理员
+				int isAdmin = employeeService.isAdmin(companyId, employeeId);
+				if(isAdmin>0){
+					Employee emp = employeeService.selectByEmployee(employeeId, companyId);
+					result.put("message", "删除人员失败，原因：【"+emp.getEmployeeName()+"】为管理员");
+					result.put("returnCode", "4118");
+					return result;
+				}
+			}
+			for (int i = 0; i < jsonArray.size(); i++) {
+				String employeeId = JSON.parseObject(jsonArray.get(i).toString()).getString("employeeId");
 				Employee emp = employeeService.selectByEmployee(employeeId, companyId);
 				String departmentId = emp.getDepartmentId();
 				String postId = emp.getPostId();
