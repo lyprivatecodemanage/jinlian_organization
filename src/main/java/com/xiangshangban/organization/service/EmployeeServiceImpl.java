@@ -113,6 +113,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 			if(!user.getUsername().equals(employee.getEmployeeName())){//姓名不匹配，添加失败
 				returnData.setMessage("登录名已被【"+user.getUsername()+"】使用");
 				returnData.setReturnCode("4115");
+				return returnData;
 			}
 			//添加绑定关系
 			UserCompanyDefault userCompany = userCompanyDefaultDao.selectByUserIdAndCompanyId(user.getUserid(), employee.getCompanyId());
