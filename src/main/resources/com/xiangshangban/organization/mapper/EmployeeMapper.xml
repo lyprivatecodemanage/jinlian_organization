@@ -723,11 +723,15 @@
 		#{employeeId,jdbcType=VARCHAR}
 	</update>
 	<!-- 李业:(功能:人员导入)根据登录名和公司id查询公司员工 -->
-	<select id="selectEmployeeByLoginNameAndCompanyId" parameterType="java.lang.String">
+	<select id="selectEmployeeByLoginNameAndCompanyId" parameterType="java.lang.String" resultMap="Employee">
 		select e.employee_id,e.employee_name
 		from employee_ e
 		where e.login_name = #{loginName} and e.company_id = #{companyId}
 	</select>
 	
-
+	<update id="updateEmployeeImgUrl" parameterType="java.lang.String">
+		update employee_
+		set employee_img_url = #{employeeImgUrl}
+		where employee_id = #{employeeId} and company_id = #{companyId}
+	</update>
 </mapper>

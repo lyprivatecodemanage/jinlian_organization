@@ -132,4 +132,13 @@ public interface EmployeeService {
 	 * @return
 	 */
 	Employee selectEmployeeByLoginNameAndCompanyId(String loginName,String companyId);
+	
+	/**
+	 * 保存员工头像key
+	 * @param employeeId
+	 * @param companyId
+	 * @param key
+	 * @return
+	 */
+	int updateEmployeeImgUrl(String employeeId, String companyId, String key);
 }

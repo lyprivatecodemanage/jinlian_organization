@@ -444,6 +444,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 		return employeeDao.selectEmployeeByLoginNameAndCompanyId(loginName, companyId);
 	}
 
+	@Override
+	public int updateEmployeeImgUrl(String employeeId, String companyId, String ossFileString) {
+		
+		return employeeDao.updateEmployeeImgUrl(employeeId, companyId, ossFileString);
+	}
 
 	
 }

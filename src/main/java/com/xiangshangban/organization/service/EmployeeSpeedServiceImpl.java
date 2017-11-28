@@ -1,9 +1,11 @@
 package com.xiangshangban.organization.service;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -24,10 +26,10 @@ import com.xiangshangban.organization.bean.ImportReturnData;
 import com.xiangshangban.organization.bean.Post;
 import com.xiangshangban.organization.bean.ReturnData;
 import com.xiangshangban.organization.exception.CustomException;
-import com.xiangshangban.organization.util.OSSFileUtil;
+import com.xiangshangban.organization.util.ImportUtil;
+import com.xiangshangban.organization.util.PropertiesUtils;
 import com.xiangshangban.organization.util.RegexUtil;
 import com.xiangshangban.organization.util.TimeUtil;
-import com.xiangshangban.organization.util.PropertiesUtils;
 
 @Service("employeeSpeedService")
 public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
@@ -71,13 +73,13 @@ public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 			return returnData;
 		}
 		int lastSheetNum = wookbook.getNumberOfSheets();
-		for (int i = 0; i < lastSheetNum; i++) {
+		//for (int i = 0; i < lastSheetNum; i++) {
 			// 得到一个工作表
-			Sheet sheet = wookbook.getSheetAt(i);
+			Sheet sheet = wookbook.getSheetAt(0);
 			// 获得表头
 			Row rowHead = sheet.getRow(0);
 			// 判断表头是否正确
-			if (rowHead.getPhysicalNumberOfCells() != 17) {
+			if (rowHead.getPhysicalNumberOfCells() != 18) {
 				returnData.setMessage("上传的Excel模板格式不正确");
 				returnData.setReturnCode("4116");
 				try {
@@ -90,34 +92,73 @@ public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 			// 获得数据的总行数
 			int totalRowNum = sheet.getLastRowNum();
 			// 遍历整个工作表,获取所有数据
-			for (int j = 1; j <= totalRowNum; j++) {
+			for (int i = 1; i <= totalRowNum; i++) {
+				
+				boolean lineFlag = false;
 				// 获得第i行对象
-				Row row = sheet.getRow(j);
-				int lastRowNum = row.getLastCellNum();
+				Row row = sheet.getRow(i);
+				boolean isBlankRow = ImportUtil.isBlankRow(row);
+				if(isBlankRow){
+					break;
+				}
+				//int lastRowNum = row.getLastCellNum();
 				List<String> paramList = new ArrayList<String>();
 				List<Post> postList = new ArrayList<Post>();
 				// 循环每一列
-				for (int k = 0; k < lastRowNum; k++) {
+				for (int k = 0; k < 18; k++) {
+					System.out.println("======>"+k);
 					Cell cell = row.getCell(k);
-					String value = cell.getStringCellValue();
+					String type = cell.getCellStyle().getDataFormatString();
+					String value = "";
+					try{
+						if(k==10 || k == 11){
+							
+							try{
+							value = cell.getStringCellValue();
+							}catch(Exception e){
+								SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+								Date date = cell.getDateCellValue();
+								value = sdf.format(date);
+							}
+							//TimeUtil.timeFormatTransfer();
+						}else if(k==5||k==8||k==15||k==16){
+							DecimalFormat format = new DecimalFormat("#");  
+							Number valueD = cell.getNumericCellValue();  
+							value = format.format(valueD);  
+						}else{
+						value = cell.getStringCellValue();
+						}
+					}catch(Exception e){
+						String importMessage = "第" + i + "行,第" + k + "列,请检查数据格式!";
+						ImportReturnData importReturnData = new ImportReturnData();
+						importReturnData.setImportMessage(importMessage);
+						importReturnDataList.add(importReturnData);
+						lineFlag = true;
+						break;
+					}
 					if (k == 1 || k == 2 || k == 3 || k == 5 || k == 6 || k == 9 || k == 10 || k == 11 || k == 12) {
 						if (StringUtils.isEmpty(value)) {
 							String importMessage = "第" + i + "行,第" + k + "列,必须填写!";
 							ImportReturnData importReturnData = new ImportReturnData();
 							importReturnData.setImportMessage(importMessage);
 							importReturnDataList.add(importReturnData);
+							lineFlag = true;
 							break;
 						}
 					}
-					if (StringUtils.isNotEmpty(value)) {
+						Post post = new Post();
 						if (k == 13 || k == 14) {
-							Post post = new Post();
-							post.setPostId(value);
+							post.setPostName(value);
 							postList.add(post);
-						} else {
-							paramList.add(value);
 						}
-					}
+						if(k==8 || k==15 || k==16){
+							value="";
+						}
+						System.out.println(value);
+						paramList.add(value);
+				}
+				if(lineFlag){
+					break;
 				}
 				Employee newEmp = new Employee(paramList.get(0), paramList.get(1), paramList.get(2), paramList.get(3),
 						paramList.get(4), paramList.get(5), paramList.get(6), paramList.get(7), paramList.get(8),
@@ -186,9 +227,44 @@ public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 					importReturnDataList.add(importReturnData);
 					continue;
 				}
+				String directPersonLoginName = newEmp.getDirectPersonLoginName();//汇报人登录名
+				boolean directPersonLoginNameMatch = true;
+				if(StringUtils.isNotEmpty(directPersonLoginName) && "0".equals(directPersonLoginName)){
+					directPersonLoginNameMatch = RegexUtil.matchPhone(directPersonLoginName);
+				}
+				if(!directPersonLoginNameMatch){
+					String importMessage = "第" + i + "行,汇报人登录名格式必须为11位手机号!";
+					ImportReturnData importReturnData = new ImportReturnData();
+					importReturnData.setImportMessage(importMessage);
+					importReturnDataList.add(importReturnData);
+					continue;
+				}
+				String onePhone = newEmp.getEmployeePhone();
+				boolean onePhoneMatch = true;
+				if(StringUtils.isNotEmpty(onePhone) && "0".equals(onePhone)){
+					onePhoneMatch = RegexUtil.matchPhone(onePhone);
+				}
+				if(!onePhoneMatch){
+					String importMessage = "第" + i + "行,联系方式1格式必须为11位手机号!";
+					ImportReturnData importReturnData = new ImportReturnData();
+					importReturnData.setImportMessage(importMessage);
+					importReturnDataList.add(importReturnData);
+					continue;
+				}
+				String towPhone = newEmp.getEmployeeTwophone();
+				boolean towPhoneMatch = true;
+				if(StringUtils.isNotEmpty(towPhone) && "0".equals(towPhone)){
+					towPhoneMatch = RegexUtil.matchPhone(towPhone);
+				}
+				if(!towPhoneMatch){
+					String importMessage = "第" + i + "行,联系方式2格式必须为11位手机号!";
+					ImportReturnData importReturnData = new ImportReturnData();
+					importReturnData.setImportMessage(importMessage);
+					importReturnDataList.add(importReturnData);
+					continue;
+				}
 				// 查询直接汇报人是否存在
 				String directPersonName = newEmp.getDirectPersonName();//汇报人姓名
-				String directPersonLoginName = newEmp.getDirectPersonLoginName();//汇报人登录名
 				//汇报人姓名和登录名是否填写
 				if(StringUtils.isNotEmpty(directPersonName) && StringUtils.isNotEmpty(directPersonLoginName)){
 					//已填写,下一步
@@ -270,20 +346,20 @@ public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 				// 副岗位判断
 				List<Post> vicePostList = newEmp.getPostList();
 				for (Post post : postListFromDepartment) {
-					if (vicePostList.get(0) != null) {
+					if (StringUtils.isNotEmpty(vicePostList.get(0).getPostName())) {
 						if (vicePostList.get(0).getPostName().equals(post.getPostName())) {
 							vicePostList.get(0).setPostId(post.getPostId());//设置副岗位1的id
 							vicePostOneFlag = false;
 						}
 					}
-					if (vicePostList.get(1) != null) {
+					if (StringUtils.isNotEmpty(vicePostList.get(1).getPostName())) {
 						if (vicePostList.get(1).getPostName().equals(post.getPostName())) {
 							vicePostList.get(1).setPostId(post.getPostId());//设置副岗位2的id
 							vicePostTowFlag = false;
 						}
 					}
 				}
-				if (vicePostList.get(0) != null) {
+				if (StringUtils.isNotEmpty(vicePostList.get(0).getPostName())) {
 					if (vicePostOneFlag) {
 						String importMessage = "第" + i + "行,副岗位1不存在";
 						ImportReturnData importReturnData = new ImportReturnData();
@@ -300,7 +376,7 @@ public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 						}
 					}
 				}
-				if (vicePostList.get(1) != null) {
+				if (StringUtils.isNotEmpty(vicePostList.get(1).getPostName())) {
 					if (vicePostTowFlag) {
 						String importMessage = "第" + i + "行,副岗位2不存在";
 						ImportReturnData importReturnData = new ImportReturnData();
@@ -318,7 +394,7 @@ public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 
 					}
 				}
-				if (vicePostList.get(0) != null && vicePostList.get(1) != null) {
+				if (StringUtils.isNotEmpty(vicePostList.get(0).getPostName()) && StringUtils.isNotEmpty(vicePostList.get(1).getPostName())) {
 					if (!vicePostOneFlag && !vicePostTowFlag) {
 						if (vicePostList.get(1).getPostName().equals(vicePostList.get(0).getPostName())) {
 							String importMessage = "第" + i + "行,副岗位1与副岗位2不可相同";
@@ -335,7 +411,7 @@ public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 				importReturnData.setImportMessage(serviceReturnData.getMessage());
 				importReturnDataList.add(importReturnData);
 			}
-		}
+		
 		boolean flag = false;
 		for (ImportReturnData importReturnDataObj : importReturnDataList) {
 			if (StringUtils.isNotEmpty(importReturnDataObj.getImportMessage())) {

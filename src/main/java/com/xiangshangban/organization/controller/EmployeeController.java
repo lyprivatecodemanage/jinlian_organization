@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.alibaba.fastjson.JSON;
@@ -58,6 +59,7 @@ public class EmployeeController {
 	private EmployeeSpeedImportService employeeSpeedImportService;
 	@Autowired
 	private CompanyService companyService;
+	
 	
 	/**
 	 * 激活
@@ -410,6 +412,30 @@ public class EmployeeController {
 			return result;
 		}
 
+	}
+	/**
+	 * @author 李业/保存app上传的员工头像key
+	 * @param key
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value="/savePersonImageUrl",method=RequestMethod.POST)
+	public Map<String,Object>  savePersonImageUrl(@RequestParam("key")String key,HttpServletRequest request){
+		Map<String,Object> result = new HashMap<String,Object>();
+		try{
+			String companyId = request.getHeader("companyId");//公司id
+			String userId = request.getHeader("accessUserId");//操作人id
+			employeeService.updateEmployeeImgUrl(userId,companyId,key);
+			result.put("message", "成功");
+			result.put("returnCode", "3000");
+			return result;
+		}catch(Exception e){
+			result.put("message", "服务器错误");
+			result.put("returnCode", "3001");
+			logger.info(e);
+			return result;
+		}
+		
 	}
 
 	/**

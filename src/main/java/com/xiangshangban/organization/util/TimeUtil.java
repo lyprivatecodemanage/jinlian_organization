@@ -524,10 +524,16 @@ public class TimeUtil {
 	 */
 	public static boolean compareTime(String newTime, String oldTime){
 		SimpleDateFormat formatter=new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
 		try {
 			 return formatter.parse(newTime).getTime()>formatter.parse(oldTime).getTime();
 		} catch (ParseException e) {
-			e.printStackTrace();
+			try {
+				return sdf.parse(newTime).getTime()>sdf.parse(oldTime).getTime();
+			} catch (ParseException e1) {
+				e1.printStackTrace();
+			}
+			
 		}
        return false;
 	}
