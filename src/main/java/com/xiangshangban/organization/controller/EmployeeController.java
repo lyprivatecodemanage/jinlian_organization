@@ -625,8 +625,10 @@ public class EmployeeController {
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping(value = "/speedImport", method = RequestMethod.POST)
-	public ReturnData speedImport(String key, HttpServletRequest request) {
+	@RequestMapping(value = "/speedImport", produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
+	public ReturnData speedImport(@RequestBody String jsonString, HttpServletRequest request) {
+		JSONObject obj = JSON.parseObject(jsonString);
+		String key = obj.getString("key");
 		ReturnData returnData = new ReturnData();
 		try {
 			String companyId = request.getHeader("companyId");// 公司id

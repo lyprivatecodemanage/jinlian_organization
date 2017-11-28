@@ -46,7 +46,7 @@ public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 		if (!key.endsWith(".xls") && !key.endsWith(".xlsx")) {
 			System.out.println("文件不是excel类型");
 		}
-		InputStream fis = null;
+		InputStream in = null;
 		Workbook wookbook = null;
 		try {
 			String accessId = PropertiesUtils.ossProperty("accessKey");
@@ -55,27 +55,18 @@ public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 			String OSS_BUCKET = PropertiesUtils.ossProperty("OSS_BUCKET");
 			OSSClient client = new OSSClient(OSS_ENDPOINT,accessId,accessKey);
 			// 获取一个绝对地址的流
-			fis = client.getObject(OSS_BUCKET, key).getObjectContent();
-		} catch (Exception e) {
-			e.printStackTrace();
-			logger.info(e);
-			returnData.setMessage("服务系错误");
+			in = client.getObject(OSS_BUCKET, key).getObjectContent();
+			// 2003版本的excel，用.xls结尾
+			if(key.endsWith(".xls")){
+				wookbook = new HSSFWorkbook(in);// 得到工作簿
+			}else{
+				wookbook = new XSSFWorkbook(in);// 得到工作簿
+			}
+		} catch (Exception ex) {
+			logger.info(ex);
+			returnData.setMessage("文件读取错误");
 			returnData.setReturnCode("3001");
 			return returnData;
-		}
-		try {
-			// 2003版本的excel，用.xls结尾
-			wookbook = new HSSFWorkbook(fis);// 得到工作簿
-		} catch (Exception ex) {
-			try {
-				wookbook = new XSSFWorkbook(fis);// 得到工作簿
-			} catch (IOException e) {
-				e.printStackTrace();
-				logger.info(e);
-				returnData.setMessage("服务系错误");
-				returnData.setReturnCode("3001");
-				return returnData;
-			}
 		}
 		int lastSheetNum = wookbook.getNumberOfSheets();
 		for (int i = 0; i < lastSheetNum; i++) {
@@ -88,7 +79,7 @@ public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 				returnData.setMessage("上传的Excel模板格式不正确");
 				returnData.setReturnCode("4116");
 				try {
-					fis.close();
+					in.close();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -354,7 +345,7 @@ public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 			returnData.setMessage("部分导入失败,请检查表格数据是否填写正确");
 			returnData.setReturnCode("4117");
 			try {
-				fis.close();
+				in.close();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -363,7 +354,7 @@ public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 		returnData.setMessage("成功");
 		returnData.setReturnCode("3000");
 		try {
-			fis.close();
+			in.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
