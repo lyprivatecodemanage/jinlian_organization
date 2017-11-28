@@ -278,7 +278,31 @@ public class OSSFileUtil {
 		}	
 		return "";	
     }
-	
+	 /**
+     * 获取文件路径
+     * @param customerId
+     * @param key
+     * @return
+     */
+	public static String getImportFilePath(String customerId, String directory, String key){
+		if(StringUtils.isNotEmpty(key)){
+			String filePath = StringUtils.isEmpty(customerId)?SYS_FILE_LOCATION + "/"+directory+"/"
+					: USER_FILE_LOCATION+"/"+customerId + "/"+directory;
+			String ossEnvironment="";
+			try {
+				ossEnvironment = PropertiesUtils.ossProperty("ossEnvironment");
+				if("test".equals(ossEnvironment)){
+	            	filePath="test/"+filePath;
+	            }else{
+	            	filePath="prod/"+filePath;
+	            }
+			} catch (IOException e) {
+				LOG.info("获取OSS环境属性错误");
+			}
+	    	return filePath + "/" + key;
+		}	
+		return "";	
+    }
 	/**
      * 获取文件路径
      * @param customerId

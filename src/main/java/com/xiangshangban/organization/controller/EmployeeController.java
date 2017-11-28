@@ -609,10 +609,10 @@ public class EmployeeController {
 			Company company = companyService.selectByCompany(companyId);
 			String companyNo = company.getCompanyNo();
 			String directory = PropertiesUtils.ossProperty("employeeImportDirectory");
-			//String filePath = oSSFileService.getPathByKey(companyNo, directory, key);
+			String filePath = oSSFileService.getImportPathByKey(companyNo, directory, key);
 			//String filePath = "http://xiangshangban.oss-cn-hangzhou.aliyuncs.com/test/data/20171124shbf001/EmployeeExcel/employeeModelOne.xlsx";
 			
-			returnData = employeeSpeedImportService.speedImport(userId, companyId, key);
+			returnData = employeeSpeedImportService.speedImport(userId, companyId, filePath);
 			return returnData;
 		} catch (Exception e) {
 			e.printStackTrace();

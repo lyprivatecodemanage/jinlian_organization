@@ -40,6 +40,13 @@ public interface OSSFileService {
 	 * @return
 	 */
 	public String getPathByKey(String customerId,  String directory, String key);
+	/**
+	 * 根据KEY获取文件路径
+	 * @param customerId
+	 * @param key
+	 * @return
+	 */
+	public String getImportPathByKey(String customerId,  String directory, String key);
 
 	public OSSFile autoAddOSSFileByLength(String customerId,  String directory, String string, int contentLength, InputStream inputStream);
 }

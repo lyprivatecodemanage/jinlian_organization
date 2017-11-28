@@ -44,6 +44,10 @@ public class OSSFileServiceImpl implements OSSFileService {
 	public String getPathByKey(String customerId, String directory, String key) {
 		return OSSFileUtil.getFilePath(customerId, directory, key);
 	}
+	@Override
+	public String getImportPathByKey(String customerId, String directory, String key) {
+		return OSSFileUtil.getImportFilePath(customerId, directory, key);
+	}
 	/**
 	 * 产生文件KEY
 	 * @return
