@@ -1,7 +1,7 @@
 package com.xiangshangban.organization.service;
 
-import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,10 +23,9 @@ import com.xiangshangban.organization.bean.ImportReturnData;
 import com.xiangshangban.organization.bean.Post;
 import com.xiangshangban.organization.bean.ReturnData;
 import com.xiangshangban.organization.exception.CustomException;
-import com.xiangshangban.organization.util.OSSFileUtil;
+import com.xiangshangban.organization.util.PropertiesUtils;
 import com.xiangshangban.organization.util.RegexUtil;
 import com.xiangshangban.organization.util.TimeUtil;
-import com.xiangshangban.organization.util.PropertiesUtils;
 
 @Service("employeeSpeedService")
 public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
@@ -47,7 +46,7 @@ public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 		if (!key.endsWith(".xls") && !key.endsWith(".xlsx")) {
 			System.out.println("文件不是excel类型");
 		}
-		FileInputStream fis = null;
+		InputStream fis = null;
 		Workbook wookbook = null;
 		try {
 			String accessId = PropertiesUtils.ossProperty("accessKey");
@@ -56,7 +55,7 @@ public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 			String OSS_BUCKET = PropertiesUtils.ossProperty("OSS_BUCKET");
 			OSSClient client = new OSSClient(OSS_ENDPOINT,accessId,accessKey);
 			// 获取一个绝对地址的流
-			fis = (FileInputStream)client.getObject(OSS_BUCKET, key).getObjectContent();
+			fis = client.getObject(OSS_BUCKET, key).getObjectContent();
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.info(e);
@@ -68,9 +67,7 @@ public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 			// 2003版本的excel，用.xls结尾
 			wookbook = new HSSFWorkbook(fis);// 得到工作簿
 		} catch (Exception ex) {
-			// ex.printStackTrace();
 			try {
-				// 2007版本的excel，用.xlsx结尾
 				wookbook = new XSSFWorkbook(fis);// 得到工作簿
 			} catch (IOException e) {
 				e.printStackTrace();

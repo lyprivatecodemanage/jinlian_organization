@@ -103,4 +103,13 @@ public interface EmployeeDao {
 	int resetEmployeeStatus(@Param("companyId")String companyId, @Param("employeeId")String employeeId);
 	
 	Employee selectEmployeeByLoginNameAndCompanyId(@Param("loginName")String loginName,@Param("companyId")String companyId);
+	
+	/**
+	 * 更新手机端用户上传的头像key
+	 * @param employeeId
+	 * @param companyId
+	 * @return
+	 */
+	int updateEmployeeImgUrl(@Param("employeeId")String employeeId,@Param("companyId")String companyId,@Param("employeeImgUrl")String employeeImgUrl);
+
 }
