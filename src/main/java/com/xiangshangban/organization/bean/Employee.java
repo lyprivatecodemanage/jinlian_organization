@@ -37,6 +37,7 @@ public class Employee {
     private String phone;//登录手机号
     private String directPersonDepartmentId;//汇报人的部门id
     private String directPersonDepartmentName;//汇报人的部门name
+    private String directPersonLoginName;//汇报人登录名
     //----现在没用到的----
 //    private String employeeBirthday;// 出生年月日    
 //    private String employeeTell;//电话号码  
@@ -60,11 +61,14 @@ public class Employee {
 	public String getPostName() {
 		return postName;
 	}
+    public void setPostName(String postName) {
+    	this.postName = postName;
+    }
     public Employee(){}
 	public Employee(String employeeNo,String employeeName,String employeeSex, String workAddress,String marriageStatus,
 			String loginName,String departmentName,
-			String directPersonName,String employeeStatus,String entryTime,String probationaryExpired,String postName,
-			List<Post> postList,String employeePhone,String employeeTwophone,   String seniority) {
+			String directPersonName,String directPersonLoginName,String employeeStatus,String entryTime,String probationaryExpired,String postName,
+			List<Post> postList,String employeePhone,String employeeTwophone, String seniority) {
 		this.employeeName = employeeName;
 		this.loginName = loginName;
 		this.employeeSex = employeeSex;
@@ -78,12 +82,16 @@ public class Employee {
 		this.postList = postList;
 		this.departmentName = departmentName;
 		this.directPersonName = directPersonName;
-		this.operateUserId = operateUserId;
+		this.directPersonLoginName = directPersonLoginName;
 		this.marriageStatus = marriageStatus;
 		this.seniority = seniority;
 	}
-	
-	
+	public String getDirectPersonLoginName() {
+		return directPersonLoginName;
+	}
+	public void setDirectPersonLoginName(String directPersonLoginName) {
+		this.directPersonLoginName = directPersonLoginName;
+	}
 	public String getDirectPersonDepartmentName() {
 		return directPersonDepartmentName;
 	}
@@ -144,9 +152,6 @@ public class Employee {
 	}
 	public void setPostId(String postId) {
 		this.postId = postId;
-	}
-	public void setPostName(String postName) {
-		this.postName = postName;
 	}
 	public String getEmployeeId() {
 		return employeeId;

@@ -22,11 +22,13 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.xiangshangban.organization.bean.Company;
 import com.xiangshangban.organization.bean.ConnectEmpPost;
 import com.xiangshangban.organization.bean.Employee;
 import com.xiangshangban.organization.bean.Post;
 import com.xiangshangban.organization.bean.ReturnData;
 import com.xiangshangban.organization.bean.Transferjob;
+import com.xiangshangban.organization.service.CompanyService;
 import com.xiangshangban.organization.service.ConnectEmpPostService;
 import com.xiangshangban.organization.service.EmployeeService;
 import com.xiangshangban.organization.service.EmployeeSpeedImportService;
@@ -54,7 +56,9 @@ public class EmployeeController {
 	private OSSFileService oSSFileService;
 	@Autowired
 	private EmployeeSpeedImportService employeeSpeedImportService;
-
+	@Autowired
+	private CompanyService companyService;
+	
 	/**
 	 * 激活
 	 * 
@@ -415,12 +419,13 @@ public class EmployeeController {
 	 * @return
 	 */
 	@RequestMapping(value = "/appSearch", method = RequestMethod.POST)
-	public Map<String, Object> appSearch(@RequestBody String jsonString, HttpServletRequest request) {
+	public Map<String, Object> appSearch(HttpServletRequest request) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			String companyId = request.getHeader("companyId");// 公司id
 			String userId = request.getHeader("accessUserId");// 操作人id
 			Employee emp = employeeService.selectByEmployeeFromApp(companyId, userId);
+			
 			String key = emp.getEmployeeImgUrl();
 			String companyNo = emp.getCompanyNo();
 			String directory = PropertiesUtils.ossProperty("portraitDirectory");
@@ -600,11 +605,14 @@ public class EmployeeController {
 		try {
 			String companyId = request.getHeader("companyId");// 公司id
 			String userId = request.getHeader("accessUserId");// 操作人id
-			Employee emp = employeeService.selectByEmployeeFromApp(companyId, userId);
-			String companyNo = emp.getCompanyNo();
-			String directory = PropertiesUtils.ossProperty("portraitDirectory");
-			String filePath = oSSFileService.getPathByKey(companyNo, directory, key);
-			returnData = employeeSpeedImportService.speedImport(userId, companyId, filePath);
+			//Employee emp = employeeService.selectByEmployee(userId,companyId);
+			Company company = companyService.selectByCompany(companyId);
+			String companyNo = company.getCompanyNo();
+			String directory = PropertiesUtils.ossProperty("employeeImportDirectory");
+			//String filePath = oSSFileService.getPathByKey(companyNo, directory, key);
+			//String filePath = "http://xiangshangban.oss-cn-hangzhou.aliyuncs.com/test/data/20171124shbf001/EmployeeExcel/employeeModelOne.xlsx";
+			
+			returnData = employeeSpeedImportService.speedImport(userId, companyId, key);
 			return returnData;
 		} catch (Exception e) {
 			e.printStackTrace();

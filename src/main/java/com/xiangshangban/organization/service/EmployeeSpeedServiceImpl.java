@@ -16,14 +16,17 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.aliyun.oss.OSSClient;
 import com.xiangshangban.organization.bean.Department;
 import com.xiangshangban.organization.bean.Employee;
 import com.xiangshangban.organization.bean.ImportReturnData;
 import com.xiangshangban.organization.bean.Post;
 import com.xiangshangban.organization.bean.ReturnData;
 import com.xiangshangban.organization.exception.CustomException;
+import com.xiangshangban.organization.util.OSSFileUtil;
 import com.xiangshangban.organization.util.RegexUtil;
 import com.xiangshangban.organization.util.TimeUtil;
+import com.xiangshangban.organization.util.PropertiesUtils;
 
 @Service("employeeSpeedService")
 public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
@@ -35,21 +38,25 @@ public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 	private DepartmentService departmentService;
 	@Autowired
 	private PostService postService;
-
 	@Override
-	public ReturnData speedImport(String operateUserId, String companyId, String filePath) {
+	public ReturnData speedImport(String operateUserId, String companyId, String key) {
 		ReturnData returnData = new ReturnData();
 		List<ImportReturnData> importReturnDataList = new ArrayList<ImportReturnData>();
 		// Map<String, String> result = new HashMap<String, String>();
 		// 判断是否为excel类型文件
-		if (!filePath.endsWith(".xls") && !filePath.endsWith(".xlsx")) {
+		if (!key.endsWith(".xls") && !key.endsWith(".xlsx")) {
 			System.out.println("文件不是excel类型");
 		}
 		FileInputStream fis = null;
 		Workbook wookbook = null;
 		try {
+			String accessId = PropertiesUtils.ossProperty("accessKey");
+			String accessKey = PropertiesUtils.ossProperty("securityKey");
+			String OSS_ENDPOINT = PropertiesUtils.ossProperty("OSS_ENDPOINT");
+			String OSS_BUCKET = PropertiesUtils.ossProperty("OSS_BUCKET");
+			OSSClient client = new OSSClient(OSS_ENDPOINT,accessId,accessKey);
 			// 获取一个绝对地址的流
-			fis = new FileInputStream(filePath);
+			fis = (FileInputStream)client.getObject(OSS_BUCKET, key).getObjectContent();
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.info(e);
@@ -83,6 +90,11 @@ public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 			if (rowHead.getPhysicalNumberOfCells() != 17) {
 				returnData.setMessage("上传的Excel模板格式不正确");
 				returnData.setReturnCode("4116");
+				try {
+					fis.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 				return returnData;
 			}
 			// 获得数据的总行数
@@ -98,7 +110,7 @@ public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 				for (int k = 0; k < lastRowNum; k++) {
 					Cell cell = row.getCell(k);
 					String value = cell.getStringCellValue();
-					if (k == 2 || k == 3 || k == 4 || k == 6 || k == 7 || k == 9 || k == 10 || k == 11 || k == 12) {
+					if (k == 1 || k == 2 || k == 3 || k == 5 || k == 6 || k == 9 || k == 10 || k == 11 || k == 12) {
 						if (StringUtils.isEmpty(value)) {
 							String importMessage = "第" + i + "行,第" + k + "列,必须填写!";
 							ImportReturnData importReturnData = new ImportReturnData();
@@ -115,14 +127,12 @@ public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 						} else {
 							paramList.add(value);
 						}
-					} else {
-						paramList.add(null);
 					}
 				}
 				Employee newEmp = new Employee(paramList.get(0), paramList.get(1), paramList.get(2), paramList.get(3),
 						paramList.get(4), paramList.get(5), paramList.get(6), paramList.get(7), paramList.get(8),
-						paramList.get(9), paramList.get(10), paramList.get(11), postList, paramList.get(14),
-						paramList.get(15), paramList.get(16));
+						paramList.get(9), paramList.get(10), paramList.get(11), paramList.get(12), postList,
+						paramList.get(15), paramList.get(16),paramList.get(17));
 				newEmp.setOperateUserId(operateUserId);
 				if ("女".equals(newEmp.getEmployeeSex())) {
 					newEmp.setEmployeeSex("1");
@@ -187,17 +197,36 @@ public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 					continue;
 				}
 				// 查询直接汇报人是否存在
-				/*String directPersonDepartmentName = newEmp.getDirectPersonDepartmentName();
-				if(StringUtils.isNotEmpty(directPersonDepartmentName)){
-					Employee directPerson = employeeService.selectEmployeeByLoginNameAndCompanyId(loginName, companyId);
+				String directPersonName = newEmp.getDirectPersonName();//汇报人姓名
+				String directPersonLoginName = newEmp.getDirectPersonLoginName();//汇报人登录名
+				//汇报人姓名和登录名是否填写
+				if(StringUtils.isNotEmpty(directPersonName) && StringUtils.isNotEmpty(directPersonLoginName)){
+					//已填写,下一步
+					Employee directPerson = employeeService.selectEmployeeByLoginNameAndCompanyId(directPersonLoginName, companyId);
+					//汇报人是否存在
 					if(directPerson==null){
-						String importMessage = "第" + i + "行,直接汇报人!";
+						//不存在
+						String importMessage = "第" + i + "行,直接汇报人的登录名不存在!";
 						ImportReturnData importReturnData = new ImportReturnData();
 						importReturnData.setImportMessage(importMessage);
 						importReturnDataList.add(importReturnData);
 						continue;
+					}else{
+						//存在,判断填写的登录人姓名和登录名是否正确
+						if(directPerson.getEmployeeName().equals(directPersonName)){
+							//正确
+							newEmp.setDirectPersonId(directPerson.getEmployeeId());//设置登录人id
+						}else{
+							//不正确
+							String importMessage = "第" + i + "行,直接汇报人姓名和登录名不匹配!";
+							ImportReturnData importReturnData = new ImportReturnData();
+							importReturnData.setImportMessage(importMessage);
+							importReturnDataList.add(importReturnData);
+							continue;
+						}
+						
 					}
-				}*/
+				}
 				// 查询添加信息中的部门是否存在
 				boolean departmentFlag = true;
 				List<Department> departmentList = departmentService.findByAllDepartment(companyId);
@@ -237,7 +266,7 @@ public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 				// 主岗位判断
 				for (Post post : postListFromDepartment) {
 					if (newEmp.getPostName().equals(post.getPostName())) {
-						newEmp.setPostId(post.getPostId());
+						newEmp.setPostId(post.getPostId());//设置主岗位id
 						masterPostFlag = false;
 					}
 				}
@@ -253,13 +282,13 @@ public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 				for (Post post : postListFromDepartment) {
 					if (vicePostList.get(0) != null) {
 						if (vicePostList.get(0).getPostName().equals(post.getPostName())) {
-							vicePostList.get(0).setPostId(post.getPostId());
+							vicePostList.get(0).setPostId(post.getPostId());//设置副岗位1的id
 							vicePostOneFlag = false;
 						}
 					}
 					if (vicePostList.get(1) != null) {
 						if (vicePostList.get(1).getPostName().equals(post.getPostName())) {
-							vicePostList.get(1).setPostId(post.getPostId());
+							vicePostList.get(1).setPostId(post.getPostId());//设置副岗位2的id
 							vicePostTowFlag = false;
 						}
 					}
@@ -327,10 +356,20 @@ public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 			returnData.setData(importReturnDataList);
 			returnData.setMessage("部分导入失败,请检查表格数据是否填写正确");
 			returnData.setReturnCode("4117");
+			try {
+				fis.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			return returnData;
 		}
 		returnData.setMessage("成功");
 		returnData.setReturnCode("3000");
+		try {
+			fis.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		return returnData;
 	}
 }

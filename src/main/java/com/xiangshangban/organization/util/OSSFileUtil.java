@@ -250,7 +250,9 @@ public class OSSFileUtil {
             throws OSSException, ClientException {
         client.getObject(new GetObjectRequest(OSS_BUCKET, key),new File(filename));
     }
-    
+    public static InputStream  getImputStream(String key){
+    	return client.getObject(OSS_BUCKET, key).getObjectContent();
+    }
     /**
      * 获取文件路径
      * @param customerId
@@ -272,7 +274,7 @@ public class OSSFileUtil {
 			} catch (IOException e) {
 				LOG.info("获取OSS环境属性错误");
 			}
-	    	return "http://" +OSS_BUCKET_PRE +"." + OSS_ENDPOINT_PRE + "/"+filePath + "/" + key;
+	    	return "http://" +OSS_BUCKET +"." + OSS_ENDPOINT + "/"+filePath + "/" + key;
 		}	
 		return "";	
     }

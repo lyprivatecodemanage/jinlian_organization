@@ -317,8 +317,7 @@
 		<result column="direct_person_department_name" property="directPersonDepartmentName" />
 	</resultMap>
 	<!-- 李业:查询单条人员信息 -->
-	<select id="selectByEmployee" parameterType="java.lang.String"
-		resultMap="EmployeeResultMap">
+	<select id="selectByEmployee" parameterType="java.lang.String" resultMap="EmployeeResultMap">
 		select e.employee_id,
 		e.employee_name,e.employee_sex,u.phone AS login_name,e.employee_phone,
 		e.employee_twophone,p.post_id,p.post_name,d.department_id,d.department_name,e.employee_no,
@@ -354,7 +353,7 @@
 		<result column="employee_sex" property="employeeSex" />
 		<result column="company_no" property="companyNo" />
 		<result column="company_name" property="companyName" />
-		<result column="post_name" property="PostName" />
+		<result column="post_name" property="postName" />
 		<result column="department_id" property="departmentId" />
 		<result column="department_name" property="departmentName" />
 		<result column="employee_no" property="employeeNo" />
@@ -474,7 +473,7 @@
 
 	<!-- 李业:(功能)导入完善的员工信息 -->
 		<!-- 根据传入的员工信息查询是否有重复的员工数据 -->
-		<select id="selectByImportEmployee" parameterType="com.xiangshangban.organization.bean.Employee" resultMap="">
+	<!-- 	<select id="selectByImportEmployee" parameterType="com.xiangshangban.organization.bean.Employee" resultMap="">
 			select
 			postId=(case)
 			from user_company uc left join
@@ -483,7 +482,7 @@
 			connect_emp_post_ cep on cep.department_id = d.department_id
 			where uc.user_id = #{userId} and uc.company_id = #{companyId}
 		
-		</select>
+		</select> -->
 
 
 
