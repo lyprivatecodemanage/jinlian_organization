@@ -191,7 +191,8 @@
     set        
       department_name = #{departmentName,jdbcType=VARCHAR},
       department_describe = #{departmentDescribe,jdbcType=VARCHAR},
-      employee_id = #{employeeId,jdbcType=VARCHAR}             
+      employee_id = #{employeeId,jdbcType=VARCHAR},
+      department_parent_id=#{departmentParentId}             
     where 
     department_id = #{departmentId,jdbcType=VARCHAR}
   </update>
