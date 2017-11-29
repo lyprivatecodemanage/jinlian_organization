@@ -219,7 +219,7 @@ public class EmployeeController {
 		String postIdList = obj.getString("postList");
 		JSONArray postIdList1 = JSON.parseArray(postIdList);
 		for (int i = 0; i < postIdList1.size(); i++) {
-			JSONObject jobj = obj.parseObject(postIdList1.getString(i));
+			JSONObject jobj = JSONObject.parseObject(postIdList1.getString(i));
 			String postId = jobj.getString("postId");
 			String postGrades = jobj.getString("postGrades");
 			ConnectEmpPost empPost = new ConnectEmpPost();
@@ -271,7 +271,7 @@ public class EmployeeController {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			String companyId = request.getHeader("companyId");// 公司id
-			String userId = request.getHeader("accessUserId");// 操作人id
+			//String userId = request.getHeader("accessUserId");// 操作人id
 			JSONObject obj = JSON.parseObject(jsonString);
 			String employeeName = obj.getString("employeeName");// 员工姓名
 			String employeeSex = obj.getString("employeeSex");// 员工性别
@@ -371,7 +371,7 @@ public class EmployeeController {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			String companyId = request.getHeader("companyId");// 公司id
-			String userId = request.getHeader("accessUserId");// 操作人id
+			//String userId = request.getHeader("accessUserId");// 操作人id
 			JSONObject jsonObj = JSON.parseObject(jsonString);
 			String employeeId = jsonObj.getString("employeeId");
 			Employee emp = employeeService.selectByEmployee(employeeId, companyId);
@@ -527,7 +527,6 @@ public class EmployeeController {
 	 * @param request
 	 * @return
 	 */
-	@SuppressWarnings("unchecked")
 	@RequestMapping(value = "/updateEmployeeInformation", method = RequestMethod.POST)
 	public Map<String, Object> updateEmployeeInformation(@RequestBody String jsonString, HttpServletRequest request) {
 		Map<String, Object> result = new HashMap<String, Object>();
@@ -557,7 +556,7 @@ public class EmployeeController {
 				}
 			}
 			//新完善信息
-			int num = employeeService.updateEmployeeInformation(emp);
+			employeeService.updateEmployeeInformation(emp);
 			//查询员工岗位部门关联表
 
 			ConnectEmpPost connect =  connectEmpPostService.selectEmployeePostInformation(emp.getEmployeeId(), companyId);
