@@ -598,6 +598,7 @@ public class EmployeeController {
 				connectEmpPost.setDepartmentId(emp.getDepartmentId());
 				connectEmpPost.setPostGrades("0");
 				connectEmpPost.setIsDelete("0");
+				connectEmpPost.setCompanyId(companyId);
 				String vPostId = post.getPostId();
 				if (StringUtils.isNotEmpty(vPostId)) {
 					connectEmpPost.setPostId(vPostId);
