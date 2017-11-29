@@ -349,12 +349,16 @@ public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 					if (StringUtils.isNotEmpty(vicePostList.get(0).getPostName())) {
 						if (vicePostList.get(0).getPostName().equals(post.getPostName())) {
 							vicePostList.get(0).setPostId(post.getPostId());//设置副岗位1的id
+							vicePostList.get(0).setDepartmentId(newEmp.getDepartmentId());
+							vicePostList.get(0).setPostGrades("0");
 							vicePostOneFlag = false;
 						}
 					}
 					if (StringUtils.isNotEmpty(vicePostList.get(1).getPostName())) {
 						if (vicePostList.get(1).getPostName().equals(post.getPostName())) {
 							vicePostList.get(1).setPostId(post.getPostId());//设置副岗位2的id
+							vicePostList.get(1).setDepartmentId(newEmp.getDepartmentId());
+							vicePostList.get(1).setPostGrades("0");
 							vicePostTowFlag = false;
 						}
 					}
@@ -405,11 +409,18 @@ public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 						}
 					}
 				}
-				
+				Post masterPost = new Post();
+				masterPost.setPostId(newEmp.getPostId());
+				masterPost.setPostName(newEmp.getPostName());
+				masterPost.setDepartmentId(newEmp.getDepartmentId());
+				masterPost.setPostGrades("1");
+				newEmp.getPostList().add(masterPost);
 				ReturnData serviceReturnData = employeeService.insertEmployee(newEmp);
-				ImportReturnData importReturnData = new ImportReturnData();
-				importReturnData.setImportMessage(serviceReturnData.getMessage());
-				importReturnDataList.add(importReturnData);
+				if(!"3000".equals(serviceReturnData.getReturnCode())){
+					ImportReturnData importReturnData = new ImportReturnData();
+					importReturnData.setImportMessage(serviceReturnData.getMessage());
+					importReturnDataList.add(importReturnData);
+				}
 			}
 		
 		boolean flag = false;
