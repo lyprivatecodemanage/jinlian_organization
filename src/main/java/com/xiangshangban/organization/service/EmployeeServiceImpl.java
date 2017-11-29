@@ -128,6 +128,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 			//添加绑定关系
 			UserCompanyDefault userCompany = userCompanyDefaultDao.selectByUserIdAndCompanyId(user.getUserid(), employee.getCompanyId());
 			if(userCompany==null || StringUtils.isEmpty(userCompany.getCompanyId())){//不存在绑定关系
+				userCompany = new UserCompanyDefault();
 				//查询已激活并且为默认的公司
 				UserCompanyDefault companyDefalt = userCompanyDefaultDao.getActiveDefault(user.getUserid());
 				if(companyDefalt==null || StringUtils.isEmpty(companyDefalt.getCompanyId())){
@@ -136,7 +137,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 				}else{
 					userCompany.setCurrentOption("2");
 				}
-				userCompany = new UserCompanyDefault();
 				userCompany.setCompanyId(employee.getCompanyId());
 				
 				userCompany.setUserId(user.getUserid());
