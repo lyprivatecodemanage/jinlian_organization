@@ -1,6 +1,8 @@
 package com.xiangshangban.organization.controller;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -11,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,6 +40,7 @@ import com.xiangshangban.organization.service.OSSFileService;
 import com.xiangshangban.organization.service.PostService;
 import com.xiangshangban.organization.service.TransferjobService;
 import com.xiangshangban.organization.util.FormatUtil;
+import com.xiangshangban.organization.util.HttpClientUtil;
 import com.xiangshangban.organization.util.HttpRequestFactory;
 import com.xiangshangban.organization.util.PropertiesUtils;
 import com.xiangshangban.organization.util.RegexUtil;
@@ -649,7 +653,29 @@ public class EmployeeController {
 			return returnData;
 		}
 	}
-
+	@RequestMapping(value = "exportExcel", produces="application/json;charset=UTF-8")
+	public void exportExcel(HttpServletRequest request, HttpServletResponse response){
+		try {
+			response.setContentType("octets/stream"); 
+			String agent = request.getHeader("USER-AGENT");
+			String excelName = "employee.xls";
+			if(agent!=null && agent.indexOf("MSIE")==-1&&agent.indexOf("rv:11")==-1 && 
+					agent.indexOf("Edge")==-1 && agent.indexOf("Apache-HttpClient")==-1){//非IE
+				excelName = new String(excelName.getBytes("UTF-8"), "ISO-8859-1");
+				response.addHeader("Content-Disposition", "attachment;filename="+excelName);
+			}else{
+				response.addHeader("Content-Disposition", "attachment;filename="+java.net.URLEncoder.encode(excelName,"UTF-8"));  	
+			}
+			response.addHeader("excelName", java.net.URLEncoder.encode(excelName,"UTF-8"));
+			OutputStream out = response.getOutputStream();
+			// 获取请求头信息
+			String companyId = request.getHeader("companyId");
+			employeeService.export(excelName, out, companyId);  
+			out.flush();  
+		} catch (IOException e) {
+			System.out.println("导出文件输出流出错了！"+e);
+		}
+	}
 	/**
 	 * 查询一个岗位下的所有员工
 	 */

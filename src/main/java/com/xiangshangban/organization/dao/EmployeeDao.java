@@ -111,5 +111,11 @@ public interface EmployeeDao {
 	 * @return
 	 */
 	int updateEmployeeImgUrl(@Param("employeeId")String employeeId,@Param("companyId")String companyId,@Param("employeeImgUrl")String employeeImgUrl);
+	/**
+	 * 查询导出人员
+	 * @param companyId 
+	 * @return
+	 */
+	List<Employee> findExport(@Param("companyId")String companyId);
 
 }

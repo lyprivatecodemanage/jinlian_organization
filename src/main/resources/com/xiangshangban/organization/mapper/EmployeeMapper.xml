@@ -515,7 +515,21 @@
 		DESC
 		limit #{pageRecordNum}::integer offset #{fromPageNum}::integer
 	</select>
-
+	<select id="findExport" resultMap="Employee">
+		select
+		e.employee_id,e.employee_name,e.employee_sex,u.phone,e.employee_phone,
+		p.post_id,p.post_name,e.department_id ,d.department_name,
+		e.entry_time,e.employee_status,uc.is_active
+		from organization.employee_ e 
+		left join user_company uc on e.employee_id = uc.user_id and e.company_id = uc.company_id 
+		left join department_ d on e.department_id = d.department_id 
+		left JOIN connect_emp_post_ cp on cp.employee_id=e.employee_id AND cp.post_grades='1'
+		left JOIN post_ p on cp.post_id = p.post_id 
+		left join u_users u on u.userid = e.employee_id  
+		where
+		e.company_id = #{companyId} AND cp.company_id = #{companyId} and uc.info_status = '1'
+		ORDER BY d.department_name, e.employee_name
+	</select>
 	<!-- 根据姓名、联系方式、性别、所属部门、岗位、入职时间、在职状态查询员工信息 -->
 	<select id="findByMoreEmployee" parameterType="java.util.Map"
 		resultMap="Employee">

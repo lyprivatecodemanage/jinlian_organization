@@ -1,5 +1,6 @@
 package com.xiangshangban.organization.bean;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.xiangshangban.organization.exportexcel.ExcelResources;
@@ -23,7 +24,7 @@ public class Employee {
     private String employeeImgUrl;//头像 
     private String workAddress;//工作地
     //---连表查询的---
-    private List<Post> postList;//父岗位   
+    private List<Post> postList = new ArrayList<Post>();//父岗位   
     private String companyName;//
     private String postId;//主岗位ID
     private String departmentName;//部门名称

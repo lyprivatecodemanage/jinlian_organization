@@ -1,5 +1,6 @@
 package com.xiangshangban.organization.service;
 
+import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
 
@@ -141,4 +142,11 @@ public interface EmployeeService {
 	 * @return
 	 */
 	int updateEmployeeImgUrl(String employeeId, String companyId, String key);
+	/**
+	 * 导出数据
+	 * @param excelName
+	 * @param out
+	 * @param companyId
+	 */
+	void export(String excelName, OutputStream out, String companyId);
 }
