@@ -518,6 +518,7 @@
 		select <include refid="EmployeeColumn"/>
 		from employee_ e
 		where company_id = #{companyId}
+	</select>
 	<select id="findExport" resultMap="Employee">
 		select
 		e.employee_id,e.employee_name,e.employee_sex,u.phone,e.employee_phone,
