@@ -518,12 +518,12 @@
 	<select id="findExport" resultMap="Employee">
 		select
 		e.employee_id,e.employee_name,e.employee_sex,u.phone,e.employee_phone,
-		p.post_id,p.post_name,e.department_id ,d.department_name,
+		p.post_id,p.post_name,cp.post_grades,e.department_id ,d.department_name,
 		e.entry_time,e.employee_status,uc.is_active
 		from organization.employee_ e 
 		left join user_company uc on e.employee_id = uc.user_id and e.company_id = uc.company_id 
 		left join department_ d on e.department_id = d.department_id 
-		left JOIN connect_emp_post_ cp on cp.employee_id=e.employee_id AND cp.post_grades='1'
+		left JOIN connect_emp_post_ cp on cp.employee_id=e.employee_id 
 		left JOIN post_ p on cp.post_id = p.post_id 
 		left join u_users u on u.userid = e.employee_id  
 		where
