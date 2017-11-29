@@ -2,12 +2,21 @@ package com.xiangshangban.organization.service;
 
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
+import org.apache.poi.hssf.usermodel.HSSFFont;
+import org.apache.poi.hssf.usermodel.HSSFRichTextString;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.hssf.util.HSSFColor;
 import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -128,6 +137,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 			//添加绑定关系
 			UserCompanyDefault userCompany = userCompanyDefaultDao.selectByUserIdAndCompanyId(user.getUserid(), employee.getCompanyId());
 			if(userCompany==null || StringUtils.isEmpty(userCompany.getCompanyId())){//不存在绑定关系
+				userCompany = new UserCompanyDefault();
 				//查询已激活并且为默认的公司
 				UserCompanyDefault companyDefalt = userCompanyDefaultDao.getActiveDefault(user.getUserid());
 				if(companyDefalt==null || StringUtils.isEmpty(companyDefalt.getCompanyId())){
@@ -136,7 +146,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 				}else{
 					userCompany.setCurrentOption("2");
 				}
-				userCompany = new UserCompanyDefault();
 				userCompany.setCompanyId(employee.getCompanyId());
 				
 				userCompany.setUserId(user.getUserid());
@@ -452,6 +461,114 @@ public class EmployeeServiceImpl implements EmployeeService {
 	public int updateEmployeeImgUrl(String employeeId, String companyId, String ossFileString) {
 		
 		return employeeDao.updateEmployeeImgUrl(employeeId, companyId, ossFileString);
+	}
+
+	@Override
+	public void export(String excelName, OutputStream out, String companyId) {
+		List<Employee> empList = employeeDao.findExport(companyId);
+		String[] headers = new String[]{"工号","姓名","性别","所在地","婚姻状况","登录名","所属部门","汇报人","汇报人登录名",
+				"在职状态","入职时间","转正时间","主岗位","副岗位1","副岗位2","联系方式1","联系方式2","工龄"};  
+		 // 第一步，创建一个webbook，对应一个Excel文件  
+		HSSFWorkbook workbook = new HSSFWorkbook();  
+        //生成一个表格  
+        HSSFSheet sheet = workbook.createSheet(excelName);  
+        //设置表格默认列宽度为15个字符  
+        sheet.setDefaultColumnWidth(20);  
+        //生成一个样式，用来设置标题样式  
+        HSSFCellStyle style = workbook.createCellStyle();  
+        //设置这些样式  
+        style.setFillForegroundColor(HSSFColor.SKY_BLUE.index);  
+        style.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);  
+        style.setBorderBottom(HSSFCellStyle.BORDER_THIN);  
+        style.setBorderLeft(HSSFCellStyle.BORDER_THIN);  
+        style.setBorderRight(HSSFCellStyle.BORDER_THIN);  
+        style.setBorderTop(HSSFCellStyle.BORDER_THIN);  
+        style.setAlignment(HSSFCellStyle.ALIGN_CENTER);  
+        //生成一个字体  
+        HSSFFont font = workbook.createFont();  
+        font.setColor(HSSFColor.VIOLET.index);  
+        font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);  
+        //把字体应用到当前的样式  
+        style.setFont(font);  
+        // 生成并设置另一个样式,用于设置内容样式  
+        HSSFCellStyle style2 = workbook.createCellStyle();  
+        style2.setFillForegroundColor(HSSFColor.LIGHT_YELLOW.index);  
+        style2.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);  
+        style2.setBorderBottom(HSSFCellStyle.BORDER_THIN);  
+        style2.setBorderLeft(HSSFCellStyle.BORDER_THIN);  
+        style2.setBorderRight(HSSFCellStyle.BORDER_THIN);  
+        style2.setBorderTop(HSSFCellStyle.BORDER_THIN);  
+        style2.setAlignment(HSSFCellStyle.ALIGN_CENTER);  
+        style2.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);  
+        // 生成另一个字体  
+        HSSFFont font2 = workbook.createFont();  
+        font2.setBoldweight(HSSFFont.BOLDWEIGHT_NORMAL);  
+        // 把字体应用到当前的样式  
+        style2.setFont(font2);  
+        //产生表格标题行  
+        HSSFRow row = sheet.createRow(0);  
+        for(int i = 0; i<headers.length;i++){  
+            HSSFCell cell = row.createCell(i);  
+            cell.setCellStyle(style);  
+            HSSFRichTextString text = new HSSFRichTextString(headers[i]);  
+            cell.setCellValue(text);  
+        }  
+        for (int i=0;i<empList.size();i++) {  
+           Employee emp = empList.get(i);  
+            row = sheet.createRow(i+1);  
+            int j = 0;  
+            row.createCell(j++).setCellValue(emp.getEmployeeNo());//工号
+            row.createCell(j++).setCellValue(emp.getEmployeeName());//姓名
+            if(emp.getEmployeeSex().equals("0")){
+            	row.createCell(j++).setCellValue("男");
+            }else{
+            	row.createCell(j++).setCellValue("女");
+            }
+            row.createCell(j++).setCellValue(emp.getWorkAddress());//工作地
+            //0：未婚，1：已婚 ，2：离异
+            if("2".equals(emp.getMarriageStatus())){
+            	row.createCell(j++).setCellValue("离异");
+            }else if("1".equals(emp.getMarriageStatus())){
+            	row.createCell(j++).setCellValue("已婚");
+            }else{
+            	row.createCell(j++).setCellValue("未婚");
+            }
+            row.createCell(j++).setCellValue(emp.getLoginName());//登录名
+            row.createCell(j++).setCellValue(emp.getDepartmentName());//所在部门
+            row.createCell(j++).setCellValue(emp.getDirectPersonName());//汇报人
+            row.createCell(j++).setCellValue(emp.getDirectPersonLoginName());//汇报人登录名
+            if("0".equals(emp.getEmployeeStatus())){//在职状态
+            	row.createCell(j++).setCellValue("在职");
+            }else{
+            	row.createCell(j++).setCellValue("离职");
+            }
+            row.createCell(j++).setCellValue(emp.getEntryTime());//入职时间
+            row.createCell(j++).setCellValue(emp.getProbationaryExpired());//转正时间
+            for(Post post:emp.getPostList()){
+            	if("1".equals(post.getPostGrades())){
+            		row.createCell(j++).setCellValue(post.getPostName());//主岗位
+            	}
+            }
+            for(Post post:emp.getPostList()){
+            	if("0".equals(post.getPostGrades())){
+            		row.createCell(j++).setCellValue(post.getPostName());//副岗位
+            	}
+            }
+            if(emp.getPostList().size()==1){
+            	j=j+2;
+            }else if(emp.getPostList().size()==2){
+            	j=j+1;
+            }
+            row.createCell(j++).setCellValue(emp.getEmployeePhone());//联系方式1
+            row.createCell(j++).setCellValue(emp.getEmployeeTwophone());//联系方式2
+            row.createCell(j++).setCellValue(emp.getSeniority());//工龄
+        }  
+        try {  
+            workbook.write(out);  
+        } catch (IOException e) {  
+            e.printStackTrace();  
+        }
+		
 	}
 
 	

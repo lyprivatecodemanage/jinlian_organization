@@ -148,7 +148,7 @@
 		left JOIN post_ p on cp.post_id = p.post_id 
 		left join u_users u on u.userid = e.employee_id  
 		where
-		e.company_id = #{companyId} and uc.info_status = '1'
+		e.company_id = #{companyId} AND cp.company_id = #{companyId} and uc.info_status = '1'
 		<if test="employeeName != null and employeeName != '' ">
 			and e.employee_name like #{employeeName}
 		</if>
@@ -328,22 +328,12 @@
 		(select department_name as direct_person_department_name from employee_ where
 		employee_id = e.direct_person_id ),
 		e.entry_time,e.probationary_expired,e.work_address,e.marriage_status,e.seniority,e.company_id
-		from employee_ as e
-		left join
-		connect_emp_post_ as cep on e.employee_id
-		= cep.employee_id and cep.post_grades = '1'
-		and cep.is_delete = '0'
-		left join
-		post_ p on cep.post_id = p.post_id
-		left join
-		department_ d on
-		cep.department_id = d.department_id
-		left join 
-		u_users u on e.employee_id = u.userid 
-		where
-		e.company_id =
-		#{companyId} and
-		e.employee_id = #{employeeId}
+		from employee_ as e 
+		left join connect_emp_post_ as cep on e.employee_id = cep.employee_id and cep.post_grades = '1' and cep.is_delete = '0'
+		left join post_ p on cep.post_id = p.post_id
+		left join department_ d on cep.department_id = d.department_id
+		left join u_users u on e.employee_id = u.userid 
+		where e.company_id = #{companyId} AND e.employee_id = #{employeeId} AND d.company_id=#{companyId}
 	</select>
 	<resultMap type="com.xiangshangban.organization.bean.Employee"
 		id="EmployeeAppResultMap">
@@ -407,7 +397,7 @@
 		left JOIN post_ p on cp.post_id = p.post_id 
 		left join u_users u on u.userid = e.employee_id  
 		where
-		e.company_id = #{companyId} and uc.info_status =
+		e.company_id = #{companyId} AND cp.company_id = #{companyId} and uc.info_status =
 		'1'
 		<if test="employeeName != null and employeeName != '' ">
 			and employee_name like #{employeeName}
@@ -515,6 +505,7 @@
 		DESC
 		limit #{pageRecordNum}::integer offset #{fromPageNum}::integer
 	</select>
+
 	<sql id="EmployeeColumn">
 		employee_id,employee_name,employee_sex,employee_birthday,employee_no,direct_person_id,employee_tell,employee_phone,
 		employee_email,employee_position,employee_img_url,entry_time,contract_period,employee_status,is_manager,
@@ -527,6 +518,21 @@
 		select <include refid="EmployeeColumn"/>
 		from employee_ e
 		where company_id = #{companyId}
+	<select id="findExport" resultMap="Employee">
+		select
+		e.employee_id,e.employee_name,e.employee_sex,u.phone,e.employee_phone,
+		p.post_id,p.post_name,cp.post_grades,e.department_id ,d.department_name,
+		e.entry_time,e.employee_status,uc.is_active
+		from organization.employee_ e 
+		left join user_company uc on e.employee_id = uc.user_id and e.company_id = uc.company_id 
+		left join department_ d on e.department_id = d.department_id 
+		left JOIN connect_emp_post_ cp on cp.employee_id=e.employee_id 
+		left JOIN post_ p on cp.post_id = p.post_id 
+		left join u_users u on u.userid = e.employee_id  
+		where
+		e.company_id = #{companyId} AND cp.company_id = #{companyId} and uc.info_status = '1'
+		ORDER BY d.department_name, e.employee_name
+
 	</select>
 	<!-- 根据姓名、联系方式、性别、所属部门、岗位、入职时间、在职状态查询员工信息 -->
 	<select id="findByMoreEmployee" parameterType="java.util.Map"
