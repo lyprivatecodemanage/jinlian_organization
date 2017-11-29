@@ -44,20 +44,8 @@ public class DepartmentServiceImpl implements DepartmentService {
 	}
 
 	@Override
-	public String updateByDepartment(Department department) {
-		String i ="0";		
-		try {
-			Department DepartmentNumbe = departmentDao.findByDepartmentNumber(department.getDepartmentNumbe());
-			if(DepartmentNumbe != null ){
-				i="2";
-				return i;//部门编号已存在				
-			}	
-			departmentDao.updateByDepartment(department);
-			i="1";
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return i;
+	public int updateByDepartment(Department department) {
+		return departmentDao.updateByDepartment(department);
 	}
 
 

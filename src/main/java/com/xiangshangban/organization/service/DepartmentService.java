@@ -15,7 +15,7 @@ public interface DepartmentService {
 	  
 		Department selectByDepartment(String departmentId ,String companyId);
 	  
-	    String updateByDepartment(Department department);	   	  
+	    int updateByDepartment(Department department);	   	  
 	    
 	    List<DepartmentTree> getDepartmentTree(String departmentParentId,String companyId,DepartmentTree departmentTree);
 	    
