@@ -515,7 +515,19 @@
 		DESC
 		limit #{pageRecordNum}::integer offset #{fromPageNum}::integer
 	</select>
-
+	<sql id="EmployeeColumn">
+		employee_id,employee_name,employee_sex,employee_birthday,employee_no,direct_person_id,employee_tell,employee_phone,
+		employee_email,employee_position,employee_img_url,entry_time,contract_period,employee_status,is_manager,
+		contract_expired,probationary_expired,probationary_period,emergency_contact_phone,emergency_contact,phone_public,
+		shift_time,employee_card_number,employee_twophone,department_id,login_name,company_id,work_address,marriage_status,
+		seniority
+	</sql>
+	<select id="findAllEmployeeByCompanyId" parameterType="java.lang.String"
+		resultMap="Employee">
+		select <include refid="EmployeeColumn"/>
+		from employee_ e
+		where company_id = #{companyId}
+	</select>
 	<!-- 根据姓名、联系方式、性别、所属部门、岗位、入职时间、在职状态查询员工信息 -->
 	<select id="findByMoreEmployee" parameterType="java.util.Map"
 		resultMap="Employee">
