@@ -23,6 +23,8 @@ public interface EmployeeDao {
 	int updateByEmployeeapprove(Employee employee);
 
 	List<Employee> findByAllEmployee(Map<String, String> map);
+	
+	List<Employee> findAllEmployeeByCompanyId(String companyId);
 
 	List<Employee> findByLiZhiemployee(String companyId);
 

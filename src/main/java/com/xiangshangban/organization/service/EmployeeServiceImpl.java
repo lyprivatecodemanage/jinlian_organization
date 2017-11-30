@@ -270,6 +270,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 	public List<Employee> findByAllEmployee(Map<String,String> map) {
 		return employeeDao.findByAllEmployee(map);
 	}
+	@Override
+	public List<Employee> findByAllEmployee(String companyId) {
+		return employeeDao.findAllEmployeeByCompanyId(companyId);
+	}
 
 	@Override
 	public List<Employee> findByMoreEmployee(Map<String, String> map) {

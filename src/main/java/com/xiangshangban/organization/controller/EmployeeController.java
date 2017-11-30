@@ -147,8 +147,6 @@ public class EmployeeController {
 			return returnData;
 		}
 		//判断三个岗位是否重复
-		
-		
 		returnData = employeeService.insertEmployee(employeenew);
 		return returnData;
 	}
@@ -404,7 +402,6 @@ public class EmployeeController {
 					emp.setMarriageStatus("离异");
 				}
 			}
-			//System.out.println(emp.getPostId()+"\t"+emp.getDepartmentId());
 			result.put("result", emp);
 			result.put("message", "成功");
 			result.put("returnCode", "3000");
@@ -424,12 +421,12 @@ public class EmployeeController {
 	 * @return
 	 */
 	@RequestMapping(value="/savePersonImageUrl",method=RequestMethod.POST)
-	public Map<String,Object>  savePersonImageUrl(@RequestParam("key")String key,HttpServletRequest request){
+	public Map<String,Object>  savePersonImageUrl(@RequestBody String key,HttpServletRequest request){
 		Map<String,Object> result = new HashMap<String,Object>();
 		try{
 			String companyId = request.getHeader("companyId");//公司id
 			String userId = request.getHeader("accessUserId");//操作人id
-			employeeService.updateEmployeeImgUrl(userId,companyId,key);
+			employeeService.updateEmployeeImgUrl(userId,companyId,JSON.parseObject(key).getString("key"));
 			result.put("message", "成功");
 			result.put("returnCode", "3000");
 			return result;
@@ -540,7 +537,26 @@ public class EmployeeController {
 			System.out.println(jsonString);
 			String companyId = request.getHeader("companyId");// 公司id
 			String userId = request.getHeader("accessUserId");// 操作人id
-			//JSONObject obj = JSON.parseObject(jsonString);
+			emp.setCompanyId(companyId);
+			//查詢編輯的人員信息是否存在
+			Employee oldEmp = employeeService.selectByEmployee(emp.getEmployeeId(), companyId);
+			if(oldEmp==null){
+				result.put("message", "编辑的人员id不存在");
+				result.put("returnCode", "");
+				return result;
+			}
+			if(StringUtils.isNotEmpty(emp.getEmployeeNo()) && !emp.getEmployeeNo().equals(oldEmp.getEmployeeNo())){
+				List<Employee> empList = employeeService.findByAllEmployee(companyId);
+				if(empList !=null && empList.size()>0){
+					for(Employee employee : empList){
+						if(employee.getEmployeeNo().equals(emp.getEmployeeNo())){
+							result.put("message", "工号已存在");
+							result.put("returnCode", "4101");
+							return result;
+						}
+					}
+				}
+			}
 			if (StringUtils.isEmpty(emp.getEmployeeName()) || StringUtils.isEmpty(emp.getEmployeeSex()) 
 					|| StringUtils.isEmpty(emp.getLoginName()) || StringUtils.isEmpty(emp.getDepartmentId()) 
 					|| StringUtils.isEmpty(emp.getEntryTime()) || StringUtils.isEmpty(emp.getProbationaryExpired()) 
@@ -549,20 +565,9 @@ public class EmployeeController {
 				result.put("returnCode", "3006");
 				return result;
 			}
-			emp.setCompanyId(companyId);
-			String employeeNo = emp.getEmployeeNo();
-			if (StringUtils.isNotEmpty(employeeNo)) {
-				Employee employeeNotemp = employeeService.findByemployeeNo(employeeNo, companyId);
-				if (employeeNotemp != null) {
-					result.put("message", "工号已存在");
-					result.put("returnCode", "4101");
-					return result;
-				}
-			}
 			//新完善信息
 			employeeService.updateEmployeeInformation(emp);
 			//查询员工岗位部门关联表
-
 			ConnectEmpPost connect =  connectEmpPostService.selectEmployeePostInformation(emp.getEmployeeId(), companyId);
 			if (connect != null && !emp.getPostId().equals(connect.getPostId())) {
 				connectEmpPostService.updateEmployeeWithPost(emp.getEmployeeId(), 
@@ -592,6 +597,33 @@ public class EmployeeController {
 			transferjobService.insertTransferjob(transferjob);
 			connectEmpPostService.deleteEmployeeWithPost(emp.getEmployeeId(), emp.getDepartmentId());
 			List<ConnectEmpPost> list = new ArrayList<ConnectEmpPost>();
+			List<Post> vicePostList = emp.getPostList();
+			if(StringUtils.isNotEmpty(vicePostList.get(0).getPostId())&&StringUtils.isNotEmpty(vicePostList.get(1).getPostId())){
+				if(vicePostList.get(0).getPostId().equals(vicePostList.get(1).getPostId())){
+					result.put("message","不能选择两个相同的副岗位");
+					result.put("returnCode","4119");
+					return result;
+				}
+				if(vicePostList.get(0).getPostId().equals(emp.getPostId()) || vicePostList.get(1).getPostId().equals(emp.getPostId())){
+					result.put("message","副岗位不能与主岗位相同");
+					result.put("returnCode","4120");
+					return result;
+				}
+			}
+			if (StringUtils.isNotEmpty(vicePostList.get(0).getPostId())) {
+				if(vicePostList.get(0).getPostId().equals(emp.getPostId())){
+					result.put("message","副岗位不能与主岗位相同");
+					result.put("returnCode","4120");
+					return result;
+				}
+			}
+			if (StringUtils.isNotEmpty(vicePostList.get(1).getPostId())) {
+				if(vicePostList.get(1).getPostId().equals(emp.getPostId())){
+					result.put("message","副岗位不能与主岗位相同");
+					result.put("returnCode","4120");
+					return result;
+				}
+			}
 			for (Post post: emp.getPostList()) {
 				ConnectEmpPost connectEmpPost = new ConnectEmpPost();
 				connectEmpPost.setEmployeeId(emp.getEmployeeId());

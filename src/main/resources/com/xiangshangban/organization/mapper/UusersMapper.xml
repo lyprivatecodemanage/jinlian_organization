@@ -88,9 +88,7 @@
 			<if test="phone != null">
 				phone,
 			</if>
-			<if test="createTime != null">
 				create_time,
-			</if>
 			<if test="lastLoginTime != null">
 				last_login_time,
 			</if>
@@ -129,9 +127,7 @@
 			<if test="phone != null">
 				#{phone},
 			</if>
-			<if test="createTime != null">
 				to_char(now(), 'yyyy-MM-dd hh24:mi:ss'),
-			</if>
 			<if test="lastLoginTime != null">
 				#{lastLoginTime},
 			</if>

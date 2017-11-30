@@ -22,6 +22,8 @@ public interface EmployeeService {
     String updateByEmployee(Employee employee);
     //查询在职员工信息
     List<Employee> findByAllEmployee(Map<String,String> map);
+    //查询在职员工信息
+    List<Employee> findByAllEmployee(String companyId);
     //查询离职员工信息
     List<Employee> findByLiZhiemployee(String companyId);   
     List<Employee> findByMoreEmployee(Map<String,String> map);
