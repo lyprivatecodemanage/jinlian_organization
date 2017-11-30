@@ -53,7 +53,7 @@ public class CheckPersonServiceImpl implements CheckPersonService {
 					usercompany = new UserCompanyDefault();
 					usercompany.setCompanyId(companyId);
 					usercompany.setUserId(userId);
-					usercompany.setCurrentOption("0");//是否默认打开
+					usercompany.setCurrentOption("2");//是否默认打开
 					usercompany.setIsActive("1");
 					userCompanyDefaultDao.insertSelective(usercompany);
 				}
