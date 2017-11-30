@@ -355,36 +355,16 @@
 		select
 		userid,employee_img_url,username,employee_sex,company_no,company_name,e.department_id,department_name,post_name,employee_no,phone
 		from (select u.userid,
-		u.username,c.company_no,c.company_name,u.phone
-		from u_users u
-		left join
-		user_company uc on u.userid = uc.user_id
-		left
-		join
-		company_ c on c.company_id = uc.company_id
-		where u.userid
-		=#{userId} and uc.company_id =
-		#{companyId}
+			u.username,c.company_no,c.company_id,c.company_name,u.phone
+			from u_users u 
+			left join user_company uc on u.userid = uc.user_id 
+			left join company_ c on c.company_id = uc.company_id 
+			where u.userid =#{userId} and uc.company_id = #{companyId}
 		) a
-		left join employee_ e
-		on
-		a.userid = e.employee_id
-		left
-		join department_
-		d
-		on
-		e.department_id =
-		d.department_id
-		left join
-		connect_emp_post_ cep
-		on
-		a.userid =
-		cep.employee_id and d.department_id
-		= cep.department_id and
-		cep.post_grades = '1'
-		left join post_ p
-		on
-		cep.post_id = p.post_id
+		left join employee_ e on a.userid = e.employee_id AND a.company_id=e.company_id
+		left join department_ d on e.department_id = d.department_id
+		left join connect_emp_post_ cep on a.userid = cep.employee_id and d.department_id = cep.department_id and cep.post_grades = '1'
+		left join post_ p on cep.post_id = p.post_id
 	</select>
 	<!-- 李业:查询员工信息总记录数 -->
 	<select id="selectCountEmployeeFromCompany" parameterType="java.lang.String"
