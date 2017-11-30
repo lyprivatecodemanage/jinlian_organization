@@ -220,4 +220,31 @@
 		where phone =
 		#{phone}
 	</select>
+	<resultMap type="com.xiangshangban.organization.bean.UusersRoles" id="UserRole">
+		<result column="roleid"  property="roleId" />
+	    <result column="userid"  property="userId" />
+	    <result column="company_id"  property="companyId" />
+	    <result column="history_user_ids"  property="historyUserIds" />
+	</resultMap>
+	<select id="selectRoleByUserIdAndCompanyId" parameterType="java.lang.String" resultMap="UserRole">
+		select userid,roleid,company_id,history_user_ids
+		from u_users_roles
+		where company_id = #{companyId} and userid = #{userId}
+	</select>
+	<update id="updateUserRoleByCompanyId">
+		update u_users_roles
+		set roleid = #{roleId}
+		where userid = #{userId} and company_id = #{companyId} and roleid = #{oldRoleId}
+	</update>
+	<insert id="insertUserRoleByCompanyId">
+		insert into u_users_roles (userid,roleid,company_id)
+		values (#{userId},#{roleId},#{companyId})
+	</insert>
+	<!-- <resultMap type="" id="Role"></resultMap>
+	根据角色name查询角色
+	<select id="selectRoleByRoleName" parameterType="java.lang.String" resultMap="Role">
+		select roleid,rolename,description
+		from u_roles
+		where rolename = #{roleName} 
+	</select> -->
 </mapper>

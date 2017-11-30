@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.xiangshangban.organization.bean.Uusers;
+import com.xiangshangban.organization.bean.UusersRoles;
 @Mapper
 public interface UusersDao {
     int deleteByPrimaryKey(String userid);
@@ -40,4 +41,27 @@ public interface UusersDao {
      * @return
      */
 	int updateStatus(@Param("userid")String userId, @Param("status")String status);
+	/**
+	 * 根据用户id和公司id查询用户在此公司的角色
+	 * @param companyId
+	 * @param userId
+	 * @return
+	 */
+	List<UusersRoles> selectRoleByUserIdAndCompanyId(@Param("companyId")String companyId,@Param("userId")String userId);
+	/**
+	 * 更改用户在此公司的角色
+	 * @param companyId
+	 * @param userId
+	 * @return
+	 */
+	int updateUserRoleByCompanyId(@Param("companyId")String companyId,@Param("userId")String userId,@Param("roleId")String roleId,@Param("oldRoleId")String oldRoleId);
+	/**
+	 * 添加用户角色关系
+	 * @param companyId
+	 * @param userId
+	 * @param roleId
+	 * @return
+	 */
+	int insertUserRoleByCompanyId(@Param("companyId")String companyId,@Param("userId")String userId,@Param("roleId")String roleId);
+	
 }

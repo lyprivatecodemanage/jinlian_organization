@@ -10,8 +10,10 @@ import org.springframework.stereotype.Service;
 import com.xiangshangban.organization.bean.CheckPerson;
 import com.xiangshangban.organization.bean.Employee;
 import com.xiangshangban.organization.bean.ReturnData;
+import com.xiangshangban.organization.bean.Uroles;
 import com.xiangshangban.organization.bean.UserCompanyDefault;
 import com.xiangshangban.organization.bean.Uusers;
+import com.xiangshangban.organization.bean.UusersRoles;
 import com.xiangshangban.organization.dao.CheckPersonDao;
 import com.xiangshangban.organization.dao.EmployeeDao;
 import com.xiangshangban.organization.dao.UserCompanyDefaultDao;
@@ -45,7 +47,8 @@ public class CheckPersonServiceImpl implements CheckPersonService {
 					employee.setEmployeeId(userId);
 					employee.setCompanyId(companyId);
 					employee.setEmployeeName(user.getUsername());
-					user.setPhone(user.getPhone());
+					//user.setPhone(user.getPhone());
+					employee.setLoginName(user.getPhone());
 					//将用户信息加入到员工表
 					employeeDao.insertEmployee(employee );
 					checkPersonDao.updateByPrimaryKeySelective(companyId, userId, status);
@@ -63,6 +66,12 @@ public class CheckPersonServiceImpl implements CheckPersonService {
 					}
 					usercompany.setIsActive("1");
 					userCompanyDefaultDao.insertSelective(usercompany);
+				}
+				List<UusersRoles> userRoleList = usersDao.selectRoleByUserIdAndCompanyId(companyId, userId);
+				if(userRoleList!=null && userRoleList.size()>0){
+					usersDao.updateUserRoleByCompanyId(companyId, userId, Uroles.user_role,Uroles.user_role);
+				}else{
+					usersDao.insertUserRoleByCompanyId(companyId, userId, Uroles.user_role);
 				}
 				usersDao.updateStatus(userId, "1");
 				if("0".equals(usercompany.getInfoStatus())){
