@@ -329,11 +329,11 @@
 		employee_id = e.direct_person_id ),
 		e.entry_time,e.probationary_expired,e.work_address,e.marriage_status,e.seniority,e.company_id
 		from employee_ as e 
-		left join connect_emp_post_ as cep on e.employee_id = cep.employee_id and cep.post_grades = '1' and cep.is_delete = '0'
+		left join connect_emp_post_ as cep on e.employee_id = cep.employee_id and cep.post_grades = '1' and cep.is_delete = '0' and cep.company_id = #{companyId}
 		left join post_ p on cep.post_id = p.post_id
 		left join department_ d on cep.department_id = d.department_id
 		left join u_users u on e.employee_id = u.userid 
-		where e.company_id = #{companyId} AND e.employee_id = #{employeeId} AND d.company_id=#{companyId}
+		where e.company_id = #{companyId} AND e.employee_id = #{employeeId} 
 	</select>
 	<resultMap type="com.xiangshangban.organization.bean.Employee"
 		id="EmployeeAppResultMap">

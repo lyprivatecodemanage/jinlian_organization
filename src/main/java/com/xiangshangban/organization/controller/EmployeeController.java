@@ -147,8 +147,6 @@ public class EmployeeController {
 			return returnData;
 		}
 		//判断三个岗位是否重复
-		
-		
 		returnData = employeeService.insertEmployee(employeenew);
 		return returnData;
 	}
@@ -404,7 +402,6 @@ public class EmployeeController {
 					emp.setMarriageStatus("离异");
 				}
 			}
-			//System.out.println(emp.getPostId()+"\t"+emp.getDepartmentId());
 			result.put("result", emp);
 			result.put("message", "成功");
 			result.put("returnCode", "3000");
@@ -544,7 +541,7 @@ public class EmployeeController {
 			//查詢編輯的人員信息是否存在
 			Employee oldEmp = employeeService.selectByEmployee(emp.getEmployeeId(), companyId);
 			if(oldEmp==null){
-				result.put("message", "編輯的人員id不存在");
+				result.put("message", "编辑的人员id不存在");
 				result.put("returnCode", "");
 				return result;
 			}
@@ -600,6 +597,33 @@ public class EmployeeController {
 			transferjobService.insertTransferjob(transferjob);
 			connectEmpPostService.deleteEmployeeWithPost(emp.getEmployeeId(), emp.getDepartmentId());
 			List<ConnectEmpPost> list = new ArrayList<ConnectEmpPost>();
+			List<Post> vicePostList = emp.getPostList();
+			if(StringUtils.isNotEmpty(vicePostList.get(0).getPostId())&&StringUtils.isNotEmpty(vicePostList.get(1).getPostId())){
+				if(vicePostList.get(0).getPostId().equals(vicePostList.get(1).getPostId())){
+					result.put("message","不能选择两个相同的副岗位");
+					result.put("returnCode","4119");
+					return result;
+				}
+				if(vicePostList.get(0).getPostId().equals(emp.getPostId()) || vicePostList.get(1).getPostId().equals(emp.getPostId())){
+					result.put("message","副岗位不能与主岗位相同");
+					result.put("returnCode","4120");
+					return result;
+				}
+			}
+			if (StringUtils.isNotEmpty(vicePostList.get(0).getPostId())) {
+				if(vicePostList.get(0).getPostId().equals(emp.getPostId())){
+					result.put("message","副岗位不能与主岗位相同");
+					result.put("returnCode","4120");
+					return result;
+				}
+			}
+			if (StringUtils.isNotEmpty(vicePostList.get(1).getPostId())) {
+				if(vicePostList.get(1).getPostId().equals(emp.getPostId())){
+					result.put("message","副岗位不能与主岗位相同");
+					result.put("returnCode","4120");
+					return result;
+				}
+			}
 			for (Post post: emp.getPostList()) {
 				ConnectEmpPost connectEmpPost = new ConnectEmpPost();
 				connectEmpPost.setEmployeeId(emp.getEmployeeId());

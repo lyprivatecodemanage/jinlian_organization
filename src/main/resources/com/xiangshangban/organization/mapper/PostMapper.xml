@@ -19,12 +19,13 @@
   </resultMap>
   <!-- 查询员工的副岗位 -->
   <select id="selectVicePositionByEmployeeId" parameterType="java.lang.String" resultMap="Post">
-  	select post_name 
+  	select cep.post_id,post_name,d.department_id,d.department_name
   	from employee_ e 
   	left join 
-  	connect_emp_post_ cep on e.employee_id = cep.employee_id
+  	connect_emp_post_ cep on e.employee_id = cep.employee_id and cep.post_grades = '0' and cep.company_id = #{companyId}
   	left join 
   	post_ p on cep.post_id = p.post_id
+  	left join department_ d on d.department_Id = p.department_Id
   	where e.company_id = #{companyId} and e.employee_id = #{employeeId}
   </select>
   
