@@ -124,8 +124,7 @@ s.userid =(select s.userid from organization.u_users s where s.account=#{Account
       company_abbreviation_name=#{companyAbbreviationName,jdbcType=VARCHAR},
       company_phone=#{companyPhone,jdbcType=VARCHAR},
       industry_type=#{industryType,jdbcType=VARCHAR},
-      company_area=#{companyArea,jdbcType=VARCHAR},      
-      company_personal_name=#{companyPersonalName,jdbcType=VARCHAR}    
+      company_area=#{companyArea,jdbcType=VARCHAR} 
     where 
     company_id = #{companyId,jdbcType=VARCHAR}
   </update>
