@@ -53,7 +53,14 @@ public class CheckPersonServiceImpl implements CheckPersonService {
 					usercompany = new UserCompanyDefault();
 					usercompany.setCompanyId(companyId);
 					usercompany.setUserId(userId);
-					usercompany.setCurrentOption("2");//是否默认打开
+					//查询已激活并且为默认的公司
+					UserCompanyDefault companyDefalt = userCompanyDefaultDao.getActiveDefault(user.getUserid());
+					if(companyDefalt==null || StringUtils.isEmpty(companyDefalt.getCompanyId())){
+						//抽取排序中已激活但非默认的第一个公司作为默认公司
+						usercompany.setCurrentOption("1");
+					}else{
+						usercompany.setCurrentOption("2");
+					}
 					usercompany.setIsActive("1");
 					userCompanyDefaultDao.insertSelective(usercompany);
 				}
