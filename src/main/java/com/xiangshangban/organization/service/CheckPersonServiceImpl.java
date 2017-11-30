@@ -64,6 +64,7 @@ public class CheckPersonServiceImpl implements CheckPersonService {
 					usercompany.setIsActive("1");
 					userCompanyDefaultDao.insertSelective(usercompany);
 				}
+				usersDao.updateStatus(userId, "1");
 				if("0".equals(usercompany.getInfoStatus())){
 					returnData.setMessage("审核已同意，请继续完善人员信息");
 					returnData.setReturnCode("4108");
