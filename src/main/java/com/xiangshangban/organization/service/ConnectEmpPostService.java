@@ -23,6 +23,13 @@ public interface ConnectEmpPostService {
 	 */
 	List<ConnectEmpPost> findEmpByPostId(String companyId, String postId);
 	/**
+	 * 查询岗位下未删除的人员
+	 * @param companyId
+	 * @param postId
+	 * @return
+	 */
+	List<ConnectEmpPost> findEmpByPostIdAndIsDelete(String companyId, String postId,String isDelete);
+	/**
 	 * @author 李业:编辑个人信息(副岗位)
 	 * 删除副岗位信息
 	 * @param employeeId
@@ -63,4 +70,11 @@ public interface ConnectEmpPostService {
 	 * @return
 	 */
 	int deleteEmployeeFromPost(String employeeId,String departmentId);
+	/**
+	 * 根据员工id和公司id删除员工在公司的所有岗位职务
+	 * @param employeeId
+	 * @param companyId
+	 * @return
+	 */
+	int deleteByEmployeeIdAndCompanyId(String employeeId,String companyId);
 }

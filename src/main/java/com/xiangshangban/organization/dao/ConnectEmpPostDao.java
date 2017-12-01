@@ -21,6 +21,8 @@ public interface ConnectEmpPostDao {
 	
 	List<ConnectEmpPost> findEmpByPostId(@Param("companyId")String companyId, @Param("postId")String postId);
 	
+	List<ConnectEmpPost> findEmpByPostIdAndIsDelete(@Param("companyId")String companyId, @Param("postId")String postId,@Param("isDelete")String isDelete);
+	
 	
 	int deleteEmployeeWithPost(@Param("employeeId")String employeeId,@Param("departmentId")String departmentId);
 	
@@ -31,4 +33,11 @@ public interface ConnectEmpPostDao {
 	ConnectEmpPost selectEmployeePostInformation(@Param("employeeId")String employeeId,@Param("companyId")String companyId);
 	
 	int deleteEmployeeFromPost(@Param("employeeId")String employeeId,@Param("departmentId")String departmentId);
+	/**
+	 * 根据员工id和公司id删除员工在公司的所有岗位职务
+	 * @param employeeId
+	 * @param companyId
+	 * @return
+	 */
+	int deleteByEmployeeIdAndCompanyId(@Param("employeeId")String employeeId,@Param("companyId")String companyId);
 }

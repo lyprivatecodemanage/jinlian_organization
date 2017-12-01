@@ -67,6 +67,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 		Employee employee = employeeDao.selectByEmployee(employeeId, companyId);
 		i=i+userCompanyDefaultDao.deleteUserFromCompany(companyId,employeeId);//更改is_active='2', current_option='2'
 		i=i+employeeDao.deleteByEmployee(employeeId,companyId);
+		i+=connectEmpPostDao.deleteByEmployeeIdAndCompanyId(employeeId, companyId);
 		//更改默认公司设置
 		//查询已激活并且为默认的公司
 		UserCompanyDefault companyDefalt = userCompanyDefaultDao.getActiveDefault(employeeId);

@@ -36,9 +36,15 @@
    	  select c.*
       from organization.connect_emp_post_ c  
       LEFT JOIN  organization.post_ p  on c.post_id = p.post_id   
-      where c.post_id=#{postId} AND p.company_id=#{companyId}
+      where c.post_id=#{postId} AND p.company_id=#{companyId} 
    </select>
-
+   <!-- 检查岗位是否可以删除 -->
+	<select id="findEmpByPostIdAndIsDelete" resultMap="ConnectEmpPost">
+   	  select c.*
+      from organization.connect_emp_post_ c  
+      LEFT JOIN  organization.post_ p  on c.post_id = p.post_id   
+      where c.post_id=#{postId} AND p.company_id=#{companyId} and c.is_delete = #{isDelete}
+	</select>
 	<insert id="saveConnect" parameterType="com.xiangshangban.organization.bean.ConnectEmpPost">
 		insert into 
 		organization.connect_emp_post_ 
@@ -105,6 +111,12 @@
 		employee_id=#{employeeId,jdbcType=VARCHAR}
 		and 
 		post_id=#{postId,jdbcType=VARCHAR}
+	</delete>
+	
+	<delete id="deleteByEmployeeIdAndCompanyId" parameterType="java.lang.String">
+		update connect_emp_post_
+		set is_delete = '1'
+		where employee_id = #{employeeId} and company_id = #{companyId} 
 	</delete>
 	
 	<delete id="deleteTransferjobConnect" parameterType="java.lang.String">

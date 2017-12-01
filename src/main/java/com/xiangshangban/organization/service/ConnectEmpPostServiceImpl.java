@@ -101,6 +101,11 @@ public class ConnectEmpPostServiceImpl implements ConnectEmpPostService {
 	public List<ConnectEmpPost> findEmpByPostId(String companyId, String postId) {
 		return connectEmpPostDao.findEmpByPostId(companyId, postId);
 	}
+	
+	@Override
+	public List<ConnectEmpPost> findEmpByPostIdAndIsDelete(String companyId, String postId, String isDelete) {
+		return connectEmpPostDao.findEmpByPostIdAndIsDelete(companyId, postId, isDelete);
+	}
 
 
 	@Override
@@ -132,6 +137,12 @@ public class ConnectEmpPostServiceImpl implements ConnectEmpPostService {
 	public int deleteEmployeeFromPost(String employeeId, String departmentId) {
 		
 		return connectEmpPostDao.deleteEmployeeFromPost(employeeId, departmentId);
+	}
+
+	@Override
+	public int deleteByEmployeeIdAndCompanyId(String employeeId, String companyId) {
+		
+		return connectEmpPostDao.deleteByEmployeeIdAndCompanyId(employeeId, companyId);
 	}
 
 

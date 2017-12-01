@@ -124,7 +124,7 @@ public class PostController {
 				String departmentid = listPost.get(i).toString();
 				JSONObject objs = JSON.parseObject(departmentid);
 				String postId=objs.getString("postId");	
-				List<ConnectEmpPost> connectEmpPostlist = connectEmpPostService.findEmpByPostId(companyId, postId);
+				List<ConnectEmpPost> connectEmpPostlist = connectEmpPostService.findEmpByPostIdAndIsDelete(companyId, postId, "0");
 				if(connectEmpPostlist.size()>0){
 					returnData.setMessage("删除岗位错误：岗位下有人员");
 					returnData.setReturnCode("4106");
