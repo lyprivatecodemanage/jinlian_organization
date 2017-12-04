@@ -685,7 +685,7 @@ public class EmployeeController {
 			return returnData;
 		}
 	}
-	@RequestMapping(value = "exportExcel", produces="application/json;charset=UTF-8")
+	@RequestMapping(value = "export/employeeInfo", produces="application/json;charset=UTF-8")
 	public void exportExcel(HttpServletRequest request, HttpServletResponse response){
 		try {
 			response.setContentType("octets/stream"); 
