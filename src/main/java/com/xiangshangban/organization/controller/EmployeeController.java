@@ -547,7 +547,8 @@ public class EmployeeController {
 				List<Employee> empList = employeeService.findByAllEmployee(companyId);
 				if(empList !=null && empList.size()>0){
 					for(Employee employee : empList){
-						if(employee.getEmployeeNo().equals(emp.getEmployeeNo())){
+						if(StringUtils.isNotEmpty(employee.getEmployeeNo()) &&
+								employee.getEmployeeNo().equals(emp.getEmployeeNo())){
 							result.put("message", "工号已存在");
 							result.put("returnCode", "4101");
 							return result;
