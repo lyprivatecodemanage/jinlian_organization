@@ -2,7 +2,7 @@ package com.xiangshangban.organization;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import org.apache.log4j.Logger;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -10,16 +10,16 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
-
 import com.xiangshangban.organization.filter.ServletFilter;
 
 
 @SpringBootApplication
 @EnableTransactionManagement
 public class OrganizationApplication {
-
+	public static Logger logger = Logger.getLogger(OrganizationApplication.class);
 	public static void main(String[] args) {
 		SpringApplication.run(OrganizationApplication.class, args);
+		logger.info("启动成功");
 	}
 	
 	@Bean
