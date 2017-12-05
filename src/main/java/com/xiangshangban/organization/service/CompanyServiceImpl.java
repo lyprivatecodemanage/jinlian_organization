@@ -79,6 +79,12 @@ public class CompanyServiceImpl implements CompanyService {
 		return companyDao.selectByUserCompany(Account);
 	}
 
+	@Override
+	public int updateCompanyLogoByCompanyId(String companyLogo, String companyId) {
+		
+		return companyDao.updateCompanyLogoByCompanyId(companyLogo, companyId);
+	}
+
 	
 	
 }

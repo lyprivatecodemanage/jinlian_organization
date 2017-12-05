@@ -3,6 +3,7 @@ package com.xiangshangban.organization.dao;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.xiangshangban.organization.bean.Company;
 
@@ -22,4 +23,6 @@ public interface CompanyDao {
     Company  findBycompanyNo(String companyNo);
     //查询一个人加入了哪些公司
     List<Company>selectByUserCompany(String Account);
+    
+    int updateCompanyLogoByCompanyId(@Param("companyLogo")String companyLogo,@Param("companyId")String companyId);
 }

@@ -1,6 +1,8 @@
 package com.xiangshangban.organization.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
@@ -122,6 +124,30 @@ public class CompanyController {
 			returnData.setReturnCode("3001");	
 		}
 		return returnData;
+	}
+	@RequestMapping(value="/saveCompanyLogo",produces="application/json;charset=utf-8",method=RequestMethod.POST)
+	public Map<String,Object> saveCompanyLogo(@RequestBody String jsonString,HttpServletRequest request){
+		Map<String,Object> result = new HashMap<String,Object>();
+		String companyId = request.getHeader("companyId");
+		String userId = request.getHeader("accessUserId");
+		JSONObject jobj = JSON.parseObject(jsonString);
+		String companyLogo = jobj.getString("key");
+		Company company = companyService.selectByCompany(companyId);
+		if(company==null){
+			result.put("message", "公司id不存在");
+			result.put("returnCode", "4121");
+			return result;
+		}
+		int i = companyService.updateCompanyLogoByCompanyId(companyLogo, companyId);
+		if(i>0){
+			result.put("message", "数据请求成功");
+			result.put("returnCode", "3000");
+			return result;
+		}else{
+			result.put("message", "服务器错误");
+			result.put("returnCode", "3001");
+			return result;
+		}
 	}
 	
 	/**

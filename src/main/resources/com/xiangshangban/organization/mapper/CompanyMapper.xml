@@ -128,4 +128,11 @@ s.userid =(select s.userid from organization.u_users s where s.account=#{Account
     where 
     company_id = #{companyId,jdbcType=VARCHAR}
   </update>
+  
+  <update id="updateCompanyLogoByCompanyId" parameterType="java.lang.String">
+  	update organization.company_
+  	set company_logo = #{companyLogo}
+  	where company_id = #{companyId}
+  </update>
+  
 </mapper>
