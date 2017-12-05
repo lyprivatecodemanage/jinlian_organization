@@ -65,7 +65,7 @@ s.userid =(select s.userid from organization.u_users s where s.account=#{Account
   <select id="selectByCompany" parameterType="java.lang.String" resultMap="Company">  
     select 
      company_id, company_name,company_abbreviation_name,company_phone,company_personal_name,industry_type,
-     company_no,company_area,company_personal_name,user_name
+     company_no,company_area,company_personal_name,user_name,company_logo
     from organization.company_
     where 
     company_id = #{companyId,jdbcType=VARCHAR}
