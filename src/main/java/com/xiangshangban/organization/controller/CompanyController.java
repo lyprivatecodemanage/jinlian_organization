@@ -125,6 +125,12 @@ public class CompanyController {
 		}
 		return returnData;
 	}
+	/**
+	 * 保存公司logo
+	 * @param jsonString
+	 * @param request
+	 * @return
+	 */
 	@RequestMapping(value="/saveCompanyLogo",produces="application/json;charset=utf-8",method=RequestMethod.POST)
 	public Map<String,Object> saveCompanyLogo(@RequestBody String jsonString,HttpServletRequest request){
 		Map<String,Object> result = new HashMap<String,Object>();
@@ -149,7 +155,26 @@ public class CompanyController {
 			return result;
 		}
 	}
-	
+	/**
+	 * 首页获取公司基础信息
+	 * @param jsonString
+	 * @param request
+	 * @return
+	 */
+	public Map<String,Object> companyDetails(@RequestBody String jsonString,HttpServletRequest request){
+		Map<String,Object> result = new HashMap<String,Object>();
+		String companyId = request.getHeader("companyId");
+		String userId = request.getHeader("accessUserId");
+		Company company = companyService.selectByCompany(companyId);
+		if(company==null){
+			result.put("message", "公司id不存在");
+			result.put("returnCode", "4121");
+			return result;
+		}
+		
+		
+		return result;
+	}
 	/**
 	 * 查询一个人加入了哪些公司
 	 * @param userId
