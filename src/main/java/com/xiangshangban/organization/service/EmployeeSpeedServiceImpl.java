@@ -108,6 +108,9 @@ public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 				for (int k = 0; k < 18; k++) {
 					System.out.println("======>"+k);
 					Cell cell = row.getCell(k);
+					if(cell==null){
+						continue;
+					}
 					String type = cell.getCellStyle().getDataFormatString();
 					String value = "";
 					try{
