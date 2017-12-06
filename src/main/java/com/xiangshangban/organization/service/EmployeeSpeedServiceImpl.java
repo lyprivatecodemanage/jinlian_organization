@@ -129,7 +129,7 @@ public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 						value = cell.getStringCellValue();
 						}
 					}catch(Exception e){
-						String importMessage = "第" + i + "行,第" + k + "列,请检查数据格式!";
+						String importMessage = "第" + i + "行,第" +( k+1) + "列,请检查数据格式!";
 						ImportReturnData importReturnData = new ImportReturnData();
 						importReturnData.setImportMessage(importMessage);
 						importReturnDataList.add(importReturnData);
@@ -138,7 +138,7 @@ public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 					}
 					if (k == 1 || k == 2 || k == 3 || k == 5 || k == 6 || k == 9 || k == 10 || k == 11 || k == 12) {
 						if (StringUtils.isEmpty(value)) {
-							String importMessage = "第" + i + "行,第" + k + "列,必须填写!";
+							String importMessage = "第" + i + "行,第" +( k+1) + "列,必须填写!";
 							ImportReturnData importReturnData = new ImportReturnData();
 							importReturnData.setImportMessage(importMessage);
 							importReturnDataList.add(importReturnData);
@@ -158,7 +158,7 @@ public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 						paramList.add(value);
 				}
 				if(lineFlag){
-					break;
+					continue;
 				}
 				Employee newEmp = new Employee(paramList.get(0), paramList.get(1), paramList.get(2), paramList.get(3),
 						paramList.get(4), paramList.get(5), paramList.get(6), paramList.get(7), paramList.get(8),
