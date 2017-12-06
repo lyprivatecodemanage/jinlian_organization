@@ -578,5 +578,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 		
 	}
 
+	@Override
+	public int selectEmployeeCountByCompanyId(String companyId) {
+		 
+		return employeeDao.selectEmployeeCountByCompanyId(companyId);
+	}
+
 	
 }

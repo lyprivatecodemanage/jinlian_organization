@@ -4,7 +4,6 @@ import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.ibatis.annotations.Param;
 
 import com.xiangshangban.organization.bean.Employee;
 import com.xiangshangban.organization.bean.ReturnData;
@@ -151,4 +150,7 @@ public interface EmployeeService {
 	 * @param companyId
 	 */
 	void export(String excelName, OutputStream out, String companyId);
+	
+	int selectEmployeeCountByCompanyId(String companyId);
+	
 }
