@@ -8,6 +8,30 @@
 		<result column="employee_sex" jdbcType="VARCHAR" property="employeeSex" />
 		<result column="employee_no" jdbcType="VARCHAR" property="employeeNo" />
 		<result column="direct_person_id" jdbcType="VARCHAR" property="directPersonId" />
+		<result column="direct_person_name" jdbcType="VARCHAR" property="directPersonName" />
+		<result column="employee_phone" jdbcType="VARCHAR" property="employeePhone" />
+		<result column="employee_twophone" jdbcType="VARCHAR" property="employeeTwophone" />
+		<result column="entry_time" jdbcType="VARCHAR" property="entryTime" />
+		<result column="employee_status" jdbcType="VARCHAR" property="employeeStatus" />
+		<result column="probationary_expired" jdbcType="VARCHAR" property="probationaryExpired" />
+		<result column="department_id" jdbcType="VARCHAR" property="departmentId" />
+		<result column="department_name" jdbcType="VARCHAR" property="departmentName" />
+		<result column="company_name" jdbcType="VARCHAR" property="companyName" />
+		<result column="company_id" jdbcType="VARCHAR" property="companyId" />
+		<result column="post_name" jdbcType="VARCHAR" property="postName" />
+		<result column="post_id" jdbcType="VARCHAR" property="postId" />
+		<result column="employee_img_url" jdbcType="VARCHAR" property="employeeImgUrl" />
+		<result column="work_address" jdbcType="VARCHAR" property="workAddress" />
+		<result column="marriage_status" jdbcType="VARCHAR" property="marriageStatus" />
+		<result column="seniority" jdbcType="VARCHAR" property="seniority" />
+	</resultMap>
+	<resultMap id="EmployeeExport" type="com.xiangshangban.organization.bean.Employee">
+		<result column="employee_id" jdbcType="VARCHAR" property="employeeId" />
+		<result column="employee_name" jdbcType="VARCHAR" property="employeeName" />
+		<result column="login_name" jdbcType="VARCHAR" property="loginName" />
+		<result column="employee_sex" jdbcType="VARCHAR" property="employeeSex" />
+		<result column="employee_no" jdbcType="VARCHAR" property="employeeNo" />
+		<result column="direct_person_id" jdbcType="VARCHAR" property="directPersonId" />
 		<result column="direct_person_name" jdbcType="VARCHAR"
 			property="directPersonName" />
 		<result column="employee_phone" jdbcType="VARCHAR" property="employeePhone" />
@@ -20,15 +44,28 @@
 		<result column="department_name" jdbcType="VARCHAR" property="departmentName" />
 		<result column="company_name" jdbcType="VARCHAR" property="companyName" />
 		<result column="company_id" jdbcType="VARCHAR" property="companyId" />
-		<result column="post_name" jdbcType="VARCHAR" property="postName" />
-		<result column="post_id" jdbcType="VARCHAR" property="postId" />
 		<result column="employee_img_url" jdbcType="VARCHAR" property="employeeImgUrl" />
 		<result column="work_address" jdbcType="VARCHAR" property="workAddress" />
 		<result column="marriage_status" jdbcType="VARCHAR" property="marriageStatus" />
 		<result column="seniority" jdbcType="VARCHAR" property="seniority" />
+		<collection property="postList" resultMap="Post"></collection>
 	</resultMap>
-
-
+	<resultMap type="com.xiangshangban.organization.bean.Post" id="Post" >   
+	    <result column="post_id" jdbcType="VARCHAR" property="postId" />
+	    <result column="post_name" jdbcType="VARCHAR" property="postName" />          
+	    <result column="post_proficiencies" jdbcType="VARCHAR" property="postProficiencies" /> 
+	    <result column="post_work_type" jdbcType="VARCHAR" property="postWorkType" /> 
+	    <result column="educational_requirements" jdbcType="VARCHAR" property="educationalRequirements" /> 
+	    <result column="post_principal_id" jdbcType="VARCHAR" property="postPrincipalId" />       
+	    <result column="post_class_name" jdbcType="VARCHAR" property="postClassName" /> 
+	    <result column="department_id" jdbcType="VARCHAR" property="departmentId" /> 
+	    <result column="department_name" jdbcType="VARCHAR" property="departmentName" />
+	    <result column="company_name" jdbcType="VARCHAR" property="companyName" />
+	    <result column="employee_name" jdbcType="VARCHAR" property="employeeName" />
+	    <result column="count_number" jdbcType="VARCHAR" property="countNumber" />
+	    <result column="company_id" jdbcType="VARCHAR" property="companyId" />   
+	    <result column="post_grades" property="postGrades"/>   
+	  </resultMap>
 	<!-- 部门下在职员工 -->
 	<select id="findEmployeeByDepartmentId" resultMap="Employee">
 		select
@@ -499,11 +536,12 @@
 		from employee_ e
 		where company_id = #{companyId}
 	</select>
-	<select id="findExport" resultMap="Employee">
+	<select id="findExport" resultMap="EmployeeExport">
 		select
-		e.employee_id,e.employee_name,e.employee_sex,u.phone,e.employee_phone,
+		e.employee_id, e.employee_name, e.employee_sex,e.employee_twophone,
+		e.employee_phone, e.work_address, e.probationary_expired,e.seniority, e.marriage_status,
 		p.post_id,p.post_name,cp.post_grades,e.department_id ,d.department_name,
-		e.entry_time,e.employee_status,uc.is_active
+		e.entry_time,e.employee_status,uc.is_active,u.phone AS login_name
 		from organization.employee_ e 
 		left join user_company uc on e.employee_id = uc.user_id and e.company_id = uc.company_id 
 		left join department_ d on e.department_id = d.department_id 
