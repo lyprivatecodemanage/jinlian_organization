@@ -93,11 +93,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 	public ReturnData insertEmployee(Employee employee) {
 		ReturnData returnData = new ReturnData();
 		Uusers user = usersDao.selectByPhone(employee.getLoginName());
+		employee.setEmployeeStatus("0");
 		if(user==null || StringUtils.isEmpty(user.getUserid())){//未注册，写入注册表	
 			user = new Uusers();
 			String employeeId = FormatUtil.createUuid();			
 			employee.setEmployeeId(employeeId);	
-			employee.setEmployeeStatus("0");
+			
 			employeeDao.insertEmployee(employee);
 			
 			user.setUserid(employeeId);
