@@ -539,7 +539,7 @@
 	<select id="findExport" resultMap="EmployeeExport">
 		select
 		e.employee_id, e.employee_name, e.employee_sex,e.employee_twophone,
-		e.employee_phone, e.work_address, e.probationary_expired,e.seniority,
+		e.employee_phone, e.work_address, e.probationary_expired,e.seniority, e.marriage_status,
 		p.post_id,p.post_name,cp.post_grades,e.department_id ,d.department_name,
 		e.entry_time,e.employee_status,uc.is_active,u.phone AS login_name
 		from organization.employee_ e 
