@@ -771,10 +771,4 @@
 		set employee_img_url = #{employeeImgUrl}
 		where employee_id = #{employeeId} and company_id = #{companyId}
 	</update>
-	
-	<select id="selectEmployeeCountByCompanyId" parameterType="java.lang.String" resultType="java.lang.Integer">
-		select count(employee_id)
-		from employee_
-		where company_id = #{companyId} GROUP BY company_id
-	</select>
 </mapper>

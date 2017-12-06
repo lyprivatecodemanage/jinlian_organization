@@ -58,7 +58,5 @@ public interface DepartmentService {
 	     * @return
 	     */
 		int getDepartmentByName(String companyId, String departmentName, String departmentId);
-		
-		int selectDepartmentCountByCompanyId(String companyId);
 
 }

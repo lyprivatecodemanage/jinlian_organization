@@ -188,7 +188,7 @@
  <select id="selectDepartmentCountByCompanyId" parameterType="java.lang.String" resultType="java.lang.Integer">
  	select count(department_id) 
  	from department_ 
- 	where company_id = #{companyId} GROUP BY company_id
+ 	where company_id = #{companyId} GROUP BY department_id
  </select>
 
   <update id="updateByDepartment" parameterType="com.xiangshangban.organization.bean.Department">  

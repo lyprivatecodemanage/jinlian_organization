@@ -72,7 +72,7 @@ public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 			returnData.setReturnCode("3001");
 			return returnData;
 		}
-		//int lastSheetNum = wookbook.getNumberOfSheets();
+		int lastSheetNum = wookbook.getNumberOfSheets();
 		//for (int i = 0; i < lastSheetNum; i++) {
 			// 得到一个工作表
 			Sheet sheet = wookbook.getSheetAt(0);
@@ -115,21 +115,16 @@ public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 							try{
 							value = cell.getStringCellValue();
 							}catch(Exception e){
-								try{
 								SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 								Date date = cell.getDateCellValue();
 								value = sdf.format(date);
-							}catch(NullPointerException e0){
-								value = "";
-							}
 							}
 							//TimeUtil.timeFormatTransfer();
 						}else if(k==5||k==8||k==15||k==16){
 							try{
 								try{
 									value = cell.getStringCellValue();
-								}catch(Exception e){
-									e.printStackTrace();
+								}catch(IllegalStateException e){
 									DecimalFormat format = new DecimalFormat("#");  
 									Number valueD = cell.getNumericCellValue();  
 									value = format.format(valueD);  
@@ -138,14 +133,9 @@ public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 								value = "";
 							}
 						}else{
-							try{
 						value = cell.getStringCellValue();
-							}catch(NullPointerException e){
-								value = "";
-							}
 						}
 					}catch(Exception e){
-
 						String importMessage = "第" + i + "行,第" +( k+1) + "列,请检查数据格式!";
 						ImportReturnData importReturnData = new ImportReturnData();
 						importReturnData.setImportMessage(importMessage);
