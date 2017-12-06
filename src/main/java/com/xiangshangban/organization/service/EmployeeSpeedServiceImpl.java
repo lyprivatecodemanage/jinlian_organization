@@ -113,7 +113,11 @@ public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 					try{
 						if(k==10 || k == 11){
 							try{
-							value = cell.getStringCellValue();
+								try{
+									value = cell.getStringCellValue();
+								}catch(NullPointerException e){
+									value = "";
+								}
 							}catch(Exception e){
 								SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 								Date date = cell.getDateCellValue();
@@ -133,7 +137,11 @@ public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 								value = "";
 							}
 						}else{
-						value = cell.getStringCellValue();
+							try{
+								value = cell.getStringCellValue();
+							}catch(NullPointerException e){
+								value = "";
+							}
 						}
 					}catch(Exception e){
 						String importMessage = "第" + i + "行,第" +( k+1) + "列,请检查数据格式!";
