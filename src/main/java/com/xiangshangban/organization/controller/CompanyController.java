@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,16 +21,25 @@ import com.alibaba.fastjson.JSONObject;
 import com.xiangshangban.organization.bean.Company;
 import com.xiangshangban.organization.bean.ReturnData;
 import com.xiangshangban.organization.service.CompanyService;
+import com.xiangshangban.organization.service.DepartmentService;
+import com.xiangshangban.organization.service.DeviceService;
+import com.xiangshangban.organization.service.EmployeeService;
 import com.xiangshangban.organization.service.OSSFileService;
 
 @RestController
 @RequestMapping("/CompanyController")
 public class CompanyController {
+	private static final Logger logger = Logger.getLogger(CompanyController.class);
 	@Autowired
-	CompanyService companyService;
+	private CompanyService companyService;
 	@Autowired
-	OSSFileService oSSFileService;
-	
+	private OSSFileService oSSFileService;
+	@Autowired 
+	private DepartmentService departmentService;
+	@Autowired
+	private EmployeeService employeeService;
+	@Autowired
+	private DeviceService deviceService;
 	/**
 	 * 添加公司信息
 	 * @param company
@@ -161,19 +171,38 @@ public class CompanyController {
 	 * @param request
 	 * @return
 	 */
+	@RequestMapping(value="/companyDetails",produces="application/json;charset=utf-8",method=RequestMethod.POST)
 	public Map<String,Object> companyDetails(@RequestBody String jsonString,HttpServletRequest request){
 		Map<String,Object> result = new HashMap<String,Object>();
+		try{
 		String companyId = request.getHeader("companyId");
 		String userId = request.getHeader("accessUserId");
+		if(StringUtils.isEmpty(companyId) || StringUtils.isEmpty(userId)){
+			result.put("message","请求信息错误");
+			result.put("returnCode","3012");
+			return result;
+		}
 		Company company = companyService.selectByCompany(companyId);
 		if(company==null){
 			result.put("message", "公司id不存在");
 			result.put("returnCode", "4121");
 			return result;
 		}
-		
-		
+		int departmentCount = departmentService.selectDepartmentCountByCompanyId(companyId);
+		int employeeCount = employeeService.selectEmployeeCountByCompanyId(companyId);
+		int deviceCount = deviceService.selectDeviceCountByCompanyId(companyId);
+		result.put("departmentCount",departmentCount);
+		result.put("employeeCount",employeeCount);
+		result.put("deviceCount",deviceCount);
+		result.put("message", "数据请求成功");
+		result.put("returnCode", "3000");
 		return result;
+		}catch(Exception e){
+			logger.info(e);
+			result.put("message", "服务器错误");
+			result.put("returnCode", "3001");
+			return result;
+		}
 	}
 	/**
 	 * 查询一个人加入了哪些公司

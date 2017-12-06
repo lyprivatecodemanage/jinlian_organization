@@ -15,7 +15,6 @@ import com.xiangshangban.organization.dao.EmployeeDao;
 import com.xiangshangban.organization.dao.PostDao;
 import com.xiangshangban.organization.util.FormatUtil;
 
-import scala.annotation.meta.setter;
 
 @Service
 public class DepartmentServiceImpl implements DepartmentService {
@@ -202,6 +201,12 @@ public class DepartmentServiceImpl implements DepartmentService {
 	@Override
 	public int getDepartmentByName(String companyId, String departmentName, String departmentId) {
 		return departmentDao.getDepartmentByName(companyId, departmentName, departmentId);
+	}
+
+	@Override
+	public int selectDepartmentCountByCompanyId(String companyId) {
+		
+		return departmentDao.selectDepartmentCountByCompanyId(companyId);
 	}
 
 	

@@ -120,4 +120,5 @@ public interface EmployeeDao {
 	 */
 	List<Employee> findExport(@Param("companyId")String companyId);
 
+	int selectEmployeeCountByCompanyId(@Param("companyId")String companyId);
 }
