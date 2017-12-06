@@ -1,6 +1,8 @@
 package com.xiangshangban.organization.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
@@ -123,7 +125,56 @@ public class CompanyController {
 		}
 		return returnData;
 	}
-	
+	/**
+	 * 保存公司logo
+	 * @param jsonString
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value="/saveCompanyLogo",produces="application/json;charset=utf-8",method=RequestMethod.POST)
+	public Map<String,Object> saveCompanyLogo(@RequestBody String jsonString,HttpServletRequest request){
+		Map<String,Object> result = new HashMap<String,Object>();
+		String companyId = request.getHeader("companyId");
+		String userId = request.getHeader("accessUserId");
+		JSONObject jobj = JSON.parseObject(jsonString);
+		String companyLogo = jobj.getString("key");
+		Company company = companyService.selectByCompany(companyId);
+		if(company==null){
+			result.put("message", "公司id不存在");
+			result.put("returnCode", "4121");
+			return result;
+		}
+		int i = companyService.updateCompanyLogoByCompanyId(companyLogo, companyId);
+		if(i>0){
+			result.put("message", "数据请求成功");
+			result.put("returnCode", "3000");
+			return result;
+		}else{
+			result.put("message", "服务器错误");
+			result.put("returnCode", "3001");
+			return result;
+		}
+	}
+	/**
+	 * 首页获取公司基础信息
+	 * @param jsonString
+	 * @param request
+	 * @return
+	 */
+	public Map<String,Object> companyDetails(@RequestBody String jsonString,HttpServletRequest request){
+		Map<String,Object> result = new HashMap<String,Object>();
+		String companyId = request.getHeader("companyId");
+		String userId = request.getHeader("accessUserId");
+		Company company = companyService.selectByCompany(companyId);
+		if(company==null){
+			result.put("message", "公司id不存在");
+			result.put("returnCode", "4121");
+			return result;
+		}
+		
+		
+		return result;
+	}
 	/**
 	 * 查询一个人加入了哪些公司
 	 * @param userId

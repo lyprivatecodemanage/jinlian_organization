@@ -38,6 +38,7 @@ public interface DepartmentDao {
 
 	int getDepartmentByName(@Param("companyId")String companyId, 
 			@Param("departmentName")String departmentName, @Param("departmentId")String departmentId);
-    
+	
+	int selectDepartmentCountByCompanyId(@Param("companyId")String companyId);
            
 }

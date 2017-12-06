@@ -13,7 +13,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.log4j.Logger;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.jboss.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -89,7 +90,6 @@ public class EmployeeController {
 		employeeService.resetEmployeeStatus(companyId, employeeId);
 		returnData.setMessage("数据请求成功");
 		returnData.setReturnCode("3000");
-		logger.info("激活完成");
 		return returnData;
 	}
 
@@ -547,11 +547,12 @@ public class EmployeeController {
 				List<Employee> empList = employeeService.findByAllEmployee(companyId);
 				if(empList !=null && empList.size()>0){
 					for(Employee employee : empList){
-						if(StringUtils.isNotEmpty(employee.getEmployeeNo()) &&
-								employee.getEmployeeNo().equals(emp.getEmployeeNo())){
-							result.put("message", "工号已存在");
-							result.put("returnCode", "4101");
-							return result;
+						if(StringUtils.isNotEmpty(employee.getEmployeeNo())){
+							if(employee.getEmployeeNo().equals(emp.getEmployeeNo())){
+								result.put("message", "工号已存在");
+								result.put("returnCode", "4101");
+								return result;
+							}
 						}
 					}
 				}

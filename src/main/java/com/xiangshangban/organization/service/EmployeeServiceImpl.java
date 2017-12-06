@@ -4,7 +4,6 @@ package com.xiangshangban.organization.service;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -28,8 +27,10 @@ import com.xiangshangban.organization.bean.Employee;
 import com.xiangshangban.organization.bean.Post;
 import com.xiangshangban.organization.bean.ReturnData;
 import com.xiangshangban.organization.bean.Transferjob;
+import com.xiangshangban.organization.bean.Uroles;
 import com.xiangshangban.organization.bean.UserCompanyDefault;
 import com.xiangshangban.organization.bean.Uusers;
+import com.xiangshangban.organization.bean.UusersRoles;
 import com.xiangshangban.organization.dao.CheckPersonDao;
 import com.xiangshangban.organization.dao.CompanyDao;
 import com.xiangshangban.organization.dao.ConnectEmpPostDao;
@@ -173,9 +174,13 @@ public class EmployeeServiceImpl implements EmployeeService {
 				return returnData;
 			}
 		}
-	    
+		List<UusersRoles> userRoleList = usersDao.selectRoleByUserIdAndCompanyId(employee.getCompanyId(), user.getUserid());
+		if(userRoleList!=null && userRoleList.size()>0){
+			usersDao.updateUserRoleByCompanyId(employee.getCompanyId(), user.getUserid(), Uroles.user_role,Uroles.user_role);
+		}else{
+			usersDao.insertUserRoleByCompanyId(employee.getCompanyId(), user.getUserid(), Uroles.user_role);
+		}
 	    this.updateTransfer(employee);//岗位信息设置
-	    
 	    updateDeviceEmp(employee);
 	    returnData.setMessage("数据请求成功");
 		returnData.setReturnCode("3000");
@@ -344,7 +349,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public Employee findByemploginName(String loginName) {
-		// TODO Auto-generated method stub
+		
 		return employeeDao.findByemploginName(loginName);
 	}
 
