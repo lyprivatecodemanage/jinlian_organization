@@ -108,11 +108,10 @@ public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 				for (int k = 0; k < 18; k++) {
 					System.out.println("======>"+k);
 					Cell cell = row.getCell(k);
-					//String type = cell.getCellStyle().getDataFormatString();
+				
 					String value = "";
 					try{
 						if(k==10 || k == 11){
-							
 							try{
 							value = cell.getStringCellValue();
 							}catch(Exception e){
@@ -122,9 +121,17 @@ public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 							}
 							//TimeUtil.timeFormatTransfer();
 						}else if(k==5||k==8||k==15||k==16){
-							DecimalFormat format = new DecimalFormat("#");  
-							Number valueD = cell.getNumericCellValue();  
-							value = format.format(valueD);  
+							try{
+								try{
+									value = cell.getStringCellValue();
+								}catch(IllegalStateException e){
+									DecimalFormat format = new DecimalFormat("#");  
+									Number valueD = cell.getNumericCellValue();  
+									value = format.format(valueD);  
+								}
+							}catch(NullPointerException e){
+								value = "";
+							}
 						}else{
 						value = cell.getStringCellValue();
 						}

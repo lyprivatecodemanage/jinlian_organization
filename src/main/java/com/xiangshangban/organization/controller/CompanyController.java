@@ -22,7 +22,6 @@ import com.xiangshangban.organization.bean.Company;
 import com.xiangshangban.organization.bean.ReturnData;
 import com.xiangshangban.organization.service.CompanyService;
 import com.xiangshangban.organization.service.DepartmentService;
-import com.xiangshangban.organization.service.DeviceService;
 import com.xiangshangban.organization.service.EmployeeService;
 import com.xiangshangban.organization.service.OSSFileService;
 
@@ -38,8 +37,6 @@ public class CompanyController {
 	private DepartmentService departmentService;
 	@Autowired
 	private EmployeeService employeeService;
-	@Autowired
-	private DeviceService deviceService;
 	/**
 	 * 添加公司信息
 	 * @param company
@@ -190,10 +187,10 @@ public class CompanyController {
 		}
 		int departmentCount = departmentService.selectDepartmentCountByCompanyId(companyId);
 		int employeeCount = employeeService.selectEmployeeCountByCompanyId(companyId);
-		int deviceCount = deviceService.selectDeviceCountByCompanyId(companyId);
+		//int deviceCount = deviceService.selectDeviceCountByCompanyId(companyId);
 		result.put("departmentCount",departmentCount);
 		result.put("employeeCount",employeeCount);
-		result.put("deviceCount",deviceCount);
+		//result.put("deviceCount",deviceCount);
 		result.put("message", "数据请求成功");
 		result.put("returnCode", "3000");
 		return result;
