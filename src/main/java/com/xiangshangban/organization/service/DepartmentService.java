@@ -4,6 +4,9 @@ package com.xiangshangban.organization.service;
 
 import java.util.List;
 import java.util.Map;
+
+import org.apache.ibatis.annotations.Param;
+
 import com.xiangshangban.organization.bean.Department;
 import com.xiangshangban.organization.bean.DepartmentTree;
 
@@ -59,4 +62,5 @@ public interface DepartmentService {
 	     */
 		int getDepartmentByName(String companyId, String departmentName, String departmentId);
 
+		int selectDepartmentCountByCompanyId(String companyId);
 }
