@@ -218,4 +218,9 @@
     post_id = #{postId,jdbcType=VARCHAR}
   </update>
   
+  <select id="selectPostByDepartmentIdAndCompanyId" parameterType="java.lang.String" resultMap="Post">
+  	select post_id,post_name
+  	from post_
+  	where company_id = #{companyId} and department_id = #{departmentId}
+  </select>
 </mapper>

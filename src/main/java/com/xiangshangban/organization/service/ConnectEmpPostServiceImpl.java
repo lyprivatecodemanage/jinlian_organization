@@ -93,8 +93,8 @@ public class ConnectEmpPostServiceImpl implements ConnectEmpPostService {
 	}
 
 	@Override
-	public ConnectEmpPost findByConnect(String employeeId, String departmentId,String postGrades) {
-		return connectEmpPostDao.findByConnect(employeeId, departmentId, postGrades);
+	public ConnectEmpPost findByConnect(String employeeId, String departmentId,String postGrades,String companyId) {
+		return connectEmpPostDao.findByConnect(employeeId, departmentId, postGrades,companyId);
 	}
 
 	@Override
@@ -115,15 +115,15 @@ public class ConnectEmpPostServiceImpl implements ConnectEmpPostService {
 	}
 
 	@Override
-	public int deleteEmployeeWithPost(String employeeId, String departmentId) {
+	public int deleteEmployeeWithPost(String employeeId, String companyId) {
 		
-		return connectEmpPostDao.deleteEmployeeWithPost(employeeId, departmentId);
+		return connectEmpPostDao.deleteEmployeeWithPost(employeeId, companyId);
 	}
 
 	@Override
-	public int updateEmployeeWithPost(String employeeId, String departmentId, String postId) {
+	public int updateEmployeeWithPost(String employeeId, String departmentId, String postId,String companyId) {
 		
-		return connectEmpPostDao.updateEmployeeWithPost(employeeId, departmentId, postId);
+		return connectEmpPostDao.updateEmployeeWithPost(employeeId, departmentId, postId,companyId);
 	}
 
 	@Override
@@ -134,9 +134,9 @@ public class ConnectEmpPostServiceImpl implements ConnectEmpPostService {
 	}
 
 	@Override
-	public int deleteEmployeeFromPost(String employeeId, String departmentId) {
+	public int deleteEmployeeFromPost(String employeeId, String departmentId,String companyId) {
 		
-		return connectEmpPostDao.deleteEmployeeFromPost(employeeId, departmentId);
+		return connectEmpPostDao.deleteEmployeeFromPost(employeeId, departmentId,companyId);
 	}
 
 	@Override

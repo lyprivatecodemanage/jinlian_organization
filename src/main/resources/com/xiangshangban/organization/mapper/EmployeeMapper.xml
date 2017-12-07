@@ -316,7 +316,7 @@
 		e.employee_no IS NOT null
 		AND
 		e.employee_no=
-		#{employeeNo,jdbcType=VARCHAR}
+		#{employeeNo}
 		and
 		e.company_id=#{companyId}
 	</select>
@@ -327,7 +327,7 @@
 		e.login_name
 		from organization.employee_ e
 		where
-		e.login_name = #{loginName,jdbcType=VARCHAR}
+		e.login_name = #{loginName}
 	</select>
 	<resultMap type="com.xiangshangban.organization.bean.Employee"
 		id="EmployeeResultMap">
@@ -672,18 +672,18 @@
 		seniority
 		)
 		values (
-		#{employeeId,jdbcType=VARCHAR},
-		#{employeeName,jdbcType=VARCHAR},
-		#{employeeSex,jdbcType=VARCHAR},
-		#{loginName,jdbcType=VARCHAR},
-		#{employeePhone,jdbcType=VARCHAR},
-		#{employeeTwophone,jdbcType=VARCHAR},
-		#{employeeNo,jdbcType=VARCHAR},
-		#{directPersonId,jdbcType=VARCHAR},
-		#{entryTime,jdbcType=VARCHAR},
-		#{probationaryExpired,jdbcType=VARCHAR},
-		#{departmentId,jdbcType=VARCHAR},
-		#{companyId,jdbcType=VARCHAR},
+		#{employeeId},
+		#{employeeName},
+		#{employeeSex},
+		#{loginName},
+		#{employeePhone},
+		#{employeeTwophone},
+		#{employeeNo},
+		#{directPersonId},
+		#{entryTime},
+		#{probationaryExpired},
+		#{departmentId},
+		#{companyId},
 		#{workAddress},
 		#{marriageStatus},
 		#{seniority}
@@ -695,28 +695,28 @@
 		organization.employee_
 		set
 		employee_name =
-		#{employeeName,jdbcType=VARCHAR},
+		#{employeeName},
 		employee_sex =
-		#{employeeSex,jdbcType=VARCHAR},
+		#{employeeSex},
 		login_name =
-		#{loginName,jdbcType=VARCHAR},
+		#{loginName},
 		direct_person_id =
-		#{directPersonId,jdbcType=VARCHAR},
+		#{directPersonId},
 		employee_phone =
-		#{employeePhone,jdbcType=VARCHAR},
+		#{employeePhone},
 		employee_twophone =
-		#{employeeTwophone,jdbcType=VARCHAR},
+		#{employeeTwophone},
 		entry_time =
-		#{entryTime,jdbcType=VARCHAR},
+		#{entryTime},
 		probationary_expired =
-		#{probationaryExpired,jdbcType=VARCHAR},
-		department_id=#{departmentId,jdbcType=VARCHAR},
+		#{probationaryExpired},
+		department_id=#{departmentId},
 		work_address=#{workAddress},
 		marriage_status=#{marriageStatus},
 		seniority=#{seniority}
 		where
 		employee_id =
-		#{employeeId,jdbcType=VARCHAR}
+		#{employeeId}
 	</update>
 
 	<update id="updateByEmployeeapprove" parameterType="com.xiangshangban.organization.bean.Employee">
@@ -724,29 +724,29 @@
 		organization.employee_
 		set
 		employee_name =
-		#{employeeName,jdbcType=VARCHAR},
+		#{employeeName},
 		employee_sex =
-		#{employeeSex,jdbcType=VARCHAR},
+		#{employeeSex},
 		login_name =
-		#{loginName,jdbcType=VARCHAR},
+		#{loginName},
 		direct_person_id =
-		#{directPersonId,jdbcType=VARCHAR},
+		#{directPersonId},
 		employee_phone =
-		#{employeePhone,jdbcType=VARCHAR},
+		#{employeePhone},
 		employee_twophone =
-		#{employeeTwophone,jdbcType=VARCHAR},
+		#{employeeTwophone},
 		entry_time =
-		#{entryTime,jdbcType=VARCHAR},
+		#{entryTime},
 		probationary_expired =
-		#{probationaryExpired,jdbcType=VARCHAR},
-		department_id=#{departmentId,jdbcType=VARCHAR},
-		employee_status=#{employeeStatus,jdbcType=VARCHAR},
+		#{probationaryExpired},
+		department_id=#{departmentId},
+		employee_status=#{employeeStatus},
 		work_address=#{workAddress},
 		marriage_status=#{marriageStatus},
 		seniority=#{seniority}
 		where
 		employee_id =
-		#{employeeId,jdbcType=VARCHAR}
+		#{employeeId}
 	</update>
 
 
@@ -754,10 +754,10 @@
 		update
 		organization.employee_
 		set
-		department_id=#{departmentId,jdbcType=VARCHAR}
+		department_id=#{departmentId}
 		where
 		employee_id =
-		#{employeeId,jdbcType=VARCHAR}
+		#{employeeId}
 	</update>
 	<!-- 李业:(功能:人员导入)根据登录名和公司id查询公司员工 -->
 	<select id="selectEmployeeByLoginNameAndCompanyId" parameterType="java.lang.String" resultMap="Employee">

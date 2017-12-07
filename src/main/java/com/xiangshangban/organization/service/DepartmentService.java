@@ -63,4 +63,6 @@ public interface DepartmentService {
 		int getDepartmentByName(String companyId, String departmentName, String departmentId);
 
 		int selectDepartmentCountByCompanyId(String companyId);
+		
+		Department selectDepatmentByDepartmentNameAndCompanyId(String companyId,String departmentName);
 }

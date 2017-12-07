@@ -201,4 +201,11 @@
     where 
     department_id = #{departmentId,jdbcType=VARCHAR}
   </update>
+  
+  <select id="selectDepatmentByDepartmentNameAndCompanyId" parameterType="java.lang.String" resultMap="Department">
+  	select department_id,department_name
+  	from department_
+  	where company_id = #{companyId} and department_name = #{departmentName} and status = '1'
+  </select>
+  
 </mapper>

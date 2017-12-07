@@ -1,7 +1,6 @@
 package com.xiangshangban.organization.controller;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,8 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang.StringUtils;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.jboss.logging.Logger;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,6 +31,7 @@ import com.xiangshangban.organization.bean.ReturnData;
 import com.xiangshangban.organization.bean.Transferjob;
 import com.xiangshangban.organization.service.CompanyService;
 import com.xiangshangban.organization.service.ConnectEmpPostService;
+import com.xiangshangban.organization.service.DepartmentService;
 import com.xiangshangban.organization.service.EmployeeService;
 import com.xiangshangban.organization.service.EmployeeSpeedImportService;
 import com.xiangshangban.organization.service.OSSFileService;
@@ -61,7 +60,8 @@ public class EmployeeController {
 	private EmployeeSpeedImportService employeeSpeedImportService;
 	@Autowired
 	private CompanyService companyService;
-	
+	@Autowired
+	private DepartmentService departmentService;
 	
 	/**
 	 * 激活
@@ -145,6 +145,32 @@ public class EmployeeController {
 			return returnData;
 		}
 		//判断三个岗位是否重复
+		List<Post> postList = employeenew.getPostList();
+		List<String> postString = new ArrayList<String>();
+		boolean masterPostFlag = true;
+		if(postList!=null && postList.size()>0){
+			for( Post post:postList){
+				if("1".equals(post.getPostGrades())){
+					employeenew.setDepartmentId(post.getDepartmentId());
+					masterPostFlag=false;
+				}
+				if(postString.contains(post.getPostId())){
+					returnData.setMessage("岗位不可相同");
+					returnData.setReturnCode("4119");
+					return returnData;
+				}
+				postString.add(post.getPostId());
+			}
+			if(masterPostFlag){
+				returnData.setMessage("必传参数为空");
+				returnData.setReturnCode("3006");
+				return returnData;
+			}
+		}else{
+			returnData.setMessage("必传参数为空");
+			returnData.setReturnCode("3006");
+			return returnData;
+		}
 		returnData = employeeService.insertEmployee(employeenew);
 		return returnData;
 	}
@@ -224,7 +250,7 @@ public class EmployeeController {
 			String postGrades = jobj.getString("postGrades");
 			ConnectEmpPost empPost = new ConnectEmpPost();
 			ConnectEmpPost connect = new ConnectEmpPost();
-			ConnectEmpPost connectemppos = connectEmpPostService.findByConnect(employeeId, departmentId, postGrades);
+			ConnectEmpPost connectemppos = connectEmpPostService.findByConnect(employeeId, departmentId, postGrades,companyId);
 			if (connectemppos == null) {
 				empPost.setEmployeeId(employeeId);
 				empPost.setDepartmentId(departmentId);
@@ -557,10 +583,23 @@ public class EmployeeController {
 					}
 				}
 			}
+			List<Post> postList = emp.getPostList();
+			if(postList!=null && postList.size()>0){
+				for(Post post:postList){
+					if("1".equals(post.getPostGrades()) && StringUtils.isNotEmpty(post.getDepartmentId()) && StringUtils.isNotEmpty(post.getPostId())){
+						emp.setPostId(post.getPostId());
+						emp.setDepartmentId(post.getDepartmentId());
+					}
+				}
+			}else{
+				result.put("message", "必传参数为空");
+				result.put("returnCode", "3006");
+				return result;
+			}
 			if (StringUtils.isEmpty(emp.getEmployeeName()) || StringUtils.isEmpty(emp.getEmployeeSex()) 
-					|| StringUtils.isEmpty(emp.getLoginName()) || StringUtils.isEmpty(emp.getDepartmentId()) 
+					|| StringUtils.isEmpty(emp.getLoginName())
 					|| StringUtils.isEmpty(emp.getEntryTime()) || StringUtils.isEmpty(emp.getProbationaryExpired()) 
-					|| StringUtils.isEmpty(emp.getPostId()) || StringUtils.isEmpty(emp.getWorkAddress())) {
+					 || StringUtils.isEmpty(emp.getWorkAddress())) {
 				result.put("message", "必传参数为空");
 				result.put("returnCode", "3006");
 				return result;
@@ -571,14 +610,14 @@ public class EmployeeController {
 			ConnectEmpPost connect =  connectEmpPostService.selectEmployeePostInformation(emp.getEmployeeId(), companyId);
 			if (connect != null && !emp.getPostId().equals(connect.getPostId())) {
 				connectEmpPostService.updateEmployeeWithPost(emp.getEmployeeId(), 
-						emp.getDepartmentId(), emp.getPostId());
+						emp.getDepartmentId(), emp.getPostId(),companyId);
 
 				// 添加更换之前主岗位的换岗时间(transferEndTime)
 				transferjobService.updateTransferEndTimeWhereDeleteEmployee(
 						companyId, userId, emp.getEmployeeId(), emp.getDepartmentId(), connect.getPostId());
 			}
 			if(connect==null){
-				connectEmpPostService.deleteEmployeeFromPost(emp.getEmployeeId(), emp.getDepartmentId());
+				connectEmpPostService.deleteEmployeeFromPost(emp.getEmployeeId(), emp.getDepartmentId(),companyId);
 				connect = new ConnectEmpPost();
 				connect.setEmployeeId(emp.getEmployeeId());
 				connect.setDepartmentId(emp.getDepartmentId());
@@ -595,9 +634,15 @@ public class EmployeeController {
 					emp.getTransferJobCause(), null, userId, null, companyId, emp.getDirectPersonId(), emp.getPostId());
 
 			transferjobService.insertTransferjob(transferjob);
-			connectEmpPostService.deleteEmployeeWithPost(emp.getEmployeeId(), emp.getDepartmentId());
+			
+			connectEmpPostService.deleteEmployeeWithPost(emp.getEmployeeId(), companyId);
 			List<ConnectEmpPost> list = new ArrayList<ConnectEmpPost>();
-			List<Post> vicePostList = emp.getPostList();
+			List<Post> vicePostList = new ArrayList<Post>();
+			for(Post post:postList){
+				if("0".equals(post.getPostGrades())){
+					vicePostList.add(post);
+				}
+			}
 			if(StringUtils.isNotEmpty(vicePostList.get(0).getPostId())&&StringUtils.isNotEmpty(vicePostList.get(1).getPostId())){
 				if(vicePostList.get(0).getPostId().equals(vicePostList.get(1).getPostId())){
 					result.put("message","不能选择两个相同的副岗位");
@@ -624,10 +669,10 @@ public class EmployeeController {
 					return result;
 				}
 			}
-			for (Post post: emp.getPostList()) {
+			for (Post post: vicePostList) {
 				ConnectEmpPost connectEmpPost = new ConnectEmpPost();
 				connectEmpPost.setEmployeeId(emp.getEmployeeId());
-				connectEmpPost.setDepartmentId(emp.getDepartmentId());
+				connectEmpPost.setDepartmentId(post.getDepartmentId());
 				connectEmpPost.setPostGrades("0");
 				connectEmpPost.setIsDelete("0");
 				connectEmpPost.setCompanyId(companyId);
@@ -640,7 +685,8 @@ public class EmployeeController {
 			if (list.size() > 0) {
 				connectEmpPostService.insertEmployeeWithPost(list);
 			}
-			employeeService.updateEmployeeInfoStatus(companyId, emp.getEmployeeId());
+			emp.setCompanyId(companyId);
+			employeeService.updateEmployeeInfoStatus(emp);
 			
 			
 			result.put("message", "成功");
