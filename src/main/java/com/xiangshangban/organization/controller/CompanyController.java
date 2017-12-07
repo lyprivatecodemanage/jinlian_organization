@@ -188,6 +188,7 @@ public class CompanyController {
 		int departmentCount = departmentService.selectDepartmentCountByCompanyId(companyId);
 		int employeeCount = employeeService.selectEmployeeCountByCompanyId(companyId);
 		//int deviceCount = deviceService.selectDeviceCountByCompanyId(companyId);
+		result.put("company",company);
 		result.put("departmentCount",departmentCount);
 		result.put("employeeCount",employeeCount);
 		//result.put("deviceCount",deviceCount);
