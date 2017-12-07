@@ -1,9 +1,0 @@
-2017-12-07 11:48:59 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
-  2017-12-07 11:49:04 INFO [com.xiangshangban.organization.controller.CompanyController]: org.mybatis.spring.MyBatisSystemException: nested exception is org.apache.ibatis.exceptions.TooManyResultsException: Expected one result (or null) to be returned by selectOne(), but found: 2
-  2017-12-07 11:58:17 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
-  2017-12-07 11:59:57 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
-  2017-12-07 12:02:08 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
-  2017-12-07 12:52:49 INFO [com.xiangshangban.organization.controller.CompanyController]: org.mybatis.spring.MyBatisSystemException: nested exception is org.apache.ibatis.exceptions.TooManyResultsException: Expected one result (or null) to be returned by selectOne(), but found: 2
-  2017-12-07 12:53:58 INFO [com.xiangshangban.organization.controller.CompanyController]: org.mybatis.spring.MyBatisSystemException: nested exception is org.apache.ibatis.exceptions.TooManyResultsException: Expected one result (or null) to be returned by selectOne(), but found: 2
-  2017-12-07 12:54:00 INFO [com.xiangshangban.organization.controller.CompanyController]: org.mybatis.spring.MyBatisSystemException: nested exception is org.apache.ibatis.exceptions.TooManyResultsException: Expected one result (or null) to be returned by selectOne(), but found: 2
-  

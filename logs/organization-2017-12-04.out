@@ -1,19 +1,2 @@
-<<<<<<< HEAD
-2017-12-04 14:55:40 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
-  2017-12-04 15:25:09 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
-  2017-12-04 15:31:27 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
-  2017-12-04 16:08:25 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
-  2017-12-04 17:28:34 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
-=======
-2017-12-04 17:05:57 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
-  2017-12-04 17:33:01 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
-  2017-12-04 17:36:42 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
-  2017-12-04 17:57:20 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
-  2017-12-04 17:59:51 INFO [com.xiangshangban.organization.service.EmployeeSpeedServiceImpl]: java.lang.ArrayIndexOutOfBoundsException: 0
-  2017-12-04 18:01:29 INFO [com.xiangshangban.organization.service.EmployeeSpeedServiceImpl]: java.lang.ArrayIndexOutOfBoundsException: 0
-  2017-12-04 18:02:30 INFO [com.xiangshangban.organization.service.EmployeeSpeedServiceImpl]: java.lang.ArrayIndexOutOfBoundsException: 0
-  2017-12-04 20:22:24 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
-  2017-12-04 20:24:35 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功
-  2017-12-04 20:26:01 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功
->>>>>>> b2d2f1e5b035c05a07e74648296d77540831f394
+2017-12-05 17:51:42 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
   
