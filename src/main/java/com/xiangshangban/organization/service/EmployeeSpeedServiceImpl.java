@@ -27,6 +27,7 @@ import com.xiangshangban.organization.bean.Post;
 import com.xiangshangban.organization.bean.ReturnData;
 import com.xiangshangban.organization.exception.CustomException;
 import com.xiangshangban.organization.util.ImportUtil;
+import com.xiangshangban.organization.util.POIUtil;
 import com.xiangshangban.organization.util.PropertiesUtils;
 import com.xiangshangban.organization.util.RegexUtil;
 import com.xiangshangban.organization.util.TimeUtil;
@@ -72,7 +73,7 @@ public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 			returnData.setReturnCode("3001");
 			return returnData;
 		}
-		int lastSheetNum = wookbook.getNumberOfSheets();
+		//int lastSheetNum = wookbook.getNumberOfSheets();
 		//for (int i = 0; i < lastSheetNum; i++) {
 			// 得到一个工作表
 			Sheet sheet = wookbook.getSheetAt(0);
@@ -113,35 +114,38 @@ public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 					try{
 						if(k==10 || k == 11){
 							try{
-								try{
-									value = cell.getStringCellValue();
-								}catch(NullPointerException e){
+								//try{
+									value = POIUtil.getExcelCellValue(cell);
+								/*}catch(NullPointerException e){
 									value = "";
-								}
+								}*/
 							}catch(Exception e){
 								SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-								Date date = cell.getDateCellValue();
-								value = sdf.format(date);
+								value = sdf.format(sdf.parse(value));
+								/*Date date = cell.getDateCellValue();
+								value = sdf.format(date);*/
 							}
 							//TimeUtil.timeFormatTransfer();
 						}else if(k==5||k==8||k==15||k==16){
-							try{
-								try{
-									value = cell.getStringCellValue();
-								}catch(IllegalStateException e){
+							/*try{
+								try{*/
+									//value = cell.getStringCellValue();
+									value = POIUtil.getExcelCellValue(cell);
+								/*}catch(IllegalStateException e){
 									DecimalFormat format = new DecimalFormat("#");  
 									Number valueD = cell.getNumericCellValue();  
 									value = format.format(valueD);  
 								}
 							}catch(NullPointerException e){
 								value = "";
-							}
+							}*/
 						}else{
-							try{
-								value = cell.getStringCellValue();
-							}catch(NullPointerException e){
+							//try{
+								value = POIUtil.getExcelCellValue(cell);
+								//value = cell.getStringCellValue();
+							/*}catch(NullPointerException e){
 								value = "";
-							}
+							}*/
 						}
 					}catch(Exception e){
 						String importMessage = "第" + i + "行,第" +( k+1) + "列,请检查数据格式!";
