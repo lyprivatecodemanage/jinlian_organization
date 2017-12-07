@@ -161,7 +161,7 @@ public class TransferjobController {
 							String postGrades = jobj.getString("postGrades");
 							ConnectEmpPost empPost = new ConnectEmpPost();
 							ConnectEmpPost connect = new ConnectEmpPost();
-							ConnectEmpPost connectemppos = connectEmpPostService.findByConnect(employeeId,departmentId, postGrades);
+							ConnectEmpPost connectemppos = connectEmpPostService.findByConnect(employeeId,departmentId, postGrades,companyId);
 							if(connectemppos==null){
 								empPost.setEmployeeId(employeeId);
 								empPost.setDepartmentId(departmentId);
@@ -263,7 +263,7 @@ public class TransferjobController {
 						String postGrades = jobj.getString("postGrades");
 						ConnectEmpPost empPost = new ConnectEmpPost();
 						ConnectEmpPost connect = new ConnectEmpPost();
-						ConnectEmpPost connectemppos = connectEmpPostService.findByConnect(employeeId,departmentId, postGrades);
+						ConnectEmpPost connectemppos = connectEmpPostService.findByConnect(employeeId,departmentId, postGrades,companyId);
 						if(connectemppos==null){
 							empPost.setEmployeeId(employeeId);
 							empPost.setDepartmentId(departmentId);

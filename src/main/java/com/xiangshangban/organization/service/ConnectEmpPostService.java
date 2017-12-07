@@ -14,7 +14,7 @@ public interface ConnectEmpPostService {
 	ConnectEmpPost findByConnectpostemp(String employeeId,String postId);
 	String updateConnectDelehipostStaus(String employeeId);
 	String updatetpostGradespostStaus(ConnectEmpPost connect);
-	ConnectEmpPost findByConnect(String employeeId,String departmentId,String postGrades);
+	ConnectEmpPost findByConnect(String employeeId,String departmentId,String postGrades,String companyId);
 	/**
 	 * 查询岗位下的人员
 	 * @param companyId
@@ -36,7 +36,7 @@ public interface ConnectEmpPostService {
 	 * @param departmentId
 	 * @return
 	 */
-	int deleteEmployeeWithPost(String employeeId,String departmentId);
+	int deleteEmployeeWithPost(String employeeId,String companyId);
 	/**
 	 * @author 李业:编辑个人信息(副岗位)
 	 * 添加副岗位信息
@@ -52,7 +52,7 @@ public interface ConnectEmpPostService {
 	 * @param postId
 	 * @return
 	 */
-	int updateEmployeeWithPost(String employeeId,String departmentId,String postId);
+	int updateEmployeeWithPost(String employeeId,String departmentId,String postId,String companyId);
 	/**
 	 * @author 李业:编辑个人信息(主岗位)
 	 * 查询主岗位信息
@@ -69,7 +69,7 @@ public interface ConnectEmpPostService {
 	 * @param departmentId
 	 * @return
 	 */
-	int deleteEmployeeFromPost(String employeeId,String departmentId);
+	int deleteEmployeeFromPost(String employeeId,String departmentId,String companyId);
 	/**
 	 * 根据员工id和公司id删除员工在公司的所有岗位职务
 	 * @param employeeId

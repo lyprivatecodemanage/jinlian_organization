@@ -98,4 +98,10 @@ public class PostServiceImpl implements PostService {
 		
 		return postDao.findBydepartmentPost(departmentId, companyId);
 	}
+
+	@Override
+	public List<Post> selectPostByDepartmentIdAndCompanyId(String companyId, String departmentId) {
+		
+		return postDao.selectPostByDepartmentIdAndCompanyId(companyId, departmentId);
+	}
 }

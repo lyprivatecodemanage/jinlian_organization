@@ -51,4 +51,6 @@ public interface PostService {
 	 * @return
 	 */
 	List<Post> findBydepartmentPost(@Param("companyId")String companyId,@Param("departmentId")String departmentId);
+	
+	List<Post> selectPostByDepartmentIdAndCompanyId(String companyId,String departmentId);
 }

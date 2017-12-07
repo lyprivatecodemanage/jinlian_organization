@@ -192,6 +192,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	 * @param employee
 	 */
 	public void updateDeviceEmp(Employee employee) {
+		employee = employeeDao.selectByEmployee(employee.getEmployeeId(), employee.getCompanyId());
 		Company company = companyDao.selectByCompany(employee.getCompanyId());
 	    employee.setCompanyNo(company.getCompanyNo());
 		List<Employee> cmdlist=new ArrayList<Employee>();
@@ -223,11 +224,49 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 	public void updateTransfer(Employee employee) {
 		//把员工关联的岗位添加到connect_emp_post_中间表里面
+		
+		//ConnectEmpPost masterPost = connectEmpPostDao.selectEmployeePostInformation(employee.getEmployeeId(), employee.getCompanyId());
 		for(Post post:employee.getPostList()){
+			System.out.println("============>"+post.getDepartmentId());
+			System.out.println("============>"+post.getPostId());
+			//主岗位
+			//if("1".equals(post.getPostGrades())){
+				/*if(masterPost!=null){
+					connectEmpPostDao.updateEmployeeWithPost(employee.getEmployeeId(), post.getDepartmentId(), post.getPostId(),employee.getCompanyId());
+				}else{*/
+			if(StringUtils.isNotEmpty(post.getPostId()) && StringUtils.isNotEmpty(post.getDepartmentId())){
+					ConnectEmpPost connect = new ConnectEmpPost();
+					connect.setCompanyId(employee.getCompanyId());
+					connect.setDepartmentId(post.getDepartmentId());
+					connect.setEmployeeId(employee.getEmployeeId());
+					connect.setIsDelete("0");
+					connect.setPostId(post.getPostId());
+					connect.setPostGrades(post.getPostGrades());
+					connectEmpPostDao.saveConnect(connect);
+			}
+				//}
+					if("1".equals(post.getPostGrades())){
+						Transferjob transferjob = new Transferjob();
+					    transferjob.setTransferJobId(FormatUtil.createUuid());
+					    transferjob.setEmployeeId(employee.getEmployeeId());
+					    transferjob.setDepartmentId(post.getDepartmentId());
+					    transferjob.setTransferBeginTime(employee.getEntryTime());
+					    transferjob.setTransferJobCause("入职");		
+					    transferjob.setUserId(employee.getOperateUserId());//操作人ID	
+					    transferjob.setCompanyId(employee.getCompanyId());
+					    transferjob.setPostId(post.getPostId());
+					    transferjobDao.insertTransferjob(transferjob);
+					}
+			//}else{
+				
+			//}
+		}
+		/*for(Post post:employee.getPostList()){
 			String postId = post.getPostId();
 			if(StringUtils.isNotEmpty(postId)){
+				
 				ConnectEmpPost empPost = connectEmpPostDao.findByConnect(employee.getEmployeeId(), 
-						employee.getDepartmentId(), post.getPostGrades());
+						post.getDepartmentId(), post.getPostGrades(),employee.getCompanyId());
 				if(empPost==null || StringUtils.isEmpty(empPost.getPostId())){//不存在，则添加
 					empPost =new ConnectEmpPost();
 					empPost.setEmployeeId(employee.getEmployeeId());
@@ -253,7 +292,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 				}
 			}
 			
-		}
+		}*/
 	}
 	//查询单条员信息
 	@Override
@@ -436,9 +475,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 		return employeeDao.updateEmployeeInformation(emp);
 	}
 	@Override
-	public int updateEmployeeInfoStatus(String companyId, String userId) {
-		int result = employeeDao.updateEmployeeInfoStatus(companyId, userId);
-		Employee employee = employeeDao.selectByEmployee(userId, companyId);
+	public int updateEmployeeInfoStatus(Employee employee) {
+		int result = employeeDao.updateEmployeeInfoStatus(employee.getCompanyId(), employee.getEmployeeId());
+		/*Employee employee = employeeDao.selectByEmployee(userId, companyId);*/
 		this.updateDeviceEmp(employee);
 		return result;
 	}

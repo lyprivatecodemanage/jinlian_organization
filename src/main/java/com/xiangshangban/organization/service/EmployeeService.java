@@ -106,7 +106,7 @@ public interface EmployeeService {
 	 */
 	int updateEmployeeInformation(Employee emp);
 	
-	int updateEmployeeInfoStatus(String companyId,String userId);
+	int updateEmployeeInfoStatus(Employee employee);
 	/**
 	 * 激活
 	 * @param employeeId

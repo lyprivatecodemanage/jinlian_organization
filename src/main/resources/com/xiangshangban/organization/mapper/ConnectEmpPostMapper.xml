@@ -22,6 +22,7 @@
     c.department_id=#{departmentId}
     and
     c.post_grades=#{postGrades}
+    and c.company_id = #{companyId}
    </select>
      
     <select id="findByConnectpostemp" parameterType="java.lang.String" resultMap="ConnectEmpPost">
@@ -70,23 +71,23 @@
 	<delete id="deleteEmployeeWithDepartment" parameterType="java.lang.String">
 		update connect_emp_post_
 		set department_id = #{departmentId},post_id = #{postId}
-		where employee_id = #{employeeId}  
+		where employee_id = #{employeeId}  and company_id = #{companyId}
 	</delete>
 	<update id="updateEmployeeWithPost" parameterType="java.lang.String">
 		update connect_emp_post_
 		set post_id = #{postId}, department_id = #{departmentId}
-		where employee_id = #{employeeId} and post_grades = '1'
+		where employee_id = #{employeeId} and post_grades = '1' and company_id = #{companyId}
 	</update>
 	<delete id="deleteEmployeeFromPost" parameterType="java.lang.String">
 		delete from connect_emp_post_
-		where employee_id = #{employeeId} and department_id = #{departmentId} and post_grades = '1'
+		where employee_id = #{employeeId} and department_id = #{departmentId} and post_grades = '1' and company_id = #{companyId}
 	</delete>
 	
 	
 	<!-- 李业:编辑个人信息(副岗位) -->
 	<delete id="deleteEmployeeWithPost" parameterType="java.lang.String">
 		delete from connect_emp_post_
-		where employee_id = #{employeeId} and department_id = #{departmentId} and post_grades = '0'
+		where employee_id = #{employeeId} and company_id = #{companyId} and post_grades = '0'
 	</delete>
 	<insert id="insertEmployeeWithPost" parameterType="java.util.List">
 		insert into connect_emp_post_ (employee_id, post_id, department_id, post_grades, company_id) 

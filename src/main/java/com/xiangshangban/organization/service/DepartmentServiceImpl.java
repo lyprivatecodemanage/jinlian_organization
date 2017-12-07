@@ -209,5 +209,11 @@ public class DepartmentServiceImpl implements DepartmentService {
 		return departmentDao.selectDepartmentCountByCompanyId(companyId);
 	}
 
+	@Override
+	public Department selectDepatmentByDepartmentNameAndCompanyId(String companyId, String departmentName) {
+		
+		return departmentDao.selectDepatmentByDepartmentNameAndCompanyId(companyId, departmentName);
+	}
+
 	
 }
