@@ -512,8 +512,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Override
 	public void export(String excelName, OutputStream out, String companyId) {
 		List<Employee> empList = employeeDao.findExport(companyId);
-		String[] headers = new String[]{"工号","姓名","性别","所在地","婚姻状况","登录名","所属部门","汇报人","汇报人登录名",
-				"在职状态","入职时间","转正时间","主岗位","副岗位1","副岗位2","联系方式1","联系方式2","工龄"};  
+		String[] headers = new String[]{"工号","姓名*","性别（男/女）","所在地（省份）*","婚姻状况（已婚/未婚/离异）","登录名（手机号）*","所属部门*",
+				"汇报人","汇报人登录名（手机号）", "在职状态（在职/离职）","入职时间*","转正时间*","主岗位*","副部门1","副岗位1","副部门2","副岗位2","联系方式1","联系方式2","工龄"};  
 		 // 第一步，创建一个webbook，对应一个Excel文件  
 		HSSFWorkbook workbook = new HSSFWorkbook();  
         //生成一个表格  
@@ -580,7 +580,16 @@ public class EmployeeServiceImpl implements EmployeeService {
             	row.createCell(j++).setCellValue("未婚");
             }
             row.createCell(j++).setCellValue(emp.getLoginName());//登录名
-            row.createCell(j++).setCellValue(emp.getDepartmentName());//所在部门
+            
+            String mainPost = "";
+            String mainDept = "";
+            for(Post post:emp.getPostList()){
+            	if("1".equals(post.getPostGrades())){
+            		mainDept=post.getDepartmentName();//主岗位对应的部门
+            		mainPost = post.getPostName();//主岗位
+            	}
+            }
+            row.createCell(j++).setCellValue(mainDept);//所在部门
             row.createCell(j++).setCellValue(emp.getDirectPersonName());//汇报人
             row.createCell(j++).setCellValue(emp.getDirectPersonLoginName());//汇报人登录名
             if("0".equals(emp.getEmployeeStatus())){//在职状态
@@ -590,20 +599,17 @@ public class EmployeeServiceImpl implements EmployeeService {
             }
             row.createCell(j++).setCellValue(emp.getEntryTime());//入职时间
             row.createCell(j++).setCellValue(emp.getProbationaryExpired());//转正时间
-            for(Post post:emp.getPostList()){
-            	if("1".equals(post.getPostGrades())){
-            		row.createCell(j++).setCellValue(post.getPostName());//主岗位
-            	}
-            }
+            row.createCell(j++).setCellValue(mainPost);//主岗位
             for(Post post:emp.getPostList()){
             	if("0".equals(post.getPostGrades())){
+            		row.createCell(j++).setCellValue(post.getDepartmentName());//副部门
             		row.createCell(j++).setCellValue(post.getPostName());//副岗位
             	}
             }
             if(emp.getPostList().size()==1){
-            	j=j+2;
+            	j=j+4;
             }else if(emp.getPostList().size()==2){
-            	j=j+1;
+            	j=j+2;
             }
             row.createCell(j++).setCellValue(emp.getEmployeePhone());//联系方式1
             row.createCell(j++).setCellValue(emp.getEmployeeTwophone());//联系方式2
