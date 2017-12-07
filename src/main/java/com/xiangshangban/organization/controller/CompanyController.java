@@ -185,6 +185,11 @@ public class CompanyController {
 			result.put("returnCode", "4121");
 			return result;
 		}
+		if(StringUtils.isNotEmpty(company.getCompanyLogo())){
+			String logoPath = oSSFileService.getPathByKey(company.getCompanyNo(),
+					"companyLogo", company.getCompanyLogo());
+			company.setCompanyLogoPath(logoPath);
+		}
 		int departmentCount = departmentService.selectDepartmentCountByCompanyId(companyId);
 		int employeeCount = employeeService.selectEmployeeCountByCompanyId(companyId);
 		//int deviceCount = deviceService.selectDeviceCountByCompanyId(companyId);

@@ -154,10 +154,12 @@ public class EmployeeController {
 					employeenew.setDepartmentId(post.getDepartmentId());
 					masterPostFlag=false;
 				}
-				if(postString.contains(post.getPostId())){
-					returnData.setMessage("岗位不可相同");
-					returnData.setReturnCode("4119");
-					return returnData;
+				if(StringUtils.isNotEmpty(post.getPostId())){
+					if(postString.contains(post.getPostId())){
+						returnData.setMessage("岗位不可相同");
+						returnData.setReturnCode("4119");
+						return returnData;
+					}
 				}
 				postString.add(post.getPostId());
 			}

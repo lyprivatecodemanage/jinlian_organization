@@ -234,6 +234,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 				/*if(masterPost!=null){
 					connectEmpPostDao.updateEmployeeWithPost(employee.getEmployeeId(), post.getDepartmentId(), post.getPostId(),employee.getCompanyId());
 				}else{*/
+			if(StringUtils.isNotEmpty(post.getPostId()) && StringUtils.isNotEmpty(post.getDepartmentId())){
 					ConnectEmpPost connect = new ConnectEmpPost();
 					connect.setCompanyId(employee.getCompanyId());
 					connect.setDepartmentId(post.getDepartmentId());
@@ -242,6 +243,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 					connect.setPostId(post.getPostId());
 					connect.setPostGrades(post.getPostGrades());
 					connectEmpPostDao.saveConnect(connect);
+			}
 				//}
 					if("1".equals(post.getPostGrades())){
 						Transferjob transferjob = new Transferjob();

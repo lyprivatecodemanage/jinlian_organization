@@ -58,4 +58,8 @@
   2017-12-07 22:52:52 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功
   2017-12-07 22:53:33 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功
   2017-12-07 22:53:55 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2017-12-07 23:20:22 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
+  2017-12-07 23:25:58 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功
+  2017-12-07 23:35:52 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功
+  2017-12-07 23:44:54 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
   
