@@ -286,7 +286,7 @@ public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 					importReturnDataList.add(importReturnData);
 					continue;
 				}
-				String onePhone = newEmp.getEmployeePhone();
+				/*String onePhone = newEmp.getEmployeePhone();
 				boolean onePhoneMatch = true;
 				if(StringUtils.isNotEmpty(onePhone) && "0".equals(onePhone)){
 					onePhoneMatch = RegexUtil.matchPhone(onePhone);
@@ -309,7 +309,7 @@ public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 					importReturnData.setImportMessage(importMessage);
 					importReturnDataList.add(importReturnData);
 					continue;
-				}
+				}*/
 				// 查询直接汇报人是否存在
 				String directPersonName = newEmp.getDirectPersonName();//汇报人姓名
 				//汇报人姓名和登录名是否填写
