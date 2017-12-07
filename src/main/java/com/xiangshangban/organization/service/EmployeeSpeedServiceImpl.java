@@ -267,6 +267,14 @@ public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 				}
 				String loginName = newEmp.getLoginName();
 				boolean loginNameMatch = RegexUtil.matchPhone(loginName);
+				Employee empLoginName = employeeService.selectEmployeeByLoginNameAndCompanyId(loginName, companyId);
+				if(empLoginName!=null){
+					String importMessage = "第" + i + "行,登录名已存在!";
+					ImportReturnData importReturnData = new ImportReturnData();
+					importReturnData.setImportMessage(importMessage);
+					importReturnDataList.add(importReturnData);
+					continue;
+				}
 				if (!loginNameMatch) {
 					String importMessage = "第" + i + "行,登录名格式必须为11位手机号!";
 					ImportReturnData importReturnData = new ImportReturnData();
