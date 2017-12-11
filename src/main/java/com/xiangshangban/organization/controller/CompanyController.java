@@ -190,7 +190,7 @@ public class CompanyController {
 					"companyLogo", company.getCompanyLogo());
 			company.setCompanyLogoPath(logoPath);
 		}
-		int departmentCount = departmentService.selectDepartmentCountByCompanyId(companyId);
+		Integer departmentCount = departmentService.selectDepartmentCountByCompanyId(companyId);
 		int employeeCount = employeeService.selectEmployeeCountByCompanyId(companyId);
 		//int deviceCount = deviceService.selectDeviceCountByCompanyId(companyId);
 		result.put("company",company);

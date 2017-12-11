@@ -105,7 +105,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 			user.setUsername(employee.getEmployeeName());
 			user.setPhone(employee.getLoginName());
 			user.setStatus("1");
-			usersDao.insertSelective(user);//加入注册表
+			//usersDao.insertSelective(user);//加入注册表
 			
 			UserCompanyDefault userCompany = new UserCompanyDefault();
 			userCompany.setCompanyId(employee.getCompanyId());
