@@ -3,4 +3,7 @@
   2017-12-11 11:42:18 INFO [com.xiangshangban.organization.controller.CompanyController]: java.lang.NullPointerException
   2017-12-11 11:46:19 INFO [com.xiangshangban.organization.controller.CompanyController]: java.lang.NullPointerException
   2017-12-11 11:58:27 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
+  2017-12-11 13:13:50 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功
+  2017-12-11 13:14:22 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功
+  2017-12-11 13:54:28 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
   

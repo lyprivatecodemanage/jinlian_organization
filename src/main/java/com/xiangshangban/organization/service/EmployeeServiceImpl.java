@@ -483,7 +483,18 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	@Override
-	public int activeEmp(String companyId, String employeeId) {
+	public int activeEmp(String companyId, String employeeId,String loginName) {
+		Employee employee = new Employee(companyId,employeeId,loginName);
+		Uusers user = usersDao.selectByPhone(employee.getLoginName());
+		employee.setEmployeeStatus("0");
+		if(user==null || StringUtils.isEmpty(user.getUserid())){//未注册，写入注册表	
+			user = new Uusers();
+			user.setUserid(employeeId);
+			user.setUsername(employee.getEmployeeName());
+			user.setPhone(employee.getLoginName());
+			user.setStatus("1");
+			usersDao.insertSelective(user);//加入注册表
+		}
 		return userCompanyDefaultDao.updateActive(companyId, employeeId);
 	}
 

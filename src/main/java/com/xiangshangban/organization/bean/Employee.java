@@ -66,6 +66,11 @@ public class Employee {
     	this.postName = postName;
     }
     public Employee(){}
+    public Employee(String companyId,String employeeId,String loginName){
+    		this.companyId=companyId;
+    		this.employeeId = employeeId;
+    		this.loginName = loginName;
+    }
 	public Employee(String employeeNo,String employeeName,String employeeSex, String workAddress,
 			String marriageStatus,String loginName,String departmentName,String directPersonName,
 			String directPersonLoginName,String employeeStatus,String entryTime,String probationaryExpired,

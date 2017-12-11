@@ -112,7 +112,7 @@ public interface EmployeeService {
 	 * @param employeeId
 	 * @return
 	 */
-	int activeEmp(String companyId, String employeeId);
+	int activeEmp(String companyId, String employeeId,String loginName);
 	/**
 	 * 查询员工是否为该公司的管理员
 	 * @param companyId
