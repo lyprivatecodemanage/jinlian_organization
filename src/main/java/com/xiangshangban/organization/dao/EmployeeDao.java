@@ -11,6 +11,8 @@ import com.xiangshangban.organization.bean.Employee;
 @Mapper
 public interface EmployeeDao {
 
+	Employee selectEmployeeByCompanyIdAndEmployeeId(@Param("employeeId")String employeeId,@Param("companyId")String companyId);
+	
 	int deleteByEmployee(@Param("employeeId") String employeeId, @Param("companyId") String companyId);
 
 	int insertEmployee(Employee employee);

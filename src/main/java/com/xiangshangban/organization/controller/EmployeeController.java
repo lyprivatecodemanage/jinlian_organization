@@ -82,13 +82,13 @@ public class EmployeeController {
 		// String operateUserId = request.getHeader("accessUserId");
 		JSONObject obj = JSON.parseObject(jsonString);
 		String employeeId = obj.getString("employeeId");
-		String loginName = obj.getString("loginName");
+		//String loginName = obj.getString("loginName");
 		if (StringUtils.isEmpty(employeeId)) {
 			returnData.setMessage("必传参数为空");
 			returnData.setReturnCode("3006");
 			return returnData;
 		}
-		employeeService.activeEmp(companyId, employeeId,loginName);
+		employeeService.activeEmp(companyId, employeeId);
 		employeeService.resetEmployeeStatus(companyId, employeeId);
 		returnData.setMessage("数据请求成功");
 		returnData.setReturnCode("3000");
