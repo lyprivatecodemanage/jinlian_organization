@@ -128,18 +128,10 @@ s.userid =(select s.userid from organization.u_users s where s.account=#{Account
     <if test="companyCode!=null and companyCode!=''">
       company_code=#{companyCode}, 
     </if>
-    <if test="companyAbbreviationName!=null and companyAbbreviationName!=''">
       company_abbreviation_name=#{companyAbbreviationName},
-    </if>
-    <if test="companyPhone!=null and companyPhone!=''">
       company_phone=#{companyPhone},
-    </if>
-    <if test="industryType!=null and industryType!=''">
       industry_type=#{industryType},
-    </if>
-    <if test="companyArea!=null and companyArea!=''">
       company_area=#{companyArea},
-    </if>
       company_id = #{companyId} 
     where 
     company_id = #{companyId}
@@ -150,5 +142,8 @@ s.userid =(select s.userid from organization.u_users s where s.account=#{Account
   	set company_logo = #{companyLogo}
   	where company_id = #{companyId}
   </update>
+  <!-- <select id="select">
   
+  
+  </select> -->
 </mapper>

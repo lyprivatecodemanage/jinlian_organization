@@ -93,4 +93,5 @@ Was expecting one of:
   2017-12-12 18:02:13 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功
   2017-12-12 18:02:13 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功
   2017-12-12 18:02:14 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功
+  2017-12-12 19:57:58 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
   
