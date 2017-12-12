@@ -77,6 +77,11 @@ public class CompanyController {
 		Company companytemp=JSON.parseObject(company,Company.class);
 		ReturnData returnData = new ReturnData();
 		String companyId = companytemp.getCompanyId();
+		String companyName = companytemp.getCompanyName();
+		if(StringUtils.isEmpty(companyName)){
+			returnData.setMessage("必传参数为空");
+			returnData.setReturnCode("3000");
+		}
 		if(StringUtils.isNotEmpty(companyId)){
 			companyService.updateByCompany(companytemp);	
 			returnData.setMessage("数据请求成功");

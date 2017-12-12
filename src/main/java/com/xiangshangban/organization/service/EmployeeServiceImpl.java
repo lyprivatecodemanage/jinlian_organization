@@ -93,6 +93,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 	public ReturnData insertEmployee(Employee employee) {
 		ReturnData returnData = new ReturnData();
 		Uusers user = usersDao.selectByPhone(employee.getLoginName());
+		Employee emp = employeeDao.selectEmployeeByLoginNameAndCompanyId(employee.getLoginName(), employee.getCompanyId());
+		if(emp!=null){
+			returnData.setMessage("登录名已被占用");
+			returnData.setReturnCode("4115");
+			return returnData;
+		}
 		employee.setEmployeeStatus("0");
 		if(user==null || StringUtils.isEmpty(user.getUserid())){//未注册，写入注册表	
 			user = new Uusers();
@@ -105,7 +111,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 			user.setUsername(employee.getEmployeeName());
 			user.setPhone(employee.getLoginName());
 			user.setStatus("1");
-			//usersDao.insertSelective(user);//加入注册表
+			usersDao.insertSelective(user);//加入注册表
 			
 			UserCompanyDefault userCompany = new UserCompanyDefault();
 			userCompany.setCompanyId(employee.getCompanyId());
@@ -183,8 +189,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 		}
 	    this.updateTransfer(employee);//岗位信息设置
 	    updateDeviceEmp(employee);
-	    returnData.setMessage("数据请求成功");
-		returnData.setReturnCode("3000");
+	    returnData.setEmployeeId(employee.getEmployeeId());
+	   /* returnData.setMessage("数据请求成功");
+		returnData.setReturnCode("3000");*/
 		return returnData;
 	}
 	/**
@@ -243,56 +250,21 @@ public class EmployeeServiceImpl implements EmployeeService {
 					connect.setPostId(post.getPostId());
 					connect.setPostGrades(post.getPostGrades());
 					connectEmpPostDao.saveConnect(connect);
-			}
-				//}
 					if("1".equals(post.getPostGrades())){
 						Transferjob transferjob = new Transferjob();
-					    transferjob.setTransferJobId(FormatUtil.createUuid());
-					    transferjob.setEmployeeId(employee.getEmployeeId());
-					    transferjob.setDepartmentId(post.getDepartmentId());
-					    transferjob.setTransferBeginTime(employee.getEntryTime());
-					    transferjob.setTransferJobCause("入职");		
-					    transferjob.setUserId(employee.getOperateUserId());//操作人ID	
-					    transferjob.setCompanyId(employee.getCompanyId());
-					    transferjob.setPostId(post.getPostId());
-					    transferjobDao.insertTransferjob(transferjob);
+						transferjob.setTransferJobId(FormatUtil.createUuid());
+						transferjob.setEmployeeId(employee.getEmployeeId());
+						transferjob.setDepartmentId(post.getDepartmentId());
+						transferjob.setTransferBeginTime(employee.getEntryTime());
+						transferjob.setTransferJobCause("入职");		
+						transferjob.setUserId(employee.getOperateUserId());//操作人ID	
+						transferjob.setCompanyId(employee.getCompanyId());
+						transferjob.setPostId(post.getPostId());
+						transferjobDao.insertTransferjob(transferjob);
 					}
-			//}else{
-				
-			//}
-		}
-		/*for(Post post:employee.getPostList()){
-			String postId = post.getPostId();
-			if(StringUtils.isNotEmpty(postId)){
-				
-				ConnectEmpPost empPost = connectEmpPostDao.findByConnect(employee.getEmployeeId(), 
-						post.getDepartmentId(), post.getPostGrades(),employee.getCompanyId());
-				if(empPost==null || StringUtils.isEmpty(empPost.getPostId())){//不存在，则添加
-					empPost =new ConnectEmpPost();
-					empPost.setEmployeeId(employee.getEmployeeId());
-					empPost.setDepartmentId(employee.getDepartmentId());
-					empPost.setPostGrades(post.getPostGrades());
-					empPost.setPostId(postId);
-					empPost.setIsDelete("0");
-					empPost.setEmployeeId(employee.getEmployeeId());
-					empPost.setCompanyId(employee.getCompanyId());
-					connectEmpPostDao.saveConnect(empPost);	
-					if("1".equals(post.getPostGrades())){//主岗位添加调动记录
-						Transferjob transferjob = new Transferjob();
-					    transferjob.setTransferJobId(FormatUtil.createUuid());
-					    transferjob.setEmployeeId(employee.getEmployeeId());
-					    transferjob.setDepartmentId(employee.getDepartmentId());
-					    transferjob.setTransferBeginTime(employee.getEntryTime());
-					    transferjob.setTransferJobCause("入职");		
-					    transferjob.setUserId(employee.getOperateUserId());//操作人ID	
-					    transferjob.setCompanyId(employee.getCompanyId());
-					    transferjob.setPostId(postId);
-					    transferjobDao.insertTransferjob(transferjob);
-					}
-				}
 			}
 			
-		}*/
+		}
 	}
 	//查询单条员信息
 	@Override
