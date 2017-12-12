@@ -29,6 +29,7 @@ import com.xiangshangban.organization.bean.Employee;
 import com.xiangshangban.organization.bean.Post;
 import com.xiangshangban.organization.bean.ReturnData;
 import com.xiangshangban.organization.bean.Transferjob;
+import com.xiangshangban.organization.bean.Uusers;
 import com.xiangshangban.organization.service.CompanyService;
 import com.xiangshangban.organization.service.ConnectEmpPostService;
 import com.xiangshangban.organization.service.DepartmentService;
@@ -81,6 +82,7 @@ public class EmployeeController {
 		// String operateUserId = request.getHeader("accessUserId");
 		JSONObject obj = JSON.parseObject(jsonString);
 		String employeeId = obj.getString("employeeId");
+		//String loginName = obj.getString("loginName");
 		if (StringUtils.isEmpty(employeeId)) {
 			returnData.setMessage("必传参数为空");
 			returnData.setReturnCode("3006");

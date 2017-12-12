@@ -2,6 +2,7 @@
   2017-12-07 19:55:41 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
   2017-12-07 20:10:58 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
   2017-12-07 21:00:09 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
+<<<<<<< HEAD
   2017-12-08 01:34:51 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
   2017-12-08 01:39:09 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.IndexOutOfBoundsException: Index: 0, Size: 0
   2017-12-08 01:39:50 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.IndexOutOfBoundsException: Index: 0, Size: 0
@@ -38,4 +39,10 @@
 ### Cause: org.postgresql.util.PSQLException: ERROR: value too long for type character varying(13)
 ; SQL []; ERROR: value too long for type character varying(13); nested exception is org.postgresql.util.PSQLException: ERROR: value too long for type character varying(13)
   2017-12-08 02:47:04 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+=======
+  2017-12-08 01:45:28 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
+  2017-12-08 01:46:06 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.IndexOutOfBoundsException: Index: 1, Size: 1
+  2017-12-08 01:50:31 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
+  2017-12-08 01:50:44 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功
+>>>>>>> 845ed9ae3b08be9dcf40681281710ebcbad4f01e
   

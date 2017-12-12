@@ -68,7 +68,7 @@ s.userid =(select s.userid from organization.u_users s where s.account=#{Account
      company_no,company_area,company_personal_name,user_name,company_logo,company_code
     from organization.company_
     where 
-    company_id = #{companyId,jdbcType=VARCHAR}
+    company_id = #{companyId}
   </select>
   
   
@@ -77,7 +77,7 @@ s.userid =(select s.userid from organization.u_users s where s.account=#{Account
     c.company_no
     from organization.company_ c
     where 
-    c.company_no = #{companyNo,jdbcType=VARCHAR}
+    c.company_no = #{companyNo}
   </select>
   
   
@@ -91,7 +91,7 @@ s.userid =(select s.userid from organization.u_users s where s.account=#{Account
   <delete id="deleteByCompany" parameterType="java.lang.String"> 
     delete from organization.company_
     where 
-    company_id = #{companyId,jdbcType=VARCHAR}
+    company_id = #{companyId}
   </delete>
   
   <insert id="insertCompany" parameterType="com.xiangshangban.organization.bean.Company">   
@@ -102,31 +102,34 @@ s.userid =(select s.userid from organization.u_users s where s.account=#{Account
     user_name,company_no
       )
     values (
-      #{companyId,jdbcType=VARCHAR}, 
-      #{companyName,jdbcType=VARCHAR},       
-      #{companyLogo,jdbcType=VARCHAR},
-      #{companyCode,jdbcType=VARCHAR}, 
-      #{companyAbbreviationName,jdbcType=VARCHAR},
-      #{industryType,jdbcType=VARCHAR},
-      #{companyArea,jdbcType=VARCHAR},
-      #{companyPersonalName,jdbcType=VARCHAR},
-      #{companyPhone,jdbcType=VARCHAR},      
-      #{userName,jdbcType=VARCHAR},
-      #{companyNo,jdbcType=VARCHAR}     
+      #{companyId}, 
+      #{companyName},       
+      #{companyLogo},
+      #{companyCode}, 
+      #{companyAbbreviationName},
+      #{industryType},
+      #{companyArea},
+      #{companyPersonalName},
+      #{companyPhone},      
+      #{userName},
+      #{companyNo}     
       )
   </insert>
   
   <update id="updateByCompany" parameterType="com.xiangshangban.organization.bean.Company">    
     update organization.company_
     set      
-      company_logo=#{companyLogo,jdbcType=VARCHAR},
-      company_code=#{companyCode,jdbcType=VARCHAR}, 
-      company_abbreviation_name=#{companyAbbreviationName,jdbcType=VARCHAR},
-      company_phone=#{companyPhone,jdbcType=VARCHAR},
-      industry_type=#{industryType,jdbcType=VARCHAR},
-      company_area=#{companyArea,jdbcType=VARCHAR} 
+    <if test="companyLogo !=null and companyLogo != ''">
+      company_logo=#{companyLogo},
+    </if>
+      company_code=#{companyCode}, 
+      company_abbreviation_name=#{companyAbbreviationName},
+      company_phone=#{companyPhone},
+      industry_type=#{industryType},
+      company_area=#{companyArea},
+      company_id = #{companyId} 
     where 
-    company_id = #{companyId,jdbcType=VARCHAR}
+    company_id = #{companyId}
   </update>
   
   <update id="updateCompanyLogoByCompanyId" parameterType="java.lang.String">

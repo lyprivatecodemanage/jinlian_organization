@@ -240,6 +240,11 @@
 		insert into u_users_roles (userid,roleid,company_id)
 		values (#{userId},#{roleId},#{companyId})
 	</insert>
+	<select id="selectUserByCompanyIdAndEmployeeId" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select 
+		from u_users u
+		where u.userid = #{employeeId}
+	</select>
 	<!-- <resultMap type="" id="Role"></resultMap>
 	根据角色name查询角色
 	<select id="selectRoleByRoleName" parameterType="java.lang.String" resultMap="Role">
