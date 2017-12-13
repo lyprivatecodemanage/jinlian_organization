@@ -49,7 +49,9 @@ public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 		// Map<String, String> result = new HashMap<String, String>();
 		// 判断是否为excel类型文件
 		if (!key.endsWith(".xls") && !key.endsWith(".xlsx")) {
-			System.out.println("文件不是excel类型");
+			returnData.setMessage("文件不是excel类型");
+			returnData.setReturnCode("4116");
+			return returnData;
 		}
 		InputStream in = null;
 		Workbook wookbook = null;
@@ -107,7 +109,7 @@ public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 				List<Post> postList = new ArrayList<Post>();
 				// 循环每一列
 				for (int k = 0; k < 20; k++) {
-					System.out.println("======>"+k);
+					//System.out.println("======>"+k);
 					Cell cell = row.getCell(k);
 				
 					String value = "";
@@ -183,7 +185,7 @@ public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 						postList.get(1).setPostName(value);
 						break;
 					}
-						System.out.println(value);
+						//System.out.println(value);
 						paramList.add(value);
 				}
 				if(lineFlag){

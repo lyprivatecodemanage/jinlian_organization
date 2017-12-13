@@ -93,12 +93,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 	public ReturnData insertEmployee(Employee employee) {
 		ReturnData returnData = new ReturnData();
 		Uusers user = usersDao.selectByPhone(employee.getLoginName());
-		Employee emp = employeeDao.selectEmployeeByLoginNameAndCompanyId(employee.getLoginName(), employee.getCompanyId());
-		if(emp!=null){
+		//Employee emp = employeeDao.selectEmployeeByLoginNameAndCompanyId(employee.getLoginName(), employee.getCompanyId());
+		/*if(emp!=null){
 			returnData.setMessage("登录名已被占用");
 			returnData.setReturnCode("4115");
 			return returnData;
-		}
+		}*/
 		employee.setEmployeeStatus("0");
 		if(user==null || StringUtils.isEmpty(user.getUserid())){//未注册，写入注册表	
 			user = new Uusers();
@@ -495,8 +495,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Override
 	public void export(String excelName, OutputStream out, String companyId) {
 		List<Employee> empList = employeeDao.findExport(companyId);
-		String[] headers = new String[]{"工号","姓名*","性别（男/女）","所在地（省份）*","婚姻状况（已婚/未婚/离异）","登录名（手机号）*","所属部门*",
-				"汇报人","汇报人登录名（手机号）", "在职状态（在职/离职）","入职时间*","转正时间*","主岗位*","副部门1","副岗位1","副部门2","副岗位2","联系方式1","联系方式2","工龄"};  
+		String[] headers = new String[]{"工号","姓名*","性别（男/女）*","所在地（省份）","婚姻状况（已婚/未婚/离异）","登录名（手机号）*","所属部门*",
+				"汇报人","汇报人登录名（手机号）", "在职状态（在职/离职）","入职时间","转正时间","主岗位","副部门1","副岗位1","副部门2","副岗位2","联系方式1","联系方式2","工龄"};  
 		 // 第一步，创建一个webbook，对应一个Excel文件  
 		HSSFWorkbook workbook = new HSSFWorkbook();  
         //生成一个表格  
@@ -559,8 +559,10 @@ public class EmployeeServiceImpl implements EmployeeService {
             	row.createCell(j++).setCellValue("离异");
             }else if("1".equals(emp.getMarriageStatus())){
             	row.createCell(j++).setCellValue("已婚");
-            }else{
+            }else if("0".equals(emp.getMarriageStatus())){
             	row.createCell(j++).setCellValue("未婚");
+            }else{
+            	row.createCell(j++).setCellValue("");
             }
             row.createCell(j++).setCellValue(emp.getLoginName());//登录名
             
@@ -568,10 +570,11 @@ public class EmployeeServiceImpl implements EmployeeService {
             String mainDept = "";
             for(Post post:emp.getPostList()){
             	if("1".equals(post.getPostGrades())){
-            		mainDept=post.getDepartmentName();//主岗位对应的部门
+            		mainDept=emp.getDepartmentName();//主岗位对应的部门
             		mainPost = post.getPostName();//主岗位
             	}
             }
+            mainDept=emp.getDepartmentName();
             row.createCell(j++).setCellValue(mainDept);//所在部门
             row.createCell(j++).setCellValue(emp.getDirectPersonName());//汇报人
             row.createCell(j++).setCellValue(emp.getDirectPersonLoginName());//汇报人登录名
@@ -610,6 +613,30 @@ public class EmployeeServiceImpl implements EmployeeService {
 	public int selectEmployeeCountByCompanyId(String companyId) {
 		 
 		return employeeDao.selectEmployeeCountByCompanyId(companyId);
+	}
+
+	@Override
+	public int updateLoginNameByEmployeeId(String loginName, String employeeId) {
+		
+		return employeeDao.updateLoginNameByEmployeeId(loginName, employeeId);
+	}
+
+	@Override
+	public int updatePhoneByUserId(String phone, String userId) {
+		
+		return usersDao.updatePhoneByUserId(phone, userId);
+	}
+
+	@Override
+	public Uusers selectByPhoneAndStatus(String phone) {
+	
+		return usersDao.selectByPhoneAndStatus(phone);
+	}
+
+	@Override
+	public UusersRoles selectRoleIdByEmployeeIdAndCompanyId(String userId, String companyId) {
+		
+		return employeeDao.selectRoleIdByEmployeeIdAndCompanyId(userId, companyId);
 	}
 
 	

@@ -4,9 +4,12 @@ import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Param;
 
 import com.xiangshangban.organization.bean.Employee;
 import com.xiangshangban.organization.bean.ReturnData;
+import com.xiangshangban.organization.bean.Uusers;
+import com.xiangshangban.organization.bean.UusersRoles;
 
 public interface EmployeeService {
 	int deleteByEmployee(String employeeId,String companyId);
@@ -153,4 +156,11 @@ public interface EmployeeService {
 	
 	int selectEmployeeCountByCompanyId(String companyId);
 	
+	int updateLoginNameByEmployeeId(String loginName,String phone);
+	
+	int updatePhoneByUserId(String phone,String userId);
+	
+	Uusers selectByPhoneAndStatus(String phone);
+	
+	UusersRoles selectRoleIdByEmployeeIdAndCompanyId(String userId,String companyId);
 }
