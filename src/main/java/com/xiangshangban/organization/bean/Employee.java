@@ -23,6 +23,7 @@ public class Employee {
     private String probationaryExpired;//试用到期日
     private String employeeImgUrl;//头像 
     private String workAddress;//工作地
+    private String operaterTime;//操作时间
     //---连表查询的---
     private List<Post> postList = new ArrayList<Post>();//父岗位   
     private String companyName;//
@@ -297,7 +298,12 @@ public class Employee {
 	public void setCompanyNo(String companyNo) {
 		this.companyNo = companyNo;
 	}
-	
+	public String getOperate_time() {
+		return operaterTime;
+	}
+	public void setOperate_time(String operaterTime) {
+		this.operaterTime = operaterTime;
+	}
 	
 	
     

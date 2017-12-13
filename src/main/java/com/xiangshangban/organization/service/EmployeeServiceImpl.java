@@ -423,10 +423,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	@Override
-	public int selectCountEmployeeFromCompany(String companyId, String numPage, String numRecordCount,
+	public int selectCountEmployeeFromCompany(String companyId, /*String numPage, String numRecordCount,*/
 			String employeeName, String employeeSex, String departmentName, String postName, String employeeStatus,String  departmentId) {
 		
-		return employeeDao.selectCountEmployeeFromCompany(companyId, numPage, numRecordCount, employeeName, employeeSex, departmentName, postName, employeeStatus,departmentId);
+		return employeeDao.selectCountEmployeeFromCompany(companyId,/* numPage, numRecordCount,*/ employeeName, employeeSex, departmentName, postName, employeeStatus,departmentId);
 	}
 
 	@Override
@@ -495,7 +495,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Override
 	public void export(String excelName, OutputStream out, String companyId) {
 		List<Employee> empList = employeeDao.findExport(companyId);
-		String[] headers = new String[]{"工号","姓名*","性别（男/女）*","所在地（省份）","婚姻状况（已婚/未婚/离异）","登录名（手机号）*","所属部门*",
+		String[] headers = new String[]{"工号","姓名*","性别（男/女）","所在地（省份）","婚姻状况（已婚/未婚/离异）","登录名（手机号）*","所属部门*",
 				"汇报人","汇报人登录名（手机号）", "在职状态（在职/离职）","入职时间","转正时间","主岗位","副部门1","副岗位1","副部门2","副岗位2","联系方式1","联系方式2","工龄"};  
 		 // 第一步，创建一个webbook，对应一个Excel文件  
 		HSSFWorkbook workbook = new HSSFWorkbook();  
@@ -577,7 +577,11 @@ public class EmployeeServiceImpl implements EmployeeService {
             mainDept=emp.getDepartmentName();
             row.createCell(j++).setCellValue(mainDept);//所在部门
             row.createCell(j++).setCellValue(emp.getDirectPersonName());//汇报人
-            row.createCell(j++).setCellValue(emp.getDirectPersonLoginName());//汇报人登录名
+            Employee emp1 = this.selectDirectPersonLoginName(emp.getDirectPersonId(), companyId);
+            if(emp1==null){
+            	emp1 = new Employee();
+            }
+            row.createCell(j++).setCellValue(emp1.getDirectPersonLoginName());//汇报人登录名
             if("0".equals(emp.getEmployeeStatus())){//在职状态
             	row.createCell(j++).setCellValue("在职");
             }else{
@@ -637,6 +641,13 @@ public class EmployeeServiceImpl implements EmployeeService {
 	public UusersRoles selectRoleIdByEmployeeIdAndCompanyId(String userId, String companyId) {
 		
 		return employeeDao.selectRoleIdByEmployeeIdAndCompanyId(userId, companyId);
+	}
+
+	@Override
+	public Employee selectDirectPersonLoginName(String employeeId, String companyId) {
+		
+		return employeeDao.selectDirectPersonLoginName(employeeId, companyId)
+				;
 	}
 
 	

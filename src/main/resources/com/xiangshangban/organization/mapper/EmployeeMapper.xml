@@ -33,6 +33,7 @@
 		<result column="employee_no" property="employeeNo" />
 		<result column="direct_person_id" property="directPersonId" />
 		<result column="direct_person_name" property="directPersonName" />
+		<result column="direct_person_login_name" property="directPersonLoginName" />
 		<result column="employee_phone" property="employeePhone" />
 		<result column="employee_twophone" property="employeeTwophone" />
 		<result column="entry_time" property="entryTime" />
@@ -218,6 +219,7 @@
 		<if test="departmentId != null and departmentId != '' ">
 			and e.department_id = #{departmentId}
 		</if>
+		order by operater_time desc
 		limit #{numRecordCount}::integer offset #{numPage}::integer
 	</select>
 	<select id="isAdmin" resultType="int">
@@ -482,6 +484,9 @@
 		#{entryTime},
 		probationary_expired =#{probationaryExpired},
 		work_address =#{workAddress}
+		<if test="operaterTime==null || opraterTime==''">
+			,operater_time = to_char(now(),'yyyy-MM-dd hh24:mi:ss')
+		</if>
 		<if test="employeePhone != null">
 			, employee_phone =#{employeePhone}
 		</if>
@@ -500,6 +505,7 @@
 		<if test="seniority != null">
 			, seniority =#{seniority}
 		</if>
+		
 		where company_id = #{companyId} and employee_id
 		= #{employeeId}
 	</update>
@@ -566,28 +572,27 @@
 	</select>
 	<select id="findExport" resultMap="EmployeeExport">
 		select
-		e.employee_id, e.employee_no, e.employee_name,
-		e.employee_sex,e.employee_twophone,
-		e.employee_phone, e.work_address,
-		e.probationary_expired,e.seniority, e.marriage_status,e.company_id,
+		e.employee_id, e.employee_no, e.employee_name, e.employee_sex,e.direct_person_id,
+		(select employee_name as direct_person_name from employee_ where employee_id =  e.direct_person_id and company_id = #{companyId} ),e.employee_twophone,
+		e.employee_phone, e.work_address, e.probationary_expired,e.seniority, e.marriage_status,e.company_id,
 		p.post_id,p.post_name,cp.post_grades,
-		d.department_id ,d.department_name,d1.department_id as
-		p_department_id,d1.department_name as p_department_name,
+    d.department_id ,d.department_name,d1.department_id as p_department_id,d1.department_name as p_department_name,
 		e.entry_time,e.employee_status,uc.is_active,e.login_name
-		from
-		organization.employee_ e
-		left join department_ d on e.department_id = d.department_id
-		left join user_company uc on e.employee_id = uc.user_id and e.company_id =
-		uc.company_id
-		left JOIN connect_emp_post_ cp on cp.employee_id=e.employee_id
-		left join department_ d1 on cp.department_id = d1.department_id
-		left JOIN post_ p on cp.post_id = p.post_id
-		left join u_users u on u.userid = e.employee_id
+		from organization.employee_ e 
+    	left join department_ d on e.department_id = d.department_id 
+		left join user_company uc on e.employee_id = uc.user_id and e.company_id = uc.company_id 
+		left JOIN connect_emp_post_ cp on cp.employee_id=e.employee_id 
+    	left join department_ d1 on cp.department_id = d1.department_id 
+		left JOIN post_ p on cp.post_id = p.post_id 
+		left join u_users u on u.userid = e.employee_id   
 		where
 		e.company_id = #{companyId} <!-- AND cp.company_id = #{companyId} --> and
 		uc.info_status = '1'
 		ORDER BY d.department_name, e.employee_name
 
+	</select>
+	<select id="selectDirectPersonLoginName" parameterType="java.lang.String" resultMap="EmployeeExport">
+		select login_name as direct_person_login_name from employee_ where employee_id =#{employeeId} and company_Id = #{companyId}
 	</select>
 	<!-- 根据姓名、联系方式、性别、所属部门、岗位、入职时间、在职状态查询员工信息 -->
 	<select id="findByMoreEmployee" parameterType="java.util.Map"
@@ -705,7 +710,8 @@
 		company_id,
 		work_address,
 		marriage_status,
-		seniority
+		seniority,
+		operater_time
 		)
 		values (
 		#{employeeId},
@@ -722,7 +728,8 @@
 		#{companyId},
 		#{workAddress},
 		#{marriageStatus},
-		#{seniority}
+		#{seniority},
+		to_char(now(),'yyyy-MM-dd hh24:mi:ss')
 		)
 	</insert>
 

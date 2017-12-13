@@ -41,8 +41,8 @@ public interface EmployeeDao {
 			@Param("employeeSex") String employeeSex, @Param("departmentName") String departmentName,
 			@Param("postName") String postName, @Param("employeeStatus") String employeeStatus,@Param("departmentId")String departmentId);
 	
-	int selectCountEmployeeFromCompany(@Param("companyId")String companyId,@Param("numPage") String numPage,
-			@Param("numRecordCount") String numRecordCount, @Param("employeeName") String employeeName,
+	int selectCountEmployeeFromCompany(@Param("companyId")String companyId,/*@Param("numPage") String numPage,
+			@Param("numRecordCount") String numRecordCount,*/ @Param("employeeName") String employeeName,
 			@Param("employeeSex") String employeeSex, @Param("departmentName") String departmentName,
 			@Param("postName") String postName, @Param("employeeStatus") String employeeStatus,
 			@Param("departmentId")String departmentId);
@@ -128,4 +128,6 @@ public interface EmployeeDao {
 	int updateLoginNameByEmployeeId(@Param("loginName")String loginName,@Param("employeeId")String employeeId);
 	
 	UusersRoles selectRoleIdByEmployeeIdAndCompanyId(@Param("userId")String userId,@Param("companyId")String companyId);
+	
+	Employee selectDirectPersonLoginName(@Param("employeeId")String employeeId,@Param("companyId")String companyId);
 }

@@ -60,7 +60,7 @@ public interface EmployeeService {
      * @param employeeStatus
      * @return
      */
-    int selectCountEmployeeFromCompany(String companyId,String numPage,String numRecordCount, String employeeName, String employeeSex, String departmentName,String postName,String employeeStatus,String departmentId);
+    int selectCountEmployeeFromCompany(String companyId,/*String numPage,String numRecordCount,*/ String employeeName, String employeeSex, String departmentName,String postName,String employeeStatus,String departmentId);
     
     String updateByEmployeedept(Employee employee);
     Employee findByemploginName(String loginName);
@@ -163,4 +163,6 @@ public interface EmployeeService {
 	Uusers selectByPhoneAndStatus(String phone);
 	
 	UusersRoles selectRoleIdByEmployeeIdAndCompanyId(String userId,String companyId);
+	
+	Employee selectDirectPersonLoginName(String employeeId,String companyId);
 }

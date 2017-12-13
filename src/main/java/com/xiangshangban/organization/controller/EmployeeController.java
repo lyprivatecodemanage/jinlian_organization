@@ -134,7 +134,7 @@ public class EmployeeController {
 			return returnData;
 		}
 		String employeeName = employeenew.getEmployeeName();
-		if (StringUtils.isEmpty(employeeName) || StringUtils.isEmpty(employeenew.getEmployeeSex())) {
+		if (StringUtils.isEmpty(employeeName)) {
 			returnData.setMessage("必传参数为空");
 			returnData.setReturnCode("3006");
 			return returnData;
@@ -322,8 +322,14 @@ public class EmployeeController {
 			String postName = obj.getString("postName");// 岗位名称
 			String employeeStatus = obj.getString("employeeStatus");// 员工状态，0,在职，1,离职，2,删除
 			String departmentId = obj.getString("departmentId");// 部门id
+			
+			// 查询总记录数
+			int intCount = employeeService.selectCountEmployeeFromCompany(companyId, /*pageNum, pageRecordNum,*/
+					employeeName, employeeSex, departmentName, postName, employeeStatus, departmentId);
+			String count = String.valueOf(intCount);
 			String pageNum = obj.getString("pageNum");// 页码
 			String pageRecordNum = obj.getString("pageRecordNum");// 页记录行数
+			
 			boolean pageNumFlag = Pattern.matches("\\d{1,}", pageNum);
 			boolean pageRecordNumFlag = Pattern.matches("\\d{1,}", pageRecordNum);
 			if (StringUtils.isEmpty("pageNum") || StringUtils.isEmpty(pageRecordNum)) {
@@ -337,6 +343,8 @@ public class EmployeeController {
 				return result;
 			}
 			pageNum = String.valueOf((Integer.valueOf(pageNum) - 1) * Integer.valueOf(pageRecordNum));
+			
+			
 			if (!StringUtils.isEmpty(employeeName)) {
 				employeeName = "%" + employeeName + "%";
 			}
@@ -381,10 +389,6 @@ public class EmployeeController {
 					}
 				}
 			}
-			// 查询总记录数
-			int intCount = employeeService.selectCountEmployeeFromCompany(companyId, pageNum, pageRecordNum,
-					employeeName, employeeSex, departmentName, postName, employeeStatus, departmentId);
-			String count = String.valueOf(intCount);
 			// 总页数
 			int intpagecountNum = (int) Math.ceil((double) intCount / (Double.valueOf(pageRecordNum)));
 			String pagecountNum = String.valueOf(intpagecountNum);

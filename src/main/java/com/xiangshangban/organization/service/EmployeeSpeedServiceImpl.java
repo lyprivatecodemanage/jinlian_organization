@@ -157,7 +157,7 @@ public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 						lineFlag = true;
 						break;
 					}
-					if (k == 1 || k == 2  || k == 5 || k == 6 /*|| k == 3|| k == 9 || k == 10 || k == 11 || k == 12*/) {
+					if (k == 1   || k == 5 || k == 6 /*|| k == 2 || k == 3|| k == 9 || k == 10 || k == 11 || k == 12*/) {
 						if (StringUtils.isEmpty(value)) {
 							String importMessage = "第" + i + "行,第" +( k+1) + "列,必须填写!";
 							ImportReturnData importReturnData = new ImportReturnData();
@@ -200,7 +200,7 @@ public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 					newEmp.setEmployeeSex("1");
 				} else if("男".equals(newEmp.getEmployeeSex())){
 					newEmp.setEmployeeSex("0");
-				}else{
+				}else if(StringUtils.isNotEmpty(newEmp.getEmployeeSex())){
 					String importMessage = "第" + i + "行,请正确填写性别";
 					ImportReturnData importReturnData = new ImportReturnData();
 					importReturnData.setImportMessage(importMessage);
