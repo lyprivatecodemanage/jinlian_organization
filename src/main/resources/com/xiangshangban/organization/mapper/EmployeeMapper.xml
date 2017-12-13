@@ -190,7 +190,7 @@
 		left JOIN post_ p on cp.post_id = p.post_id 
 		left join u_users u on u.userid = e.employee_id  
 		where
-		e.company_id = #{companyId} AND cp.company_id = #{companyId} and uc.info_status = '1'
+		e.company_id = #{companyId} <!-- AND cp.company_id = #{companyId} --> and uc.info_status = '1'
 		<if test="employeeName != null and employeeName != '' ">
 			and e.employee_name like #{employeeName}
 		</if>
@@ -419,7 +419,7 @@
 		left JOIN post_ p on cp.post_id = p.post_id 
 		left join u_users u on u.userid = e.employee_id  
 		where
-		e.company_id = #{companyId} AND cp.company_id = #{companyId} and uc.info_status =
+		e.company_id = #{companyId} <!-- AND cp.company_id = #{companyId} --> and uc.info_status =
 		'1'
 		<if test="employeeName != null and employeeName != '' ">
 			and employee_name like #{employeeName}
@@ -435,9 +435,6 @@
 		</if>
 		<if test="employeeStatus != null and employeeStatus != '' ">
 			and employee_status = #{employeeStatus}
-		</if>
-		<if test="employeeStatus == null or employeeStatus == '' ">
-			and employee_status = '0'
 		</if>
 		<if test="departmentId != null and departmentId != '' ">
 			and e.department_id = #{departmentId}

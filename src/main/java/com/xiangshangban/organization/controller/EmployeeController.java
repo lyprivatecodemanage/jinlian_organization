@@ -133,7 +133,7 @@ public class EmployeeController {
 			return returnData;
 		}
 		String employeeName = employeenew.getEmployeeName();
-		if (StringUtils.isEmpty(employeeName)) {
+		if (StringUtils.isEmpty(employeeName) || StringUtils.isEmpty(employeenew.getEmployeeSex())) {
 			returnData.setMessage("必传参数为空");
 			returnData.setReturnCode("3006");
 			return returnData;
@@ -165,17 +165,29 @@ public class EmployeeController {
 				}
 				postString.add(post.getPostId());
 			}
-			if(masterPostFlag){
+			/*if(masterPostFlag){
 				returnData.setMessage("必传参数为空");
 				returnData.setReturnCode("3006");
 				return returnData;
-			}
+			}*/
 		}else{
 			returnData.setMessage("必传参数为空");
 			returnData.setReturnCode("3006");
 			return returnData;
 		}
 		returnData = employeeService.insertEmployee(employeenew);
+		// String operateUserId = request.getHeader("accessUserId");
+		if(StringUtils.isEmpty(returnData.getMessage()) && StringUtils.isEmpty(returnData.getReturnCode())){
+		String employeeId = returnData.getEmployeeId();
+		//String loginName = obj.getString("loginName");
+		
+		employeeService.activeEmp(companyId, employeeId);
+		employeeService.resetEmployeeStatus(companyId, employeeId);
+		}else{
+			return returnData;
+		}
+		returnData.setMessage("数据请求成功");
+		returnData.setReturnCode("3000");
 		return returnData;
 	}
 
@@ -590,9 +602,11 @@ public class EmployeeController {
 			List<Post> postList = emp.getPostList();
 			if(postList!=null && postList.size()>0){
 				for(Post post:postList){
-					if("1".equals(post.getPostGrades()) && StringUtils.isNotEmpty(post.getDepartmentId()) && StringUtils.isNotEmpty(post.getPostId())){
-						emp.setPostId(post.getPostId());
+					if("1".equals(post.getPostGrades()) && StringUtils.isNotEmpty(post.getDepartmentId())){
 						emp.setDepartmentId(post.getDepartmentId());
+					}
+					if(StringUtils.isNotEmpty(post.getPostId())){
+						emp.setPostId(post.getPostId());
 					}
 				}
 			}else{
@@ -601,44 +615,45 @@ public class EmployeeController {
 				return result;
 			}
 			if (StringUtils.isEmpty(emp.getEmployeeName()) || StringUtils.isEmpty(emp.getEmployeeSex()) 
-					|| StringUtils.isEmpty(emp.getLoginName())
-					|| StringUtils.isEmpty(emp.getEntryTime()) || StringUtils.isEmpty(emp.getProbationaryExpired()) 
-					 || StringUtils.isEmpty(emp.getWorkAddress())) {
+					|| StringUtils.isEmpty(emp.getLoginName()) ||StringUtils.isEmpty(emp.getDepartmentId())
+					/*|| StringUtils.isEmpty(emp.getEntryTime()) || StringUtils.isEmpty(emp.getProbationaryExpired()) 
+					 || StringUtils.isEmpty(emp.getWorkAddress())*/) {
 				result.put("message", "必传参数为空");
 				result.put("returnCode", "3006");
 				return result;
 			}
 			//新完善信息
 			employeeService.updateEmployeeInformation(emp);
-			//查询员工岗位部门关联表
-			ConnectEmpPost connect =  connectEmpPostService.selectEmployeePostInformation(emp.getEmployeeId(), companyId);
-			if (connect != null && !emp.getPostId().equals(connect.getPostId())) {
-				connectEmpPostService.updateEmployeeWithPost(emp.getEmployeeId(), 
-						emp.getDepartmentId(), emp.getPostId(),companyId);
-
-				// 添加更换之前主岗位的换岗时间(transferEndTime)
-				transferjobService.updateTransferEndTimeWhereDeleteEmployee(
-						companyId, userId, emp.getEmployeeId(), emp.getDepartmentId(), connect.getPostId());
+			if(StringUtils.isNotEmpty(emp.getPostId())){
+				//查询员工岗位部门关联表
+				ConnectEmpPost connect =  connectEmpPostService.selectEmployeePostInformation(emp.getEmployeeId(), companyId);
+				if (connect != null && !emp.getPostId().equals(connect.getPostId())) {
+					connectEmpPostService.updateEmployeeWithPost(emp.getEmployeeId(), 
+							emp.getDepartmentId(), emp.getPostId(),companyId);
+	
+					// 添加更换之前主岗位的换岗时间(transferEndTime)
+					transferjobService.updateTransferEndTimeWhereDeleteEmployee(
+							companyId, userId, emp.getEmployeeId(), emp.getDepartmentId(), connect.getPostId());
+				}
+				if(connect==null){
+					connectEmpPostService.deleteEmployeeFromPost(emp.getEmployeeId(), emp.getDepartmentId(),companyId);
+					connect = new ConnectEmpPost();
+					connect.setEmployeeId(emp.getEmployeeId());
+					connect.setDepartmentId(emp.getDepartmentId());
+					connect.setPostId(emp.getPostId());
+					connect.setPostGrades("1");
+					connect.setIsDelete("0");
+					connect.setCompanyId(companyId);
+					List<ConnectEmpPost> newConnectEmpPost = new ArrayList<ConnectEmpPost>();
+					newConnectEmpPost.add(connect);
+					connectEmpPostService.insertEmployeeWithPost(newConnectEmpPost);
+				}
+				// 添加新岗位的记录
+				Transferjob transferjob = new Transferjob(FormatUtil.createUuid(), emp.getEmployeeId(), null, emp.getDepartmentId(),
+						emp.getTransferJobCause(), null, userId, null, companyId, emp.getDirectPersonId(), emp.getPostId());
+	
+				transferjobService.insertTransferjob(transferjob);
 			}
-			if(connect==null){
-				connectEmpPostService.deleteEmployeeFromPost(emp.getEmployeeId(), emp.getDepartmentId(),companyId);
-				connect = new ConnectEmpPost();
-				connect.setEmployeeId(emp.getEmployeeId());
-				connect.setDepartmentId(emp.getDepartmentId());
-				connect.setPostId(emp.getPostId());
-				connect.setPostGrades("1");
-				connect.setIsDelete("0");
-				connect.setCompanyId(companyId);
-				List<ConnectEmpPost> newConnectEmpPost = new ArrayList<ConnectEmpPost>();
-				newConnectEmpPost.add(connect);
-				connectEmpPostService.insertEmployeeWithPost(newConnectEmpPost);
-			}
-			// 添加新岗位的记录
-			Transferjob transferjob = new Transferjob(FormatUtil.createUuid(), emp.getEmployeeId(), null, emp.getDepartmentId(),
-					emp.getTransferJobCause(), null, userId, null, companyId, emp.getDirectPersonId(), emp.getPostId());
-
-			transferjobService.insertTransferjob(transferjob);
-			
 			connectEmpPostService.deleteEmployeeWithPost(emp.getEmployeeId(), companyId);
 			List<ConnectEmpPost> list = new ArrayList<ConnectEmpPost>();
 			List<Post> vicePostList = new ArrayList<Post>();

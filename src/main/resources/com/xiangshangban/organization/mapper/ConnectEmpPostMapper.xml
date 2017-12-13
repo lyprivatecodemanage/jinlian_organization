@@ -94,11 +94,21 @@
 		values
 		<foreach collection="list" item="cnctEmpPost" separator="," index='index'>
 			(
+			<if test="cnctEmpPost.employeeId!=null and cnctEmpPost.employeeId!=''">
 			#{cnctEmpPost.employeeId},
+			</if>
+			<if test="cnctEmpPost.postId!=null and cnctEmpPost.postId!=''">
 			#{cnctEmpPost.postId},
+			</if>
+			<if test="cnctEmpPost.departmentId!=null and cnctEmpPost.departmentId!=''">
 			#{cnctEmpPost.departmentId},
+			</if>
+			<if test="cnctEmpPost.postGrades!=null and cnctEmpPost.postGrades!=''">
 			#{cnctEmpPost.postGrades},
+			</if>
+			<if test="cnctEmpPost.companyId!=null and cnctEmpPost.companyId!=''">
 			#{cnctEmpPost.companyId}
+			</if>
 			)
 		</foreach>
 	</insert>

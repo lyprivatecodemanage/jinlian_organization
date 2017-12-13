@@ -5,6 +5,7 @@ package com.xiangshangban.organization.bean;
  *
  */
 public class ReturnData {
+	private String employeeId;
 	private Object data;//数据
 	private Object totalPages;//总记录数
 	private String message;//请求状态描述
@@ -48,6 +49,12 @@ public class ReturnData {
 	}
 	public void setReturnCode(String returnCode) {
 		this.returnCode = returnCode;
+	}
+	public String getEmployeeId() {
+		return employeeId;
+	}
+	public void setEmployeeId(String employeeId) {
+		this.employeeId = employeeId;
 	}
 	
 }
