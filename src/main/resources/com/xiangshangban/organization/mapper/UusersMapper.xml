@@ -245,6 +245,18 @@
 		from u_users u
 		where u.userid = #{employeeId}
 	</select>
+	<update id="updatePhoneByUserId" parameterType="java.lang.String">
+		update u_users
+		set phone =#{phone}
+		where userid = #{userId}
+	</update>
+	<select id="selectByPhoneAndStatus" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from u_users
+		where phone = #{phone} and status = '1'
+	</select>
 	<!-- <resultMap type="" id="Role"></resultMap>
 	根据角色name查询角色
 	<select id="selectRoleByRoleName" parameterType="java.lang.String" resultMap="Role">

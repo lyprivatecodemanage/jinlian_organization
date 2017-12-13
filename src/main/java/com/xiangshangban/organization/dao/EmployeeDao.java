@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import com.xiangshangban.organization.bean.Employee;
+import com.xiangshangban.organization.bean.UusersRoles;
 
 @Mapper
 public interface EmployeeDao {
@@ -123,4 +124,8 @@ public interface EmployeeDao {
 	List<Employee> findExport(@Param("companyId")String companyId);
 
 	int selectEmployeeCountByCompanyId(@Param("companyId")String companyId);
+	
+	int updateLoginNameByEmployeeId(@Param("loginName")String loginName,@Param("employeeId")String employeeId);
+	
+	UusersRoles selectRoleIdByEmployeeIdAndCompanyId(@Param("userId")String userId,@Param("companyId")String companyId);
 }

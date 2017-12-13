@@ -64,4 +64,7 @@ public interface UusersDao {
 	 */
 	int insertUserRoleByCompanyId(@Param("companyId")String companyId,@Param("userId")String userId,@Param("roleId")String roleId);
 	
+	int updatePhoneByUserId(@Param("phone")String phone,@Param("userId")String userId);
+	
+	Uusers selectByPhoneAndStatus(String phone);
 }

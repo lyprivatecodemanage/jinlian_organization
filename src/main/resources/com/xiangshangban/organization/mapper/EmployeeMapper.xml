@@ -2,75 +2,79 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xiangshangban.organization.dao.EmployeeDao">
 	<resultMap id="Employee" type="com.xiangshangban.organization.bean.Employee">
-		<result column="employee_id"  property="employeeId" />
-		<result column="employee_name"  property="employeeName" />
-		<result column="login_name"  property="loginName" />
-		<result column="employee_sex"  property="employeeSex" />
-		<result column="employee_no"  property="employeeNo" />
-		<result column="direct_person_id"  property="directPersonId" />
-		<result column="direct_person_name"  property="directPersonName" />
-		<result column="employee_phone"  property="employeePhone" />
-		<result column="employee_twophone"  property="employeeTwophone" />
-		<result column="entry_time"  property="entryTime" />
-		<result column="employee_status"  property="employeeStatus" />
-		<result column="probationary_expired"  property="probationaryExpired" />
-		<result column="department_id"  property="departmentId" />
-		<result column="department_name"  property="departmentName" />
-		<result column="company_name"  property="companyName" />
-		<result column="company_id"  property="companyId" />
-		<result column="post_name"  property="postName" />
-		<result column="post_id"  property="postId" />
-		<result column="employee_img_url"  property="employeeImgUrl" />
-		<result column="work_address"  property="workAddress" />
-		<result column="marriage_status"  property="marriageStatus" />
-		<result column="seniority"  property="seniority" />
+		<result column="employee_id" property="employeeId" />
+		<result column="employee_name" property="employeeName" />
+		<result column="login_name" property="loginName" />
+		<result column="employee_sex" property="employeeSex" />
+		<result column="employee_no" property="employeeNo" />
+		<result column="direct_person_id" property="directPersonId" />
+		<result column="direct_person_name" property="directPersonName" />
+		<result column="employee_phone" property="employeePhone" />
+		<result column="employee_twophone" property="employeeTwophone" />
+		<result column="entry_time" property="entryTime" />
+		<result column="employee_status" property="employeeStatus" />
+		<result column="probationary_expired" property="probationaryExpired" />
+		<result column="department_id" property="departmentId" />
+		<result column="department_name" property="departmentName" />
+		<result column="company_name" property="companyName" />
+		<result column="company_id" property="companyId" />
+		<result column="post_name" property="postName" />
+		<result column="post_id" property="postId" />
+		<result column="employee_img_url" property="employeeImgUrl" />
+		<result column="work_address" property="workAddress" />
+		<result column="marriage_status" property="marriageStatus" />
+		<result column="seniority" property="seniority" />
 	</resultMap>
 	<resultMap id="EmployeeExport" type="com.xiangshangban.organization.bean.Employee">
-		<result column="employee_id"  property="employeeId" />
-		<result column="employee_name"  property="employeeName" />
-		<result column="login_name"  property="loginName" />
-		<result column="employee_sex"  property="employeeSex" />
-		<result column="employee_no"  property="employeeNo" />
-		<result column="direct_person_id"  property="directPersonId" />
-		<result column="direct_person_name" 
-			property="directPersonName" />
-		<result column="employee_phone"  property="employeePhone" />
-		<result column="employee_twophone"  property="employeeTwophone" />
-		<result column="entry_time"  property="entryTime" />
-		<result column="employee_status"  property="employeeStatus" />
-		<result column="probationary_expired" 
-			property="probationaryExpired" />
-		<!-- <result column="department_id"  property="departmentId" />
-		<result column="department_name"  property="departmentName" /> -->
-		<result column="company_name"  property="companyName" />
-		<result column="company_id"  property="companyId" />
-		<result column="employee_img_url"  property="employeeImgUrl" />
-		<result column="work_address"  property="workAddress" />
-		<result column="marriage_status"  property="marriageStatus" />
-		<result column="seniority"  property="seniority" />
-		<collection property="postList" resultMap="Post"></collection>
+		<result column="employee_id" property="employeeId" />
+		<result column="employee_name" property="employeeName" />
+		<result column="login_name" property="loginName" />
+		<result column="employee_sex" property="employeeSex" />
+		<result column="employee_no" property="employeeNo" />
+		<result column="direct_person_id" property="directPersonId" />
+		<result column="direct_person_name" property="directPersonName" />
+		<result column="employee_phone" property="employeePhone" />
+		<result column="employee_twophone" property="employeeTwophone" />
+		<result column="entry_time" property="entryTime" />
+		<result column="employee_status" property="employeeStatus" />
+		<result column="probationary_expired" property="probationaryExpired" />
+		<result column="department_id" property="departmentId" />
+		<result column="department_name" property="departmentName" />
+		<result column="company_name" property="companyName" />
+		<result column="company_id" property="companyId" />
+		<result column="employee_img_url" property="employeeImgUrl" />
+		<result column="work_address" property="workAddress" />
+		<result column="marriage_status" property="marriageStatus" />
+		<result column="seniority" property="seniority" />
+		<collection property="postList" resultMap="Post">
+			<result column="department_id" property="departmentId" />
+			<result column="department_name" property="departmentName" />
+		</collection>
 	</resultMap>
-	<resultMap type="com.xiangshangban.organization.bean.Post" id="Post" >   
-	    <result column="post_id"  property="postId" />
-	    <result column="post_name"  property="postName" />          
-	    <result column="post_proficiencies"  property="postProficiencies" /> 
-	    <result column="post_work_type"  property="postWorkType" /> 
-	    <result column="educational_requirements"  property="educationalRequirements" /> 
-	    <result column="post_principal_id"  property="postPrincipalId" />       
-	    <result column="post_class_name"  property="postClassName" /> 
-	    <result column="department_id"  property="departmentId" /> 
-	    <result column="department_name"  property="departmentName" />
-	    <result column="company_name"  property="companyName" />
-	    <result column="employee_name"  property="employeeName" />
-	    <result column="count_number"  property="countNumber" />
-	    <result column="company_id"  property="companyId" />   
-	    <result column="post_grades" property="postGrades"/>   
-	  </resultMap>
-	  <select id="selectEmployeeByCompanyIdAndEmployeeId" parameterType="java.lang.String" resultMap="Employee">
-	  	select <include refid="EmployeeColumn"/>
-	  	from employee_
-	  	where employee_id = #{employeeId} and company_id =#{companyId}
-	  </select>
+	<resultMap type="com.xiangshangban.organization.bean.Post"
+		id="Post">
+		<result column="post_id" property="postId" />
+		<result column="post_name" property="postName" />
+		<result column="post_proficiencies" property="postProficiencies" />
+		<result column="post_work_type" property="postWorkType" />
+		<result column="educational_requirements" property="educationalRequirements" />
+		<result column="post_principal_id" property="postPrincipalId" />
+		<result column="post_class_name" property="postClassName" />
+		<result column="p_department_id" property="departmentId" />
+		<result column="p_department_name" property="departmentName" />
+		<result column="company_name" property="companyName" />
+		<result column="employee_name" property="employeeName" />
+		<result column="count_number" property="countNumber" />
+		<result column="company_id" property="companyId" />
+		<result column="post_grades" property="postGrades" />
+	</resultMap>
+	<select id="selectEmployeeByCompanyIdAndEmployeeId"
+		parameterType="java.lang.String" resultMap="Employee">
+		select
+		<include refid="EmployeeColumn" />
+		from employee_
+		where employee_id = #{employeeId} and company_id =#{companyId}
+	</select>
 	<!-- 部门下在职员工 -->
 	<select id="findEmployeeByDepartmentId" resultMap="Employee">
 		select
@@ -139,7 +143,8 @@
 		LEFT JOIN organization.connect_emp_post_ c on
 		c.employee_id=e.employee_id
 		LEFT JOIN
-		organization.post_ p on c.post_id = p.post_id
+		organization.post_ p on c.post_id
+		= p.post_id
 		where
 		e.employee_status='0'
 		and
@@ -183,14 +188,18 @@
 		e.employee_id,e.employee_name,e.employee_sex,e.login_name,e.employee_phone,
 		p.post_id,p.post_name,e.department_id ,d.department_name,
 		e.entry_time,e.employee_status,uc.is_active
-		from organization.employee_ e 
-		left join user_company uc on e.employee_id = uc.user_id and e.company_id = uc.company_id 
-		left join department_ d on e.department_id = d.department_id 
-		left JOIN connect_emp_post_ cp on cp.employee_id=e.employee_id AND cp.post_grades='1'
-		left JOIN post_ p on cp.post_id = p.post_id 
-		left join u_users u on u.userid = e.employee_id  
+		from organization.employee_
+		e
+		left join user_company uc on e.employee_id = uc.user_id and e.company_id =
+		uc.company_id
+		left join department_ d on e.department_id = d.department_id
+		left JOIN connect_emp_post_ cp on cp.employee_id=e.employee_id AND
+		cp.post_grades='1'
+		left JOIN post_ p on cp.post_id = p.post_id
+		left join u_users u on u.userid = e.employee_id
 		where
-		e.company_id = #{companyId} <!-- AND cp.company_id = #{companyId} --> and uc.info_status = '1'
+		e.company_id = #{companyId} <!-- AND cp.company_id = #{companyId} -->
+		and uc.info_status = '1'
 		<if test="employeeName != null and employeeName != '' ">
 			and e.employee_name like #{employeeName}
 		</if>
@@ -212,10 +221,12 @@
 		limit #{numRecordCount}::integer offset #{numPage}::integer
 	</select>
 	<select id="isAdmin" resultType="int">
-	   SELECT count(a.userid) 
+		SELECT count(a.userid)
 		FROM u_users_roles AS a
 		LEFT JOIN u_roles AS b ON a.roleid=b.roleid
-		WHERE a.company_id=#{companyId} AND a.userid=#{userId} AND b.rolename='admin'
+		WHERE
+		a.company_id=#{companyId} AND a.userid=#{userId} AND
+		b.rolename='admin'
 	</select>
 	<!-- 查询所有员工信息 -->
 	<select id="selectByAllEmployee" parameterType="java.lang.String"
@@ -338,7 +349,7 @@
 		id="EmployeeResultMap">
 		<result column="employee_id" property="employeeId" />
 		<result column="employee_name" property="employeeName" />
-		<result column="login_name"  property="loginName" />
+		<result column="login_name" property="loginName" />
 		<result column="employee_sex" property="employeeSex" />
 		<result column="phone" property="phone" />
 		<result column="employee_phone" property="employeePhone" />
@@ -359,23 +370,32 @@
 		<result column="direct_person_department_name" property="directPersonDepartmentName" />
 	</resultMap>
 	<!-- 李业:查询单条人员信息 -->
-	<select id="selectByEmployee" parameterType="java.lang.String" resultMap="EmployeeResultMap">
+	<select id="selectByEmployee" parameterType="java.lang.String"
+		resultMap="EmployeeResultMap">
 		select e.employee_id,
 		e.employee_name,e.employee_sex,e.login_name,e.employee_phone,
 		e.employee_twophone,p.post_id,p.post_name,d.department_id,d.department_name,e.employee_no,
 		(select employee_name as derect_person_name from employee_ where
 		employee_id = e.direct_person_id ),
-		(select department_id as direct_person_department_id from employee_ where
-		employee_id = e.direct_person_id ),
-		(select department_name as direct_person_department_name from employee_ where
-		employee_id = e.direct_person_id ),
+		(select department_id as
+		direct_person_department_id from employee_ where
+		employee_id =
+		e.direct_person_id ),
+		(select department_name as
+		direct_person_department_name from employee_ where
+		employee_id =
+		e.direct_person_id ),
 		e.entry_time,e.probationary_expired,e.work_address,e.marriage_status,e.seniority,e.company_id
-		from employee_ as e 
-		left join connect_emp_post_ as cep on e.employee_id = cep.employee_id and cep.post_grades = '1' and cep.is_delete = '0' and cep.company_id = #{companyId}
+		from employee_ as e
+		left join department_ d on e.department_id = d.department_id
+		left join
+		connect_emp_post_ as cep on e.employee_id = cep.employee_id and
+		cep.post_grades = '1' and cep.is_delete = '0' and cep.company_id =
+		#{companyId}
 		left join post_ p on cep.post_id = p.post_id
-		left join department_ d on cep.department_id = d.department_id
-		left join u_users u on e.employee_id = u.userid 
-		where e.company_id = #{companyId} AND e.employee_id = #{employeeId} 
+		left join
+		u_users u on e.employee_id = u.userid
+		where e.company_id = #{companyId} AND e.employee_id = #{employeeId}
 	</select>
 	<resultMap type="com.xiangshangban.organization.bean.Employee"
 		id="EmployeeAppResultMap">
@@ -397,29 +417,37 @@
 		select
 		userid,employee_img_url,username,employee_sex,company_no,company_name,e.department_id,department_name,post_name,employee_no,phone
 		from (select u.userid,
-			u.username,c.company_no,c.company_id,c.company_name,u.phone
-			from u_users u 
-			left join user_company uc on u.userid = uc.user_id 
-			left join company_ c on c.company_id = uc.company_id 
-			where u.userid =#{userId} and uc.company_id = #{companyId}
+		u.username,c.company_no,c.company_id,c.company_name,u.phone
+		from u_users u
+		left join user_company uc on u.userid = uc.user_id
+		left join company_ c on c.company_id = uc.company_id
+		where u.userid =#{userId} and uc.company_id = #{companyId}
 		) a
-		left join employee_ e on a.userid = e.employee_id AND a.company_id=e.company_id
+		left join
+		employee_ e on a.userid = e.employee_id AND a.company_id=e.company_id
 		left join department_ d on e.department_id = d.department_id
-		left join connect_emp_post_ cep on a.userid = cep.employee_id and d.department_id = cep.department_id and cep.post_grades = '1'
-		left join post_ p on cep.post_id = p.post_id
+		left join
+		connect_emp_post_ cep on a.userid = cep.employee_id and
+		d.department_id = cep.department_id and cep.post_grades = '1'
+		left join
+		post_ p on cep.post_id = p.post_id
 	</select>
 	<!-- 李业:查询员工信息总记录数 -->
 	<select id="selectCountEmployeeFromCompany" parameterType="java.lang.String"
 		resultType="java.lang.Integer">
 		select count(e.employee_id)
-		from organization.employee_ e 
-		left join user_company uc on e.employee_id = uc.user_id and e.company_id = uc.company_id
-		left join department_ d on e.department_id = d.department_id 
-		left JOIN connect_emp_post_ cp on cp.employee_id=e.employee_id AND cp.post_grades='1'
-		left JOIN post_ p on cp.post_id = p.post_id 
-		left join u_users u on u.userid = e.employee_id  
+		from organization.employee_ e
+		left join user_company uc on e.employee_id = uc.user_id and e.company_id =
+		uc.company_id
+		left join department_ d on e.department_id =
+		d.department_id
+		left JOIN connect_emp_post_ cp on cp.employee_id=e.employee_id AND
+		cp.post_grades='1'
+		left JOIN post_ p on cp.post_id = p.post_id
+		left join u_users u on u.userid = e.employee_id
 		where
-		e.company_id = #{companyId} <!-- AND cp.company_id = #{companyId} --> and uc.info_status =
+		e.company_id = #{companyId} <!-- AND cp.company_id = #{companyId} -->
+		and uc.info_status =
 		'1'
 		<if test="employeeName != null and employeeName != '' ">
 			and employee_name like #{employeeName}
@@ -443,16 +471,17 @@
 	<!-- 李业:编辑人员信息 -->
 	<update id="updateEmployeeInformation" parameterType="com.xiangshangban.organization.bean.Employee">
 		update organization.employee_
-		set employee_name = #{employeeName} ,  
-		employee_sex =#{employeeSex}, 
+		set employee_name = #{employeeName} ,
+		employee_sex =#{employeeSex},
 		<if test="employeeStatus != null and employeeStatus!=''">
 			employee_status = #{employeeStatus},
 		</if>
 		department_id = #{departmentId},
 		login_name =#{loginName},
-		entry_time = #{entryTime}, 
+		entry_time =
+		#{entryTime},
 		probationary_expired =#{probationaryExpired},
-		 work_address =#{workAddress}
+		work_address =#{workAddress}
 		<if test="employeePhone != null">
 			, employee_phone =#{employeePhone}
 		</if>
@@ -481,16 +510,12 @@
 	</update>
 
 	<!-- 李业:(功能)导入完善的员工信息 -->
-		<!-- 根据传入的员工信息查询是否有重复的员工数据 -->
-	<!-- 	<select id="selectByImportEmployee" parameterType="com.xiangshangban.organization.bean.Employee" resultMap="">
-			select
-			postId=(case)
-			from user_company uc left join
-			employee_ e on e.company_id = uc.company_id left join
-			department_ d on d.department_id = e.department_id left join
-			connect_emp_post_ cep on cep.department_id = d.department_id
-			where uc.user_id = #{userId} and uc.company_id = #{companyId}
-		
+	<!-- 根据传入的员工信息查询是否有重复的员工数据 -->
+	<!-- <select id="selectByImportEmployee" parameterType="com.xiangshangban.organization.bean.Employee" 
+		resultMap=""> select postId=(case) from user_company uc left join employee_ 
+		e on e.company_id = uc.company_id left join department_ d on d.department_id 
+		= e.department_id left join connect_emp_post_ cep on cep.department_id = 
+		d.department_id where uc.user_id = #{userId} and uc.company_id = #{companyId} 
 		</select> -->
 
 
@@ -534,24 +559,33 @@
 	</sql>
 	<select id="findAllEmployeeByCompanyId" parameterType="java.lang.String"
 		resultMap="Employee">
-		select <include refid="EmployeeColumn"/>
+		select
+		<include refid="EmployeeColumn" />
 		from employee_ e
 		where company_id = #{companyId}
 	</select>
 	<select id="findExport" resultMap="EmployeeExport">
 		select
-		e.employee_id, e.employee_no, e.employee_name, e.employee_sex,e.employee_twophone,
-		e.employee_phone, e.work_address, e.probationary_expired,e.seniority, e.marriage_status,e.company_id,
-		p.post_id,p.post_name,cp.post_grades,d.department_id ,d.department_name,
+		e.employee_id, e.employee_no, e.employee_name,
+		e.employee_sex,e.employee_twophone,
+		e.employee_phone, e.work_address,
+		e.probationary_expired,e.seniority, e.marriage_status,e.company_id,
+		p.post_id,p.post_name,cp.post_grades,
+		d.department_id ,d.department_name,d1.department_id as
+		p_department_id,d1.department_name as p_department_name,
 		e.entry_time,e.employee_status,uc.is_active,e.login_name
-		from organization.employee_ e 
-		left join user_company uc on e.employee_id = uc.user_id and e.company_id = uc.company_id 
-		left JOIN connect_emp_post_ cp on cp.employee_id=e.employee_id 
-    	left join department_ d on cp.department_id = d.department_id 
-		left JOIN post_ p on cp.post_id = p.post_id 
-		left join u_users u on u.userid = e.employee_id   
+		from
+		organization.employee_ e
+		left join department_ d on e.department_id = d.department_id
+		left join user_company uc on e.employee_id = uc.user_id and e.company_id =
+		uc.company_id
+		left JOIN connect_emp_post_ cp on cp.employee_id=e.employee_id
+		left join department_ d1 on cp.department_id = d1.department_id
+		left JOIN post_ p on cp.post_id = p.post_id
+		left join u_users u on u.userid = e.employee_id
 		where
-		e.company_id = #{companyId} AND cp.company_id = #{companyId} and uc.info_status = '1'
+		e.company_id = #{companyId} <!-- AND cp.company_id = #{companyId} --> and
+		uc.info_status = '1'
 		ORDER BY d.department_name, e.employee_name
 
 	</select>
@@ -762,21 +796,38 @@
 		#{employeeId}
 	</update>
 	<!-- 李业:(功能:人员导入)根据登录名和公司id查询公司员工 -->
-	<select id="selectEmployeeByLoginNameAndCompanyId" parameterType="java.lang.String" resultMap="Employee">
-		select e.employee_id,e.employee_name
+	<select id="selectEmployeeByLoginNameAndCompanyId"
+		parameterType="java.lang.String" resultMap="Employee">
+		select
+		e.employee_id,e.employee_name
 		from employee_ e
-		where e.login_name = #{loginName} and e.company_id = #{companyId}
+		where e.login_name =
+		#{loginName} and e.company_id = #{companyId}
 	</select>
-	
+
 	<update id="updateEmployeeImgUrl" parameterType="java.lang.String">
 		update employee_
 		set employee_img_url = #{employeeImgUrl}
-		where employee_id = #{employeeId} and company_id = #{companyId}
+		where employee_id =
+		#{employeeId} and company_id = #{companyId}
 	</update>
-	 <select id="selectEmployeeCountByCompanyId" parameterType="java.lang.String" resultType="java.lang.Integer">
- 	select count(employee_id) 
- 	from employee_ 
- 	where company_id = #{companyId} GROUP BY company_id
- </select>
-	
+	<select id="selectEmployeeCountByCompanyId" parameterType="java.lang.String"
+		resultType="java.lang.Integer">
+		select count(employee_id)
+		from employee_
+		where company_id = #{companyId} GROUP BY company_id
+	</select>
+	<update id="updateLoginNameByEmployeeId" parameterType="java.lang.String">
+		update employee_
+		set login_name = #{loginName} 
+		where employee_id = #{employeeId}
+	</update>
+	<resultMap type="com.xiangshangban.organization.bean.UusersRoles" id="UserRole">
+		<result column="userid" property="userId"/>
+		<result column="roleid" property="roleId"/>
+		<result column="company_id" property="companyId"/>
+	</resultMap>
+	<select id="selectRoleIdByEmployeeIdAndCompanyId" parameterType="java.lang.String" resultMap="UserRole">
+		select userid,roleid,company_id from u_users_roles where userid=#{userId} and company_id=#{companyId}
+	</select>
 </mapper>

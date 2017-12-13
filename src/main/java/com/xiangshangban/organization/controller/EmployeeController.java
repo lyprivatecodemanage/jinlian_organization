@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -30,6 +31,7 @@ import com.xiangshangban.organization.bean.Post;
 import com.xiangshangban.organization.bean.ReturnData;
 import com.xiangshangban.organization.bean.Transferjob;
 import com.xiangshangban.organization.bean.Uusers;
+import com.xiangshangban.organization.bean.UusersRoles;
 import com.xiangshangban.organization.service.CompanyService;
 import com.xiangshangban.organization.service.ConnectEmpPostService;
 import com.xiangshangban.organization.service.DepartmentService;
@@ -63,7 +65,6 @@ public class EmployeeController {
 	private CompanyService companyService;
 	@Autowired
 	private DepartmentService departmentService;
-	
 	/**
 	 * 激活
 	 * 
@@ -568,6 +569,7 @@ public class EmployeeController {
 	 * @param request
 	 * @return
 	 */
+	@Transactional
 	@RequestMapping(value = "/updateEmployeeInformation", method = RequestMethod.POST)
 	public Map<String, Object> updateEmployeeInformation(@RequestBody String jsonString, HttpServletRequest request) {
 		Map<String, Object> result = new HashMap<String, Object>();
@@ -585,6 +587,8 @@ public class EmployeeController {
 				result.put("returnCode", "");
 				return result;
 			}
+			
+			
 			if(StringUtils.isNotEmpty(emp.getEmployeeNo()) && !emp.getEmployeeNo().equals(oldEmp.getEmployeeNo())){
 				List<Employee> empList = employeeService.findByAllEmployee(companyId);
 				if(empList !=null && empList.size()>0){
@@ -604,9 +608,9 @@ public class EmployeeController {
 				for(Post post:postList){
 					if("1".equals(post.getPostGrades()) && StringUtils.isNotEmpty(post.getDepartmentId())){
 						emp.setDepartmentId(post.getDepartmentId());
-					}
-					if(StringUtils.isNotEmpty(post.getPostId())){
-						emp.setPostId(post.getPostId());
+						if(StringUtils.isNotEmpty(post.getPostId())){
+							emp.setPostId(post.getPostId());
+						}
 					}
 				}
 			}else{
@@ -621,6 +625,22 @@ public class EmployeeController {
 				result.put("message", "必传参数为空");
 				result.put("returnCode", "3006");
 				return result;
+			}
+			/*更换登录手机号*/
+			if(!oldEmp.getLoginName().equals(emp.getLoginName())){
+				employeeService.updateLoginNameByEmployeeId(emp.getLoginName(), emp.getEmployeeId());
+				Uusers user = employeeService.selectByPhoneAndStatus(emp.getLoginName());
+				if(user ==null || (StringUtils.isNotEmpty(user.getUserid()) && user.getUserid().equals(emp.getEmployeeId()) && !user.getPhone().equals(emp.getLoginName()))){
+					employeeService.updatePhoneByUserId(emp.getLoginName(), emp.getEmployeeId());
+					UusersRoles userRole = employeeService.selectRoleIdByEmployeeIdAndCompanyId(emp.getEmployeeId(), companyId);
+					if(userRole!=null && StringUtils.isNotEmpty(userRole.getRoleId()) && "56b814c2ea7e4f679ee505036f5b030a".equals(userRole.getRoleId())){
+						result.put("flag", "1");
+					}
+				}else{
+					result.put("message", "登录名已被占用");
+					result.put("returnCode", "4115");
+					return result;
+				}
 			}
 			//新完善信息
 			employeeService.updateEmployeeInformation(emp);
