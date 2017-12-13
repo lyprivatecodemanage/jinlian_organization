@@ -52,4 +52,14 @@
   2017-12-13 20:43:27 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
   2017-12-13 20:46:00 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
   2017-12-13 20:47:23 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
+2017-12-12 12:15:42 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
+  2017-12-12 12:16:54 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
+  2017-12-12 13:07:05 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
+  2017-12-12 15:14:13 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
+  2017-12-12 16:04:15 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
+  2017-12-12 16:10:48 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.IndexOutOfBoundsException: Index: 0, Size: 0
+  2017-12-12 16:11:34 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.IndexOutOfBoundsException: Index: 0, Size: 0
+  2017-12-12 16:11:50 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.IndexOutOfBoundsException: Index: 0, Size: 0
+  2017-12-12 16:25:09 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.IndexOutOfBoundsException: Index: 0, Size: 0
+  2017-12-12 17:25:36 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
   
