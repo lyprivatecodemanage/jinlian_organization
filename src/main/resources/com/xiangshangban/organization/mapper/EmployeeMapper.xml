@@ -195,7 +195,7 @@
 		uc.company_id
 		left join department_ d on e.department_id = d.department_id
 		left JOIN connect_emp_post_ cp on cp.employee_id=e.employee_id AND
-		cp.post_grades='1'
+		cp.post_grades='1' AND cp.company_id = #{companyId}
 		left JOIN post_ p on cp.post_id = p.post_id
 		left join u_users u on u.userid = e.employee_id
 		where
@@ -581,12 +581,12 @@
 		from organization.employee_ e 
     	left join department_ d on e.department_id = d.department_id 
 		left join user_company uc on e.employee_id = uc.user_id and e.company_id = uc.company_id 
-		left JOIN connect_emp_post_ cp on cp.employee_id=e.employee_id 
+		left JOIN connect_emp_post_ cp on cp.employee_id=e.employee_id AND cp.company_id = #{companyId}
     	left join department_ d1 on cp.department_id = d1.department_id 
 		left JOIN post_ p on cp.post_id = p.post_id 
 		left join u_users u on u.userid = e.employee_id   
 		where
-		e.company_id = #{companyId} <!-- AND cp.company_id = #{companyId} --> and
+		e.company_id = #{companyId} and
 		uc.info_status = '1'
 		ORDER BY d.department_name, e.employee_name
 

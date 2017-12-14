@@ -65,6 +65,23 @@ public class EmployeeController {
 	private CompanyService companyService;
 	@Autowired
 	private DepartmentService departmentService;
+	
+	public Map<String,Object> newInsertEmployee(){
+		Map<String,Object> result = new HashMap<String,Object>();
+		try{
+			
+			return result;
+		}catch(Exception e){
+			logger.info(e);
+			result.put("message", "服务器错误");
+			result.put("returnCode", "3001");
+			return result;
+		}
+	}
+	
+	
+	
+	
 	/**
 	 * 激活
 	 * 
@@ -622,8 +639,7 @@ public class EmployeeController {
 				result.put("returnCode", "3006");
 				return result;
 			}
-			if (StringUtils.isEmpty(emp.getEmployeeName()) || StringUtils.isEmpty(emp.getEmployeeSex()) 
-					|| StringUtils.isEmpty(emp.getLoginName()) ||StringUtils.isEmpty(emp.getDepartmentId())
+			if (StringUtils.isEmpty(emp.getEmployeeName()) || StringUtils.isEmpty(emp.getLoginName()) ||StringUtils.isEmpty(emp.getDepartmentId())
 					/*|| StringUtils.isEmpty(emp.getEntryTime()) || StringUtils.isEmpty(emp.getProbationaryExpired()) 
 					 || StringUtils.isEmpty(emp.getWorkAddress())*/) {
 				result.put("message", "必传参数为空");
