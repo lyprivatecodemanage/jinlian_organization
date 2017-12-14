@@ -213,7 +213,8 @@
     post_proficiencies = #{postProficiencies,jdbcType=VARCHAR},
     post_work_type = #{postWorkType,jdbcType=VARCHAR},
     educational_requirements = #{educationalRequirements,jdbcType=VARCHAR}, 
-    post_principal_id = #{postPrincipalId,jdbcType=VARCHAR}            
+    post_principal_id = #{postPrincipalId,jdbcType=VARCHAR},
+    department_id=#{departmentId,jdbcType=VARCHAR}            
     where 
     post_id = #{postId,jdbcType=VARCHAR}
   </update>
