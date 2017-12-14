@@ -84,7 +84,7 @@ public class PostController {
 			String postName = posttemp.getPostName();						
 			if(StringUtils.isNotEmpty(departmentId) && StringUtils.isNotEmpty(postName) && StringUtils.isNotEmpty(companyId)){
 				int num = postService.getDepPostNumByName(companyId, 
-						departmentId, postName, posttemp.getPostId());//查询该岗位下是否存在同名岗位
+						departmentId, postName, posttemp.getPostId());//查询该部门下是否存在同名岗位
 				if(num>0){
 					returnData.setMessage("添加岗位失败：部门下存在同名岗位");
 					returnData.setReturnCode("4114");
