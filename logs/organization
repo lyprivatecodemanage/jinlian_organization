@@ -5,4 +5,7 @@
   2017-12-14 14:14:22 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
   2017-12-14 14:14:45 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
   2017-12-14 14:14:53 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2017-12-14 14:28:02 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
+  2017-12-14 14:31:19 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2017-12-14 14:31:36 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
   

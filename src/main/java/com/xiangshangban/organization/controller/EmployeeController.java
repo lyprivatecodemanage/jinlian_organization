@@ -66,9 +66,10 @@ public class EmployeeController {
 	@Autowired
 	private DepartmentService departmentService;
 	
-	public Map<String,Object> newInsertEmployee(){
+	public Map<String,Object> newInsertEmployee(@RequestBody String jsonString,HttpServletRequest request){
 		Map<String,Object> result = new HashMap<String,Object>();
 		try{
+			String companyId = request.getHeader("header");
 			
 			return result;
 		}catch(Exception e){
@@ -601,6 +602,13 @@ public class EmployeeController {
 			String companyId = request.getHeader("companyId");// 公司id
 			String userId = request.getHeader("accessUserId");// 操作人id
 			emp.setCompanyId(companyId);
+			String loginName = emp.getLoginName();
+			boolean loginNameMatch = RegexUtil.matchPhone(loginName);
+			if (!loginNameMatch) {
+				result.put("message", "登录名格式必须为11位手机号");
+				result.put("returnCode", "4102");
+				return result;
+			}
 			//查詢編輯的人員信息是否存在
 			Employee oldEmp = employeeService.selectByEmployee(emp.getEmployeeId(), companyId);
 			if(oldEmp==null){
