@@ -837,4 +837,27 @@
 	<select id="selectRoleIdByEmployeeIdAndCompanyId" parameterType="java.lang.String" resultMap="UserRole">
 		select userid,roleid,company_id from u_users_roles where userid=#{userId} and company_id=#{companyId}
 	</select>
+	<resultMap type="com.xiangshangban.organization.bean.Employee" id="AdminEmployeeResult">
+		<result column="employee_name" property="employeeName"/>
+		<result column="description" property="description"/>
+		<result column="login_name" property="loginName"/>
+		<result column="employee_img_url" property="employeeImgUrl"/>
+		<result column="company_name" property="companyName"/>
+		<result column="post_name" property="postName"/>
+	</resultMap>
+	<!-- 查询公司首页管理员展示信息 -->
+	<select id="selectAdminEmployeeDetails" parameterType="java.lang.String" resultMap="AdminEmployeeResult">
+		select e.employee_name,r.description,e.login_name,e.employee_img_url,c.company_name,p.post_name
+		from employee_ e 
+		left join  u_users_roles ur on ur.userid = e.employee_id and ur.company_id = e.company_id
+		left join  u_roles r on r.roleid = ur.roleid 
+		left join	 company_ c on  c.company_id = e.company_id
+		left join  connect_emp_post_ cep on cep.employee_id = e.employee_id and cep.company_id = e.company_id and cep.department_id = e.department_id and post_grades ='1'
+		left join  post_ p on p.post_id = cep.post_id
+		where e.employee_id = #{employeeId} and e.company_id = #{companyId}
+	</select>
+	<!-- 修改管理员头像 -->
+	<update id="updateAdminEmployeeImgUrl" parameterType="java.lang.String">
+		update employee_ set employee_img_url = #{employeeImgUrl} where employee_id = #{employeeId} and company_id = #{companyId}
+	</update>
 </mapper>

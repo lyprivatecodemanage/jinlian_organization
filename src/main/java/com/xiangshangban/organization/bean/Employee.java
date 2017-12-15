@@ -40,6 +40,7 @@ public class Employee {
     private String directPersonDepartmentId;//汇报人的部门id
     private String directPersonDepartmentName;//汇报人的部门name
     private String directPersonLoginName;//汇报人登录名
+    private String description;//角色描述
     //----现在没用到的----
 //    private String employeeBirthday;// 出生年月日    
 //    private String employeeTell;//电话号码  

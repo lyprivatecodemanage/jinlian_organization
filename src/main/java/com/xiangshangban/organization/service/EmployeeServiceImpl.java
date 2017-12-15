@@ -550,8 +550,10 @@ public class EmployeeServiceImpl implements EmployeeService {
             row.createCell(j++).setCellValue(emp.getEmployeeName());//姓名
             if(emp.getEmployeeSex().equals("0")){
             	row.createCell(j++).setCellValue("男");
-            }else{
+            }else if(emp.getEmployeeSex().equals("1")){
             	row.createCell(j++).setCellValue("女");
+            }else{
+            	row.createCell(j++).setCellValue("");
             }
             row.createCell(j++).setCellValue(emp.getWorkAddress());//工作地
             //0：未婚，1：已婚 ，2：离异
@@ -648,6 +650,18 @@ public class EmployeeServiceImpl implements EmployeeService {
 		
 		return employeeDao.selectDirectPersonLoginName(employeeId, companyId)
 				;
+	}
+
+	@Override
+	public Employee selectAdminEmployeeDetails(String employeeId, String companyId) {
+		
+		return employeeDao.selectAdminEmployeeDetails(employeeId, companyId);
+	}
+
+	@Override
+	public int updateAdminEmployeeImgUrl(String companyId, String employeeId, String employeeImgUrl) {
+		
+		return employeeDao.updateAdminEmployeeImgUrl(companyId, employeeId, employeeImgUrl);
 	}
 
 	

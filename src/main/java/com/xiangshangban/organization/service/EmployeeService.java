@@ -165,4 +165,19 @@ public interface EmployeeService {
 	UusersRoles selectRoleIdByEmployeeIdAndCompanyId(String userId,String companyId);
 	
 	Employee selectDirectPersonLoginName(String employeeId,String companyId);
+	/**
+	 * web首页查询管理员个人信息
+	 * @param employeeId
+	 * @param companyId
+	 * @return
+	 */
+	Employee selectAdminEmployeeDetails(String employeeId,String companyId);
+	/**
+	 * @author 李业   修改管理员头像
+	 * @param companyId
+	 * @param employeeId
+	 * @param employeeImgUrl
+	 * @return
+	 */
+	int updateAdminEmployeeImgUrl(String companyId,String employeeId,String employeeImgUrl);
 }

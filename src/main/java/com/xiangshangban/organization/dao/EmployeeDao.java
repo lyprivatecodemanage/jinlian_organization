@@ -130,4 +130,19 @@ public interface EmployeeDao {
 	UusersRoles selectRoleIdByEmployeeIdAndCompanyId(@Param("userId")String userId,@Param("companyId")String companyId);
 	
 	Employee selectDirectPersonLoginName(@Param("employeeId")String employeeId,@Param("companyId")String companyId);
+	/**
+	 * @author 李业   查询公司首页管理员展示信息
+	 * @param employeeId
+	 * @param companyId
+	 * @return
+	 */
+	Employee selectAdminEmployeeDetails(@Param("employeeId")String employeeId,@Param("companyId")String companyId);
+	/**
+	 * @author 李业   修改管理员头像
+	 * @param companyId
+	 * @param employeeId
+	 * @param employeeImgUrl
+	 * @return
+	 */
+	int updateAdminEmployeeImgUrl(@Param("companyId")String companyId,@Param("employeeId")String employeeId,@Param("employeeImgUrl")String employeeImgUrl);
 }

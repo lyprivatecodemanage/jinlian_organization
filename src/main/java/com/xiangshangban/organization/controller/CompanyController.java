@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.xiangshangban.organization.bean.Company;
+import com.xiangshangban.organization.bean.Employee;
 import com.xiangshangban.organization.bean.ReturnData;
 import com.xiangshangban.organization.service.CompanyService;
 import com.xiangshangban.organization.service.DepartmentService;
@@ -78,7 +79,7 @@ public class CompanyController {
 		ReturnData returnData = new ReturnData();
 		String companyId = companytemp.getCompanyId();
 		String companyName = companytemp.getCompanyName();
-		if(StringUtils.isEmpty(companyName)){
+		if(StringUtils.isEmpty(companyName) || StringUtils.isEmpty(companytemp.getCompanyArea())){
 			returnData.setMessage("必传参数为空");
 			returnData.setReturnCode("3000");
 		}
@@ -195,10 +196,18 @@ public class CompanyController {
 					"companyLogo", company.getCompanyLogo());
 			company.setCompanyLogoPath(logoPath);
 		}
-		
 		Integer departmentCount = departmentService.selectDepartmentCountByCompanyId(companyId);
 		int employeeCount = employeeService.selectEmployeeCountByCompanyId(companyId);
 		//int deviceCount = deviceService.selectDeviceCountByCompanyId(companyId);
+		Employee adminEmployee = employeeService.selectAdminEmployeeDetails(userId, companyId);
+		if(adminEmployee!=null && StringUtils.isNotEmpty(adminEmployee.getEmployeeImgUrl())){
+			String employeeImgUrlPath = oSSFileService.getPathByKey(company.getCompanyNo(),
+					"portrait", adminEmployee.getEmployeeImgUrl());
+			if(StringUtils.isNotEmpty(employeeImgUrlPath)){
+				adminEmployee.setEmployeeImgUrl(employeeImgUrlPath);
+			}
+		}
+		result.put("adminEmployee", adminEmployee);
 		result.put("company",company);
 		result.put("departmentCount",departmentCount);
 		result.put("employeeCount",employeeCount);
@@ -206,6 +215,68 @@ public class CompanyController {
 		result.put("message", "数据请求成功");
 		result.put("returnCode", "3000");
 		return result;
+		}catch(Exception e){
+			logger.info(e);
+			e.printStackTrace();
+			result.put("message", "服务器错误");
+			result.put("returnCode", "3001");
+			return result;
+		}
+	}
+	/**
+	 * 获取管理员个人信息
+	 * @param jsonString
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value="getAdminEmployeeDetails",produces="application/json;charset=utf-8",method=RequestMethod.POST)
+	public Map<String,Object> getAdminEmployeeDetails(@RequestBody String jsonString,HttpServletRequest request){
+		Map<String,Object> result = new HashMap<String,Object>();
+		try{
+			String companyId = request.getHeader("companyId");
+			String userId = request.getHeader("accessUserId");
+			String companyNo = JSON.parseObject(jsonString).getString("companyNo");
+			Employee adminEmployee = employeeService.selectAdminEmployeeDetails(userId, companyId);
+			if(adminEmployee!=null && StringUtils.isNotEmpty(adminEmployee.getEmployeeImgUrl())){
+				String employeeImgUrlPath = oSSFileService.getPathByKey(companyNo,
+						"portrait", adminEmployee.getEmployeeImgUrl());
+				if(StringUtils.isNotEmpty(employeeImgUrlPath)){
+					adminEmployee.setEmployeeImgUrl(employeeImgUrlPath);
+				}
+			}
+			result.put("adminEmployee", adminEmployee);
+			result.put("message", "成功");
+			result.put("returnCode", "3000");
+			return result;
+		}catch(Exception e){
+			logger.info(e);
+			result.put("message", "服务器错误");
+			result.put("returnCode", "3001");
+			return result;
+		}
+	}
+	/**
+	 * 管理员修改头像
+	 * @param jsonString
+	 * @param reequest
+	 * @return
+	 */
+	@RequestMapping(value="updateAdminEmployeeImgUrl",produces="application/json;charset=utf-8",method=RequestMethod.POST)
+	public Map<String,Object> updateAdminEmployeeImgUrl(@RequestBody String jsonString, HttpServletRequest request){
+		Map<String,Object> result = new HashMap<String ,Object>();
+		try{
+			String companyId = request.getHeader("companyId");
+			String userId = request.getHeader("accessUserId");
+			if(StringUtils.isEmpty(companyId) || StringUtils.isEmpty(userId)){
+				logger.info("========>管理员修改头像:api服务器头信息传递错误");
+			}
+			String employeeImgUrl = JSON.parseObject(jsonString).getString("key");
+			if(StringUtils.isNotEmpty(employeeImgUrl)){
+				employeeService.updateAdminEmployeeImgUrl(companyId, userId, employeeImgUrl);
+			}
+			result.put("message", "成功");
+			result.put("returnCode", "3000");
+			return result;
 		}catch(Exception e){
 			logger.info(e);
 			result.put("message", "服务器错误");
