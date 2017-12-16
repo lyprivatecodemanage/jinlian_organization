@@ -162,7 +162,7 @@ public interface EmployeeService {
 	
 	Uusers selectByPhoneAndStatus(String phone);
 	
-	UusersRoles selectRoleIdByEmployeeIdAndCompanyId(String userId,String companyId);
+	List<UusersRoles> selectRoleIdByEmployeeId(String userId);
 	
 	Employee selectDirectPersonLoginName(String employeeId,String companyId);
 	/**

@@ -206,6 +206,8 @@ public class CompanyController {
 			if(StringUtils.isNotEmpty(employeeImgUrlPath)){
 				adminEmployee.setEmployeeImgUrl(employeeImgUrlPath);
 			}
+		}else{
+				adminEmployee.setEmployeeImgUrl("http://xiangshangban.oss-cn-hangzhou.aliyuncs.com/test/sys/portrait/default.png");
 		}
 		result.put("adminEmployee", adminEmployee);
 		result.put("company",company);
@@ -243,6 +245,8 @@ public class CompanyController {
 				if(StringUtils.isNotEmpty(employeeImgUrlPath)){
 					adminEmployee.setEmployeeImgUrl(employeeImgUrlPath);
 				}
+			}else{
+				adminEmployee.setEmployeeImgUrl("http://xiangshangban.oss-cn-hangzhou.aliyuncs.com/test/sys/portrait/default.png");
 			}
 			result.put("adminEmployee", adminEmployee);
 			result.put("message", "成功");
@@ -274,6 +278,18 @@ public class CompanyController {
 			if(StringUtils.isNotEmpty(employeeImgUrl)){
 				employeeService.updateAdminEmployeeImgUrl(companyId, userId, employeeImgUrl);
 			}
+			Company company = companyService.selectByCompany(companyId);
+			Employee adminEmployee = employeeService.selectAdminEmployeeDetails(userId, companyId);
+			if(adminEmployee!=null && StringUtils.isNotEmpty(adminEmployee.getEmployeeImgUrl())){
+				String employeeImgUrlPath = oSSFileService.getPathByKey(company.getCompanyNo(),
+						"portrait", adminEmployee.getEmployeeImgUrl());
+				if(StringUtils.isNotEmpty(employeeImgUrlPath)){
+					adminEmployee.setEmployeeImgUrl(employeeImgUrlPath);
+				}
+			}else{
+				adminEmployee.setEmployeeImgUrl("http://xiangshangban.oss-cn-hangzhou.aliyuncs.com/test/sys/portrait/default.png");
+			}
+			result.put("adminEmployee",adminEmployee);
 			result.put("message", "成功");
 			result.put("returnCode", "3000");
 			return result;

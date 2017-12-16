@@ -616,8 +616,6 @@ public class EmployeeController {
 				result.put("returnCode", "");
 				return result;
 			}
-			
-			
 			if(StringUtils.isNotEmpty(emp.getEmployeeNo()) && !emp.getEmployeeNo().equals(oldEmp.getEmployeeNo())){
 				List<Employee> empList = employeeService.findByAllEmployee(companyId);
 				if(empList !=null && empList.size()>0){
@@ -656,14 +654,31 @@ public class EmployeeController {
 			}
 			/*更换登录手机号*/
 			if(!oldEmp.getLoginName().equals(emp.getLoginName())){
+				/*检查是否是管理员身份*/
+				List<UusersRoles> userRoles = employeeService.selectRoleIdByEmployeeId(emp.getEmployeeId());
+				if(userRoles!=null && userRoles.size()>0){
+					for(UusersRoles userRole : userRoles){
+						//判断是否是管理员
+						if(userRole!=null && StringUtils.isNotEmpty(userRole.getRoleId()) && "56b814c2ea7e4f679ee505036f5b030a".equals(userRole.getRoleId())){
+							//判断是否是本公司的管理员
+							if(StringUtils.isNotEmpty(userRole.getCompanyId()) && companyId.equals(userRole.getCompanyId())){
+								//是
+								result.put("flag", "1");
+								break;
+							}else{
+								result.put("message", "该员工在其他公司具有管理员身份,无权限修改登录名");
+								result.put("returnCode", "4121");
+								return result;
+							}
+						}else{
+							result.put("flag", "0");
+						}
+					}
+				}
 				employeeService.updateLoginNameByEmployeeId(emp.getLoginName(), emp.getEmployeeId());
 				Uusers user = employeeService.selectByPhoneAndStatus(emp.getLoginName());
 				if(user ==null || (StringUtils.isNotEmpty(user.getUserid()) && user.getUserid().equals(emp.getEmployeeId()) && !user.getPhone().equals(emp.getLoginName()))){
 					employeeService.updatePhoneByUserId(emp.getLoginName(), emp.getEmployeeId());
-					UusersRoles userRole = employeeService.selectRoleIdByEmployeeIdAndCompanyId(emp.getEmployeeId(), companyId);
-					if(userRole!=null && StringUtils.isNotEmpty(userRole.getRoleId()) && "56b814c2ea7e4f679ee505036f5b030a".equals(userRole.getRoleId())){
-						result.put("flag", "1");
-					}
 				}else{
 					result.put("message", "登录名已被占用");
 					result.put("returnCode", "4115");

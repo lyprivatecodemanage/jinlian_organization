@@ -127,7 +127,7 @@ public interface EmployeeDao {
 	
 	int updateLoginNameByEmployeeId(@Param("loginName")String loginName,@Param("employeeId")String employeeId);
 	
-	UusersRoles selectRoleIdByEmployeeIdAndCompanyId(@Param("userId")String userId,@Param("companyId")String companyId);
+	List<UusersRoles> selectRoleIdByEmployeeId(@Param("userId")String userId);
 	
 	Employee selectDirectPersonLoginName(@Param("employeeId")String employeeId,@Param("companyId")String companyId);
 	/**

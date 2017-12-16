@@ -640,9 +640,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	@Override
-	public UusersRoles selectRoleIdByEmployeeIdAndCompanyId(String userId, String companyId) {
+	public List<UusersRoles> selectRoleIdByEmployeeId(String userId) {
 		
-		return employeeDao.selectRoleIdByEmployeeIdAndCompanyId(userId, companyId);
+		return employeeDao.selectRoleIdByEmployeeId(userId);
 	}
 
 	@Override

@@ -1,0 +1,17 @@
+2017-12-14 10:15:01 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
+  2017-12-14 11:14:36 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
+  2017-12-14 13:53:22 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
+  2017-12-14 14:12:27 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
+  2017-12-14 14:14:22 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2017-12-14 14:14:45 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2017-12-14 14:14:53 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2017-12-14 14:28:02 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
+  2017-12-14 14:31:19 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2017-12-14 14:31:36 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2017-12-14 20:07:42 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
+  2017-12-14 20:08:34 INFO [com.xiangshangban.organization.controller.CompanyController]: org.mybatis.spring.MyBatisSystemException: nested exception is org.apache.ibatis.binding.BindingException: Parameter 'employee_id' not found. Available parameters are [employeeId, param1, param2, companyId]
+  2017-12-14 20:11:20 INFO [com.xiangshangban.organization.controller.CompanyController]: org.mybatis.spring.MyBatisSystemException: nested exception is org.apache.ibatis.binding.BindingException: Parameter 'employee_id' not found. Available parameters are [employeeId, param1, param2, companyId]
+  2017-12-14 20:11:49 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
+  2017-12-14 20:12:19 INFO [com.xiangshangban.organization.controller.CompanyController]: org.mybatis.spring.MyBatisSystemException: nested exception is org.apache.ibatis.binding.BindingException: Parameter 'employee_id' not found. Available parameters are [employeeId, param1, param2, companyId]
+  2017-12-14 20:15:54 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
+  

@@ -834,8 +834,8 @@
 		<result column="roleid" property="roleId"/>
 		<result column="company_id" property="companyId"/>
 	</resultMap>
-	<select id="selectRoleIdByEmployeeIdAndCompanyId" parameterType="java.lang.String" resultMap="UserRole">
-		select userid,roleid,company_id from u_users_roles where userid=#{userId} and company_id=#{companyId}
+	<select id="selectRoleIdByEmployeeId" parameterType="java.lang.String" resultMap="UserRole">
+		select userid,roleid,company_id from u_users_roles where userid=#{userId}
 	</select>
 	<resultMap type="com.xiangshangban.organization.bean.Employee" id="AdminEmployeeResult">
 		<result column="employee_name" property="employeeName"/>
