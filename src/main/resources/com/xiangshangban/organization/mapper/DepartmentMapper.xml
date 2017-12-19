@@ -49,7 +49,7 @@
 	<if test="employeeName!=null and employeeName!=''">
 		AND employeeName like '%${employeeName}%'
 	</if>
-	order by d.department_name
+	order by d.department_parent_id
 	limit #{pageRecordNum}::integer offset #{fromPageNum}::integer 	 
   </select>
   <!-- 分页查询部门信息数目-->
@@ -112,7 +112,7 @@
 	     and d.employee_id in(select d.employee_id from organization.department_  d  LEFT JOIN organization.employee_ e on e.employee_id=d.employee_id where employee_name like '%${employeeName}%')
 	 </if> 				 
      </where>
-     order by d.department_name
+     order by d.department_parent_id
   </select> 
     
   <!-- 查询所有部门 -->
