@@ -122,6 +122,7 @@ public class CompanyController {
 		ReturnData returnData = new ReturnData();
 		JSONObject obj = JSON.parseObject(companyId);
 		String companyid=obj.getString("companyId");
+		companyid = request.getHeader("companyId");
 		if(!companyid.equals("")){
 			Company company =companyService.selectByCompany(companyid);	
 			if(StringUtils.isNotEmpty(company.getCompanyLogo())){

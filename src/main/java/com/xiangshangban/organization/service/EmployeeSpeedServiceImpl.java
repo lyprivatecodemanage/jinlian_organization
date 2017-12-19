@@ -2,10 +2,8 @@ package com.xiangshangban.organization.service;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -191,10 +189,12 @@ public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 				if(lineFlag){
 					continue;
 				}
-				Employee newEmp = new Employee(paramList.get(0), paramList.get(1), paramList.get(2), paramList.get(3),
-						paramList.get(4), paramList.get(5), paramList.get(6), paramList.get(7), paramList.get(8),
-						paramList.get(9), paramList.get(10), paramList.get(11), paramList.get(12), postList,
-						paramList.get(17), paramList.get(18),paramList.get(19));
+				Employee newEmp = new Employee(paramList.get(0)/*employeeNo*/,paramList.get(1)/*employeeName*/, paramList.get(2)/*employeeSex*/, 
+						paramList.get(3)/*workAddress*/,paramList.get(4)/*marriageStatus*/, paramList.get(5)/*loginName*/,
+						paramList.get(6)/*departmentName*/,paramList.get(7)/*directPersonName*/, paramList.get(8)/*directPersonLoginName*/,
+						paramList.get(9)/*employeeStatus*/,paramList.get(10)/*entryTime*/, paramList.get(11)/*probationaryExpired*/,
+						paramList.get(12)/*postName*/, postList/*postList*/,paramList.get(17)/*employeePhone*/, 
+						paramList.get(18)/*employeeTwophone*/,paramList.get(19)/*seniority*/);
 				newEmp.setOperateUserId(operateUserId);
 				if ("女".equals(newEmp.getEmployeeSex())) {
 					newEmp.setEmployeeSex("1");
@@ -303,30 +303,7 @@ public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 					importReturnDataList.add(importReturnData);
 					continue;
 				}
-				/*String onePhone = newEmp.getEmployeePhone();
-				boolean onePhoneMatch = true;
-				if(StringUtils.isNotEmpty(onePhone) && "0".equals(onePhone)){
-					onePhoneMatch = RegexUtil.matchPhone(onePhone);
-				}
-				if(!onePhoneMatch){
-					String importMessage = "第" + i + "行,联系方式1格式必须为11位手机号!";
-					ImportReturnData importReturnData = new ImportReturnData();
-					importReturnData.setImportMessage(importMessage);
-					importReturnDataList.add(importReturnData);
-					continue;
-				}
-				String towPhone = newEmp.getEmployeeTwophone();
-				boolean towPhoneMatch = true;
-				if(StringUtils.isNotEmpty(towPhone) && "0".equals(towPhone)){
-					towPhoneMatch = RegexUtil.matchPhone(towPhone);
-				}
-				if(!towPhoneMatch){
-					String importMessage = "第" + i + "行,联系方式2格式必须为11位手机号!";
-					ImportReturnData importReturnData = new ImportReturnData();
-					importReturnData.setImportMessage(importMessage);
-					importReturnDataList.add(importReturnData);
-					continue;
-				}*/
+				
 				// 查询直接汇报人是否存在
 				String directPersonName = newEmp.getDirectPersonName();//汇报人姓名
 				//汇报人姓名和登录名是否填写
@@ -374,7 +351,7 @@ public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 					}
 				}
 				if (departmentFlag) {
-					String importMessage = "第" + i + "行,填写的部门不存在";
+					String importMessage = "第" + i + "行,填写的主部门不存在";
 					ImportReturnData importReturnData = new ImportReturnData();
 					importReturnData.setImportMessage(importMessage);
 					importReturnDataList.add(importReturnData);
@@ -388,11 +365,23 @@ public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 					List<Post> postListFromDepartment = postService.findBydepartmentPost(companyId,
 							newEmp.getDepartmentId());
 					if (postListFromDepartment.size() < 1) {
-						String importMessage = "第" + i + "行," + newEmp.getDepartmentName() + "部门还没有设置岗位,请先添加岗位";
-						ImportReturnData importReturnData = new ImportReturnData();
-						importReturnData.setImportMessage(importMessage);
-						importReturnDataList.add(importReturnData);
-						continue;
+						//如果部门是全公司
+						if("全公司".equals(newEmp.getDepartmentName())){
+							List<Post> postListFromCompany = postService.findBydepartmentPost(companyId,
+									null);
+							for(Post post : postListFromCompany){
+								if(newEmp.getPostName().equals(post.getPostName())){
+									newEmp.setPostId(post.getPostId());//设置主岗位id
+									masterPostFlag = false;
+								}
+							}
+						}else{
+							String importMessage = "第" + i + "行," + newEmp.getDepartmentName() + "部门还没有设置岗位,请先添加岗位";
+							ImportReturnData importReturnData = new ImportReturnData();
+							importReturnData.setImportMessage(importMessage);
+							importReturnDataList.add(importReturnData);
+							continue;
+						}
 					}
 					// 主岗位判断
 					for (Post post : postListFromDepartment) {
@@ -401,6 +390,8 @@ public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 							masterPostFlag = false;
 						}
 					}
+					
+					
 					if (masterPostFlag) {
 						String importMessage = "第" + i + "行,主岗位不存在";
 						ImportReturnData importReturnData = new ImportReturnData();
@@ -412,6 +403,7 @@ public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 				
 				List<Post> vicePostList = newEmp.getPostList();
 				//副岗位部门判断
+				int numFlag=0;
 				for(Post post : vicePostList){
 					if(StringUtils.isNotEmpty(post.getDepartmentName())){
 						for (Department department : departmentList) {
@@ -421,6 +413,7 @@ public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 							}
 						}
 						if (departmentFlag) {
+							numFlag+=1;
 							String importMessage = "第" + i + "行,填写的副部门不存在";
 							ImportReturnData importReturnData = new ImportReturnData();
 							importReturnData.setImportMessage(importMessage);
@@ -435,6 +428,7 @@ public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 									for(Post post1 : postList1){
 										if(post1!=null && StringUtils.isNotEmpty(post1.getPostName()) && post.getPostName().equals(post1.getPostName())){
 											if(department.getDepartmentName().equals(newEmp.getDepartmentName()) && post.getPostName().equals(newEmp.getPostName())){
+												numFlag+=1;
 												String importMessage = "第" + i + "行,主岗位和副岗位不可以相同";
 												ImportReturnData importReturnData = new ImportReturnData();
 												importReturnData.setImportMessage(importMessage);
@@ -451,6 +445,7 @@ public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 										}
 									}
 									if(post1Flag){
+										numFlag+=1;
 										String importMessage = "第" + i + "行,填写的副部门不存在填写的副岗位";
 										ImportReturnData importReturnData = new ImportReturnData();
 										importReturnData.setImportMessage(importMessage);
@@ -458,6 +453,7 @@ public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 										continue;
 									}
 								}else{
+									numFlag+=1;
 									String importMessage = "第" + i + "行,填写的副部门没有岗位";
 									ImportReturnData importReturnData = new ImportReturnData();
 									importReturnData.setImportMessage(importMessage);
@@ -465,6 +461,7 @@ public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 									continue;
 								}
 							}else{
+								numFlag+=1;
 								String importMessage = "第" + i + "行,填写的副部门下对应的副岗位名称";
 								ImportReturnData importReturnData = new ImportReturnData();
 								importReturnData.setImportMessage(importMessage);
@@ -474,7 +471,9 @@ public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 						}
 					}
 				}
-				
+				if(numFlag>0){
+					break;
+				}
 				// 副岗位判断
 				/*for (Post post : postListFromDepartment) {
 					if (StringUtils.isNotEmpty(vicePostList.get(0).getPostName())) {

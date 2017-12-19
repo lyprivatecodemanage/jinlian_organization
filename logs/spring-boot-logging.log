@@ -1,0 +1,14 @@
+2017-12-19 16:45:41.220  INFO 25124 --- [main] c.x.o.OrganizationApplication            : Starting OrganizationApplication on DESKTOP-32CKNA2 with PID 25124 (C:\Users\cachee\Desktop\Organization\Organization\target\classes started by cachee in C:\Users\cachee\Desktop\Organization\Organization)
+2017-12-19 16:45:41.237  INFO 25124 --- [main] c.x.o.OrganizationApplication            : No active profile set, falling back to default profiles: default
+2017-12-19 16:45:46.102  INFO 25124 --- [main] o.a.c.c.StandardService                  : Starting service [Tomcat]
+2017-12-19 16:45:46.106  INFO 25124 --- [main] o.a.c.c.StandardEngine                   : Starting Servlet Engine: Apache Tomcat/8.5.20
+2017-12-19 16:45:46.405  INFO 25124 --- [localhost-startStop-1] o.a.c.c.C.[.[.[/organization]            : Initializing Spring embedded WebApplicationContext
+2017-12-19 16:45:52.244  INFO 25124 --- [main] c.x.o.OrganizationApplication            : Started OrganizationApplication in 11.804 seconds (JVM running for 13.131)
+2017-12-19 16:46:03.863  INFO 25124 --- [http-nio-8093-exec-2] o.a.c.c.C.[.[.[/organization]            : Initializing Spring FrameworkServlet 'dispatcherServlet'
+2017-12-19 16:52:28.006  INFO 23648 --- [main] c.x.o.OrganizationApplication            : Starting OrganizationApplication on DESKTOP-32CKNA2 with PID 23648 (C:\Users\cachee\Desktop\Organization\Organization\target\classes started by cachee in C:\Users\cachee\Desktop\Organization\Organization)
+2017-12-19 16:52:28.019  INFO 23648 --- [main] c.x.o.OrganizationApplication            : No active profile set, falling back to default profiles: default
+2017-12-19 16:52:32.415  INFO 23648 --- [main] o.a.c.c.StandardService                  : Starting service [Tomcat]
+2017-12-19 16:52:32.418  INFO 23648 --- [main] o.a.c.c.StandardEngine                   : Starting Servlet Engine: Apache Tomcat/8.5.20
+2017-12-19 16:52:32.612  INFO 23648 --- [localhost-startStop-1] o.a.c.c.C.[.[.[/organization]            : Initializing Spring embedded WebApplicationContext
+2017-12-19 16:52:38.443  INFO 23648 --- [main] c.x.o.OrganizationApplication            : Started OrganizationApplication in 11.072 seconds (JVM running for 12.618)
+2017-12-19 16:52:55.424  INFO 23648 --- [http-nio-8093-exec-1] o.a.c.c.C.[.[.[/organization]            : Initializing Spring FrameworkServlet 'dispatcherServlet'

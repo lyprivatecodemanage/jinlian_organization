@@ -214,7 +214,7 @@ public class DepartmentController {
 		String departmentName = departmenttemp.getDepartmentName();
 		String departmentParentId = departmenttemp.getDepartmentParentId();		
 		if(StringUtils.isEmpty(departmentParentId)){
-			departmenttemp.setDepartmentParentId("0");
+			departmenttemp.setDepartmentParentId(companyId);
 		}		
 		if(StringUtils.isNotEmpty(companyId) && StringUtils.isNotEmpty(departmentName)
 				&& StringUtils.isNotEmpty(departmentParentId)){

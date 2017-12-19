@@ -84,10 +84,12 @@
     SELECT DISTINCT 
     p.post_id,p.post_name
     FROM  organization.post_ p       	
-	where  	
-	p.department_id=#{departmentId} 
-    AND	
+	<where> 
+	<if test="departmentId!=null and departmentId!=''">
+		p.department_id=#{departmentId} AND 
+	</if>
     p.company_id=#{companyId}
+    </where>
   </select>
   
   <!-- 根据岗位名称、所属部门查询岗位信息 -->

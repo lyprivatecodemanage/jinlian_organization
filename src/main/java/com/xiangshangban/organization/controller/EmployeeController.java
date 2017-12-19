@@ -26,6 +26,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.xiangshangban.organization.bean.Company;
 import com.xiangshangban.organization.bean.ConnectEmpPost;
+import com.xiangshangban.organization.bean.Department;
 import com.xiangshangban.organization.bean.Employee;
 import com.xiangshangban.organization.bean.Post;
 import com.xiangshangban.organization.bean.ReturnData;
@@ -341,10 +342,7 @@ public class EmployeeController {
 			String employeeStatus = obj.getString("employeeStatus");// 员工状态，0,在职，1,离职，2,删除
 			String departmentId = obj.getString("departmentId");// 部门id
 			
-			// 查询总记录数
-			int intCount = employeeService.selectCountEmployeeFromCompany(companyId, /*pageNum, pageRecordNum,*/
-					employeeName, employeeSex, departmentName, postName, employeeStatus, departmentId);
-			String count = String.valueOf(intCount);
+			
 			String pageNum = obj.getString("pageNum");// 页码
 			String pageRecordNum = obj.getString("pageRecordNum");// 页记录行数
 			
@@ -389,24 +387,34 @@ public class EmployeeController {
 				}
 			}
 			
-			List<Employee> employeeList = employeeService.selectByAllFnyeEmployee(companyId, pageNum, pageRecordNum,
-					employeeName, employeeSex, departmentName, postName, employeeStatus, departmentId);
-			for(Employee emp:employeeList){
-				if(emp!=null){
-					if("0".equals(emp.getEmployeeSex())){
-						emp.setEmployeeSex("男");
-					}else if("1".equals(emp.getEmployeeSex())){
-						emp.setEmployeeSex("女");
-					}
-					if("0".equals(emp.getEmployeeStatus())){
-						emp.setEmployeeStatus("在职");
-					}else if("1".equals(emp.getEmployeeStatus())){
-						emp.setEmployeeStatus("离职");
-					}else if("2".equals(emp.getEmployeeStatus())){
-						emp.setEmployeeStatus("删除");
-					}
+			Department department = departmentService.selectByDepartment(departmentId, companyId);
+			if(department!=null && StringUtils.isNotEmpty(department.getDepartmentParentId())){
+				if("0".equals(department.getDepartmentParentId())){
+					departmentId ="";
 				}
 			}
+			List<Employee> employeeList = employeeService.selectByAllFnyeEmployee(companyId, pageNum, pageRecordNum,
+					employeeName, employeeSex, departmentName, postName, employeeStatus, departmentId);
+				for(Employee emp:employeeList){
+					if(emp!=null){
+						if("0".equals(emp.getEmployeeSex())){
+							emp.setEmployeeSex("男");
+						}else if("1".equals(emp.getEmployeeSex())){
+							emp.setEmployeeSex("女");
+						}
+						if("0".equals(emp.getEmployeeStatus())){
+							emp.setEmployeeStatus("在职");
+						}else if("1".equals(emp.getEmployeeStatus())){
+							emp.setEmployeeStatus("离职");
+						}else if("2".equals(emp.getEmployeeStatus())){
+							emp.setEmployeeStatus("删除");
+						}
+					}
+				}
+			// 查询总记录数
+			int intCount = employeeService.selectCountEmployeeFromCompany(companyId, /*pageNum, pageRecordNum,*/
+					employeeName, employeeSex, departmentName, postName, employeeStatus, departmentId);
+			String count = String.valueOf(intCount);
 			// 总页数
 			int intpagecountNum = (int) Math.ceil((double) intCount / (Double.valueOf(pageRecordNum)));
 			String pagecountNum = String.valueOf(intpagecountNum);

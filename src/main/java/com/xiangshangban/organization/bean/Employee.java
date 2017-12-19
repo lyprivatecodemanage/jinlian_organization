@@ -73,10 +73,11 @@ public class Employee {
     		this.employeeId = employeeId;
     		this.loginName = loginName;
     }
-	public Employee(String employeeNo,String employeeName,String employeeSex, String workAddress,
-			String marriageStatus,String loginName,String departmentName,String directPersonName,
-			String directPersonLoginName,String employeeStatus,String entryTime,String probationaryExpired,
-			String postName,List<Post> postList,String employeePhone,String employeeTwophone, String seniority) {
+	public Employee(String employeeNo,String employeeName,String employeeSex, 
+			String workAddress,String marriageStatus,String loginName,
+			String departmentName,String directPersonName,String directPersonLoginName,
+			String employeeStatus,String entryTime,String probationaryExpired,String postName,
+			List<Post> postList,String employeePhone,String employeeTwophone, String seniority) {
 		this.employeeName = employeeName;
 		this.loginName = loginName;
 		this.employeeSex = employeeSex;

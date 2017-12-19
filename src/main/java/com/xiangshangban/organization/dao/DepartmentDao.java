@@ -16,7 +16,7 @@ public interface DepartmentDao {
 
     int insertDepartment(Department department);
   
-    Department selectByDepartment(String departmentId ,String companyId);
+    Department selectByDepartment(@Param("departmentId")String departmentId ,@Param("companyId")String companyId);
   
     int updateByDepartment(Department department);
         
