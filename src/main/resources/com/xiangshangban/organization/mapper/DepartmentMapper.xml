@@ -124,7 +124,7 @@
 	    (select e.employee_name from organization.employee_ e where e.employee_id=d.employee_id)
     from organization.department_  d  
     where d.company_id=#{companyId}	AND d.status='1' 
-    order by d.department_name
+    order by d.department_parent_id
   </select>
   <!-- 查询部门下的所有子部门 -->
   <select id="findSingleAllDepartment" parameterType="java.lang.String" resultMap="Department">

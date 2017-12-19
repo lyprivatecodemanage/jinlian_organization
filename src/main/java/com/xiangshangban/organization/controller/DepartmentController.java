@@ -292,6 +292,12 @@ public class DepartmentController {
 			String departmentid = listdepartment.get(i).toString();
 			JSONObject objs = JSON.parseObject(departmentid);
 			departmentId=objs.getString("departmentId");	
+			Department department = departmentService.selectByDepartment(departmentId, companyId);
+			if("0".equals(department.getDepartmentParentId())){
+				returnData.setMessage("删除部门错误：全公司不可删除");
+				returnData.setReturnCode("4103");
+				return returnData;
+			}
 			if(StringUtils.isNotEmpty(departmentId)){
 				List<Department> deptlist = departmentService.getDepartmentChild(departmentId, companyId);
 				if(deptlist.size()>0){
