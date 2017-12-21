@@ -22,6 +22,13 @@ public interface EmployeeService {
    //查询单条员信息
     Employee selectByEmployee(String employeeId,String companyId);  
     String updateByEmployee(Employee employee);
+    /**
+	 * @author 李业
+	 * 通过公司id查询公司所有的在职员工
+	 * @param companyId
+	 * @return
+	 */
+	List<Employee> selectAllEmployeeByCompanyId(String companyId);
     //查询在职员工信息
     List<Employee> findByAllEmployee(Map<String,String> map);
     //查询在职员工信息

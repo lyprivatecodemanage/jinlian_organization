@@ -51,7 +51,6 @@ public class CheckPersonController {
 		}
 		return returnData;
 	}
-	
 	/**
 	 * 加入公司企业管理员审核
 	 * @param userid
@@ -81,7 +80,6 @@ public class CheckPersonController {
 			pageNum = "1";
 			pageRecordNum="10";
 		}
-		
 		String strNum = (Integer.parseInt(pageNum) - 1) * Integer.parseInt(pageRecordNum)+"";
 		params.put("pageRecordNum", pageRecordNum);
 		params.put("fromPageNum", strNum);

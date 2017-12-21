@@ -20,7 +20,7 @@ public class Department {
     private String employeeName;//部门负责人
     private String CountNumber;//部门总人数
     private List<Department> children = new ArrayList<Department>();//子部门
-    
+    private List<Post> postList = new ArrayList<Post>();//岗位
 	
 	@ExcelResources(title="部门编号",order=1)
 	public String getDepartmentNumbe() {
@@ -112,6 +112,12 @@ public class Department {
 	}
 	public void setDepartmentParentName(String departmentParentName) {
 		this.departmentParentName = departmentParentName;
+	}
+	public List<Post> getPostList() {
+		return postList;
+	}
+	public void setPostList(List<Post> postList) {
+		this.postList = postList;
 	}
     
 	

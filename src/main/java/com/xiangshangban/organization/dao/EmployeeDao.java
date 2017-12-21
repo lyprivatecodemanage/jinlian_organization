@@ -17,7 +17,14 @@ public interface EmployeeDao {
 	int deleteByEmployee(@Param("employeeId") String employeeId, @Param("companyId") String companyId);
 
 	int insertEmployee(Employee employee);
-
+	/**
+	 * @author 李业
+	 * 通过公司id查询公司所有的在职员工
+	 * @param companyId
+	 * @return
+	 */
+	List<Employee> selectAllEmployeeByCompanyId(String companyId);
+	
 	// 查询单条员信息
 	Employee selectByEmployee(@Param("employeeId") String employeeId, @Param("companyId") String companyId);
 

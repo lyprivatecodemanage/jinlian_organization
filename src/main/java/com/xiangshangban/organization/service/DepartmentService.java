@@ -65,4 +65,11 @@ public interface DepartmentService {
 		Integer selectDepartmentCountByCompanyId(String companyId);
 		
 		Department selectDepatmentByDepartmentNameAndCompanyId(String companyId,String departmentName);
+		
+		/**
+		 * 根据公司id查询公司部门及部门下的岗位
+		 * @param companyId
+		 * @return
+		 */
+		List<Department> selectDepartmentAndPostByCompanyId(String companyId);
 }

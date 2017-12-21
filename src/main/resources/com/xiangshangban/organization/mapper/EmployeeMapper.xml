@@ -254,7 +254,14 @@
 		and
 		e.employee_status IN ('0','1')
 	</select>
-
+	<!-- 查询公司所有在职员工 -->
+	<select id="selectAllEmployeeByCompanyId" parameterType="java.lang.String" resultMap="Employee">
+		select employee_id,employee_name,login_name,employee_no
+		from employee_ e
+		where e.company_id=#{companyId}
+		and
+		e.employee_status = '0'
+	</select>
 	<select id="findBydeptemployee" parameterType="java.lang.String"
 		resultMap="Employee">
 		SELECT
@@ -378,25 +385,21 @@
 		e.employee_name,e.employee_sex,e.login_name,e.employee_phone,
 		e.employee_twophone,p.post_id,p.post_name,d.department_id,d.department_name,e.employee_no,
 		(select employee_name as derect_person_name from employee_ where
-		employee_id = e.direct_person_id ),
+		employee_id = e.direct_person_id and company_id = #{companyId} ),
 		(select department_id as
 		direct_person_department_id from employee_ where
 		employee_id =
-		e.direct_person_id ),
+		e.direct_person_id and company_id = #{companyId}),
 		(select department_name as
 		direct_person_department_name from employee_ where
 		employee_id =
-		e.direct_person_id ),
+		e.direct_person_id and company_id = #{companyId}),
 		e.entry_time,e.probationary_expired,e.work_address,e.marriage_status,e.seniority,e.company_id
 		from employee_ as e
-		left join department_ d on e.department_id = d.department_id
-		left join
-		connect_emp_post_ as cep on e.employee_id = cep.employee_id and
-		cep.post_grades = '1' and cep.is_delete = '0' and cep.company_id =
-		#{companyId}
-		left join post_ p on cep.post_id = p.post_id
-		left join
-		u_users u on e.employee_id = u.userid
+		left join department_ d on e.department_id = d.department_id and e.company_id =d.company_id
+		left join connect_emp_post_ as cep on e.employee_id = cep.employee_id and cep.post_grades = '1' and cep.is_delete = '0' and cep.company_id =#{companyId}
+		left join post_ p on cep.post_id = p.post_id and cep.company_id =p.company_id
+		left join u_users u on e.employee_id = u.userid
 		where e.company_id = #{companyId} AND e.employee_id = #{employeeId}
 	</select>
 	<resultMap type="com.xiangshangban.organization.bean.Employee"
@@ -427,7 +430,7 @@
 		) a
 		left join
 		employee_ e on a.userid = e.employee_id AND a.company_id=e.company_id
-		left join department_ d on e.department_id = d.department_id
+		left join department_ d on e.department_id = d.department_id 
 		left join
 		connect_emp_post_ cep on a.userid = cep.employee_id and
 		d.department_id = cep.department_id and cep.post_grades = '1'

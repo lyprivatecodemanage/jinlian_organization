@@ -664,5 +664,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 		return employeeDao.updateAdminEmployeeImgUrl(companyId, employeeId, employeeImgUrl);
 	}
 
+	@Override
+	public List<Employee> selectAllEmployeeByCompanyId(String companyId) {
+		
+		return employeeDao.selectAllEmployeeByCompanyId(companyId);
+	}
+
 	
 }
