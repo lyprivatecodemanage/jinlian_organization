@@ -1,0 +1,16 @@
+2017-12-24 15:22:29 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
+  2017-12-24 15:26:53 INFO [com.xiangshangban.organization.controller.CompanyController]: org.mybatis.spring.MyBatisSystemException: nested exception is org.apache.ibatis.exceptions.PersistenceException: 
+### Error querying database.  Cause: org.springframework.jdbc.CannotGetJdbcConnectionException: Could not get JDBC Connection; nested exception is org.postgresql.util.PSQLException: 尝试连线已失败。
+### The error may exist in file [C:\Users\cachee\Desktop\Organization\Organization\target\classes\com\xiangshangban\organization\mapper\CompanyMapper.xml]
+### The error may involve com.xiangshangban.organization.dao.CompanyDao.selectByCompany
+### The error occurred while executing a query
+### Cause: org.springframework.jdbc.CannotGetJdbcConnectionException: Could not get JDBC Connection; nested exception is org.postgresql.util.PSQLException: 尝试连线已失败。
+  2017-12-24 15:27:13 INFO [com.xiangshangban.organization.controller.CompanyController]: org.mybatis.spring.MyBatisSystemException: nested exception is org.apache.ibatis.exceptions.PersistenceException: 
+### Error querying database.  Cause: org.springframework.jdbc.CannotGetJdbcConnectionException: Could not get JDBC Connection; nested exception is org.postgresql.util.PSQLException: 尝试连线已失败。
+### The error may exist in file [C:\Users\cachee\Desktop\Organization\Organization\target\classes\com\xiangshangban\organization\mapper\CompanyMapper.xml]
+### The error may involve com.xiangshangban.organization.dao.CompanyDao.selectByCompany
+### The error occurred while executing a query
+### Cause: org.springframework.jdbc.CannotGetJdbcConnectionException: Could not get JDBC Connection; nested exception is org.postgresql.util.PSQLException: 尝试连线已失败。
+  2017-12-24 15:28:49 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
+  2017-12-24 15:29:23 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  

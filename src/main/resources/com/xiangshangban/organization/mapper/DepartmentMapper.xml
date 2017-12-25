@@ -60,7 +60,7 @@
 		LEFT JOIN organization.company_  c ON c.company_id=d.company_id
 		LEFT JOIN organization.employee_ e ON e.employee_id=d.employee_id  
 	    where	
-		d.company_id=#{companyId} AND d.status='1' 
+		d.company_id=#{companyId} AND d.status='1' and d.department_parent_id !='0' 
 		<if test="departmentId!=null and departmentId!=''">
 			AND (d.department_id =#{departmentId} OR d.department_parent_id =#{departmentId})
 		</if>
@@ -215,9 +215,10 @@
   <!-- 查询公司的所有部门以及部门下的岗位 -->
   <select id="selectDepartmentAndPostByCompanyId" parameterType="java.lang.String" resultMap="DepartmentPost">
   	select d.department_id,d.department_name,p.post_id,p.post_name
-  	from department_ d,post_ p
+  	from department_ d
+  	left join post_ p on p.department_id =d.department_id and p.company_id = #{companyId}
   	where 
-  	d.company_id = #{companyId} and p.company_id = #{companyId} and p.department_id =d.department_id
+  	d.company_id = #{companyId}
   </select>
   
   

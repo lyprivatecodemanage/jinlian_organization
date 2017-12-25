@@ -93,12 +93,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 	public ReturnData insertEmployee(Employee employee) {
 		ReturnData returnData = new ReturnData();
 		Uusers user = usersDao.selectByPhone(employee.getLoginName());
-		//Employee emp = employeeDao.selectEmployeeByLoginNameAndCompanyId(employee.getLoginName(), employee.getCompanyId());
-		/*if(emp!=null){
-			returnData.setMessage("登录名已被占用");
-			returnData.setReturnCode("4115");
-			return returnData;
-		}*/
 		employee.setEmployeeStatus("0");
 		if(user==null || StringUtils.isEmpty(user.getUserid())){//未注册，写入注册表	
 			user = new Uusers();
@@ -163,7 +157,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 				employeeDao.insertEmployee(employee);//插入人员表
 			}else if(userCompany!=null && userCompany.getCompanyId().equals(employee.getCompanyId())){//已存在绑定关系，则直接返回
 				if("2".equals(userCompany.getIsActive())){
-					userCompany.setIsActive("0");
+					userCompany.setIsActive("1");
 					userCompany.setInfoStatus("1");
 					//查询已激活并且为默认的公司
 					UserCompanyDefault companyDefalt = userCompanyDefaultDao.getActiveDefault(user.getUserid());

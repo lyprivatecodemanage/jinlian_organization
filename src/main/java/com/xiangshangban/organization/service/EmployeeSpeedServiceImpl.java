@@ -455,8 +455,6 @@ public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 				
 					//查询公司所有的部门以及部门下的岗位
 					List<Department> departmentList = departmentService.selectDepartmentAndPostByCompanyId(companyId);
-					boolean masterDepartment = true;//主部门是否存在的标志
-					boolean departmentFlag = true;//主部门是否存在填写的主岗位的标志
 					if (departmentList.size() < 1) {
 						String importMessage = "第" + i + "行,公司还没有创建部门,请先添加部门信息";
 						ImportReturnData importReturnData = new ImportReturnData();
@@ -466,6 +464,8 @@ public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 						lineFlag=true;
 						continue;
 					}
+					boolean masterDepartment = true;//主部门是否存在的标志
+					boolean departmentFlag = true;//主部门是否存在填写的主岗位的标志
 					for(Department department :departmentList){
 						//主岗位
 						if(newEmp.getDepartmentName().equals(department.getDepartmentName())){
@@ -492,14 +492,16 @@ public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 					lineFlag=true;
 					continue;
 				}
-				if(departmentFlag){
-					String importMessage = "第" + i + "行,填写的主部门中没有填写的主岗位";
-					ImportReturnData importReturnData = new ImportReturnData();
-					importReturnData.setImportMessage(importMessage);
-					importReturnDataList.add(importReturnData);
-					//iterator.remove();
-					lineFlag=true;
-					continue;
+				if(StringUtils.isNotEmpty(newEmp.getPostName())){
+					if(departmentFlag){
+						String importMessage = "第" + i + "行,填写的主部门中没有填写的主岗位";
+						ImportReturnData importReturnData = new ImportReturnData();
+						importReturnData.setImportMessage(importMessage);
+						importReturnDataList.add(importReturnData);
+						//iterator.remove();
+						lineFlag=true;
+						continue;
+					}
 				}
 					boolean vDepartment = false;//副部门是否存在的标志
 					boolean vdepartmentFlag = false;//副部门是否存在填写的副岗位的标志
