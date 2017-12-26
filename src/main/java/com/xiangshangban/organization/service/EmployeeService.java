@@ -54,7 +54,9 @@ public interface EmployeeService {
      * @param employeeStatus
      * @return
      */
-    List<Employee> selectByAllFnyeEmployee(String companyId,String numPage,String numRecordCount, String employeeName, String employeeSex, String departmentName,String postName,String employeeStatus,String departmentId);
+    List<Employee> selectByAllFnyeEmployee(String companyId,String numPage,String numRecordCount, 
+    		String employeeName, String employeeSex, String departmentName,String postName,
+    		String employeeStatus,String departmentId,String type);
     /**
      * 分页条件查询总记录数
      * @param companyId
@@ -67,7 +69,9 @@ public interface EmployeeService {
      * @param employeeStatus
      * @return
      */
-    int selectCountEmployeeFromCompany(String companyId,/*String numPage,String numRecordCount,*/ String employeeName, String employeeSex, String departmentName,String postName,String employeeStatus,String departmentId);
+    int selectCountEmployeeFromCompany(String companyId,/*String numPage,String numRecordCount,*/ 
+    		String employeeName, String employeeSex, String departmentName,String postName,
+    		String employeeStatus,String departmentId,String type);
     
     String updateByEmployeedept(Employee employee);
     Employee findByemploginName(String loginName);
@@ -107,7 +111,7 @@ public interface EmployeeService {
 	 * @param userId
 	 * @return
 	 */
-	Employee selectByEmployeeFromApp(String companyId,String userId);
+	Employee selectByEmployeeFromApp(String companyId,String userId,String type);
 	
 	/**
 	 * @author 李业/编辑个人信息

@@ -46,13 +46,14 @@ public interface EmployeeDao {
 	List<Employee> selectByAllFnyeEmployee(@Param("companyId")String companyId,@Param("numPage") String numPage,
 			@Param("numRecordCount") String numRecordCount, @Param("employeeName") String employeeName,
 			@Param("employeeSex") String employeeSex, @Param("departmentName") String departmentName,
-			@Param("postName") String postName, @Param("employeeStatus") String employeeStatus,@Param("departmentId")String departmentId);
+			@Param("postName") String postName, @Param("employeeStatus") String employeeStatus,
+			@Param("departmentId")String departmentId,@Param("type")String type);
 	
 	int selectCountEmployeeFromCompany(@Param("companyId")String companyId,/*@Param("numPage") String numPage,
 			@Param("numRecordCount") String numRecordCount,*/ @Param("employeeName") String employeeName,
 			@Param("employeeSex") String employeeSex, @Param("departmentName") String departmentName,
 			@Param("postName") String postName, @Param("employeeStatus") String employeeStatus,
-			@Param("departmentId")String departmentId);
+			@Param("departmentId")String departmentId,@Param("type")String type);
 
 	int batchUpdateTest(String employeeId);
 
@@ -100,7 +101,7 @@ public interface EmployeeDao {
 	List<Employee> findEmployeeByDepartmentId(@Param("companyId") String companyId,
 			@Param("departmentId") String departmentId);
 	
-	Employee selectByEmployeeFromApp(@Param("companyId")String companyId,@Param("userId")String userId);
+	Employee selectByEmployeeFromApp(@Param("companyId")String companyId,@Param("userId")String userId,@Param("type")String type);
 	/**
 	 * @author 李业/编辑个人信息
 	 * @param params

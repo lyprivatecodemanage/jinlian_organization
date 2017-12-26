@@ -8,10 +8,11 @@
 			<idArg column="current_option" jdbcType="VARCHAR" javaType="java.lang.String" />
 			<idArg column="is_active" jdbcType="VARCHAR" javaType="java.lang.String" />
 			<idArg column="info_status" jdbcType="VARCHAR" javaType="java.lang.String" />
+			<idArg column="type" jdbcType="VARCHAR" javaType="java.lang.String"/>
 		</constructor>
 	</resultMap>
 	<sql id="Base_Column_List">
-		user_id, company_id, current_option,is_active,info_status
+		user_id, company_id, current_option,is_active,info_status,type
 	</sql>
 	<select id="selectByUserId" parameterType="java.lang.String" resultMap="BaseResultMap">
 		select 
@@ -85,6 +86,9 @@
 			<if test="infoStatus!=null">
 				info_status,
 			</if>
+			<if test="type!=null and type!=''">
+				type,
+			</if>
 		</trim>
 		<trim prefix="values (" suffix=")" suffixOverrides="," >
 			<if test="userId != null" >
@@ -101,6 +105,9 @@
 			</if>
 			<if test="infoStatus!=null">
 				#{infoStatus},
+			</if>
+			<if test="type!=null and type!=''">
+				#{type},
 			</if>
 		</trim>
 	</insert>

@@ -185,7 +185,7 @@
  <select id="selectDepartmentCountByCompanyId" parameterType="java.lang.String" resultType="java.lang.Integer">
  	select count(department_id) 
  	from department_ 
- 	where company_id = #{companyId} and status = '1'
+ 	where company_id = #{companyId} and status = '1' and department_parent_id !='0'
  </select>
 
   <update id="updateByDepartment" parameterType="com.xiangshangban.organization.bean.Department">  

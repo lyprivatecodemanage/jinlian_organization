@@ -333,6 +333,7 @@ public class EmployeeController {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			String companyId = request.getHeader("companyId");// 公司id
+			String type = request.getHeader("type");
 			//String userId = request.getHeader("accessUserId");// 操作人id
 			JSONObject obj = JSON.parseObject(jsonString);
 			String employeeName = obj.getString("employeeName");// 员工姓名
@@ -394,7 +395,7 @@ public class EmployeeController {
 				}
 			}
 			List<Employee> employeeList = employeeService.selectByAllFnyeEmployee(companyId, pageNum, pageRecordNum,
-					employeeName, employeeSex, departmentName, postName, employeeStatus, departmentId);
+					employeeName, employeeSex, departmentName, postName, employeeStatus, departmentId,type);
 				for(Employee emp:employeeList){
 					if(emp!=null){
 						if("0".equals(emp.getEmployeeSex())){
@@ -413,7 +414,7 @@ public class EmployeeController {
 				}
 			// 查询总记录数
 			int intCount = employeeService.selectCountEmployeeFromCompany(companyId, /*pageNum, pageRecordNum,*/
-					employeeName, employeeSex, departmentName, postName, employeeStatus, departmentId);
+					employeeName, employeeSex, departmentName, postName, employeeStatus, departmentId,type);
 			String count = String.valueOf(intCount);
 			// 总页数
 			int intpagecountNum = (int) Math.ceil((double) intCount / (Double.valueOf(pageRecordNum)));
@@ -522,7 +523,8 @@ public class EmployeeController {
 		try {
 			String companyId = request.getHeader("companyId");// 公司id
 			String userId = request.getHeader("accessUserId");// 操作人id
-			Employee emp = employeeService.selectByEmployeeFromApp(companyId, userId);
+			String type = request.getHeader("type");
+			Employee emp = employeeService.selectByEmployeeFromApp(companyId, userId,type);
 			
 			String key = emp.getEmployeeImgUrl();
 			String companyNo = emp.getCompanyNo();

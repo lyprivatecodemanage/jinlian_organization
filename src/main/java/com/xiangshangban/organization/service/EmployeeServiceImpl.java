@@ -119,8 +119,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 			}
 			userCompany.setUserId(user.getUserid());
 			userCompany.setInfoStatus("1");
+			userCompany.setType("0");
 			userCompanyDefaultDao.insertSelective(userCompany);//添加用户公司的绑定关系
-			
+			userCompany.setType("1");
+			userCompanyDefaultDao.insertSelective(userCompany);//添加用户公司的绑定关系
 			CheckPerson checkPerson = new CheckPerson();
 			checkPerson.setUserid(employeeId);
 			checkPerson.setCompanyid(employee.getCompanyId());
@@ -150,9 +152,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 					userCompany.setCurrentOption("2");
 				}
 				userCompany.setCompanyId(employee.getCompanyId());
-				
 				userCompany.setUserId(user.getUserid());
 				userCompany.setInfoStatus("1");
+				userCompany.setType("0");
+				userCompanyDefaultDao.insertSelective(userCompany);//添加用户公司的绑定关系
+				userCompany.setType("1");
 				userCompanyDefaultDao.insertSelective(userCompany);//添加用户公司的绑定关系
 				employeeDao.insertEmployee(employee);//插入人员表
 			}else if(userCompany!=null && userCompany.getCompanyId().equals(employee.getCompanyId())){//已存在绑定关系，则直接返回
@@ -392,9 +396,13 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	@Override
-	public List<Employee> selectByAllFnyeEmployee(String companyId,String numPage,String numRecordCount, String employeeName, String employeeSex, String departmentName,String postName,String employeeStatus,String departmentId) {
+	public List<Employee> selectByAllFnyeEmployee(String companyId,String numPage,String numRecordCount,
+			String employeeName, String employeeSex, String departmentName,String postName,
+			String employeeStatus,String departmentId,String type) {
 		// TODO Auto-generated method stub
-		return employeeDao.selectByAllFnyeEmployee(companyId, numPage, numRecordCount,  employeeName,  employeeSex,  departmentName, postName, employeeStatus,departmentId);
+		return employeeDao.selectByAllFnyeEmployee(companyId, numPage, numRecordCount, 
+				employeeName,  employeeSex,  departmentName, postName, employeeStatus,
+				departmentId,type);
 	}
 
 
@@ -418,9 +426,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public int selectCountEmployeeFromCompany(String companyId, /*String numPage, String numRecordCount,*/
-			String employeeName, String employeeSex, String departmentName, String postName, String employeeStatus,String  departmentId) {
+			String employeeName, String employeeSex, String departmentName, 
+			String postName, String employeeStatus,String  departmentId,String type) {
 		
-		return employeeDao.selectCountEmployeeFromCompany(companyId,/* numPage, numRecordCount,*/ employeeName, employeeSex, departmentName, postName, employeeStatus,departmentId);
+		return employeeDao.selectCountEmployeeFromCompany(companyId,/* numPage, numRecordCount,*/ 
+				employeeName, employeeSex, departmentName, postName, employeeStatus,departmentId,type);
 	}
 
 	@Override
@@ -430,9 +440,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	@Override
-	public Employee selectByEmployeeFromApp(String companyId, String userId) {
+	public Employee selectByEmployeeFromApp(String companyId, String userId,String type) {
 	
-		return employeeDao.selectByEmployeeFromApp(companyId, userId);
+		return employeeDao.selectByEmployeeFromApp(companyId, userId,type);
 	}
 
 	@Override

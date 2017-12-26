@@ -63,6 +63,7 @@ public class CheckPersonController {
 		ReturnData returnData = new ReturnData();
 		//获取请求头信息			
 		String companyId = request.getHeader("companyId");
+		String type = request.getHeader("type");
 		Map<String,String> params = new HashMap<String, String>();
 		JSONObject obj = JSON.parseObject(jsonString);	
 		String pageNum = obj.getString("pageNum");//页码
@@ -84,6 +85,7 @@ public class CheckPersonController {
 		params.put("pageRecordNum", pageRecordNum);
 		params.put("fromPageNum", strNum);
 		params.put("companyId", companyId);
+		params.put("type", type);
 		List<CheckPerson> checkList =checkPersonService.getcheckListByPage(params);
 		int totalPages = checkPersonService.getcheckListByPageAllLength(params);//数据总条数
 		//总页数

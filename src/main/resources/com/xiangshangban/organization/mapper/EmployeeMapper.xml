@@ -190,7 +190,7 @@
 		p.post_id,p.post_name,e.department_id ,d.department_name,
 		e.entry_time,e.employee_status,uc.is_active
 		from organization.employee_ e
-		left join user_company uc on e.employee_id = uc.user_id and e.company_id = uc.company_id
+		left join user_company uc on e.employee_id = uc.user_id and e.company_id = uc.company_id and uc.type=#{type}
 		left join department_ d on e.department_id = d.department_id 
 		left JOIN connect_emp_post_ cp on cp.employee_id=e.employee_id AND cp.post_grades='1' AND cp.company_id = #{companyId}
 		left JOIN post_ p on cp.post_id = p.post_id
@@ -381,16 +381,16 @@
 		select e.employee_id,
 		e.employee_name,e.employee_sex,e.login_name,e.employee_phone,
 		e.employee_twophone,p.post_id,p.post_name,d.department_id,d.department_name,e.employee_no,
+		
 		(select employee_name as derect_person_name from employee_ where
 		employee_id = e.direct_person_id and company_id = #{companyId} ),
-		(select department_id as
-		direct_person_department_id from employee_ where
-		employee_id =
-		e.direct_person_id and company_id = #{companyId}),
-		(select department_name as
-		direct_person_department_name from employee_ where
-		employee_id =
-		e.direct_person_id and company_id = #{companyId}),
+		
+		(select department_id as direct_person_department_id from employee_ where
+		employee_id = e.direct_person_id and company_id = #{companyId}),
+		
+		(select department_name as direct_person_department_name from employee_ where
+		employee_id = e.direct_person_id and company_id = #{companyId}),
+		
 		e.entry_time,e.probationary_expired,e.work_address,e.marriage_status,e.seniority,e.company_id
 		from employee_ as e
 		left join department_ d on e.department_id = d.department_id and e.company_id =d.company_id
@@ -418,28 +418,24 @@
 		resultMap="EmployeeAppResultMap">
 		select
 		userid,employee_img_url,username,employee_sex,company_no,company_name,e.department_id,department_name,post_name,employee_no,phone
-		from (select u.userid,
-		u.username,c.company_no,c.company_id,c.company_name,u.phone
+		from 
+		(select u.userid,u.username,c.company_no,c.company_id,c.company_name,u.phone
 		from u_users u
-		left join user_company uc on u.userid = uc.user_id
+		left join user_company uc on u.userid = uc.user_id and uc.type=#{type}
 		left join company_ c on c.company_id = uc.company_id
-		where u.userid =#{userId} and uc.company_id = #{companyId}
-		) a
-		left join
-		employee_ e on a.userid = e.employee_id AND a.company_id=e.company_id
+		where u.userid =#{userId} and uc.company_id = #{companyId}) a
+		left join employee_ e on a.userid = e.employee_id AND a.company_id=e.company_id
 		left join department_ d on e.department_id = d.department_id 
-		left join
-		connect_emp_post_ cep on a.userid = cep.employee_id and
+		left join connect_emp_post_ cep on a.userid = cep.employee_id and
 		d.department_id = cep.department_id and cep.post_grades = '1'
-		left join
-		post_ p on cep.post_id = p.post_id
+		left join post_ p on cep.post_id = p.post_id
 	</select>
 	<!-- 李业:查询员工信息总记录数 -->
 	<select id="selectCountEmployeeFromCompany" parameterType="java.lang.String"
 		resultType="java.lang.Integer">
 		select count(e.employee_id)
 		from organization.employee_ e
-		left join user_company uc on e.employee_id = uc.user_id and e.company_id =uc.company_id
+		left join user_company uc on e.employee_id = uc.user_id and e.company_id =uc.company_id and uc.type = #{type}
 		left join department_ d on e.department_id = d.department_id and d.company_id = #{companyId}
 		left JOIN connect_emp_post_ cp on cp.employee_id=e.employee_id AND cp.post_grades='1' AND cp.company_id = #{companyId}
 		left JOIN post_ p on cp.post_id = p.post_id and p.company_id =#{companyId}
