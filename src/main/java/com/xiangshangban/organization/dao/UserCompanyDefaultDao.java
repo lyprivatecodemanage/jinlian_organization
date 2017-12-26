@@ -20,7 +20,7 @@ public interface UserCompanyDefaultDao {
 
 	UserCompanyDefault selectByUserCompanyDefault(String userid);
 
-	UserCompanyDefault selectByUserIdAndCompanyId(@Param("userId")String userId, @Param("companyId")String companyId);
+	UserCompanyDefault selectByUserIdAndCompanyId(@Param("userId")String userId, @Param("companyId")String companyId,@Param("type")String type);
 
 	int updateSelective(UserCompanyDefault usercompany);
 	
@@ -32,13 +32,13 @@ public interface UserCompanyDefaultDao {
 	 * @param userId 用户ID
 	 * @return
 	 */
-	UserCompanyDefault getActiveDefault(@Param("userId")String userId);
+	UserCompanyDefault getActiveDefault(@Param("userId")String userId,@Param("type")String type);
 	/**
 	 * 查询已激活的备选公司中的第一个公司
 	 * @param userId 用户ID
 	 * @return
 	 */
-	UserCompanyDefault getActiveNoDefaultFirst(@Param("userId")String userId);
+	UserCompanyDefault getActiveNoDefaultFirst(@Param("userId")String userId,@Param("type")String type);
 	/**
 	 * 设置当前默认打开的公司
 	 * @param companyId
