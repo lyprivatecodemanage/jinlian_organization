@@ -3,10 +3,13 @@ package com.xiangshangban.organization.service;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.arjuna.ats.arjuna.common.recoveryPropertyManager;
 import com.xiangshangban.organization.bean.CheckPerson;
 import com.xiangshangban.organization.bean.Employee;
 import com.xiangshangban.organization.bean.ReturnData;
@@ -29,13 +32,16 @@ public class CheckPersonServiceImpl implements CheckPersonService {
 	CheckPersonDao checkPersonDao;
 	@Autowired
 	UserCompanyDefaultDao userCompanyDefaultDao;
+	
+	
+	
 	@Override
 	public ReturnData updateApplyStatus(String companyId, String userId, String status) {
 		ReturnData returnData = new ReturnData();
 		if("1".equals(status)){//同意
 			Uusers user = usersDao.selectById(userId);
 			if(user!=null && StringUtils.isNotEmpty(user.getPhone())){
-				UserCompanyDefault usercompany =userCompanyDefaultDao.selectByUserIdAndCompanyId(userId, companyId);
+				UserCompanyDefault usercompany =userCompanyDefaultDao.selectByUserIdAndCompanyId(userId, companyId ,"0");
 				if(usercompany!=null && StringUtils.isNotEmpty(usercompany.getCompanyId())){//已存在
 					if("0".equals(usercompany.getIsActive())){//未激活，则激活
 						usercompany.setIsActive("1");
@@ -57,7 +63,7 @@ public class CheckPersonServiceImpl implements CheckPersonService {
 					usercompany.setCompanyId(companyId);
 					usercompany.setUserId(userId);
 					//查询已激活并且为默认的公司
-					UserCompanyDefault companyDefalt = userCompanyDefaultDao.getActiveDefault(user.getUserid());
+					UserCompanyDefault companyDefalt = userCompanyDefaultDao.getActiveDefault(user.getUserid(),"0");
 					if(companyDefalt==null || StringUtils.isEmpty(companyDefalt.getCompanyId())){
 						//抽取排序中已激活但非默认的第一个公司作为默认公司
 						usercompany.setCurrentOption("1");
@@ -65,6 +71,11 @@ public class CheckPersonServiceImpl implements CheckPersonService {
 						usercompany.setCurrentOption("2");
 					}
 					usercompany.setIsActive("1");
+					//web端
+					usercompany.setType("0");
+					userCompanyDefaultDao.insertSelective(usercompany);
+					//app端
+					usercompany.setType("1");
 					userCompanyDefaultDao.insertSelective(usercompany);
 				}
 				List<UusersRoles> userRoleList = usersDao.selectRoleByUserIdAndCompanyId(companyId, userId);
@@ -90,7 +101,7 @@ public class CheckPersonServiceImpl implements CheckPersonService {
 		}else{//驳回
 			Uusers user = usersDao.selectById(userId);
 			if(user!=null && StringUtils.isNotEmpty(user.getPhone())){
-				UserCompanyDefault usercompany =userCompanyDefaultDao.selectByUserIdAndCompanyId(userId, companyId);
+				UserCompanyDefault usercompany =userCompanyDefaultDao.selectByUserIdAndCompanyId(userId, companyId,"0");
 				if(usercompany!=null && StringUtils.isNotEmpty(usercompany.getCompanyId())){//已存在人员信息，不管是否已激活，都驳回失败
 					returnData.setMessage("审核驳回失败，原因：人员信息已存在");
 					returnData.setReturnCode("4110");

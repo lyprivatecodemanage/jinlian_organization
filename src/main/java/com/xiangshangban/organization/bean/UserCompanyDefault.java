@@ -50,14 +50,11 @@ public class UserCompanyDefault {
 	public void setInfoStatus(String infoStatus) {
 		this.infoStatus = infoStatus;
 	}
-
 	public String getType() {
 		return type;
 	}
-
 	public void setType(String type) {
 		this.type = type;
 	}
-	
 	
 }

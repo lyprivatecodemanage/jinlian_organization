@@ -30,20 +30,20 @@
 		select 
 		<include refid="Base_Column_List"/>
 		from user_company
-		where user_id = #{userId} AND company_id=#{companyId}
+		where user_id = #{userId} AND company_id=#{companyId} and type = #{type}
 	</select>
 	<select id="getActiveDefault" resultMap="BaseResultMap">
 		select 
 		<include refid="Base_Column_List"/>
 		from user_company
-		where user_id = #{userId} AND current_option='1' AND is_active='1'
+		where user_id = #{userId} AND current_option='1' AND is_active='1' and type = #{type}
 	</select>
 	
 	<select id="getActiveNoDefaultFirst" resultMap="BaseResultMap">
 		select 
 		<include refid="Base_Column_List"/>
 		from user_company
-		where user_id = #{userId} AND current_option='2' AND is_active='1'
+		where user_id = #{userId} AND current_option='2' AND is_active='1' and type = #{type}
 		limit 1 offset 0
 	</select>
 	<!-- 将某个已激活的公司设置为默认公司 -->

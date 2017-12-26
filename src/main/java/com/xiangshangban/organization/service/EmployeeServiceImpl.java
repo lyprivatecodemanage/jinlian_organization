@@ -71,13 +71,20 @@ public class EmployeeServiceImpl implements EmployeeService {
 		i+=connectEmpPostDao.deleteByEmployeeIdAndCompanyId(employeeId, companyId);
 		//更改默认公司设置
 		//查询已激活并且为默认的公司
-		UserCompanyDefault companyDefalt = userCompanyDefaultDao.getActiveDefault(employeeId);
+		UserCompanyDefault companyDefalt = userCompanyDefaultDao.getActiveDefault(employeeId,"0");
 		if(companyDefalt==null || StringUtils.isEmpty(companyDefalt.getCompanyId())){
-			//抽取排序中已激活但非默认的第一个公司作为默认公司
-			UserCompanyDefault newDefalt = userCompanyDefaultDao.getActiveNoDefaultFirst(employeeId);
+			// web端  抽取排序中已激活但非默认的第一个公司作为默认公司
+			UserCompanyDefault newDefalt = userCompanyDefaultDao.getActiveNoDefaultFirst(employeeId,"0");
 			if(companyDefalt!=null && StringUtils.isNotEmpty(companyDefalt.getCompanyId())){
 				//设置默认公司
 				userCompanyDefaultDao.updateCurrentCompany(newDefalt.getCompanyId(), employeeId);
+			}
+			
+			// app端  抽取排序中已激活但非默认的第一个公司作为默认公司
+			UserCompanyDefault nDefalt = userCompanyDefaultDao.getActiveNoDefaultFirst(employeeId,"1");
+			if(companyDefalt!=null && StringUtils.isNotEmpty(companyDefalt.getCompanyId())){
+				//设置默认公司
+				userCompanyDefaultDao.updateCurrentCompany(nDefalt.getCompanyId(), employeeId);
 			}
 		}
 		if(i>1){
@@ -110,7 +117,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 			UserCompanyDefault userCompany = new UserCompanyDefault();
 			userCompany.setCompanyId(employee.getCompanyId());
 			//查询已激活并且为默认的公司
-			UserCompanyDefault companyDefalt = userCompanyDefaultDao.getActiveDefault(user.getUserid());
+			UserCompanyDefault companyDefalt = userCompanyDefaultDao.getActiveDefault(user.getUserid(),"0");
 			if(companyDefalt==null || StringUtils.isEmpty(companyDefalt.getCompanyId())){
 				//抽取排序中已激活但非默认的第一个公司作为默认公司
 				userCompany.setCurrentOption("1");
@@ -119,8 +126,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 			}
 			userCompany.setUserId(user.getUserid());
 			userCompany.setInfoStatus("1");
+			//web端
 			userCompany.setType("0");
 			userCompanyDefaultDao.insertSelective(userCompany);//添加用户公司的绑定关系
+			//app端
 			userCompany.setType("1");
 			userCompanyDefaultDao.insertSelective(userCompany);//添加用户公司的绑定关系
 			CheckPerson checkPerson = new CheckPerson();
@@ -140,11 +149,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 				usersDao.updateStatus(user.getUserid(), "1");
 			}
 			//添加绑定关系
-			UserCompanyDefault userCompany = userCompanyDefaultDao.selectByUserIdAndCompanyId(user.getUserid(), employee.getCompanyId());
+			UserCompanyDefault userCompany = userCompanyDefaultDao.selectByUserIdAndCompanyId(user.getUserid(), employee.getCompanyId(),"0");
 			if(userCompany==null || StringUtils.isEmpty(userCompany.getCompanyId())){//不存在绑定关系
 				userCompany = new UserCompanyDefault();
 				//查询已激活并且为默认的公司
-				UserCompanyDefault companyDefalt = userCompanyDefaultDao.getActiveDefault(user.getUserid());
+				UserCompanyDefault companyDefalt = userCompanyDefaultDao.getActiveDefault(user.getUserid(),"0");
 				if(companyDefalt==null || StringUtils.isEmpty(companyDefalt.getCompanyId())){
 					//抽取排序中已激活但非默认的第一个公司作为默认公司
 					userCompany.setCurrentOption("1");
@@ -154,8 +163,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 				userCompany.setCompanyId(employee.getCompanyId());
 				userCompany.setUserId(user.getUserid());
 				userCompany.setInfoStatus("1");
+				//web端
 				userCompany.setType("0");
 				userCompanyDefaultDao.insertSelective(userCompany);//添加用户公司的绑定关系
+				//app端
 				userCompany.setType("1");
 				userCompanyDefaultDao.insertSelective(userCompany);//添加用户公司的绑定关系
 				employeeDao.insertEmployee(employee);//插入人员表
@@ -164,7 +175,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 					userCompany.setIsActive("1");
 					userCompany.setInfoStatus("1");
 					//查询已激活并且为默认的公司
-					UserCompanyDefault companyDefalt = userCompanyDefaultDao.getActiveDefault(user.getUserid());
+					UserCompanyDefault companyDefalt = userCompanyDefaultDao.getActiveDefault(user.getUserid(),"0");
 					if(companyDefalt==null || StringUtils.isEmpty(companyDefalt.getCompanyId())){
 						//抽取排序中已激活但非默认的第一个公司作为默认公司
 						userCompany.setCurrentOption("1");
