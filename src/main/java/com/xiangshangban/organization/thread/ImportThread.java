@@ -19,6 +19,8 @@ public class ImportThread implements Runnable {
 	public void run() {
 		for(Employee employee:employeeList){
 			ReturnData serviceReturnData = employeeService.insertEmployee(employee);
+			employeeService.activeEmp(employee.getCompanyId(), employee.getEmployeeId());
+			employeeService.resetEmployeeStatus(employee.getCompanyId(), employee.getEmployeeId());
 			if(!"3000".equals(serviceReturnData.getReturnCode())){
 				ImportReturnData importReturnData = new ImportReturnData();
 				importReturnData.setImportMessage(serviceReturnData.getMessage());

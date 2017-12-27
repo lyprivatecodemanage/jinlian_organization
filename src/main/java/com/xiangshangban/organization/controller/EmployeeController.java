@@ -735,30 +735,35 @@ public class EmployeeController {
 					vicePostList.add(post);
 				}
 			}
-			if(StringUtils.isNotEmpty(vicePostList.get(0).getPostId())&&StringUtils.isNotEmpty(vicePostList.get(1).getPostId())){
-				if(vicePostList.get(0).getPostId().equals(vicePostList.get(1).getPostId())){
-					result.put("message","不能选择两个相同的副岗位");
-					result.put("returnCode","4119");
-					return result;
-				}
-				if(vicePostList.get(0).getPostId().equals(emp.getPostId()) || vicePostList.get(1).getPostId().equals(emp.getPostId())){
-					result.put("message","副岗位不能与主岗位相同");
-					result.put("returnCode","4120");
-					return result;
+			if(vicePostList!=null && vicePostList.size()>0){
+				if (StringUtils.isNotEmpty(vicePostList.get(0).getPostId())) {
+					if(vicePostList.get(0).getPostId().equals(emp.getPostId())){
+						result.put("message","副岗位不能与主岗位相同");
+						result.put("returnCode","4120");
+						return result;
+					}
 				}
 			}
-			if (StringUtils.isNotEmpty(vicePostList.get(0).getPostId())) {
-				if(vicePostList.get(0).getPostId().equals(emp.getPostId())){
-					result.put("message","副岗位不能与主岗位相同");
-					result.put("returnCode","4120");
-					return result;
+			if(vicePostList!=null && vicePostList.size()>1){
+				if(StringUtils.isNotEmpty(vicePostList.get(0).getPostId())&&StringUtils.isNotEmpty(vicePostList.get(1).getPostId())){
+					if(vicePostList.get(0).getPostId().equals(vicePostList.get(1).getPostId())){
+						result.put("message","不能选择两个相同的副岗位");
+						result.put("returnCode","4119");
+						return result;
+					}
+					if(vicePostList.get(0).getPostId().equals(emp.getPostId()) || vicePostList.get(1).getPostId().equals(emp.getPostId())){
+						result.put("message","副岗位不能与主岗位相同");
+						result.put("returnCode","4120");
+						return result;
+					}
 				}
-			}
-			if (StringUtils.isNotEmpty(vicePostList.get(1).getPostId())) {
-				if(vicePostList.get(1).getPostId().equals(emp.getPostId())){
-					result.put("message","副岗位不能与主岗位相同");
-					result.put("returnCode","4120");
-					return result;
+				
+				if (StringUtils.isNotEmpty(vicePostList.get(1).getPostId())) {
+					if(vicePostList.get(1).getPostId().equals(emp.getPostId())){
+						result.put("message","副岗位不能与主岗位相同");
+						result.put("returnCode","4120");
+						return result;
+					}
 				}
 			}
 			for (Post post: vicePostList) {
@@ -824,7 +829,7 @@ public class EmployeeController {
 			return returnData;
 		}
 	}
-	@RequestMapping(value = "export/employeeInfo", produces="application/json;charset=UTF-8")
+	@RequestMapping(value = "/export/employeeInfo")
 	public void exportExcel(HttpServletRequest request, HttpServletResponse response){
 		try {
 			response.setContentType("octets/stream"); 

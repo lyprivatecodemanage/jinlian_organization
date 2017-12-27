@@ -45,6 +45,10 @@ public class CheckPersonController {
 				return returnData;
 			}
 			returnData = checkPersonService.updateApplyStatus(companyId, userId, status);
+			Map<String,Object> data = new HashMap<String,Object>(); 
+			data.put("employeeId", userId);
+			data.put("companyId", companyId);
+			returnData.setData(data);
 		}else{
 			returnData.setMessage("必传参数为空");
 			returnData.setReturnCode("3006");
