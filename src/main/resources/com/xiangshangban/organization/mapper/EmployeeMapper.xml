@@ -6,6 +6,7 @@
 		<result column="employee_name" property="employeeName" />
 		<result column="login_name" property="loginName" />
 		<result column="employee_sex" property="employeeSex" />
+		<result column="employee_birthday" property="employeeBirthday" />
 		<result column="employee_no" property="employeeNo" />
 		<result column="direct_person_id" property="directPersonId" />
 		<result column="direct_person_name" property="directPersonName" />
@@ -171,6 +172,7 @@
 		<id column="employee_id" property="employeeId" />
 		<id column="employee_name" property="employeeName" />
 		<id column="employee_sex" property="employeeSex" />
+		<id column="employee_birthday" property="employeeBirthday" />
 		<id column="login_name" property="loginName" />
 		<id column="employee_phone" property="employeePhone" />
 		<id column="post_id" property="postId" />
@@ -186,7 +188,7 @@
 	<select id="selectByAllFnyeEmployee" parameterType="java.lang.String"
 		resultMap="PagingColumnList">
 		select
-		e.employee_id,e.employee_name,e.employee_sex,e.login_name,e.employee_phone,
+		e.employee_id,e.employee_name,e.employee_sex,e.employee_birthday,e.login_name,e.employee_phone,
 		p.post_id,p.post_name,e.department_id ,d.department_name,
 		e.entry_time,e.employee_status,uc.is_active
 		from organization.employee_ e
@@ -357,6 +359,7 @@
 		<result column="employee_name" property="employeeName" />
 		<result column="login_name" property="loginName" />
 		<result column="employee_sex" property="employeeSex" />
+		<result column="employee_birthday" property="employeeBirthday" />
 		<result column="phone" property="phone" />
 		<result column="employee_phone" property="employeePhone" />
 		<result column="employee_twophone" property="employeeTwophone" />
@@ -379,7 +382,7 @@
 	<select id="selectByEmployee" parameterType="java.lang.String"
 		resultMap="EmployeeResultMap">
 		select e.employee_id,
-		e.employee_name,e.employee_sex,e.login_name,e.employee_phone,
+		e.employee_name,e.employee_sex,e.employee_birthday,e.login_name,e.employee_phone,
 		e.employee_twophone,p.post_id,p.post_name,d.department_id,d.department_name,e.employee_no,
 		
 		(select employee_name as derect_person_name from employee_ where
@@ -473,9 +476,9 @@
 		</if>
 		department_id = #{departmentId},
 		login_name =#{loginName},
-		entry_time =
-		#{entryTime},
+		entry_time =#{entryTime},
 		probationary_expired =#{probationaryExpired},
+		employee_birthday = #{employeeBirthday},
 		work_address =#{workAddress}
 		<if test="operaterTime==null || opraterTime==''">
 			,operater_time = to_char(now(),'yyyy-MM-dd hh24:mi:ss')
@@ -692,6 +695,7 @@
 		employee_id,
 		employee_name,
 		employee_sex,
+		employee_birthday,
 		login_name,
 		employee_phone,
 		employee_twophone,
@@ -710,6 +714,7 @@
 		#{employeeId},
 		#{employeeName},
 		#{employeeSex},
+		#{employeeBirthday},
 		#{loginName},
 		#{employeePhone},
 		#{employeeTwophone},

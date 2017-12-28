@@ -591,6 +591,10 @@ public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 					e.printStackTrace();
 				}
 			}
+			/*for(Employee employee:list){
+				employeeService.activeEmp(employee.getCompanyId(), employee.getEmployeeId());
+				employeeService.resetEmployeeStatus(employee.getCompanyId(), employee.getEmployeeId());
+			}*/
 			}
 		boolean flag = false;
 		for (ImportReturnData importReturnDataObj : importReturnDataList) {

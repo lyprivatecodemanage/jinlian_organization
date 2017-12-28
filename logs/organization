@@ -1,13 +1,13 @@
-2017-12-27 10:15:56 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
-  2017-12-27 10:22:51 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
-  2017-12-27 11:08:10 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
-  2017-12-27 13:51:20 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
-  2017-12-27 15:00:38 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
-  2017-12-27 15:04:05 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
-  2017-12-27 15:32:06 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
-  2017-12-27 16:32:11 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
-  2017-12-27 17:00:29 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.IndexOutOfBoundsException: Index: 0, Size: 0
-  2017-12-27 17:10:02 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.IndexOutOfBoundsException: Index: 0, Size: 0
-  2017-12-27 17:10:30 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
-  2017-12-27 17:11:09 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+2017-12-28 10:30:27 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
+  2017-12-28 10:31:56 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2017-12-28 11:22:19 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
+  2017-12-28 11:25:54 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2017-12-28 14:12:46 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
+  2017-12-28 14:26:01 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
+  2017-12-28 14:26:28 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2017-12-28 14:26:41 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2017-12-28 14:31:04 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
+  2017-12-28 14:32:29 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
+  2017-12-28 14:32:56 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2017-12-28 15:08:32 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
   

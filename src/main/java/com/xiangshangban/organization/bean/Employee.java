@@ -11,6 +11,7 @@ public class Employee {
     private String employeeName;//员工姓名
     private String loginName;//登录姓名
     private String employeeSex;//员工性别(0：男，1：女)
+    private String employeeBirthday;//出生日期
     private String departmentId;//部门ID
     private String companyId;//公司ID
     private String companyNo;//公司编号
@@ -305,6 +306,12 @@ public class Employee {
 	}
 	public void setOperate_time(String operaterTime) {
 		this.operaterTime = operaterTime;
+	}
+	public String getEmployeeBirthday() {
+		return employeeBirthday;
+	}
+	public void setEmployeeBirthday(String employeeBirthday) {
+		this.employeeBirthday = employeeBirthday;
 	}
 	
 	
