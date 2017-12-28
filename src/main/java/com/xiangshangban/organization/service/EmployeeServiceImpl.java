@@ -71,13 +71,20 @@ public class EmployeeServiceImpl implements EmployeeService {
 		i+=connectEmpPostDao.deleteByEmployeeIdAndCompanyId(employeeId, companyId);
 		//更改默认公司设置
 		//查询已激活并且为默认的公司
-		UserCompanyDefault companyDefalt = userCompanyDefaultDao.getActiveDefault(employeeId);
+		UserCompanyDefault companyDefalt = userCompanyDefaultDao.getActiveDefault(employeeId,"0");
 		if(companyDefalt==null || StringUtils.isEmpty(companyDefalt.getCompanyId())){
-			//抽取排序中已激活但非默认的第一个公司作为默认公司
-			UserCompanyDefault newDefalt = userCompanyDefaultDao.getActiveNoDefaultFirst(employeeId);
+			// web端  抽取排序中已激活但非默认的第一个公司作为默认公司
+			UserCompanyDefault newDefalt = userCompanyDefaultDao.getActiveNoDefaultFirst(employeeId,"0");
 			if(companyDefalt!=null && StringUtils.isNotEmpty(companyDefalt.getCompanyId())){
 				//设置默认公司
 				userCompanyDefaultDao.updateCurrentCompany(newDefalt.getCompanyId(), employeeId);
+			}
+			
+			// app端  抽取排序中已激活但非默认的第一个公司作为默认公司
+			UserCompanyDefault nDefalt = userCompanyDefaultDao.getActiveNoDefaultFirst(employeeId,"1");
+			if(companyDefalt!=null && StringUtils.isNotEmpty(companyDefalt.getCompanyId())){
+				//设置默认公司
+				userCompanyDefaultDao.updateCurrentCompany(nDefalt.getCompanyId(), employeeId);
 			}
 		}
 		if(i>1){
@@ -93,12 +100,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 	public ReturnData insertEmployee(Employee employee) {
 		ReturnData returnData = new ReturnData();
 		Uusers user = usersDao.selectByPhone(employee.getLoginName());
-		//Employee emp = employeeDao.selectEmployeeByLoginNameAndCompanyId(employee.getLoginName(), employee.getCompanyId());
-		/*if(emp!=null){
-			returnData.setMessage("登录名已被占用");
-			returnData.setReturnCode("4115");
-			return returnData;
-		}*/
 		employee.setEmployeeStatus("0");
 		if(user==null || StringUtils.isEmpty(user.getUserid())){//未注册，写入注册表	
 			user = new Uusers();
@@ -116,7 +117,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 			UserCompanyDefault userCompany = new UserCompanyDefault();
 			userCompany.setCompanyId(employee.getCompanyId());
 			//查询已激活并且为默认的公司
-			UserCompanyDefault companyDefalt = userCompanyDefaultDao.getActiveDefault(user.getUserid());
+			UserCompanyDefault companyDefalt = userCompanyDefaultDao.getActiveDefault(user.getUserid(),"0");
 			if(companyDefalt==null || StringUtils.isEmpty(companyDefalt.getCompanyId())){
 				//抽取排序中已激活但非默认的第一个公司作为默认公司
 				userCompany.setCurrentOption("1");
@@ -125,8 +126,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 			}
 			userCompany.setUserId(user.getUserid());
 			userCompany.setInfoStatus("1");
+			//web端
+			userCompany.setType("0");
 			userCompanyDefaultDao.insertSelective(userCompany);//添加用户公司的绑定关系
-			
+			//app端
+			userCompany.setType("1");
+			userCompanyDefaultDao.insertSelective(userCompany);//添加用户公司的绑定关系
 			CheckPerson checkPerson = new CheckPerson();
 			checkPerson.setUserid(employeeId);
 			checkPerson.setCompanyid(employee.getCompanyId());
@@ -144,11 +149,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 				usersDao.updateStatus(user.getUserid(), "1");
 			}
 			//添加绑定关系
-			UserCompanyDefault userCompany = userCompanyDefaultDao.selectByUserIdAndCompanyId(user.getUserid(), employee.getCompanyId());
+			UserCompanyDefault userCompany = userCompanyDefaultDao.selectByUserIdAndCompanyId(user.getUserid(), employee.getCompanyId(),"0");
 			if(userCompany==null || StringUtils.isEmpty(userCompany.getCompanyId())){//不存在绑定关系
 				userCompany = new UserCompanyDefault();
 				//查询已激活并且为默认的公司
-				UserCompanyDefault companyDefalt = userCompanyDefaultDao.getActiveDefault(user.getUserid());
+				UserCompanyDefault companyDefalt = userCompanyDefaultDao.getActiveDefault(user.getUserid(),"0");
 				if(companyDefalt==null || StringUtils.isEmpty(companyDefalt.getCompanyId())){
 					//抽取排序中已激活但非默认的第一个公司作为默认公司
 					userCompany.setCurrentOption("1");
@@ -156,17 +161,21 @@ public class EmployeeServiceImpl implements EmployeeService {
 					userCompany.setCurrentOption("2");
 				}
 				userCompany.setCompanyId(employee.getCompanyId());
-				
 				userCompany.setUserId(user.getUserid());
 				userCompany.setInfoStatus("1");
+				//web端
+				userCompany.setType("0");
+				userCompanyDefaultDao.insertSelective(userCompany);//添加用户公司的绑定关系
+				//app端
+				userCompany.setType("1");
 				userCompanyDefaultDao.insertSelective(userCompany);//添加用户公司的绑定关系
 				employeeDao.insertEmployee(employee);//插入人员表
 			}else if(userCompany!=null && userCompany.getCompanyId().equals(employee.getCompanyId())){//已存在绑定关系，则直接返回
 				if("2".equals(userCompany.getIsActive())){
-					userCompany.setIsActive("0");
+					userCompany.setIsActive("1");
 					userCompany.setInfoStatus("1");
 					//查询已激活并且为默认的公司
-					UserCompanyDefault companyDefalt = userCompanyDefaultDao.getActiveDefault(user.getUserid());
+					UserCompanyDefault companyDefalt = userCompanyDefaultDao.getActiveDefault(user.getUserid(),"0");
 					if(companyDefalt==null || StringUtils.isEmpty(companyDefalt.getCompanyId())){
 						//抽取排序中已激活但非默认的第一个公司作为默认公司
 						userCompany.setCurrentOption("1");
@@ -398,9 +407,13 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	@Override
-	public List<Employee> selectByAllFnyeEmployee(String companyId,String numPage,String numRecordCount, String employeeName, String employeeSex, String departmentName,String postName,String employeeStatus,String departmentId) {
+	public List<Employee> selectByAllFnyeEmployee(String companyId,String numPage,String numRecordCount,
+			String employeeName, String employeeSex, String departmentName,String postName,
+			String employeeStatus,String departmentId,String type) {
 		// TODO Auto-generated method stub
-		return employeeDao.selectByAllFnyeEmployee(companyId, numPage, numRecordCount,  employeeName,  employeeSex,  departmentName, postName, employeeStatus,departmentId);
+		return employeeDao.selectByAllFnyeEmployee(companyId, numPage, numRecordCount, 
+				employeeName,  employeeSex,  departmentName, postName, employeeStatus,
+				departmentId,type);
 	}
 
 
@@ -424,9 +437,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public int selectCountEmployeeFromCompany(String companyId, /*String numPage, String numRecordCount,*/
-			String employeeName, String employeeSex, String departmentName, String postName, String employeeStatus,String  departmentId) {
+			String employeeName, String employeeSex, String departmentName, 
+			String postName, String employeeStatus,String  departmentId,String type) {
 		
-		return employeeDao.selectCountEmployeeFromCompany(companyId,/* numPage, numRecordCount,*/ employeeName, employeeSex, departmentName, postName, employeeStatus,departmentId);
+		return employeeDao.selectCountEmployeeFromCompany(companyId,/* numPage, numRecordCount,*/ 
+				employeeName, employeeSex, departmentName, postName, employeeStatus,departmentId,type);
 	}
 
 	@Override
@@ -436,9 +451,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	@Override
-	public Employee selectByEmployeeFromApp(String companyId, String userId) {
+	public Employee selectByEmployeeFromApp(String companyId, String userId,String type) {
 	
-		return employeeDao.selectByEmployeeFromApp(companyId, userId);
+		return employeeDao.selectByEmployeeFromApp(companyId, userId,type);
 	}
 
 	@Override
@@ -662,6 +677,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 	public int updateAdminEmployeeImgUrl(String companyId, String employeeId, String employeeImgUrl) {
 		
 		return employeeDao.updateAdminEmployeeImgUrl(companyId, employeeId, employeeImgUrl);
+	}
+
+	@Override
+	public List<Employee> selectAllEmployeeByCompanyId(String companyId) {
+		
+		return employeeDao.selectAllEmployeeByCompanyId(companyId);
 	}
 
 	

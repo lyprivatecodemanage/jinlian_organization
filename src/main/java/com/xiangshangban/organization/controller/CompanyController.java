@@ -77,13 +77,15 @@ public class CompanyController {
 	public ReturnData updateByCompany(@RequestBody String company,HttpServletRequest request,HttpServletResponse response){
 		Company companytemp=JSON.parseObject(company,Company.class);
 		ReturnData returnData = new ReturnData();
-		String companyId = companytemp.getCompanyId();
+		String companyId = request.getHeader("companyId");
+		//String companyId = companytemp.getCompanyId();
 		String companyName = companytemp.getCompanyName();
 		if(StringUtils.isEmpty(companyName) || StringUtils.isEmpty(companytemp.getCompanyArea())){
 			returnData.setMessage("必传参数为空");
 			returnData.setReturnCode("3000");
 		}
 		if(StringUtils.isNotEmpty(companyId)){
+			companytemp.setCompanyId(companyId);
 			companyService.updateByCompany(companytemp);	
 			returnData.setMessage("数据请求成功");
 			returnData.setReturnCode("3000");

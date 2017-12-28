@@ -42,4 +42,10 @@ public interface DepartmentDao {
 	Integer selectDepartmentCountByCompanyId(@Param("companyId")String companyId);
 	
 	Department selectDepatmentByDepartmentNameAndCompanyId(@Param("companyId")String companyId,@Param("departmentName")String departmentName);
+	/**
+	 * 根据公司id查询公司部门及部门下的岗位
+	 * @param companyId
+	 * @return
+	 */
+	List<Department> selectDepartmentAndPostByCompanyId(String companyId);
 }

@@ -22,6 +22,13 @@ public interface EmployeeService {
    //查询单条员信息
     Employee selectByEmployee(String employeeId,String companyId);  
     String updateByEmployee(Employee employee);
+    /**
+	 * @author 李业
+	 * 通过公司id查询公司所有的在职员工
+	 * @param companyId
+	 * @return
+	 */
+	List<Employee> selectAllEmployeeByCompanyId(String companyId);
     //查询在职员工信息
     List<Employee> findByAllEmployee(Map<String,String> map);
     //查询在职员工信息
@@ -47,7 +54,9 @@ public interface EmployeeService {
      * @param employeeStatus
      * @return
      */
-    List<Employee> selectByAllFnyeEmployee(String companyId,String numPage,String numRecordCount, String employeeName, String employeeSex, String departmentName,String postName,String employeeStatus,String departmentId);
+    List<Employee> selectByAllFnyeEmployee(String companyId,String numPage,String numRecordCount, 
+    		String employeeName, String employeeSex, String departmentName,String postName,
+    		String employeeStatus,String departmentId,String type);
     /**
      * 分页条件查询总记录数
      * @param companyId
@@ -60,7 +69,9 @@ public interface EmployeeService {
      * @param employeeStatus
      * @return
      */
-    int selectCountEmployeeFromCompany(String companyId,/*String numPage,String numRecordCount,*/ String employeeName, String employeeSex, String departmentName,String postName,String employeeStatus,String departmentId);
+    int selectCountEmployeeFromCompany(String companyId,/*String numPage,String numRecordCount,*/ 
+    		String employeeName, String employeeSex, String departmentName,String postName,
+    		String employeeStatus,String departmentId,String type);
     
     String updateByEmployeedept(Employee employee);
     Employee findByemploginName(String loginName);
@@ -100,7 +111,7 @@ public interface EmployeeService {
 	 * @param userId
 	 * @return
 	 */
-	Employee selectByEmployeeFromApp(String companyId,String userId);
+	Employee selectByEmployeeFromApp(String companyId,String userId,String type);
 	
 	/**
 	 * @author 李业/编辑个人信息

@@ -333,6 +333,7 @@ public class EmployeeController {
 		Map<String, Object> result = new HashMap<String, Object>();
 		try {
 			String companyId = request.getHeader("companyId");// 公司id
+			String type = request.getHeader("type");
 			//String userId = request.getHeader("accessUserId");// 操作人id
 			JSONObject obj = JSON.parseObject(jsonString);
 			String employeeName = obj.getString("employeeName");// 员工姓名
@@ -394,7 +395,7 @@ public class EmployeeController {
 				}
 			}
 			List<Employee> employeeList = employeeService.selectByAllFnyeEmployee(companyId, pageNum, pageRecordNum,
-					employeeName, employeeSex, departmentName, postName, employeeStatus, departmentId);
+					employeeName, employeeSex, departmentName, postName, employeeStatus, departmentId,type);
 				for(Employee emp:employeeList){
 					if(emp!=null){
 						if("0".equals(emp.getEmployeeSex())){
@@ -413,7 +414,7 @@ public class EmployeeController {
 				}
 			// 查询总记录数
 			int intCount = employeeService.selectCountEmployeeFromCompany(companyId, /*pageNum, pageRecordNum,*/
-					employeeName, employeeSex, departmentName, postName, employeeStatus, departmentId);
+					employeeName, employeeSex, departmentName, postName, employeeStatus, departmentId,type);
 			String count = String.valueOf(intCount);
 			// 总页数
 			int intpagecountNum = (int) Math.ceil((double) intCount / (Double.valueOf(pageRecordNum)));
@@ -522,7 +523,8 @@ public class EmployeeController {
 		try {
 			String companyId = request.getHeader("companyId");// 公司id
 			String userId = request.getHeader("accessUserId");// 操作人id
-			Employee emp = employeeService.selectByEmployeeFromApp(companyId, userId);
+			String type = request.getHeader("type");
+			Employee emp = employeeService.selectByEmployeeFromApp(companyId, userId,type);
 			
 			String key = emp.getEmployeeImgUrl();
 			String companyNo = emp.getCompanyNo();
@@ -733,30 +735,35 @@ public class EmployeeController {
 					vicePostList.add(post);
 				}
 			}
-			if(StringUtils.isNotEmpty(vicePostList.get(0).getPostId())&&StringUtils.isNotEmpty(vicePostList.get(1).getPostId())){
-				if(vicePostList.get(0).getPostId().equals(vicePostList.get(1).getPostId())){
-					result.put("message","不能选择两个相同的副岗位");
-					result.put("returnCode","4119");
-					return result;
-				}
-				if(vicePostList.get(0).getPostId().equals(emp.getPostId()) || vicePostList.get(1).getPostId().equals(emp.getPostId())){
-					result.put("message","副岗位不能与主岗位相同");
-					result.put("returnCode","4120");
-					return result;
+			if(vicePostList!=null && vicePostList.size()>0){
+				if (StringUtils.isNotEmpty(vicePostList.get(0).getPostId())) {
+					if(vicePostList.get(0).getPostId().equals(emp.getPostId())){
+						result.put("message","副岗位不能与主岗位相同");
+						result.put("returnCode","4120");
+						return result;
+					}
 				}
 			}
-			if (StringUtils.isNotEmpty(vicePostList.get(0).getPostId())) {
-				if(vicePostList.get(0).getPostId().equals(emp.getPostId())){
-					result.put("message","副岗位不能与主岗位相同");
-					result.put("returnCode","4120");
-					return result;
+			if(vicePostList!=null && vicePostList.size()>1){
+				if(StringUtils.isNotEmpty(vicePostList.get(0).getPostId())&&StringUtils.isNotEmpty(vicePostList.get(1).getPostId())){
+					if(vicePostList.get(0).getPostId().equals(vicePostList.get(1).getPostId())){
+						result.put("message","不能选择两个相同的副岗位");
+						result.put("returnCode","4119");
+						return result;
+					}
+					if(vicePostList.get(0).getPostId().equals(emp.getPostId()) || vicePostList.get(1).getPostId().equals(emp.getPostId())){
+						result.put("message","副岗位不能与主岗位相同");
+						result.put("returnCode","4120");
+						return result;
+					}
 				}
-			}
-			if (StringUtils.isNotEmpty(vicePostList.get(1).getPostId())) {
-				if(vicePostList.get(1).getPostId().equals(emp.getPostId())){
-					result.put("message","副岗位不能与主岗位相同");
-					result.put("returnCode","4120");
-					return result;
+				
+				if (StringUtils.isNotEmpty(vicePostList.get(1).getPostId())) {
+					if(vicePostList.get(1).getPostId().equals(emp.getPostId())){
+						result.put("message","副岗位不能与主岗位相同");
+						result.put("returnCode","4120");
+						return result;
+					}
 				}
 			}
 			for (Post post: vicePostList) {
@@ -822,7 +829,7 @@ public class EmployeeController {
 			return returnData;
 		}
 	}
-	@RequestMapping(value = "export/employeeInfo", produces="application/json;charset=UTF-8")
+	@RequestMapping(value = "/export/employeeInfo")
 	public void exportExcel(HttpServletRequest request, HttpServletResponse response){
 		try {
 			response.setContentType("octets/stream"); 

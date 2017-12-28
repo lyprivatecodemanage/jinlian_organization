@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -18,12 +19,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.aliyun.oss.OSSClient;
+import com.arjuna.ats.internal.jdbc.drivers.modifiers.list;
 import com.xiangshangban.organization.bean.Department;
 import com.xiangshangban.organization.bean.Employee;
 import com.xiangshangban.organization.bean.ImportReturnData;
 import com.xiangshangban.organization.bean.Post;
 import com.xiangshangban.organization.bean.ReturnData;
 import com.xiangshangban.organization.exception.CustomException;
+import com.xiangshangban.organization.thread.ImportThread;
 import com.xiangshangban.organization.util.ImportUtil;
 import com.xiangshangban.organization.util.POIUtil;
 import com.xiangshangban.organization.util.PropertiesUtils;
@@ -43,7 +46,6 @@ public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 	@Override
 	public ReturnData speedImport(String operateUserId, String companyId, String key) {
 		ReturnData returnData = new ReturnData();
-		List<ImportReturnData> importReturnDataList = new ArrayList<ImportReturnData>();
 		// Map<String, String> result = new HashMap<String, String>();
 		// 判断是否为excel类型文件
 		if (!key.endsWith(".xls") && !key.endsWith(".xlsx")) {
@@ -92,9 +94,11 @@ public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 			}
 			// 获得数据的总行数
 			int totalRowNum = sheet.getLastRowNum();
+			List<ImportReturnData> importReturnDataList = new ArrayList<ImportReturnData>();
+			List<Employee> importEmployeeList = new ArrayList<Employee>();
+			List<Employee> list = new ArrayList<Employee>();
 			// 遍历整个工作表,获取所有数据
 			for (int i = 1; i <= totalRowNum; i++) {
-				
 				boolean lineFlag = false;
 				// 获得第i行对象
 				Row row = sheet.getRow(i);
@@ -107,45 +111,20 @@ public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 				List<Post> postList = new ArrayList<Post>();
 				// 循环每一列
 				for (int k = 0; k < 20; k++) {
-					//System.out.println("======>"+k);
 					Cell cell = row.getCell(k);
-				
 					String value = "";
 					try{
 						if(k==10 || k == 11){
 							try{
-								//try{
 									value = POIUtil.getExcelCellValue(cell);
-								/*}catch(NullPointerException e){
-									value = "";
-								}*/
 							}catch(Exception e){
 								SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 								value = sdf.format(sdf.parse(value));
-								/*Date date = cell.getDateCellValue();
-								value = sdf.format(date);*/
 							}
-							//TimeUtil.timeFormatTransfer();
 						}else if(k==5||k==8||k==17||k==18){
-							/*try{
-								try{*/
-									//value = cell.getStringCellValue();
 									value = POIUtil.getExcelCellValue(cell);
-								/*}catch(IllegalStateException e){
-									DecimalFormat format = new DecimalFormat("#");  
-									Number valueD = cell.getNumericCellValue();  
-									value = format.format(valueD);  
-								}
-							}catch(NullPointerException e){
-								value = "";
-							}*/
 						}else{
-							//try{
 								value = POIUtil.getExcelCellValue(cell);
-								//value = cell.getStringCellValue();
-							/*}catch(NullPointerException e){
-								value = "";
-							}*/
 						}
 					}catch(Exception e){
 						String importMessage = "第" + i + "行,第" +( k+1) + "列,请检查数据格式!";
@@ -183,7 +162,6 @@ public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 						postList.get(1).setPostName(value);
 						break;
 					}
-						//System.out.println(value);
 						paramList.add(value);
 				}
 				if(lineFlag){
@@ -196,349 +174,379 @@ public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 						paramList.get(12)/*postName*/, postList/*postList*/,paramList.get(17)/*employeePhone*/, 
 						paramList.get(18)/*employeeTwophone*/,paramList.get(19)/*seniority*/);
 				newEmp.setOperateUserId(operateUserId);
-				if ("女".equals(newEmp.getEmployeeSex())) {
-					newEmp.setEmployeeSex("1");
-				} else if("男".equals(newEmp.getEmployeeSex())){
-					newEmp.setEmployeeSex("0");
-				}else if(StringUtils.isNotEmpty(newEmp.getEmployeeSex())){
-					String importMessage = "第" + i + "行,请正确填写性别";
-					ImportReturnData importReturnData = new ImportReturnData();
-					importReturnData.setImportMessage(importMessage);
-					importReturnDataList.add(importReturnData);
-					continue;
-				}
-				if (StringUtils.isNotEmpty(newEmp.getMarriageStatus())) {
-					if ("离异".equals(newEmp.getMarriageStatus())) {
-						newEmp.setMarriageStatus("2");
-					} else if ("已婚".equals(newEmp.getMarriageStatus())) {
-						newEmp.setMarriageStatus("1");
-					} else if("未婚".equals(newEmp.getMarriageStatus())){
-						newEmp.setMarriageStatus("0");
-					}else{
-						String importMessage = "第" + i + "行,请正确填写婚姻状况";
+				importEmployeeList.add(newEmp);
+			}
+			//找出错误数据
+			//工号判断
+			//1.传入的数据中工号不能有重复
+			//2.传入的数据中工号不能与公司已有的工号重复
+			
+			//登录名判断
+			//1.传入的数据中登录名不能有重复
+			//2.传入的数据中登录名不能与公司已有的登录名重复
+
+			//汇报人登录名判断
+			//1.传入的数据中汇报人登录名在公司系统数据中是否存在
+			//2.如果不存在,判断传入数据中是否存在
+			//3.如果存在,判断填写的汇报人姓名是否和登录名对应
+			
+			//部门,岗位判断
+			//1.判断传入的数据中部门是否在公司系统中存在
+			//2.判断部门中是否包含填写的岗位(存在全公司特例)
+			//3.判断传入的数据中岗位之间是否同名,不允许相同
+			//首先对外部数据整体检查
+			Iterator<Employee> emp = importEmployeeList.iterator();
+			boolean externalFlag = false;
+			for(int j=0;j<importEmployeeList.size();j++){
+				for(int k=j+1;k<importEmployeeList.size();k++){
+					if(StringUtils.isNotEmpty(importEmployeeList.get(j).getEmployeeNo()) && StringUtils.isNotEmpty(importEmployeeList.get(k).getEmployeeNo()) && importEmployeeList.get(j).getEmployeeNo().equals(importEmployeeList.get(k).getEmployeeNo())){
+						String importMessage = "第" + (j+2) + "行与第"+(k+2)+"行工号重复";
 						ImportReturnData importReturnData = new ImportReturnData();
 						importReturnData.setImportMessage(importMessage);
 						importReturnDataList.add(importReturnData);
+						externalFlag =true;
 						continue;
 					}
 				}
-				if(StringUtils.isNotEmpty(newEmp.getEmployeeStatus())){
-					if ("离职".equals(newEmp.getEmployeeStatus())) {
-						newEmp.setEmployeeStatus("1");
-					} else if ("删除".equals(newEmp.getEmployeeStatus())) {
-						newEmp.setEmployeeStatus("2");
-					} else if("在职".equals(newEmp.getEmployeeStatus())){
-						newEmp.setEmployeeStatus("0");
+				if ("女".equals(importEmployeeList.get(j).getEmployeeSex())) {
+					importEmployeeList.get(j).setEmployeeSex("1");
+				} else if("男".equals(importEmployeeList.get(j).getEmployeeSex())){
+					importEmployeeList.get(j).setEmployeeSex("0");
+				}else if(StringUtils.isNotEmpty(importEmployeeList.get(j).getEmployeeSex())){
+					String importMessage = "第" + (j+2) + "行,请正确填写性别";
+					ImportReturnData importReturnData = new ImportReturnData();
+					importReturnData.setImportMessage(importMessage);
+					importReturnDataList.add(importReturnData);
+					externalFlag =true;
+					continue;
+				}
+				if (StringUtils.isNotEmpty(importEmployeeList.get(j).getMarriageStatus())) {
+					if ("离异".equals(importEmployeeList.get(j).getMarriageStatus())) {
+						importEmployeeList.get(j).setMarriageStatus("2");
+					} else if ("已婚".equals(importEmployeeList.get(j).getMarriageStatus())) {
+						importEmployeeList.get(j).setMarriageStatus("1");
+					} else if("未婚".equals(importEmployeeList.get(j).getMarriageStatus())){
+						importEmployeeList.get(j).setMarriageStatus("0");
 					}else{
-						String importMessage = "第" + i + "行,请正确填写在职状态";
+						String importMessage = "第" + (j+2) + "行,请正确填写婚姻状况";
 						ImportReturnData importReturnData = new ImportReturnData();
 						importReturnData.setImportMessage(importMessage);
 						importReturnDataList.add(importReturnData);
+						externalFlag =true;
+						continue;
+					}
+				}
+				if(StringUtils.isNotEmpty(importEmployeeList.get(j).getEmployeeStatus())){
+					if ("离职".equals(importEmployeeList.get(j).getEmployeeStatus())) {
+						importEmployeeList.get(j).setEmployeeStatus("1");
+					} else if ("删除".equals(importEmployeeList.get(j).getEmployeeStatus())) {
+						importEmployeeList.get(j).setEmployeeStatus("2");
+					} else if("在职".equals(importEmployeeList.get(j).getEmployeeStatus())){
+						importEmployeeList.get(j).setEmployeeStatus("0");
+					}else{
+						String importMessage = "第" + (j+2) + "行,请正确填写在职状态";
+						ImportReturnData importReturnData = new ImportReturnData();
+						importReturnData.setImportMessage(importMessage);
+						importReturnDataList.add(importReturnData);
+						externalFlag =true;
 						continue;
 					}
 				}
 				String entryTime = "";
 				String probationaryExpired = "";
 				try {
-					if(StringUtils.isNotEmpty(newEmp.getEntryTime())){
-						entryTime = TimeUtil.timeFormatTransfer(newEmp.getEntryTime());
+					if(StringUtils.isNotEmpty(importEmployeeList.get(j).getEntryTime())){
+						entryTime = TimeUtil.timeFormatTransfer(importEmployeeList.get(j).getEntryTime());
 					}
-					if(StringUtils.isNotEmpty(newEmp.getProbationaryExpired())){
-						probationaryExpired = TimeUtil.timeFormatTransfer(newEmp.getProbationaryExpired());
+					if(StringUtils.isNotEmpty(importEmployeeList.get(j).getProbationaryExpired())){
+						probationaryExpired = TimeUtil.timeFormatTransfer(importEmployeeList.get(j).getProbationaryExpired());
 					}
 				} catch (Exception e) {
-					String importMessage = "第" + i + "行," + ((CustomException) e).getExceptionMessage();
+					String importMessage = "第" + (j+2) + "行," + ((CustomException) e).getExceptionMessage();
 					ImportReturnData importReturnData = new ImportReturnData();
 					importReturnData.setImportMessage(importMessage);
 					importReturnDataList.add(importReturnData);
+					externalFlag =true;
 					continue;
 				}
-				if(StringUtils.isNotEmpty(newEmp.getEntryTime()) && StringUtils.isNotEmpty(newEmp.getProbationaryExpired())){
+				if(StringUtils.isNotEmpty(importEmployeeList.get(j).getEntryTime()) && StringUtils.isNotEmpty(importEmployeeList.get(j).getProbationaryExpired())){
 					if (TimeUtil.compareTime(entryTime, probationaryExpired)) {
-						String importMessage = "第" + i + "行,转正时间必须大于入职时间";
+						String importMessage = "第" + (j+2) + "行,转正时间必须大于入职时间";
 						ImportReturnData importReturnData = new ImportReturnData();
 						importReturnData.setImportMessage(importMessage);
 						importReturnDataList.add(importReturnData);
+						externalFlag =true;
 						continue;
 					}
 				}
-				newEmp.setCompanyId(companyId);
-				String employeeNo = newEmp.getEmployeeNo();
-				if (StringUtils.isNotEmpty(employeeNo)) {
-					Employee employeeNotemp = employeeService.findByemployeeNo(employeeNo, companyId);
-					if (employeeNotemp != null) {
-						String importMessage = "第" + i + "行,工号已存在!";
-						ImportReturnData importReturnData = new ImportReturnData();
-						importReturnData.setImportMessage(importMessage);
-						importReturnDataList.add(importReturnData);
-						continue;
-					}
-				}
-				String loginName = newEmp.getLoginName();
-				boolean loginNameMatch = RegexUtil.matchPhone(loginName);
-				Employee empLoginName = employeeService.selectEmployeeByLoginNameAndCompanyId(loginName, companyId);
-				if(empLoginName!=null){
-					String importMessage = "第" + i + "行,登录名已存在!";
-					ImportReturnData importReturnData = new ImportReturnData();
-					importReturnData.setImportMessage(importMessage);
-					importReturnDataList.add(importReturnData);
-					continue;
-				}
+				boolean loginNameMatch = RegexUtil.matchPhone(importEmployeeList.get(j).getLoginName());
 				if (!loginNameMatch) {
-					String importMessage = "第" + i + "行,登录名格式必须为11位手机号!";
+					String importMessage = "第" + (j+2) + "行,登录名格式必须为11位手机号!";
 					ImportReturnData importReturnData = new ImportReturnData();
 					importReturnData.setImportMessage(importMessage);
 					importReturnDataList.add(importReturnData);
+					externalFlag =true;
 					continue;
 				}
-				String directPersonLoginName = newEmp.getDirectPersonLoginName();//汇报人登录名
-				boolean directPersonLoginNameMatch = true;
-				if(StringUtils.isNotEmpty(directPersonLoginName) && "0".equals(directPersonLoginName)){
-					directPersonLoginNameMatch = RegexUtil.matchPhone(directPersonLoginName);
-				}
-				if(!directPersonLoginNameMatch){
-					String importMessage = "第" + i + "行,汇报人登录名格式必须为11位手机号!";
-					ImportReturnData importReturnData = new ImportReturnData();
-					importReturnData.setImportMessage(importMessage);
-					importReturnDataList.add(importReturnData);
-					continue;
-				}
-				
-				// 查询直接汇报人是否存在
-				String directPersonName = newEmp.getDirectPersonName();//汇报人姓名
-				//汇报人姓名和登录名是否填写
-				if(StringUtils.isNotEmpty(directPersonName) && StringUtils.isNotEmpty(directPersonLoginName)){
-					//已填写,下一步
-					Employee directPerson = employeeService.selectEmployeeByLoginNameAndCompanyId(directPersonLoginName, companyId);
-					//汇报人是否存在
-					if(directPerson==null){
-						//不存在
-						String importMessage = "第" + i + "行,直接汇报人的登录名不存在!";
+				for(int k=j+1;k<importEmployeeList.size();k++){
+					if(StringUtils.isNotEmpty(importEmployeeList.get(j).getLoginName()) && StringUtils.isNotEmpty(importEmployeeList.get(k).getLoginName()) && importEmployeeList.get(j).getLoginName().equals(importEmployeeList.get(k).getLoginName())){
+						String importMessage = "第" + (j+2) + "行与第"+(k+2)+"行登录名重复";
 						ImportReturnData importReturnData = new ImportReturnData();
 						importReturnData.setImportMessage(importMessage);
 						importReturnDataList.add(importReturnData);
+						externalFlag =true;
 						continue;
-					}else{
-						//存在,判断填写的登录人姓名和登录名是否正确
-						if(directPerson.getEmployeeName().equals(directPersonName)){
-							//正确
-							newEmp.setDirectPersonId(directPerson.getEmployeeId());//设置登录人id
-						}else{
-							//不正确
-							String importMessage = "第" + i + "行,直接汇报人姓名和登录名不匹配!";
+					}
+				}
+				String masterDepartmentName = importEmployeeList.get(j).getDepartmentName();
+				String masterPostName = importEmployeeList.get(j).getPostName();
+				if(importEmployeeList.get(j).getPostList()!=null&&importEmployeeList.get(j).getPostList().size()>=0){
+					if(importEmployeeList.get(j).getPostList().size()==1){
+						String v1DepartmentName = importEmployeeList.get(j).getPostList().get(0).getDepartmentName();
+						String v1PostName =  importEmployeeList.get(j).getPostList().get(0).getPostName();
+						if(StringUtils.isNotEmpty(v1PostName) && StringUtils.isEmpty(v1DepartmentName)){
+							importEmployeeList.get(j).getPostList().get(0).setDepartmentName("全公司");
+						}
+						if(masterDepartmentName.equals(v1DepartmentName)&&StringUtils.isNotEmpty(masterPostName)&&StringUtils.isNotEmpty(v1PostName) && masterPostName.equals(v1PostName)){
+							String importMessage = "第" + (j+2) + "行,主岗位与副岗位相同";
 							ImportReturnData importReturnData = new ImportReturnData();
 							importReturnData.setImportMessage(importMessage);
 							importReturnDataList.add(importReturnData);
+							externalFlag =true;
+							continue;
+						}
+					}
+					if(importEmployeeList.get(j).getPostList().size()==2){
+						String v1DepartmentName = importEmployeeList.get(j).getPostList().get(0).getDepartmentName();
+						String v1PostName =  importEmployeeList.get(j).getPostList().get(0).getPostName();
+						if(StringUtils.isNotEmpty(v1PostName) && StringUtils.isEmpty(v1DepartmentName)){
+							importEmployeeList.get(j).getPostList().get(0).setDepartmentName("全公司");
+						}
+						String v2DepartmentName = importEmployeeList.get(j).getPostList().get(1).getDepartmentName();
+						String v2PostName =  importEmployeeList.get(j).getPostList().get(1).getPostName();
+						if(StringUtils.isNotEmpty(v2PostName) && StringUtils.isEmpty(v1DepartmentName)){
+							importEmployeeList.get(j).getPostList().get(0).setDepartmentName("全公司");
+						}					
+						if((masterDepartmentName.equals(v1DepartmentName)&&StringUtils.isNotEmpty(masterPostName)&&StringUtils.isNotEmpty(v1PostName) && masterPostName.equals(v1PostName))
+								||(masterDepartmentName.equals(v2DepartmentName)&&StringUtils.isNotEmpty(masterPostName)&&StringUtils.isNotEmpty(v2PostName) && masterPostName.equals(v2PostName))){
+							String importMessage = "第" + (j+2) + "行,主岗位与副岗位相同";
+							ImportReturnData importReturnData = new ImportReturnData();
+							importReturnData.setImportMessage(importMessage);
+							importReturnDataList.add(importReturnData);
+							externalFlag =true;
+							continue;
+						}
+						if(v1DepartmentName.equals(v2DepartmentName)&&StringUtils.isNotEmpty(v2PostName)&&StringUtils.isNotEmpty(v1PostName) && v2PostName.equals(v1PostName)){
+							String importMessage = "第" + (j+2) + "行,副岗位相同";
+							ImportReturnData importReturnData = new ImportReturnData();
+							importReturnData.setImportMessage(importMessage);
+							importReturnDataList.add(importReturnData);
+							externalFlag =true;
 							continue;
 						}
 						
 					}
 				}
-				// 查询添加信息中的部门是否存在
-				boolean departmentFlag = true;
-				List<Department> departmentList = departmentService.findByAllDepartment(companyId);
-				if (departmentList.size() < 1) {
-					String importMessage = "第" + i + "行,公司还没有创建部门,请先添加部门信息";
+				if(StringUtils.isNotEmpty(importEmployeeList.get(j).getDirectPersonLoginName())&&StringUtils.isNotEmpty(importEmployeeList.get(j).getDirectPersonName())){
+					boolean directPersonLoginNameMatch = RegexUtil.matchPhone(importEmployeeList.get(j).getDirectPersonLoginName());
+					if(!directPersonLoginNameMatch){
+						String importMessage = "第" + (j+2) + "行,汇报人登录名格式必须为11位手机号!";
+						ImportReturnData importReturnData = new ImportReturnData();
+						importReturnData.setImportMessage(importMessage);
+						importReturnDataList.add(importReturnData);
+						externalFlag =true;
+						continue;
+					}
+				}else if(StringUtils.isEmpty(importEmployeeList.get(j).getDirectPersonLoginName())&&StringUtils.isEmpty(importEmployeeList.get(j).getDirectPersonName())){
+				}else{
+					String importMessage = "第" + (j+2) + "行,必须同时填写汇报人登录名和汇报人姓名!";
 					ImportReturnData importReturnData = new ImportReturnData();
 					importReturnData.setImportMessage(importMessage);
 					importReturnDataList.add(importReturnData);
+					externalFlag =true;
 					continue;
 				}
-				for (Department department : departmentList) {
-					if (newEmp.getDepartmentName().equals(department.getDepartmentName())) {
-						newEmp.setDepartmentId(department.getDepartmentId());
-						departmentFlag = false;
+			}
+			if(externalFlag){
+				returnData.setData(importReturnDataList);
+				returnData.setMessage("拒绝导入,表格存在错误数据,请仔细检查表格数据是否完全正确");
+				returnData.setReturnCode("4117");
+				return returnData;
+			}
+			//内部数据检查
+		
+			int i =1;
+			Iterator<Employee> iterator = importEmployeeList.iterator();
+			while(iterator.hasNext()){
+				i=i+1;
+				Employee newEmp = iterator.next();
+				boolean lineFlag = false;
+				newEmp.setCompanyId(companyId);
+				//String employeeNo = newEmp.getEmployeeNo();
+				//String loginName = newEmp.getLoginName();
+				//查询公司所有的员工
+				List<Employee> employeeList = employeeService.selectAllEmployeeByCompanyId(companyId);
+				if (/*StringUtils.isNotEmpty(newEmp.getEmployeeNo())&& */employeeList!=null &&employeeList.size()>0) {
+					//Employee employeeNotemp = employeeService.findByemployeeNo(employeeNo, companyId);
+					for(Employee employee :employeeList){
+						
+						if (StringUtils.isNotEmpty(employee.getEmployeeNo())&&newEmp.getEmployeeNo().equals(employee.getEmployeeNo())) {
+							String importMessage = "第" + i + "行,工号已存在!";
+							ImportReturnData importReturnData = new ImportReturnData();
+							importReturnData.setImportMessage(importMessage);
+							importReturnDataList.add(importReturnData);
+							//iterator.remove();
+							lineFlag=true;
+							break;
+						}
+						if(employee.getLoginName().equals(newEmp.getLoginName())){
+							String importMessage = "第" + i + "行,登录名已存在!";
+							ImportReturnData importReturnData = new ImportReturnData();
+							importReturnData.setImportMessage(importMessage);
+							importReturnDataList.add(importReturnData);
+							//iterator.remove();
+							lineFlag=true;
+							break;
+						}
 					}
-				}
-				if (departmentFlag) {
+						//String directPersonLoginName = newEmp.getDirectPersonLoginName();//汇报人登录名
+						//String directPersonName = newEmp.getDirectPersonName();//汇报人姓名
+						/*if(StringUtils.isEmpty(newEmp.getDirectPersonLoginName()) && StringUtils.isEmpty(newEmp.getDirectPersonName())){
+							flag=false;
+						}*/
+						if(StringUtils.isNotEmpty(newEmp.getDirectPersonLoginName()) && StringUtils.isNotEmpty(newEmp.getDirectPersonName())){
+							boolean flag = true;
+							for(Employee employee :employeeList){
+								if(newEmp.getDirectPersonLoginName().equals(employee.getLoginName())){
+									flag = false;
+								}
+							}
+							if(flag){
+								String importMessage = "第" + i + "行,直接汇报人的登录名不存在!";
+								ImportReturnData importReturnData = new ImportReturnData();
+								importReturnData.setImportMessage(importMessage);
+								importReturnDataList.add(importReturnData);
+								//iterator.remove();
+								lineFlag=true;
+								break;
+							}
+							flag=true;
+							for(Employee employee :employeeList){
+								if(newEmp.getDirectPersonLoginName().equals(employee.getLoginName())&&newEmp.getDirectPersonName().equals(employee.getEmployeeName())){
+									newEmp.setDirectPersonId(employee.getEmployeeId());//设置登录人id
+									flag = false;
+								}
+							}
+							if(flag){
+								String importMessage = "第" + i + "行,直接汇报人姓名和登录名不匹配!";
+								ImportReturnData importReturnData = new ImportReturnData();
+								importReturnData.setImportMessage(importMessage);
+								importReturnDataList.add(importReturnData);
+								//iterator.remove();
+								lineFlag=true;
+								break;
+							}
+						}
+					}
+					
+					if(lineFlag){
+						continue;
+					}
+				
+					//查询公司所有的部门以及部门下的岗位
+					List<Department> departmentList = departmentService.selectDepartmentAndPostByCompanyId(companyId);
+					if (departmentList.size() < 1) {
+						String importMessage = "第" + i + "行,公司还没有创建部门,请先添加部门信息";
+						ImportReturnData importReturnData = new ImportReturnData();
+						importReturnData.setImportMessage(importMessage);
+						importReturnDataList.add(importReturnData);
+						//iterator.remove();
+						lineFlag=true;
+						continue;
+					}
+					boolean masterDepartment = true;//主部门是否存在的标志
+					boolean departmentFlag = true;//主部门是否存在填写的主岗位的标志
+					for(Department department :departmentList){
+						//主岗位
+						if(newEmp.getDepartmentName().equals(department.getDepartmentName())){
+							if(StringUtils.isNotEmpty(newEmp.getPostName())){
+								if(department.getDepartmentName().equals(newEmp.getDepartmentName())){
+									for(Post post:department.getPostList()){
+										if(post.getPostName().equals(newEmp.getPostName())){
+											newEmp.setPostId(post.getPostId());
+											departmentFlag =false;
+										}
+									}
+								}
+							}
+							newEmp.setDepartmentId(department.getDepartmentId());
+							masterDepartment=false;
+						}
+					}
+				if(masterDepartment){
 					String importMessage = "第" + i + "行,填写的主部门不存在";
 					ImportReturnData importReturnData = new ImportReturnData();
 					importReturnData.setImportMessage(importMessage);
 					importReturnDataList.add(importReturnData);
+					//iterator.remove();
+					lineFlag=true;
 					continue;
 				}
 				if(StringUtils.isNotEmpty(newEmp.getPostName())){
-					// 查询添加信息中的岗位是否存在于对应的部门之中
-					boolean masterPostFlag = true;
-					/*boolean vicePostOneFlag = true;
-					boolean vicePostTowFlag = true;*/
-					List<Post> postListFromDepartment = postService.findBydepartmentPost(companyId,
-							newEmp.getDepartmentId());
-					if (postListFromDepartment.size() < 1) {
-						//如果部门是全公司
-						if("全公司".equals(newEmp.getDepartmentName())){
-							List<Post> postListFromCompany = postService.findBydepartmentPost(companyId,
-									null);
-							for(Post post : postListFromCompany){
-								if(newEmp.getPostName().equals(post.getPostName())){
-									newEmp.setPostId(post.getPostId());//设置主岗位id
-									masterPostFlag = false;
-								}
-							}
-						}else{
-							String importMessage = "第" + i + "行," + newEmp.getDepartmentName() + "部门还没有设置岗位,请先添加岗位";
-							ImportReturnData importReturnData = new ImportReturnData();
-							importReturnData.setImportMessage(importMessage);
-							importReturnDataList.add(importReturnData);
-							continue;
-						}
-					}
-					// 主岗位判断
-					for (Post post : postListFromDepartment) {
-						if (newEmp.getPostName().equals(post.getPostName())) {
-							newEmp.setPostId(post.getPostId());//设置主岗位id
-							masterPostFlag = false;
-						}
-					}
-					
-					
-					if (masterPostFlag) {
-						String importMessage = "第" + i + "行,主岗位不存在";
+					if(departmentFlag){
+						String importMessage = "第" + i + "行,填写的主部门中没有填写的主岗位";
 						ImportReturnData importReturnData = new ImportReturnData();
 						importReturnData.setImportMessage(importMessage);
 						importReturnDataList.add(importReturnData);
+						//iterator.remove();
+						lineFlag=true;
 						continue;
 					}
 				}
-				
-				List<Post> vicePostList = newEmp.getPostList();
-				//副岗位部门判断
-				int numFlag=0;
-				for(Post post : vicePostList){
-					if(StringUtils.isNotEmpty(post.getDepartmentName())){
-						for (Department department : departmentList) {
-							if (post.getDepartmentName().equals(department.getDepartmentName())) {
-								post.setDepartmentId(department.getDepartmentId());
-								departmentFlag = false;
-							}
-						}
-						if (departmentFlag) {
-							numFlag+=1;
-							String importMessage = "第" + i + "行,填写的副部门不存在";
-							ImportReturnData importReturnData = new ImportReturnData();
-							importReturnData.setImportMessage(importMessage);
-							importReturnDataList.add(importReturnData);
-							continue;
-						}else{
-							if(StringUtils.isNotEmpty(post.getPostName())){
-								Department department = departmentService.selectDepatmentByDepartmentNameAndCompanyId(companyId, post.getDepartmentName());
-								List<Post> postList1 = postService.selectPostByDepartmentIdAndCompanyId(companyId, department.getDepartmentId());
-								if(postList!=null &&postList.size()>0){
-									boolean post1Flag = true;
-									for(Post post1 : postList1){
-										if(post1!=null && StringUtils.isNotEmpty(post1.getPostName()) && post.getPostName().equals(post1.getPostName())){
-											if(department.getDepartmentName().equals(newEmp.getDepartmentName()) && post.getPostName().equals(newEmp.getPostName())){
-												numFlag+=1;
-												String importMessage = "第" + i + "行,主岗位和副岗位不可以相同";
-												ImportReturnData importReturnData = new ImportReturnData();
-												importReturnData.setImportMessage(importMessage);
-												importReturnDataList.add(importReturnData);
-												continue;
-											}else{
-												post.setDepartmentId(department.getDepartmentId());
-												post.setDepartmentName(department.getDepartmentName());
-												post.setPostId(post1.getPostId());
-												post.setPostName(post1.getPostName());
-												post.setPostGrades("0");
-											}
-											post1Flag = false;
+					boolean vDepartment = false;//副部门是否存在的标志
+					boolean vdepartmentFlag = false;//副部门是否存在填写的副岗位的标志
+					//副岗位
+					for(Post post:newEmp.getPostList()){
+						if(StringUtils.isNotEmpty(post.getDepartmentName())){
+							vDepartment=true;
+							vdepartmentFlag=true;
+							for(Department department :departmentList){
+								if(post.getDepartmentName().equals(department.getDepartmentName())){
+									post.setDepartmentId(department.getDepartmentId());
+									vDepartment=false;
+									for(Post vpost: department.getPostList()){
+										if(vpost.getPostName().equals(post.getPostName())){
+											post.setDepartmentId(department.getDepartmentId());
+											post.setDepartmentName(department.getDepartmentName());
+											post.setPostId(vpost.getPostId());
+											post.setPostName(vpost.getPostName());
+											post.setPostGrades("0");
+											vdepartmentFlag=false;
 										}
 									}
-									if(post1Flag){
-										numFlag+=1;
-										String importMessage = "第" + i + "行,填写的副部门不存在填写的副岗位";
-										ImportReturnData importReturnData = new ImportReturnData();
-										importReturnData.setImportMessage(importMessage);
-										importReturnDataList.add(importReturnData);
-										continue;
-									}
-								}else{
-									numFlag+=1;
-									String importMessage = "第" + i + "行,填写的副部门没有岗位";
-									ImportReturnData importReturnData = new ImportReturnData();
-									importReturnData.setImportMessage(importMessage);
-									importReturnDataList.add(importReturnData);
-									continue;
 								}
-							}else{
-								numFlag+=1;
-								String importMessage = "第" + i + "行,填写的副部门下对应的副岗位名称";
-								ImportReturnData importReturnData = new ImportReturnData();
-								importReturnData.setImportMessage(importMessage);
-								importReturnDataList.add(importReturnData);
-								continue;
 							}
 						}
 					}
-				}
-				if(numFlag>0){
-					break;
-				}
-				// 副岗位判断
-				/*for (Post post : postListFromDepartment) {
-					if (StringUtils.isNotEmpty(vicePostList.get(0).getPostName())) {
-						if (vicePostList.get(0).getPostName().equals(post.getPostName())) {
-							vicePostList.get(0).setPostId(post.getPostId());//设置副岗位1的id
-							vicePostList.get(0).setDepartmentId(newEmp.getDepartmentId());
-							vicePostList.get(0).setPostGrades("0");
-							vicePostOneFlag = false;
-						}
-					}
-					if (StringUtils.isNotEmpty(vicePostList.get(1).getPostName())) {
-						if (vicePostList.get(1).getPostName().equals(post.getPostName())) {
-							vicePostList.get(1).setPostId(post.getPostId());//设置副岗位2的id
-							vicePostList.get(1).setDepartmentId(newEmp.getDepartmentId());
-							vicePostList.get(1).setPostGrades("0");
-							vicePostTowFlag = false;
-						}
-					}
-				}
-				if (StringUtils.isNotEmpty(vicePostList.get(0).getPostName())) {
-					if (vicePostOneFlag) {
-						String importMessage = "第" + i + "行,副岗位1不存在";
+					if(vDepartment){
+						String importMessage = "第" + i + "行,填写的副部门不存在";
 						ImportReturnData importReturnData = new ImportReturnData();
 						importReturnData.setImportMessage(importMessage);
 						importReturnDataList.add(importReturnData);
+						//iterator.remove();
+						lineFlag=true;
 						continue;
-					} else {
-						if (vicePostList.get(0).getPostName().equals(newEmp.getPostName())) {
-							String importMessage = "第" + i + "行,主岗位与副岗位1不可相同";
-							ImportReturnData importReturnData = new ImportReturnData();
-							importReturnData.setImportMessage(importMessage);
-							importReturnDataList.add(importReturnData);
-							continue;
-						}
 					}
-				}
-				if (StringUtils.isNotEmpty(vicePostList.get(1).getPostName())) {
-					if (vicePostTowFlag) {
-						String importMessage = "第" + i + "行,副岗位2不存在";
+					if(vdepartmentFlag){
+						String importMessage = "第" + i + "行,请填写正确的副部门、副岗位";
 						ImportReturnData importReturnData = new ImportReturnData();
 						importReturnData.setImportMessage(importMessage);
 						importReturnDataList.add(importReturnData);
+						//iterator.remove();
+						lineFlag=true;
 						continue;
-					} else {
-						if (vicePostList.get(1).getPostName().equals(newEmp.getPostName())) {
-							String importMessage = "第" + i + "行,主岗位与副岗位2不可相同";
-							ImportReturnData importReturnData = new ImportReturnData();
-							importReturnData.setImportMessage(importMessage);
-							importReturnDataList.add(importReturnData);
-							continue;
-						}
-
 					}
-				}
-				if (StringUtils.isNotEmpty(vicePostList.get(0).getPostName()) && StringUtils.isNotEmpty(vicePostList.get(1).getPostName())) {
-					if (!vicePostOneFlag && !vicePostTowFlag) {
-						if (vicePostList.get(1).getPostName().equals(vicePostList.get(0).getPostName())) {
-							String importMessage = "第" + i + "行,副岗位1与副岗位2不可相同";
-							ImportReturnData importReturnData = new ImportReturnData();
-							importReturnData.setImportMessage(importMessage);
-							importReturnDataList.add(importReturnData);
-							continue;
-						}
-					}
-				}*/
+			
 				Post masterPost = new Post();
 				masterPost.setPostId(newEmp.getPostId());
 				masterPost.setPostName(newEmp.getPostName());
@@ -548,14 +556,46 @@ public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 				newEmp.getPostList().add(masterPost);
 				newEmp.setCompanyId(companyId);
 				newEmp.setOperateUserId(operateUserId);
-				ReturnData serviceReturnData = employeeService.insertEmployee(newEmp);
+				//将筛选结果存于新的集合中
+				list.add(newEmp);
+				
+			}
+			if(list!=null&&list.size()>0){
+			int length = list.size();
+			List<Employee> list1 = new ArrayList<Employee>();
+			List<Employee> list2 = new ArrayList<Employee>();
+			for(int n=0;n<length/2;n++){
+				list1.add(importEmployeeList.get(n));
+			}
+			for(int m=length/2;m<length;m++){
+				list2.add(importEmployeeList.get(m));
+			}
+			/*ReturnData serviceReturnData = employeeService.insertEmployee(newEmp);
 				if(!"3000".equals(serviceReturnData.getReturnCode())){
 					ImportReturnData importReturnData = new ImportReturnData();
 					importReturnData.setImportMessage(serviceReturnData.getMessage());
 					importReturnDataList.add(importReturnData);
+				}*/
+			ImportThread importThread1 = new ImportThread(employeeService,importReturnDataList,list1);
+			ImportThread importThread2 = new ImportThread(employeeService,importReturnDataList,list2);
+			Thread thead1 = new Thread(importThread1);
+			Thread thead2 = new Thread(importThread2);
+			thead1.run();
+			thead2.run();
+			if(i==totalRowNum){
+				try {
+					thead1.join();
+					thead2.join();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 			}
-		
+			/*for(Employee employee:list){
+				employeeService.activeEmp(employee.getCompanyId(), employee.getEmployeeId());
+				employeeService.resetEmployeeStatus(employee.getCompanyId(), employee.getEmployeeId());
+			}*/
+			}
 		boolean flag = false;
 		for (ImportReturnData importReturnDataObj : importReturnDataList) {
 			if (StringUtils.isNotEmpty(importReturnDataObj.getImportMessage())) {

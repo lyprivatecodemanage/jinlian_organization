@@ -60,7 +60,7 @@
 		LEFT JOIN organization.company_  c ON c.company_id=d.company_id
 		LEFT JOIN organization.employee_ e ON e.employee_id=d.employee_id  
 	    where	
-		d.company_id=#{companyId} AND d.status='1' 
+		d.company_id=#{companyId} AND d.status='1' and d.department_parent_id !='0' 
 		<if test="departmentId!=null and departmentId!=''">
 			AND (d.department_id =#{departmentId} OR d.department_parent_id =#{departmentId})
 		</if>
@@ -185,7 +185,7 @@
  <select id="selectDepartmentCountByCompanyId" parameterType="java.lang.String" resultType="java.lang.Integer">
  	select count(department_id) 
  	from department_ 
- 	where company_id = #{companyId}
+ 	where company_id = #{companyId} and status = '1' and department_parent_id !='0'
  </select>
 
   <update id="updateByDepartment" parameterType="com.xiangshangban.organization.bean.Department">  
@@ -204,5 +204,22 @@
   	from department_
   	where company_id = #{companyId} and department_name = #{departmentName} and status = '1'
   </select>
+  <resultMap id="DepartmentPost" type="com.xiangshangban.organization.bean.Department">
+  		<id column="department_id" property="departmentId"/>
+  		<result column="department_name" property="departmentName"/>
+  		<association property="postList" column="post_id" javaType="com.xiangshangban.organization.bean.Post">
+  			<id column="post_id" property="postId"/>
+  			<result column="post_name" property="postName"/>
+  		</association>
+  </resultMap>
+  <!-- 查询公司的所有部门以及部门下的岗位 -->
+  <select id="selectDepartmentAndPostByCompanyId" parameterType="java.lang.String" resultMap="DepartmentPost">
+  	select d.department_id,d.department_name,p.post_id,p.post_name
+  	from department_ d
+  	left join post_ p on p.department_id =d.department_id and p.company_id = #{companyId}
+  	where 
+  	d.company_id = #{companyId}
+  </select>
+  
   
 </mapper>

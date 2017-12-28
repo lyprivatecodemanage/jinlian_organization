@@ -17,7 +17,14 @@ public interface EmployeeDao {
 	int deleteByEmployee(@Param("employeeId") String employeeId, @Param("companyId") String companyId);
 
 	int insertEmployee(Employee employee);
-
+	/**
+	 * @author 李业
+	 * 通过公司id查询公司所有的在职员工
+	 * @param companyId
+	 * @return
+	 */
+	List<Employee> selectAllEmployeeByCompanyId(String companyId);
+	
 	// 查询单条员信息
 	Employee selectByEmployee(@Param("employeeId") String employeeId, @Param("companyId") String companyId);
 
@@ -39,13 +46,14 @@ public interface EmployeeDao {
 	List<Employee> selectByAllFnyeEmployee(@Param("companyId")String companyId,@Param("numPage") String numPage,
 			@Param("numRecordCount") String numRecordCount, @Param("employeeName") String employeeName,
 			@Param("employeeSex") String employeeSex, @Param("departmentName") String departmentName,
-			@Param("postName") String postName, @Param("employeeStatus") String employeeStatus,@Param("departmentId")String departmentId);
+			@Param("postName") String postName, @Param("employeeStatus") String employeeStatus,
+			@Param("departmentId")String departmentId,@Param("type")String type);
 	
 	int selectCountEmployeeFromCompany(@Param("companyId")String companyId,/*@Param("numPage") String numPage,
 			@Param("numRecordCount") String numRecordCount,*/ @Param("employeeName") String employeeName,
 			@Param("employeeSex") String employeeSex, @Param("departmentName") String departmentName,
 			@Param("postName") String postName, @Param("employeeStatus") String employeeStatus,
-			@Param("departmentId")String departmentId);
+			@Param("departmentId")String departmentId,@Param("type")String type);
 
 	int batchUpdateTest(String employeeId);
 
@@ -93,7 +101,7 @@ public interface EmployeeDao {
 	List<Employee> findEmployeeByDepartmentId(@Param("companyId") String companyId,
 			@Param("departmentId") String departmentId);
 	
-	Employee selectByEmployeeFromApp(@Param("companyId")String companyId,@Param("userId")String userId);
+	Employee selectByEmployeeFromApp(@Param("companyId")String companyId,@Param("userId")String userId,@Param("type")String type);
 	/**
 	 * @author 李业/编辑个人信息
 	 * @param params
