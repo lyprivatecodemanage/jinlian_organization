@@ -124,11 +124,11 @@
 		post_id=#{postId,jdbcType=VARCHAR}
 	</delete>
 	
-	<delete id="deleteByEmployeeIdAndCompanyId" parameterType="java.lang.String">
+	<update id="deleteByEmployeeIdAndCompanyId" parameterType="java.lang.String">
 		update connect_emp_post_
 		set is_delete = '1'
 		where employee_id = #{employeeId} and company_id = #{companyId} 
-	</delete>
+	</update>
 	
 	<delete id="deleteTransferjobConnect" parameterType="java.lang.String">
 		delete 

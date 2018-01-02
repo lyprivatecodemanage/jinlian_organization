@@ -1,7 +1,6 @@
 package com.xiangshangban.organization.controller;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -23,10 +22,12 @@ import com.xiangshangban.organization.bean.Company;
 import com.xiangshangban.organization.bean.Department;
 import com.xiangshangban.organization.bean.DepartmentTree;
 import com.xiangshangban.organization.bean.Employee;
+import com.xiangshangban.organization.bean.Post;
 import com.xiangshangban.organization.bean.ReturnData;
 import com.xiangshangban.organization.service.CompanyService;
 import com.xiangshangban.organization.service.DepartmentService;
 import com.xiangshangban.organization.service.EmployeeService;
+import com.xiangshangban.organization.service.PostService;
 
 @RestController
 @RequestMapping("/DepartmentController")
@@ -38,6 +39,8 @@ public class DepartmentController {
 	CompanyService companyService;
 	@Autowired
 	EmployeeService employeeService;
+	@Autowired
+	private PostService postService;
 	
 	/**
 	 * 根据当前组织机构、部门名称、部门负责人查询部门信息
@@ -311,6 +314,12 @@ public class DepartmentController {
 				List<Department> deptlist = departmentService.getDepartmentChild(departmentId, companyId);
 				if(deptlist.size()>0){
 					returnData.setMessage("删除部门错误：存在子部门");
+					returnData.setReturnCode("4103");
+					return returnData;
+				}
+				List<Post> postList = postService.selectPostByDepartmentIdAndCompanyId(companyId, departmentId);
+				if(postList.size()>0){
+					returnData.setMessage("删除部门错误：部门下存在岗位");
 					returnData.setReturnCode("4103");
 					return returnData;
 				}

@@ -39,4 +39,5 @@ public interface PostDao {
 			@Param("postName")String postName, @Param("postId")String postId);
 	
 	List<Post> selectPostByDepartmentIdAndCompanyId(@Param("companyId")String companyId,@Param("departmentId")String departmentId);
+	
 }

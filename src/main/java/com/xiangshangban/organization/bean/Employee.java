@@ -313,6 +313,23 @@ public class Employee {
 	public void setEmployeeBirthday(String employeeBirthday) {
 		this.employeeBirthday = employeeBirthday;
 	}
+	@Override
+	public String toString() {
+		return "Employee [employeeId=" + employeeId + ", employeeName=" + employeeName + ", loginName=" + loginName
+				+ ", employeeSex=" + employeeSex + ", employeeBirthday=" + employeeBirthday + ", departmentId="
+				+ departmentId + ", companyId=" + companyId + ", companyNo=" + companyNo + ", employeeNo=" + employeeNo
+				+ ", directPersonId=" + directPersonId + ", employeePhone=" + employeePhone + ", employeeTwophone="
+				+ employeeTwophone + ", entryTime=" + entryTime + ", employeeStatus=" + employeeStatus
+				+ ", probationaryExpired=" + probationaryExpired + ", employeeImgUrl=" + employeeImgUrl
+				+ ", workAddress=" + workAddress + ", operaterTime=" + operaterTime + ", postList=" + postList
+				+ ", companyName=" + companyName + ", postId=" + postId + ", departmentName=" + departmentName
+				+ ", postName=" + postName + ", directPersonName=" + directPersonName + ", operateUserId="
+				+ operateUserId + ", isActive=" + isActive + ", infoStatus=" + infoStatus + ", marriageStatus="
+				+ marriageStatus + ", seniority=" + seniority + ", phone=" + phone + ", directPersonDepartmentId="
+				+ directPersonDepartmentId + ", directPersonDepartmentName=" + directPersonDepartmentName
+				+ ", directPersonLoginName=" + directPersonLoginName + ", description=" + description
+				+ ", contractPeriod=" + contractPeriod + ", transferJobCause=" + transferJobCause + "]";
+	}
 	
 	
     

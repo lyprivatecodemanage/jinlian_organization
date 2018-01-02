@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -696,17 +696,28 @@ public class EmployeeController {
 				}
 			}
 			//新完善信息
+			ConnectEmpPost connect =  connectEmpPostService.selectEmployeePostInformation(emp.getEmployeeId(), companyId);
+			if(connect != null && StringUtils.isEmpty(emp.getPostId())){
+				result.put("message","主岗位已设置,则不能修改为无,只可变更为别的岗位");
+				result.put("returnCode","4031");
+				return result;
+			}
 			employeeService.updateEmployeeInformation(emp);
-			if(StringUtils.isNotEmpty(emp.getPostId())){
+			if(/*StringUtils.isNotEmpty(emp.getPostId())*/emp.getPostId()!=null){
 				//查询员工岗位部门关联表
-				ConnectEmpPost connect =  connectEmpPostService.selectEmployeePostInformation(emp.getEmployeeId(), companyId);
 				if (connect != null && !emp.getPostId().equals(connect.getPostId())) {
 					connectEmpPostService.updateEmployeeWithPost(emp.getEmployeeId(), 
 							emp.getDepartmentId(), emp.getPostId(),companyId);
 	
 					// 添加更换之前主岗位的换岗时间(transferEndTime)
 					transferjobService.updateTransferEndTimeWhereDeleteEmployee(
-							companyId, userId, emp.getEmployeeId(), emp.getDepartmentId(), connect.getPostId());
+							companyId, userId, emp.getEmployeeId(), connect.getDepartmentId(), connect.getPostId());
+					
+					// 添加新岗位的记录
+					Transferjob transferjob = new Transferjob(FormatUtil.createUuid(), emp.getEmployeeId(), null, emp.getDepartmentId(),
+							emp.getTransferJobCause(), null, userId, null, companyId, emp.getDirectPersonId(), emp.getPostId());
+					
+					transferjobService.insertTransferjob(transferjob);
 				}
 				if(connect==null){
 					connectEmpPostService.deleteEmployeeFromPost(emp.getEmployeeId(), emp.getDepartmentId(),companyId);
@@ -720,12 +731,12 @@ public class EmployeeController {
 					List<ConnectEmpPost> newConnectEmpPost = new ArrayList<ConnectEmpPost>();
 					newConnectEmpPost.add(connect);
 					connectEmpPostService.insertEmployeeWithPost(newConnectEmpPost);
+					// 添加新岗位的记录
+					Transferjob transferjob = new Transferjob(FormatUtil.createUuid(), emp.getEmployeeId(), null, emp.getDepartmentId(),
+							emp.getTransferJobCause(), null, userId, null, companyId, emp.getDirectPersonId(), emp.getPostId());
+					
+					transferjobService.insertTransferjob(transferjob);
 				}
-				// 添加新岗位的记录
-				Transferjob transferjob = new Transferjob(FormatUtil.createUuid(), emp.getEmployeeId(), null, emp.getDepartmentId(),
-						emp.getTransferJobCause(), null, userId, null, companyId, emp.getDirectPersonId(), emp.getPostId());
-	
-				transferjobService.insertTransferjob(transferjob);
 			}
 			connectEmpPostService.deleteEmployeeWithPost(emp.getEmployeeId(), companyId);
 			List<ConnectEmpPost> list = new ArrayList<ConnectEmpPost>();

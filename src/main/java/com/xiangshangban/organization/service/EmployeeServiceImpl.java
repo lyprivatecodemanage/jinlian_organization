@@ -4,6 +4,7 @@ package com.xiangshangban.organization.service;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -96,9 +97,30 @@ public class EmployeeServiceImpl implements EmployeeService {
 		return i;
 	}
 
+	public Map<String,Object> reInsertEmployee(Employee employee){
+		Map<String,Object> result = new HashMap<String,Object>();
+		
+		return result;
+	}
+	
 	@Override
 	public ReturnData insertEmployee(Employee employee) {
 		ReturnData returnData = new ReturnData();
+		//查询添加的员工在本公司是否曾经加入过
+		/*Employee recordEmp = employeeDao.selectEmployeeByLoginNameAndCompanyId(employee.getLoginName(), employee.getCompanyId());
+		//判断目前是什么状态
+		if(recordEmp!=null){
+			//在职
+			if(StringUtils.isNotEmpty(recordEmp.getEmployeeStatus())&&"0".equals(recordEmp.getEmployeeStatus())){
+			}
+			//离职
+			if(StringUtils.isNotEmpty(recordEmp.getEmployeeStatus())&&"1".equals(recordEmp.getEmployeeStatus())){
+				
+			}
+			if(StringUtils.isNotEmpty(recordEmp.getEmployeeStatus())&&"0".equals(recordEmp.getEmployeeStatus())){
+				
+			}
+		}*/
 		Uusers user = usersDao.selectByPhone(employee.getLoginName());
 		employee.setEmployeeStatus("0");
 		if(user==null || StringUtils.isEmpty(user.getUserid())){//未注册，写入注册表	
@@ -185,9 +207,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 					userCompanyDefaultDao.updateSelective(userCompany);
 				}
 				this.updateTransfer(employee);//岗位信息设置
-				returnData.setMessage("数据请求成功");
+				/*returnData.setMessage("数据请求成功");
 				returnData.setReturnCode("3000");
-				return returnData;
+				return returnData;*/
 			}
 		}
 		List<UusersRoles> userRoleList = usersDao.selectRoleByUserIdAndCompanyId(employee.getCompanyId(), user.getUserid());
@@ -197,10 +219,13 @@ public class EmployeeServiceImpl implements EmployeeService {
 			usersDao.insertUserRoleByCompanyId(employee.getCompanyId(), user.getUserid(), Uroles.user_role);
 		}
 	    this.updateTransfer(employee);//岗位信息设置
-	    updateDeviceEmp(employee);
 	    returnData.setEmployeeId(employee.getEmployeeId());
 	   /* returnData.setMessage("数据请求成功");
 		returnData.setReturnCode("3000");*/
+	    this.activeEmp(employee.getCompanyId(), employee.getEmployeeId());
+	    this.resetEmployeeStatus(employee.getCompanyId(), employee.getEmployeeId());
+	    updateDeviceEmp(employee);
+	    
 		return returnData;
 	}
 	/**

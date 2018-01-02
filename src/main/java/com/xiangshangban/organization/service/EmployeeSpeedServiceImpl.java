@@ -46,6 +46,7 @@ public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 	@Override
 	public ReturnData speedImport(String operateUserId, String companyId, String key) {
 		ReturnData returnData = new ReturnData();
+		logger.info(key);
 		// Map<String, String> result = new HashMap<String, String>();
 		// 判断是否为excel类型文件
 		if (!key.endsWith(".xls") && !key.endsWith(".xlsx")) {

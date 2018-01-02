@@ -1,6 +1,8 @@
 package com.xiangshangban.organization.thread;
 import java.util.List;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.xiangshangban.organization.bean.Employee;
 import com.xiangshangban.organization.bean.ImportReturnData;
 import com.xiangshangban.organization.bean.ReturnData;
@@ -23,6 +25,11 @@ public class ImportThread implements Runnable {
 				ImportReturnData importReturnData = new ImportReturnData();
 				importReturnData.setImportMessage(serviceReturnData.getMessage());
 				list.add(importReturnData);
+			}
+			if(StringUtils.isEmpty(serviceReturnData.getMessage()) && StringUtils.isEmpty(serviceReturnData.getReturnCode())){
+				String employeeId = serviceReturnData.getEmployeeId();
+				employeeService.activeEmp(employee.getCompanyId(), employeeId);
+				employeeService.resetEmployeeStatus(employee.getCompanyId(), employeeId);
 			}
 		}
 	}
