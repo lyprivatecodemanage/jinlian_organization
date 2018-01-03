@@ -41,4 +41,10 @@ public interface ConnectEmpPostDao {
 	 * @return
 	 */
 	int deleteByEmployeeIdAndCompanyId(@Param("employeeId")String employeeId,@Param("companyId")String companyId);
+	
+	int deleteByConnectEmpPost(ConnectEmpPost connectEmpPost);
+	
+	int updateIsDeleteByConnectEmpPost(ConnectEmpPost connectEmpPost);
+	
+	int deleteConnectEmpPost(ConnectEmpPost connectEmpPost);
 }

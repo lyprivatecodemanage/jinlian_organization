@@ -36,7 +36,8 @@ import com.xiangshangban.organization.util.TimeUtil;
 @Service("employeeSpeedService")
 public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 	private static final Logger logger = Logger.getLogger(EmployeeSpeedServiceImpl.class);
-
+	public static Integer total =0;
+	public static Integer successNum = 0;
 	@Autowired
 	private EmployeeService employeeService;
 	@Autowired
@@ -563,6 +564,7 @@ public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 			}
 			if(list!=null&&list.size()>0){
 			int length = list.size();
+			total = list.size();
 			List<Employee> list1 = new ArrayList<Employee>();
 			List<Employee> list2 = new ArrayList<Employee>();
 			for(int n=0;n<length/2;n++){

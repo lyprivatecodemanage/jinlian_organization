@@ -1,0 +1,110 @@
+2018-01-02 10:22:37 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
+  2018-01-02 10:24:29 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-02 10:39:37 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-02 10:40:55 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-02 10:44:22 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
+  2018-01-02 10:45:23 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-02 10:46:24 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-02 10:48:07 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-02 10:48:31 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-02 10:54:14 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
+  2018-01-02 10:58:29 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-02 11:09:49 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
+  2018-01-02 11:10:00 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-02 11:10:49 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-02 11:11:02 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-02 11:11:37 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-02 11:13:42 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-02 11:16:43 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-02 11:22:58 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
+  2018-01-02 11:26:29 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-02 11:27:04 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-02 11:27:23 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-02 11:28:50 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-02 11:30:46 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-02 11:31:03 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-02 13:10:24 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
+  2018-01-02 13:12:34 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-02 13:13:42 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-02 13:14:01 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-02 13:16:04 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
+  2018-01-02 13:17:03 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-02 13:17:27 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-02 13:26:33 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
+  2018-01-02 13:26:53 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-02 13:27:38 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-02 13:43:18 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-02 13:43:42 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-02 13:57:33 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
+  2018-01-02 13:58:06 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-02 14:03:03 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-02 15:06:17 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-02 15:12:06 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-02 15:15:16 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-02 15:17:23 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
+  2018-01-02 15:18:24 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-02 15:18:42 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+2017-12-28 16:57:23 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
+  2017-12-28 17:02:20 INFO [com.xiangshangban.organization.controller.EmployeeController]: org.springframework.dao.DataIntegrityViolationException: 
+### Error updating database.  Cause: org.postgresql.util.PSQLException: ERROR: null value in column "type" violates not-null constraint
+  详细：Failing row contains (6CCE54A0D23A4064BAA51D5A3FBCB244, 48DF99C9256D405B97B57B7ECE98457E, 1, 0, 1, null).
+### The error may involve com.xiangshangban.organization.dao.UserCompanyDefaultDao.insertSelective-Inline
+### The error occurred while setting parameters
+### SQL: insert into user_company    ( user_id,             company_id,             current_option,                 info_status )     values ( ?,             ?,             ?,                 ? )
+### Cause: org.postgresql.util.PSQLException: ERROR: null value in column "type" violates not-null constraint
+  详细：Failing row contains (6CCE54A0D23A4064BAA51D5A3FBCB244, 48DF99C9256D405B97B57B7ECE98457E, 1, 0, 1, null).
+; SQL []; ERROR: null value in column "type" violates not-null constraint
+  详细：Failing row contains (6CCE54A0D23A4064BAA51D5A3FBCB244, 48DF99C9256D405B97B57B7ECE98457E, 1, 0, 1, null).; nested exception is org.postgresql.util.PSQLException: ERROR: null value in column "type" violates not-null constraint
+  详细：Failing row contains (6CCE54A0D23A4064BAA51D5A3FBCB244, 48DF99C9256D405B97B57B7ECE98457E, 1, 0, 1, null).
+  2017-12-28 17:23:24 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
+  2017-12-28 17:25:22 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
+  2018-01-02 15:48:47 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
+  2018-01-02 16:16:58 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-02 16:22:07 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
+  2018-01-02 16:23:41 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
+  2018-01-02 16:24:30 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-02 16:26:57 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-02 16:34:49 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-02 16:42:03 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-02 16:49:41 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
+  2018-01-02 16:50:19 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-02 16:50:43 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-02 19:06:39 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-02 19:08:56 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
+  2018-01-02 19:26:40 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
+  2018-01-02 19:26:58 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-02 19:31:58 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
+  2018-01-02 19:32:16 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-02 19:34:06 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
+  2018-01-02 19:34:28 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-02 19:34:54 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-02 19:41:34 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
+  2018-01-02 19:41:43 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-02 19:42:21 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-02 19:42:37 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-02 19:44:06 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
+  2018-01-02 19:53:11 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
+  2018-01-02 19:58:21 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
+  2018-01-02 19:58:46 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-02 19:59:23 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-02 20:00:09 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-02 20:02:11 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
+  2018-01-02 20:02:25 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-02 20:04:33 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-02 20:04:57 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-02 20:07:49 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-02 20:08:25 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-02 20:16:00 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
+  2018-01-02 20:16:10 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-02 20:16:49 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-02 20:16:58 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-02 20:17:09 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-02 20:17:29 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-02 20:19:18 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-02 20:19:50 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-02 20:20:22 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-02 20:20:30 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-02 20:21:24 INFO [com.xiangshangban.organization.service.EmployeeSpeedServiceImpl]: test/data/20171227frgr001/EmployeeExcel/2DF5CD507A1B40A6B07083F31C316B17.xls
+  2018-01-02 20:21:28 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-02 20:21:58 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  

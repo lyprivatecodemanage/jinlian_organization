@@ -736,29 +736,20 @@
 		update
 		organization.employee_
 		set
-		employee_name =
-		#{employeeName},
-		employee_sex =
-		#{employeeSex},
-		login_name =
-		#{loginName},
-		direct_person_id =
-		#{directPersonId},
-		employee_phone =
-		#{employeePhone},
-		employee_twophone =
-		#{employeeTwophone},
-		entry_time =
-		#{entryTime},
-		probationary_expired =
-		#{probationaryExpired},
+		employee_name = #{employeeName},
+		employee_sex = #{employeeSex},
+		login_name = #{loginName},
+		direct_person_id = #{directPersonId},
+		employee_phone = #{employeePhone},
+		employee_twophone = #{employeeTwophone},
+		entry_time = #{entryTime},
+		probationary_expired = #{probationaryExpired},
 		department_id=#{departmentId},
 		work_address=#{workAddress},
 		marriage_status=#{marriageStatus},
 		seniority=#{seniority}
 		where
-		employee_id =
-		#{employeeId}
+		employee_id = #{employeeId} and company_id = #{companyId}
 	</update>
 
 	<update id="updateByEmployeeapprove" parameterType="com.xiangshangban.organization.bean.Employee">

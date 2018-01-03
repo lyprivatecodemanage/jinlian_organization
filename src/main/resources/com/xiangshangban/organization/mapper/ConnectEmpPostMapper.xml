@@ -75,8 +75,8 @@
 	</delete>
 	<update id="updateEmployeeWithPost" parameterType="java.lang.String">
 		update connect_emp_post_
-		set post_id = #{postId}, department_id = #{departmentId}
-		where employee_id = #{employeeId} and post_grades = '1' and company_id = #{companyId}
+		set post_id = #{postId}, department_id = #{departmentId},is_delete = '0'
+		where employee_id = #{employeeId} and post_grades = '1' and company_id = #{companyId} 
 	</update>
 	<delete id="deleteEmployeeFromPost" parameterType="java.lang.String">
 		delete from connect_emp_post_
@@ -88,6 +88,12 @@
 	<delete id="deleteEmployeeWithPost" parameterType="java.lang.String">
 		delete from connect_emp_post_
 		where employee_id = #{employeeId} and company_id = #{companyId} and post_grades = '0'
+	</delete>
+	
+	<delete id="deleteByConnectEmpPost" parameterType="com.xiangshangban.organization.bean.ConnectEmpPost">
+		delete from connect_emp_post_ 
+		where employee_id = #{employeeId} and company_id = #{companyId} and post_grades = #{post_grades}
+		and department_id = #{departmentId} and is_delete = #{isDelete} and post_id = #{postId}
 	</delete>
 	<insert id="insertEmployeeWithPost" parameterType="java.util.List">
 		insert into connect_emp_post_ (employee_id, post_id, department_id, post_grades, company_id) 
@@ -130,6 +136,11 @@
 		where employee_id = #{employeeId} and company_id = #{companyId} 
 	</update>
 	
+	<delete id="deleteConnectEmpPost"  parameterType="com.xiangshangban.organization.bean.ConnectEmpPost">
+		delete from connect_emp_post_
+		where employee_id = #{employeeId} and company_id = #{companyId}
+	</delete>
+	
 	<delete id="deleteTransferjobConnect" parameterType="java.lang.String">
 		delete 
 		from 
@@ -161,5 +172,12 @@
 		employee_id=#{employeeId,jdbcType=VARCHAR}		
 	</update>
 	
+	<update id="updateIsDeleteByConnectEmpPost" parameterType="com.xiangshangban.organization.bean.ConnectEmpPost">
+		update 
+		organization.connect_emp_post_
+		set
+		is_delete = '0'
+		where employee_id=#{employeeId} and company_id =#{companyId} and department_id = #{departmentId} and post_id = #{postId} and post_grades = #{postGrades} and is_delete = #{isDelete}
+	</update>
 	
 </mapper>	

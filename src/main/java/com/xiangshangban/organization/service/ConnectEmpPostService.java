@@ -77,4 +77,10 @@ public interface ConnectEmpPostService {
 	 * @return
 	 */
 	int deleteByEmployeeIdAndCompanyId(String employeeId,String companyId);
+	/**
+	 * 修改connect_emp_post对应的删除状态,状态改为'0'
+	 * @param connectEmpPost
+	 * @return
+	 */
+	int updateIsDeleteByConnectEmpPost(ConnectEmpPost connectEmpPost);
 }

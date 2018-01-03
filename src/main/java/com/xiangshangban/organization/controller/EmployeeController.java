@@ -2,6 +2,7 @@ package com.xiangshangban.organization.controller;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,6 +39,7 @@ import com.xiangshangban.organization.service.ConnectEmpPostService;
 import com.xiangshangban.organization.service.DepartmentService;
 import com.xiangshangban.organization.service.EmployeeService;
 import com.xiangshangban.organization.service.EmployeeSpeedImportService;
+import com.xiangshangban.organization.service.EmployeeSpeedServiceImpl;
 import com.xiangshangban.organization.service.OSSFileService;
 import com.xiangshangban.organization.service.PostService;
 import com.xiangshangban.organization.service.TransferjobService;
@@ -718,6 +720,20 @@ public class EmployeeController {
 							emp.getTransferJobCause(), null, userId, null, companyId, emp.getDirectPersonId(), emp.getPostId());
 					
 					transferjobService.insertTransferjob(transferjob);
+				}else if(connect != null && emp.getPostId().equals(connect.getPostId())){
+					ConnectEmpPost connectEmpPost = new ConnectEmpPost(); 
+					connectEmpPost.setEmployeeId(emp.getEmployeeId());
+					connectEmpPost.setCompanyId(companyId);
+					connectEmpPost.setDepartmentId(emp.getDepartmentId());
+					connectEmpPost.setPostId(emp.getPostId());
+					connectEmpPost.setPostGrades("1");
+					connectEmpPost.setIsDelete("1");
+					int i = connectEmpPostService.updateIsDeleteByConnectEmpPost(connectEmpPost);
+					if(i>0){
+					// 添加新岗位的记录
+					Transferjob transferjob = new Transferjob(FormatUtil.createUuid(), emp.getEmployeeId(), null, emp.getDepartmentId(),
+							emp.getTransferJobCause(), null, userId, null, companyId, emp.getDirectPersonId(), emp.getPostId());
+					}
 				}
 				if(connect==null){
 					connectEmpPostService.deleteEmployeeFromPost(emp.getEmployeeId(), emp.getDepartmentId(),companyId);
@@ -730,6 +746,7 @@ public class EmployeeController {
 					connect.setCompanyId(companyId);
 					List<ConnectEmpPost> newConnectEmpPost = new ArrayList<ConnectEmpPost>();
 					newConnectEmpPost.add(connect);
+					
 					connectEmpPostService.insertEmployeeWithPost(newConnectEmpPost);
 					// 添加新岗位的记录
 					Transferjob transferjob = new Transferjob(FormatUtil.createUuid(), emp.getEmployeeId(), null, emp.getDepartmentId(),
@@ -738,7 +755,7 @@ public class EmployeeController {
 					transferjobService.insertTransferjob(transferjob);
 				}
 			}
-			connectEmpPostService.deleteEmployeeWithPost(emp.getEmployeeId(), companyId);
+			int i = connectEmpPostService.deleteEmployeeWithPost(emp.getEmployeeId(), companyId);
 			List<ConnectEmpPost> list = new ArrayList<ConnectEmpPost>();
 			List<Post> vicePostList = new ArrayList<Post>();
 			for(Post post:postList){
@@ -808,6 +825,40 @@ public class EmployeeController {
 			return result;
 		}
 	}
+	/**
+	 * 导入获取当前导入进度
+	 * @param request
+	 * @return
+	 */
+	@RequestMapping(value="/progressBar",method=RequestMethod.POST)
+	public Map<String,Object> progressBar(String data,HttpServletRequest request){
+		Map<String,Object> result = new HashMap<String,Object>();
+		try{
+	        // 创建一个数值格式化对象  
+	        NumberFormat numberFormat = NumberFormat.getInstance(); 
+	        //精确到小数点后两位
+	        numberFormat.setMinimumIntegerDigits(2);
+			if(EmployeeSpeedServiceImpl.total==0&&EmployeeSpeedServiceImpl.successNum==0){
+				result.put("percent", "0");
+			}
+			if(EmployeeSpeedServiceImpl.total>0){
+				String percent = String.valueOf((int)((float)EmployeeSpeedServiceImpl.successNum/(float)EmployeeSpeedServiceImpl.total*100));
+				
+				result.put("percent", percent);
+				if(EmployeeSpeedServiceImpl.total==EmployeeSpeedServiceImpl.successNum){
+					EmployeeSpeedServiceImpl.total=0;
+					EmployeeSpeedServiceImpl.successNum=0;
+				}
+			}
+			
+			return result;
+		}catch(Exception e){
+			logger.info(e);
+			result.put("message", "服务器错误");
+			result.put("returnCode", "3001");
+			return result;
+		}
+	}
 
 	/**
 	 * @author 李业:人员信息导入
@@ -840,6 +891,12 @@ public class EmployeeController {
 			return returnData;
 		}
 	}
+	
+	/**
+	 * 人员信息文件导出
+	 * @param request
+	 * @param response
+	 */
 	@RequestMapping(value = "/export/employeeInfo")
 	public void exportExcel(HttpServletRequest request, HttpServletResponse response){
 		try {

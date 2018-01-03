@@ -7,6 +7,7 @@ import com.xiangshangban.organization.bean.Employee;
 import com.xiangshangban.organization.bean.ImportReturnData;
 import com.xiangshangban.organization.bean.ReturnData;
 import com.xiangshangban.organization.service.EmployeeService;
+import com.xiangshangban.organization.service.EmployeeSpeedServiceImpl;
 public class ImportThread implements Runnable {
 	private EmployeeService employeeService;
 	private List<Employee> employeeList;
@@ -20,7 +21,12 @@ public class ImportThread implements Runnable {
 	@Override
 	public void run() {
 		for(Employee employee:employeeList){
-			ReturnData serviceReturnData = employeeService.insertEmployee(employee);
+			ReturnData serviceReturnData;
+			synchronized(EmployeeSpeedServiceImpl.successNum){
+				serviceReturnData = new ReturnData();
+				serviceReturnData = employeeService.insertEmployee(employee);
+				++EmployeeSpeedServiceImpl.successNum;
+			}
 			if(!"3000".equals(serviceReturnData.getReturnCode())){
 				ImportReturnData importReturnData = new ImportReturnData();
 				importReturnData.setImportMessage(serviceReturnData.getMessage());

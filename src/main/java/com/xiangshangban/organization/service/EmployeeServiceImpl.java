@@ -69,7 +69,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 		Employee employee = employeeDao.selectByEmployee(employeeId, companyId);
 		i=i+userCompanyDefaultDao.deleteUserFromCompany(companyId,employeeId);//更改is_active='2', current_option='2'
 		i=i+employeeDao.deleteByEmployee(employeeId,companyId);
-		i+=connectEmpPostDao.deleteByEmployeeIdAndCompanyId(employeeId, companyId);
+		//i+=connectEmpPostDao.deleteByEmployeeIdAndCompanyId(employeeId, companyId);
+		ConnectEmpPost connectEmpPost = new ConnectEmpPost();
+		connectEmpPost.setCompanyId(companyId);
+		connectEmpPost.setEmployeeId(employeeId);
+		i+=connectEmpPostDao.deleteConnectEmpPost(connectEmpPost);
 		//更改默认公司设置
 		//查询已激活并且为默认的公司
 		UserCompanyDefault companyDefalt = userCompanyDefaultDao.getActiveDefault(employeeId,"0");
@@ -167,6 +171,13 @@ public class EmployeeServiceImpl implements EmployeeService {
 				returnData.setReturnCode("4115");
 				return returnData;
 			}
+			Employee emp = employeeDao.selectEmployeeByCompanyIdAndEmployeeId(employee.getEmployeeId(), employee.getCompanyId());
+				if("0".equals(emp.getEmployeeStatus())){
+					returnData.setMessage("该员工已经入职,不可再次添加");
+					returnData.setReturnCode("4115");
+					return returnData;
+				}
+					
 			if("0".equals(user.getStatus())){//将不可用状态改为可用
 				usersDao.updateStatus(user.getUserid(), "1");
 			}
@@ -204,9 +215,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 					}else{
 						userCompany.setCurrentOption("2");
 					}
+					
 					userCompanyDefaultDao.updateSelective(userCompany);
 				}
-				this.updateTransfer(employee);//岗位信息设置
+				employeeDao.updateByEmployee(employee);
 				/*returnData.setMessage("数据请求成功");
 				returnData.setReturnCode("3000");
 				return returnData;*/
@@ -265,7 +277,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 	public void updateTransfer(Employee employee) {
 		//把员工关联的岗位添加到connect_emp_post_中间表里面
-		
+		//ConnectEmpPost connect =  connectEmpPostDao.selectEmployeePostInformation(employee.getEmployeeId(), employee.getCompanyId());
 		//ConnectEmpPost masterPost = connectEmpPostDao.selectEmployeePostInformation(employee.getEmployeeId(), employee.getCompanyId());
 		for(Post post:employee.getPostList()){
 			System.out.println("============>"+post.getDepartmentId());
@@ -275,15 +287,18 @@ public class EmployeeServiceImpl implements EmployeeService {
 				/*if(masterPost!=null){
 					connectEmpPostDao.updateEmployeeWithPost(employee.getEmployeeId(), post.getDepartmentId(), post.getPostId(),employee.getCompanyId());
 				}else{*/
+		/*	if(){
+				
+			}*/
 			if(StringUtils.isNotEmpty(post.getPostId()) && StringUtils.isNotEmpty(post.getDepartmentId())){
-					ConnectEmpPost connect = new ConnectEmpPost();
-					connect.setCompanyId(employee.getCompanyId());
-					connect.setDepartmentId(post.getDepartmentId());
-					connect.setEmployeeId(employee.getEmployeeId());
-					connect.setIsDelete("0");
-					connect.setPostId(post.getPostId());
-					connect.setPostGrades(post.getPostGrades());
-					connectEmpPostDao.saveConnect(connect);
+					ConnectEmpPost connectEmpPost = new ConnectEmpPost();
+					connectEmpPost.setCompanyId(employee.getCompanyId());
+					connectEmpPost.setDepartmentId(post.getDepartmentId());
+					connectEmpPost.setEmployeeId(employee.getEmployeeId());
+					connectEmpPost.setIsDelete("0");
+					connectEmpPost.setPostId(post.getPostId());
+					connectEmpPost.setPostGrades(post.getPostGrades());
+					connectEmpPostDao.saveConnect(connectEmpPost);
 					if("1".equals(post.getPostGrades())){
 						Transferjob transferjob = new Transferjob();
 						transferjob.setTransferJobId(FormatUtil.createUuid());

@@ -145,6 +145,12 @@ public class ConnectEmpPostServiceImpl implements ConnectEmpPostService {
 		return connectEmpPostDao.deleteByEmployeeIdAndCompanyId(employeeId, companyId);
 	}
 
+	@Override
+	public int updateIsDeleteByConnectEmpPost(ConnectEmpPost connectEmpPost) {
+		
+		return connectEmpPostDao.updateIsDeleteByConnectEmpPost(connectEmpPost);
+	}
+
 
 
 
