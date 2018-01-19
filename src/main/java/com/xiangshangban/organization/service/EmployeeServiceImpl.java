@@ -20,6 +20,7 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.xiangshangban.organization.bean.CheckPerson;
 import com.xiangshangban.organization.bean.Company;
@@ -64,13 +65,14 @@ public class EmployeeServiceImpl implements EmployeeService {
 	
 	
 	@Override
+	@Transactional
 	public int deleteByEmployee(String companyId,String employeeId) {
 		int i = 0;
 		Employee employee = employeeDao.selectByEmployee(employeeId, companyId);
 		i=i+userCompanyDefaultDao.deleteUserFromCompany(companyId,employeeId);//更改is_active='2', current_option='2'
 		i=i+employeeDao.deleteByEmployee(employeeId,companyId);
 		//i+=connectEmpPostDao.deleteByEmployeeIdAndCompanyId(employeeId, companyId);
-		ConnectEmpPost connectEmpPost = new ConnectEmpPost();
+		ConnectEmpPost connectEmpPost = new ConnectEmpPost();;
 		connectEmpPost.setCompanyId(companyId);
 		connectEmpPost.setEmployeeId(employeeId);
 		i+=connectEmpPostDao.deleteConnectEmpPost(connectEmpPost);
@@ -79,15 +81,15 @@ public class EmployeeServiceImpl implements EmployeeService {
 		UserCompanyDefault companyDefalt = userCompanyDefaultDao.getActiveDefault(employeeId,"0");
 		if(companyDefalt==null || StringUtils.isEmpty(companyDefalt.getCompanyId())){
 			// web端  抽取排序中已激活但非默认的第一个公司作为默认公司
-			UserCompanyDefault newDefalt = userCompanyDefaultDao.getActiveNoDefaultFirst(employeeId,"0");
-			if(companyDefalt!=null && StringUtils.isNotEmpty(companyDefalt.getCompanyId())){
+			UserCompanyDefault newDefalt = userCompanyDefaultDao.getActiveNoDefaultFirst(employeeId,companyId,"0");
+			if(newDefalt!=null && StringUtils.isNotEmpty(newDefalt.getCompanyId())){
 				//设置默认公司
 				userCompanyDefaultDao.updateCurrentCompany(newDefalt.getCompanyId(), employeeId);
 			}
 			
 			// app端  抽取排序中已激活但非默认的第一个公司作为默认公司
-			UserCompanyDefault nDefalt = userCompanyDefaultDao.getActiveNoDefaultFirst(employeeId,"1");
-			if(companyDefalt!=null && StringUtils.isNotEmpty(companyDefalt.getCompanyId())){
+			UserCompanyDefault nDefalt = userCompanyDefaultDao.getActiveNoDefaultFirst(employeeId,companyId,"1");
+			if(nDefalt!=null && StringUtils.isNotEmpty(nDefalt.getCompanyId())){
 				//设置默认公司
 				userCompanyDefaultDao.updateCurrentCompany(nDefalt.getCompanyId(), employeeId);
 			}
@@ -95,7 +97,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 		if(i>1){
 			employee.setCompanyId(companyId);
 			employee.setEmployeeStatus("1");
-			this.deleteDeviceEmp(employee);
+			Map<String,Object> params = new HashMap<String,Object>();
+			String[] array ={employee.getEmployeeId()};
+			params.put("employeeIdList", array);
+			params.put("companyId", employee.getCompanyId());
+			this.deleteDeviceEmp(params);
 		}
 		
 		return i;
@@ -108,6 +114,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 	
 	@Override
+	@Transactional
 	public ReturnData insertEmployee(Employee employee) {
 		ReturnData returnData = new ReturnData();
 		//查询添加的员工在本公司是否曾经加入过
@@ -172,7 +179,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 				return returnData;
 			}
 			Employee emp = employeeDao.selectEmployeeByCompanyIdAndEmployeeId(employee.getEmployeeId(), employee.getCompanyId());
-				if("0".equals(emp.getEmployeeStatus())){
+				if(emp!=null && StringUtils.isNotEmpty(emp.getEmployeeStatus())&&"0".equals(emp.getEmployeeStatus())){
 					returnData.setMessage("该员工已经入职,不可再次添加");
 					returnData.setReturnCode("4115");
 					return returnData;
@@ -262,11 +269,15 @@ public class EmployeeServiceImpl implements EmployeeService {
 	 * 告知设备模块更新人员信息
 	 * @param employee
 	 */
-	public void deleteDeviceEmp(Employee employee) {
-		Company company = companyDao.selectByCompany(employee.getCompanyId());
-	    employee.setCompanyNo(company.getCompanyNo());
-		List<Employee> cmdlist=new ArrayList<Employee>();
-		cmdlist.add(employee);
+	public void deleteDeviceEmp(/*Employee employee*/Map<String,Object> params) {
+/*		Company company = companyDao.selectByCompany(employee.getCompanyId());*/
+		Company company = companyDao.selectByCompany(params.get("companyId").toString());
+	    /*employee.setCompanyNo(company.getCompanyNo());*/
+		params.put("companyNo",company.getCompanyNo());
+		/*List<Employee> cmdlist=new ArrayList<Employee>();*/
+		List<Map<String,Object>> cmdlist=new ArrayList<Map<String,Object>>();
+		/*cmdlist.add(employee);*/
+		cmdlist.add(params);
 		try {
 			String result = HttpClientUtil.sendRequet(PropertiesUtils.pathUrl("deleteEmployeeInformationEmp"), cmdlist);
 			logger.info("设备访问成功"+result);

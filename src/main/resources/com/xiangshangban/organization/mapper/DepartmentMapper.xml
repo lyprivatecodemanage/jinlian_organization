@@ -216,9 +216,9 @@
   <select id="selectDepartmentAndPostByCompanyId" parameterType="java.lang.String" resultMap="DepartmentPost">
   	select d.department_id,d.department_name,p.post_id,p.post_name
   	from department_ d
-  	left join post_ p on p.department_id =d.department_id and p.company_id = #{companyId}
+  	left join post_ p on p.department_id =d.department_id and p.company_id = #{companyId} and p.is_delete ='0'
   	where 
-  	d.company_id = #{companyId}
+  	d.company_id = #{companyId} and d.status = '1'
   </select>
   
   

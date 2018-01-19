@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -19,25 +21,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.aliyun.oss.OSSClient;
-import com.arjuna.ats.internal.jdbc.drivers.modifiers.list;
 import com.xiangshangban.organization.bean.Department;
 import com.xiangshangban.organization.bean.Employee;
 import com.xiangshangban.organization.bean.ImportReturnData;
 import com.xiangshangban.organization.bean.Post;
 import com.xiangshangban.organization.bean.ReturnData;
 import com.xiangshangban.organization.exception.CustomException;
-import com.xiangshangban.organization.thread.ImportThread;
 import com.xiangshangban.organization.util.ImportUtil;
 import com.xiangshangban.organization.util.POIUtil;
 import com.xiangshangban.organization.util.PropertiesUtils;
+import com.xiangshangban.organization.util.RedisUtil;
 import com.xiangshangban.organization.util.RegexUtil;
 import com.xiangshangban.organization.util.TimeUtil;
 
 @Service("employeeSpeedService")
 public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 	private static final Logger logger = Logger.getLogger(EmployeeSpeedServiceImpl.class);
-	public static Integer total =0;
-	public static Integer successNum = 0;
+	/*public Integer total =0;
+	public Integer successNum = 0;*/
 	@Autowired
 	private EmployeeService employeeService;
 	@Autowired
@@ -564,22 +565,53 @@ public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 			}
 			if(list!=null&&list.size()>0){
 			int length = list.size();
-			total = list.size();
-			List<Employee> list1 = new ArrayList<Employee>();
+			int total = list.size();
+			int successNum = 0; 
+			RedisUtil redis = RedisUtil.getInstance();
+			redis.new Hash().hset("total_"+companyId, operateUserId, String.valueOf(total));
+			redis.expire("total_"+companyId, 1800);
+			redis.new Hash().hset("success_"+companyId, operateUserId, String.valueOf(successNum));
+			redis.expire("success_"+companyId, 1800);
+		/*	session.setAttribute("total", total);
+			session.setAttribute("successNum", successNum);*/
+			for(Employee employee:list){
+				ReturnData serviceReturnData;
+				/*synchronized(EmployeeSpeedServiceImpl.successNum){*/
+					serviceReturnData = new ReturnData();
+					serviceReturnData = employeeService.insertEmployee(employee);
+					/*++EmployeeSpeedServiceImpl.successNum;*/
+				/*}*/
+				if(!"3000".equals(serviceReturnData.getReturnCode())){
+					ImportReturnData importReturnData = new ImportReturnData();
+					importReturnData.setImportMessage(serviceReturnData.getMessage());
+					importReturnDataList.add(importReturnData);
+				}
+				if(StringUtils.isEmpty(serviceReturnData.getMessage()) && StringUtils.isEmpty(serviceReturnData.getReturnCode())){
+					String employeeId = serviceReturnData.getEmployeeId();
+					employeeService.activeEmp(employee.getCompanyId(), employeeId);
+					employeeService.resetEmployeeStatus(employee.getCompanyId(), employeeId);
+				}
+				successNum = successNum + 1;
+				redis.new Hash().hset("successNum_"+companyId, operateUserId, String.valueOf(successNum));
+				redis.expire("successNum_"+companyId, 1800);
+				/*session.setAttribute("successNum", successNum);*/
+				
+			}
+			/*List<Employee> list1 = new ArrayList<Employee>();
 			List<Employee> list2 = new ArrayList<Employee>();
 			for(int n=0;n<length/2;n++){
 				list1.add(importEmployeeList.get(n));
 			}
 			for(int m=length/2;m<length;m++){
 				list2.add(importEmployeeList.get(m));
-			}
+			}*/
 			/*ReturnData serviceReturnData = employeeService.insertEmployee(newEmp);
 				if(!"3000".equals(serviceReturnData.getReturnCode())){
 					ImportReturnData importReturnData = new ImportReturnData();
 					importReturnData.setImportMessage(serviceReturnData.getMessage());
 					importReturnDataList.add(importReturnData);
 				}*/
-			ImportThread importThread1 = new ImportThread(employeeService,importReturnDataList,list1);
+			/*ImportThread importThread1 = new ImportThread(employeeService,importReturnDataList,list1);
 			ImportThread importThread2 = new ImportThread(employeeService,importReturnDataList,list2);
 			Thread thead1 = new Thread(importThread1);
 			Thread thead2 = new Thread(importThread2);
@@ -593,7 +625,7 @@ public class EmployeeSpeedServiceImpl implements EmployeeSpeedImportService {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-			}
+			}*/
 			/*for(Employee employee:list){
 				employeeService.activeEmp(employee.getCompanyId(), employee.getEmployeeId());
 				employeeService.resetEmployeeStatus(employee.getCompanyId(), employee.getEmployeeId());

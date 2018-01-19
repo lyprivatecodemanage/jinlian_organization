@@ -12,6 +12,7 @@ public class ImportThread implements Runnable {
 	private EmployeeService employeeService;
 	private List<Employee> employeeList;
 	private List<ImportReturnData> list;
+	private int num = 0;
 	
 	public ImportThread(EmployeeService employeeService,List<ImportReturnData> list,List<Employee> employeeList) {
 		this.employeeService =employeeService;
@@ -20,13 +21,14 @@ public class ImportThread implements Runnable {
 	}
 	@Override
 	public void run() {
+		
 		for(Employee employee:employeeList){
 			ReturnData serviceReturnData;
-			synchronized(EmployeeSpeedServiceImpl.successNum){
+			/*synchronized(EmployeeSpeedServiceImpl.successNum){*/
 				serviceReturnData = new ReturnData();
 				serviceReturnData = employeeService.insertEmployee(employee);
-				++EmployeeSpeedServiceImpl.successNum;
-			}
+				/*++EmployeeSpeedServiceImpl.successNum;*/
+			/*}*/
 			if(!"3000".equals(serviceReturnData.getReturnCode())){
 				ImportReturnData importReturnData = new ImportReturnData();
 				importReturnData.setImportMessage(serviceReturnData.getMessage());
@@ -37,6 +39,8 @@ public class ImportThread implements Runnable {
 				employeeService.activeEmp(employee.getCompanyId(), employeeId);
 				employeeService.resetEmployeeStatus(employee.getCompanyId(), employeeId);
 			}
+			num = num + 1;
+			
 		}
 	}
 }

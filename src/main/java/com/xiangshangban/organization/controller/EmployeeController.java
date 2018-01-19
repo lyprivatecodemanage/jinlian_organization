@@ -11,6 +11,7 @@ import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
@@ -39,13 +40,13 @@ import com.xiangshangban.organization.service.ConnectEmpPostService;
 import com.xiangshangban.organization.service.DepartmentService;
 import com.xiangshangban.organization.service.EmployeeService;
 import com.xiangshangban.organization.service.EmployeeSpeedImportService;
-import com.xiangshangban.organization.service.EmployeeSpeedServiceImpl;
 import com.xiangshangban.organization.service.OSSFileService;
 import com.xiangshangban.organization.service.PostService;
 import com.xiangshangban.organization.service.TransferjobService;
 import com.xiangshangban.organization.util.FormatUtil;
 import com.xiangshangban.organization.util.HttpRequestFactory;
 import com.xiangshangban.organization.util.PropertiesUtils;
+import com.xiangshangban.organization.util.RedisUtil;
 import com.xiangshangban.organization.util.RegexUtil;
 
 @RestController
@@ -831,26 +832,48 @@ public class EmployeeController {
 	 * @return
 	 */
 	@RequestMapping(value="/progressBar",method=RequestMethod.POST)
-	public Map<String,Object> progressBar(String data,HttpServletRequest request){
+	public Map<String,Object> progressBar(String data,HttpServletRequest request,HttpSession session){
 		Map<String,Object> result = new HashMap<String,Object>();
 		try{
-	        // 创建一个数值格式化对象  
-	        NumberFormat numberFormat = NumberFormat.getInstance(); 
-	        //精确到小数点后两位
-	        numberFormat.setMinimumIntegerDigits(2);
-			if(EmployeeSpeedServiceImpl.total==0&&EmployeeSpeedServiceImpl.successNum==0){
+			String companyId = request.getHeader("companyId");// 公司id
+			String userId = request.getHeader("accessUserId");// 操作人id
+			RedisUtil redis = RedisUtil.getInstance();
+			String successNumFromRedis = redis.new Hash().hget("successNum_"+companyId, userId);
+			String totalFromRedis = redis.new Hash().hget("total_"+companyId, userId);
+			if(StringUtils.isNotEmpty(successNumFromRedis)&&StringUtils.isNotEmpty(totalFromRedis)){
+				int total = Integer.valueOf(totalFromRedis);
+				int successNum = Integer.valueOf(successNumFromRedis);
+		        // 创建一个数值格式化对象  
+		        NumberFormat numberFormat = NumberFormat.getInstance(); 
+		        //精确到小数点后两位
+		        numberFormat.setMinimumIntegerDigits(2);
+				if(total==0&&successNum==0){
+					result.put("percent", "0");
+				}
+				if(total>0){
+					String percent = String.valueOf((int)((float)successNum/(float)total*100));
+					
+					result.put("percent", percent);
+					if("100".equals(percent)){
+						redis.new Hash().hset("successNum_"+companyId, userId, "0");
+						redis.new Hash().hset("total_"+companyId, userId, "0");
+					}
+				}
+				/*if(EmployeeSpeedServiceImpl.total==0&&EmployeeSpeedServiceImpl.successNum==0){
+					result.put("percent", "0");
+				}
+				if(EmployeeSpeedServiceImpl.total>0){
+					String percent = String.valueOf((int)((float)EmployeeSpeedServiceImpl.successNum/(float)EmployeeSpeedServiceImpl.total*100));
+					
+					result.put("percent", percent);
+					if(EmployeeSpeedServiceImpl.total==EmployeeSpeedServiceImpl.successNum){
+						EmployeeSpeedServiceImpl.total=0;
+						EmployeeSpeedServiceImpl.successNum=0;
+					}
+				}*/
+			}else{
 				result.put("percent", "0");
 			}
-			if(EmployeeSpeedServiceImpl.total>0){
-				String percent = String.valueOf((int)((float)EmployeeSpeedServiceImpl.successNum/(float)EmployeeSpeedServiceImpl.total*100));
-				
-				result.put("percent", percent);
-				if(EmployeeSpeedServiceImpl.total==EmployeeSpeedServiceImpl.successNum){
-					EmployeeSpeedServiceImpl.total=0;
-					EmployeeSpeedServiceImpl.successNum=0;
-				}
-			}
-			
 			return result;
 		}catch(Exception e){
 			logger.info(e);
@@ -867,19 +890,26 @@ public class EmployeeController {
 	 * @return
 	 */
 	@RequestMapping(value = "/speedImport", produces = "application/json;charset=UTF-8", method = RequestMethod.POST)
-	public ReturnData speedImport(@RequestBody String jsonString, HttpServletRequest request) {
+	public ReturnData speedImport(@RequestBody String jsonString, HttpServletRequest request,HttpSession session) {
 		JSONObject obj = JSON.parseObject(jsonString);
 		String key = obj.getString("key");
+		int total = 0;
+		int successNum = 0;
+		/*session.setAttribute("total", total);
+		session.setAttribute("successNum", successNum);*/
 		ReturnData returnData = new ReturnData();
 		try {
 			String companyId = request.getHeader("companyId");// 公司id
 			String userId = request.getHeader("accessUserId");// 操作人id
-			//Employee emp = employeeService.selectByEmployee(userId,companyId);
+			RedisUtil redis = RedisUtil.getInstance();
+			redis.new Hash().hset("successNum_"+companyId, userId,String.valueOf(total));
+			redis.expire("successNum_"+companyId, 1800);
+			redis.new Hash().hset("total_"+companyId, userId,String.valueOf(successNum));
+			redis.expire("total_"+companyId, 1800);
 			Company company = companyService.selectByCompany(companyId);
 			String companyNo = company.getCompanyNo();
 			String directory = PropertiesUtils.ossProperty("employeeImportDirectory");
 			String filePath = oSSFileService.getImportPathByKey(companyNo, directory, key);
-			//String filePath = "http://xiangshangban.oss-cn-hangzhou.aliyuncs.com/test/data/20171124shbf001/EmployeeExcel/employeeModelOne.xlsx";
 			
 			returnData = employeeSpeedImportService.speedImport(userId, companyId, filePath);
 			return returnData;

@@ -1,0 +1,442 @@
+2018-01-05 13:43:39 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
+  2018-01-05 13:46:55 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 13:46:57 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 13:47:00 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 13:47:02 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 13:47:04 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 13:47:06 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 13:47:08 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 13:47:10 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 13:47:12 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 13:47:14 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 13:47:29 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 13:47:31 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 13:47:33 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 13:47:35 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 13:47:37 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 13:47:39 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 13:47:41 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 13:47:43 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 13:47:45 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 13:47:47 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 13:47:50 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 13:47:52 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 13:47:54 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 13:47:56 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 13:47:58 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 13:48:01 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 13:48:03 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 13:48:05 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 13:48:07 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 13:48:09 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 13:48:31 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 13:48:33 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 13:48:35 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 13:48:37 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 13:48:54 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:48:54 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:48:55 INFO [com.xiangshangban.organization.service.EmployeeSpeedServiceImpl]: test/data/20171228shyy001/EmployeeExcel/6281AB99300146309F1D50B79723C37C.xls
+  2018-01-05 13:48:55 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:48:55 INFO [com.xiangshangban.organization.service.EmployeeSpeedServiceImpl]: com.aliyun.oss.OSSException: The specified key does not exist.
+[ErrorCode]: NoSuchKey
+[RequestId]: 5A4F11C5D69B24C838A9A364
+[HostId]: xiangshangban.oss-cn-hangzhou.aliyuncs.com
+[ResponseError]:
+<?xml version="1.0" encoding="UTF-8"?>
+<Error>
+  <Code>NoSuchKey</Code>
+  <Message>The specified key does not exist.</Message>
+  <RequestId>5A4F11C5D69B24C838A9A364</RequestId>
+  <HostId>xiangshangban.oss-cn-hangzhou.aliyuncs.com</HostId>
+  <Key>test/data/20171228shyy001/EmployeeExcel/6281AB99300146309F1D50B79723C37C.xls</Key>
+</Error>
+
+  2018-01-05 13:49:00 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:49:00 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:49:01 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:49:01 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:49:01 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:50:21 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
+  2018-01-05 13:50:40 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:50:41 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:50:41 INFO [com.xiangshangban.organization.service.EmployeeSpeedServiceImpl]: test/data/20171228shyy001/EmployeeExcel/24F597F8B35B4843844E63B579EC45B2.xls
+  2018-01-05 13:50:41 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:50:42 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:50:42 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:50:43 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:50:43 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:50:44 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:50:44 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:50:45 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 13:50:45 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:50:45 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:50:46 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:50:46 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:50:47 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:50:47 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 13:50:47 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:50:48 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:50:48 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:50:49 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:50:49 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 13:50:49 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:50:50 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:50:50 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:50:51 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:50:51 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 13:50:51 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:50:52 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:50:52 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:50:53 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:50:53 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 13:50:53 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:50:54 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:50:54 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:50:55 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:50:55 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:50:56 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 13:50:56 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:50:56 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:50:57 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:50:57 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:50:58 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 13:50:58 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:50:58 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:50:59 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:50:59 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:00 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 13:51:00 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:00 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:01 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:01 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:02 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 13:51:02 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:02 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:03 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:03 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:04 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:04 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 13:51:04 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:05 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:05 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:06 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:06 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 13:51:06 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:07 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:07 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:08 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:08 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 13:51:08 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:09 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:09 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:10 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:10 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 13:51:10 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:11 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:11 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:12 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:12 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:12 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 13:51:13 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:13 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:14 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:14 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:15 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 13:51:15 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:15 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:16 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:16 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:17 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 13:51:17 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:17 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:18 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:18 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:19 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:19 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:20 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:20 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:21 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:21 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:22 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:22 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:23 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:23 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:24 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:24 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:25 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:25 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:26 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:26 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:27 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:27 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:28 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:28 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:29 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:29 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:30 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:30 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:31 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:31 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:32 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:32 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:33 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:33 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:34 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:34 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:35 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:35 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:36 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:36 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:37 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:37 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:38 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:38 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:39 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:39 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:40 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:40 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:41 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:41 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:42 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:42 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:43 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:43 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:44 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:44 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:45 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:45 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:46 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:46 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:47 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:47 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:48 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:48 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:49 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:49 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:50 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:50 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:51 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:51 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:52 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:52 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:51:53 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:52:04 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:56:31 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 13:57:20 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
+  2018-01-05 13:59:42 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 13:59:44 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 13:59:46 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 13:59:48 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 13:59:50 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 13:59:52 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 13:59:54 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 13:59:56 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 13:59:58 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:00:21 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:00:23 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:00:26 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:00:28 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:00:30 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:00:32 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:00:34 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:01:03 INFO [com.xiangshangban.organization.service.EmployeeSpeedServiceImpl]: test/data/20171228shyy001/EmployeeExcel/A55606DDF3C242CD8582352FB0484ACB.xls
+  2018-01-05 14:01:08 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:01:09 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:09 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:09 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:09 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:09 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:09 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:09 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:09 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:09 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:09 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:09 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:10 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:10 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:10 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:01:10 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:10 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:11 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:11 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:11 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:12 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:12 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:12 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:12 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:01:12 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:12 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:13 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:13 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:14 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:14 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:15 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:01:15 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:15 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:16 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:16 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:17 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:01:17 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:17 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:18 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:18 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:19 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:01:19 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:19 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:20 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:20 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:21 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:01:21 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:21 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:22 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:22 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:23 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:23 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:01:23 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:24 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:24 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:25 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:25 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:01:25 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:26 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:26 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:27 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:27 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:01:27 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:28 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:28 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:29 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:29 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:29 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:01:30 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:30 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:31 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:31 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:32 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:01:32 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:32 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:33 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:33 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:34 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:01:34 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:34 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:35 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:36 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:36 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:01:36 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:36 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:37 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:38 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:38 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:38 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:01:38 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:39 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:39 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:40 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:40 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:41 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:41 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:01:42 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:42 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:42 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:43 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:43 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:44 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:45 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:45 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:45 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:46 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:46 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:47 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:47 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:48 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:48 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:49 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:49 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:50 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:51 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:51 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:51 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:01:52 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: For input string: "null"
+  2018-01-05 14:34:46 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
+  2018-01-05 14:37:04 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: null
+  2018-01-05 14:37:04 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: null
+  2018-01-05 14:37:05 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: null
+  2018-01-05 14:37:05 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: null
+  2018-01-05 14:37:06 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: null
+  2018-01-05 14:37:06 INFO [com.xiangshangban.organization.controller.EmployeeController]: java.lang.NumberFormatException: null
+  2018-01-05 14:37:06 INFO [com.xiangshangban.organization.service.EmployeeSpeedServiceImpl]: test/data/20171228shyy001/EmployeeExcel/FB311D92D8CA4844A0171268DA9DA2B3.xls
+  2018-01-05 14:38:06 INFO [com.xiangshangban.organization.service.EmployeeSpeedServiceImpl]: test/data/20171228shyy001/EmployeeExcel/C757E397F85E4841B79BD8D70C86139C.xls
+  2018-01-05 14:38:55 INFO [com.xiangshangban.organization.service.EmployeeSpeedServiceImpl]: test/data/20171228shyy001/EmployeeExcel/F9E294F2617243CD8283B50C0637097B.xls
+  2018-01-05 14:40:21 INFO [com.xiangshangban.organization.service.EmployeeSpeedServiceImpl]: test/data/20171228shyy001/EmployeeExcel/E807354219D048DDBF70067F23F5BA4A.xls
+  2018-01-05 14:41:09 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:41:11 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:41:13 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:41:15 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:41:17 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:41:19 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:41:21 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:41:23 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:41:25 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:41:42 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:41:44 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:41:47 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:41:49 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:41:51 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:41:53 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:41:55 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:41:57 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:41:59 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:42:12 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:42:32 INFO [com.xiangshangban.organization.service.EmployeeSpeedServiceImpl]: test/data/20171228shyy001/EmployeeExcel/34BA9B8E8C74473E82ED2BC34DA4F2F8.xls
+  2018-01-05 14:42:34 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:42:36 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:42:39 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:42:41 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:42:43 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:42:45 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:42:47 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:42:49 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:42:51 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:42:53 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:42:56 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:42:58 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:43:00 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:43:03 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:43:05 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:43:07 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:45:42 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
+  2018-01-05 14:45:56 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:45:58 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:46:00 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:46:02 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:46:04 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:46:06 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:46:08 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:46:10 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:46:12 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:46:28 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:46:31 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:46:33 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:46:35 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:46:37 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:46:39 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:46:41 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:47:00 INFO [com.xiangshangban.organization.service.EmployeeSpeedServiceImpl]: test/data/20171228shyy001/EmployeeExcel/F8C3C6A89C294D7985D3C906ED06B2D6.xls
+  2018-01-05 14:47:03 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:47:05 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:47:07 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:47:10 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:47:12 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:47:14 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:47:16 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:47:18 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:47:20 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:47:22 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:47:24 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:47:27 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:47:29 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:47:31 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:47:33 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-01-05 14:47:35 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  

@@ -38,7 +38,7 @@ public interface UserCompanyDefaultDao {
 	 * @param userId 用户ID
 	 * @return
 	 */
-	UserCompanyDefault getActiveNoDefaultFirst(@Param("userId")String userId,@Param("type")String type);
+	UserCompanyDefault getActiveNoDefaultFirst(@Param("userId")String userId,@Param("companyId")String companyId,@Param("type")String type);
 	/**
 	 * 设置当前默认打开的公司
 	 * @param companyId
