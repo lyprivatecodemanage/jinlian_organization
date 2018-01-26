@@ -191,4 +191,11 @@ public interface EmployeeService {
 	 * @return
 	 */
 	int updateAdminEmployeeImgUrl(String companyId,String employeeId,String employeeImgUrl);
+	/**
+	 * 调用考勤模块，设置某个人默认排班
+	 * @param companyId
+	 * @param employeeId
+	 */
+	public void addClasses(String companyId, String employeeId);
+	public void updateDeviceEmp(Employee employee);
 }

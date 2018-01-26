@@ -32,6 +32,8 @@ public class CheckPersonServiceImpl implements CheckPersonService {
 	CheckPersonDao checkPersonDao;
 	@Autowired
 	UserCompanyDefaultDao userCompanyDefaultDao;
+	@Autowired
+	EmployeeService employeeService;
 	
 	
 	
@@ -77,6 +79,8 @@ public class CheckPersonServiceImpl implements CheckPersonService {
 					//app端
 					usercompany.setType("1");
 					userCompanyDefaultDao.insertSelective(usercompany);
+					employeeService.addClasses(companyId, userId);
+					employeeService.updateDeviceEmp(employee);
 				}
 				List<UusersRoles> userRoleList = usersDao.selectRoleByUserIdAndCompanyId(companyId, userId);
 				if(userRoleList!=null && userRoleList.size()>0){
@@ -92,7 +96,6 @@ public class CheckPersonServiceImpl implements CheckPersonService {
 					returnData.setMessage("审核已同意");
 					returnData.setReturnCode("4107");
 				}
-				
 			}else{
 				returnData.setMessage("找不到待审核人员的信息");
 				returnData.setReturnCode("4111");
