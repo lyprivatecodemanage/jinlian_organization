@@ -243,14 +243,32 @@ public class EmployeeServiceImpl implements EmployeeService {
 		returnData.setReturnCode("3000");*/
 	    this.activeEmp(employee.getCompanyId(), employee.getEmployeeId());
 	    this.resetEmployeeStatus(employee.getCompanyId(), employee.getEmployeeId());
-	    updateDeviceEmp(employee);
-	    
+	    this.updateDeviceEmp(employee);
+	    this.addClasses(employee.getCompanyId(), employee.getEmployeeId());
 		return returnData;
+	}
+	@Override
+	public void addClasses(String companyId, String employeeId) {
+		Map<String,Object> classesMap = new HashMap<String,Object>();
+		classesMap.put("companyId", companyId);
+		List<Map<String,Object>> cmdlist=new ArrayList<Map<String,Object>>();
+		Map<String,Object> empIdMap = new HashMap<String,Object>();
+		empIdMap.put("empId", employeeId);
+		cmdlist.add(empIdMap);
+		classesMap.put("empIdList", cmdlist);
+		try {
+			String result = HttpClientUtil.sendRequet(PropertiesUtils.pathUrl("addDefaultEmpClasses"), classesMap);
+			logger.info("给管理员设置默认排班成功"+result);
+		} catch (IOException e) {
+			logger.info("管理员设置默认排班，获取路径出错");
+			e.printStackTrace();
+		}
 	}
 	/**
 	 * 告知设备模块更新人员信息
 	 * @param employee
 	 */
+	@Override
 	public void updateDeviceEmp(Employee employee) {
 		employee = employeeDao.selectByEmployee(employee.getEmployeeId(), employee.getCompanyId());
 		Company company = companyDao.selectByCompany(employee.getCompanyId());
