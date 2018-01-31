@@ -266,8 +266,17 @@ public class DepartmentController {
 			int size = departmentService.getDepartmentByName(companyId,
 					departmenttemp.getDepartmentName(), departmentId);
 			if(size>0){
-				returnData.setMessage("添加部门失败：部门名称已存在");
+				returnData.setMessage("修改部门失败：部门名称已存在");
 				returnData.setReturnCode("3006");
+				return returnData;
+			}
+			//检查上下级关系是否正确，上级部门不能修改为直属下级或间接下级部门
+			String curentDeptGrade = departmentService.getGrade(companyId, departmentId);//获得当前部门的完整节点字符串
+			String newParentDeptGrade = departmentService.getGrade(
+					companyId, departmenttemp.getDepartmentParentId());//获得新指定的部门的完整节点字符串
+			if(newParentDeptGrade.contains(curentDeptGrade) && newParentDeptGrade.length()>curentDeptGrade.length()){
+				returnData.setMessage("修改部门错误：不能选择下级部门作为上级部门");
+				returnData.setReturnCode("4122");
 				return returnData;
 			}
 			departmentService.updateByDepartment(departmenttemp);

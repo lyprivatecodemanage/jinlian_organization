@@ -72,4 +72,11 @@ public interface DepartmentService {
 		 * @return
 		 */
 		List<Department> selectDepartmentAndPostByCompanyId(String companyId);
+		/**
+		 * 获得部门的完整节点字符串，以"部门ID+逗号"拼接
+		 * @param companyId
+		 * @param departmentId
+		 * @return 部门ID+逗号
+		 */
+		String getGrade(String companyId, String departmentId);
 }

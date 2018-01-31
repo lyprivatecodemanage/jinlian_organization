@@ -221,5 +221,15 @@ public class DepartmentServiceImpl implements DepartmentService {
 		return departmentDao.selectDepartmentAndPostByCompanyId(companyId);
 	}
 
+	@Override
+	public String getGrade(String companyId, String departmentId) {
+		String grade = departmentId;
+		Department dept = departmentDao.findByDepartmentById(companyId, departmentId);
+		if(!dept.getDepartmentId().equals(dept.getCompanyId())){
+			grade+=","+getGrade(dept.getCompanyId(), dept.getDepartmentParentId());
+		}
+		return grade;
+	}
+
 	
 }

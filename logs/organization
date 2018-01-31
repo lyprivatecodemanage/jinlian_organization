@@ -1,6 +1,5 @@
-2018-01-26 11:20:46 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
-  2018-01-26 11:44:34 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功
-  2018-01-26 11:46:40 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
-  2018-01-26 11:46:57 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功
-  2018-01-26 11:47:02 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 给管理员设置默认排班成功排班成功
+2018-01-31 11:18:57 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
+  2018-01-31 14:13:27 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
+  2018-01-31 14:16:04 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
+  2018-01-31 14:21:31 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
   
