@@ -688,9 +688,10 @@ public class EmployeeController {
 						}
 					}
 				}
-				employeeService.updateLoginNameByEmployeeId(emp.getLoginName(), emp.getEmployeeId());
+				
 				Uusers user = employeeService.selectByPhoneAndStatus(emp.getLoginName());
 				if(user ==null || (StringUtils.isNotEmpty(user.getUserid()) && user.getUserid().equals(emp.getEmployeeId()) && !user.getPhone().equals(emp.getLoginName()))){
+					employeeService.updateLoginNameByEmployeeId(emp.getLoginName(), emp.getEmployeeId());
 					employeeService.updatePhoneByUserId(emp.getLoginName(), emp.getEmployeeId());
 				}else{
 					result.put("message", "登录名已被占用");
