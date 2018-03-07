@@ -1,0 +1,14 @@
+2018-02-07 16:19:43 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
+  2018-02-07 16:20:55 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-02-07 16:20:56 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 给管理员设置默认排班成功排班成功
+  2018-02-07 16:40:16 INFO [com.xiangshangban.organization.OrganizationApplication]: 启动成功
+  2018-02-07 17:35:39 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-02-07 17:45:47 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-02-07 17:46:41 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-02-07 17:46:42 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 给管理员设置默认排班成功排班成功
+  2018-02-07 17:47:30 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-02-07 17:47:56 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-02-07 17:47:56 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 给管理员设置默认排班成功排班成功
+  2018-02-07 17:49:37 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  2018-02-07 17:50:09 INFO [com.xiangshangban.organization.service.EmployeeServiceImpl]: 设备访问成功null
+  
