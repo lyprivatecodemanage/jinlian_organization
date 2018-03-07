@@ -83,7 +83,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 		for(Department department: DepartmentList){
 			DepartmentTree departmentTree = new DepartmentTree();			
 			departmentTree.setLabel(department.getDepartmentName());						
-			departmentTree.setValue(department.getDepartmentName());
+			departmentTree.setValue(department.getDepartmentId());
 			departmentTree.setKey(department.getDepartmentId());			
 			departmentTree.setChildren(getDepartmentTree(department.getDepartmentId(), companyId, departmentTree));
 			list.add(departmentTree);
