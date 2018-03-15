@@ -145,7 +145,7 @@
     where 
     p.company_id=#{companyId} AND p.is_delete='0'
     <if test="departmentId!=null and departmentId!=''">
-		AND (p.department_id = #{departmentId} <!-- OR d.department_parent_id = #{departmentId} -->)
+		AND (p.department_id = #{departmentId} OR d.department_parent_id = #{departmentId})
 	</if>
     <if test="postName!=null and postName!=''">
 		AND p.post_name like '%${postName}%'
