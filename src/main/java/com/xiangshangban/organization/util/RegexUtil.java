@@ -14,7 +14,7 @@ public class RegexUtil {
 	 * @return
 	 */
 	public static boolean matchPhone(String phone){
-		return Pattern.matches("^[1][3,4,5,7,8][0-9]{9}$", phone);
+		return Pattern.matches("^[1][3,4,5,7,8,9][0-9]{9}$", phone);
 	}
 	/**
 	 * 匹配日期yyyy-MM-dd
